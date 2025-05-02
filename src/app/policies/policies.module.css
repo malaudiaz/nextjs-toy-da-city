@@ -1,0 +1,53 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .main {
+    padding: 2rem 0;
+  }
+  
+  .title {
+    color: #2e86de;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .section {
+    margin-bottom: 2.5rem;
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .section h2 {
+    color: #2e86de;
+    margin-bottom: 1rem;
+  }
+  
+  .section ul {
+    padding-left: 1.5rem;
+  }
+  
+  .section li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .contact {
+    background: #e8f4fd;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+    
+    .section {
+      padding: 1rem;
+    }
+  }
