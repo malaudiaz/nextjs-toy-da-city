@@ -8,6 +8,7 @@ import './globals.css'
 import { esES } from '@clerk/localizations'
 import { dark } from '@clerk/themes'
 import Navbar from '@/components/shared/header/Navbar'
+import Footer from '@/components/shared/footer/Footer'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -38,6 +39,7 @@ export default function RootLayout({
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <Navbar/>
           {children}
+          <Footer/>
         </body>
       </html>
     </ClerkProvider>

@@ -14,19 +14,18 @@ import {
 
 const Navbar = () => {
   return (
-    <header className=" test w-full pt-2">
+    <header className="bg-[#F2CC8F] w-full pt-2">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-4 py-2">
           {/* Logo and Title */}
           <div className="flex items-center gap-2 shrink-0">
             <Image
-              src="/tren.png"
+              src="/Logo.png"
               alt="TOY DACITY logo"
-              width={60}
-              height={60}
+              width={160}
+              height={32}
               className=""
             />
-            <h3 className="font-bold text-2xl leading-tight">Toydacity</h3>
           </div>
 
           {/* Search and Navigation */}
@@ -74,14 +73,14 @@ export default Navbar;
 const BannerNavbar = () => {
   return (
     <div className="test2 text-white w-full h-12 flex items-center justify-center gap-3 shrink-0">
-      <nav className="flex gap-4 items-center justify-center">
-        <Link href="/home" className="text-sm font-medium hover:underline">
+      <nav className="flex gap-x-4 items-center justify-center">
+        <Link href="/home" className="text-lg font-medium hover:underline  border-r-[2px] pr-3">
           Categorias
         </Link>
-        <Link href="/home" className="text-sm font-medium hover:underline">
+        <Link href="/home" className="text-lg font-medium hover:underline border-r-[2px] pr-3">
           Edades Recomendadas
         </Link>
-        <Link href="/home" className="text-sm font-medium hover:underline">
+        <Link href="/home" className="text-lg font-medium hover:underline">
           Por Ubicación
         </Link>
       </nav>
