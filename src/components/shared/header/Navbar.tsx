@@ -42,23 +42,24 @@ const Navbar = () => {
             </Button>
             <div className="flex flex-col gap-1">
               <SignedOut>
-                <SignInButton mode="modal">
-                  <span className="hidden sm:inline cursor-pointer">
-                    Entrar
-                  </span>
-                </SignInButton>
-                <SignUpButton mode="modal">
-                  <span className="hidden sm:inline cursor-pointer">
-                    Registrarse
+              <SignUpButton mode="modal">
+                  <span className="text-sm hidden sm:inline cursor-pointer">
+                  ▸ Create your account
                   </span>
                 </SignUpButton>
+                <SignInButton mode="modal">
+                  <span className="text-sm hidden sm:inline cursor-pointer">
+                  ▸ Login
+                  </span>
+                </SignInButton>
+                
               </SignedOut>
               <SignedIn>
                 <UserButton />
               </SignedIn>
             </div>
             <Link href="/cart" className="p-1 hover:bg-greeen-400 rounded-full">
-              <ShoppingCart className="w-5 h-5" />
+              <ShoppingCart className="size-10" />
             </Link>
           </div>
         </div>
