@@ -1,13 +1,15 @@
 import React from "react";
 import ProductCard from "../ProductCard";
+import {useTranslations} from 'next-intl';
 
 const ProductHome = () => {
+  const t = useTranslations('BestSellers');
   return (
     <div className="w-full h-full">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="w-full flex items-center gap-x-4 py-6">
           <h3 className="text-xl font-bold whitespace-nowrap">
-            Lo más vendido
+            {t('Title')}
           </h3>
           <div className="bg-black h-[1px] w-full"></div>
         </div>
