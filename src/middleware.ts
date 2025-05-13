@@ -6,32 +6,39 @@ import createIntlMiddleware from 'next-intl/middleware';
 const intlMiddleware = createIntlMiddleware({
   locales: ['en', 'es'],
   defaultLocale: 'en',
-  localePrefix: 'as-needed', // o 'always' si prefieres /en/... siempre visible
+  localePrefix: 'always', // o 'always' si prefieres /en/... siempre visible
 });
 
 
 // 2. Configuración de Clerk
 const isProtectedRoute = createRouteMatcher([
-  "/api(.*)",
-  "/protected(.*)",
+  '/(en|es)/protected(.*)',
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
 
-  // Primero ejecuta el middleware de internacionalización
-  const intlResponse = intlMiddleware(req);
-  if (intlResponse) return intlResponse;
-  
   // Luego maneja la autenticación con Clerk
   if (isProtectedRoute(req)) await auth.protect();
 
-  return NextResponse.next();
+  const response = NextResponse.next();
+  
+  // Configura los headers CORS
+  response.headers.set('Access-Control-Allow-Origin', '*');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+
+  // Primero ejecuta el middleware de internacionalización
+  const intlResponse = intlMiddleware(req);
+  if (intlResponse) return intlResponse; 
+ 
+  return response;  
 });
 
 export const config = {
   matcher: [
     '/((?!.+\\.[\\w]+$|_next|_vercel|.*\\..*).*)', // Clerk
     '/', 
-    '/(en|es)/:path*', // next-intl
+    '/(en|es)/:path*',   // next-intl
+    '/api/:path*'
   ],
 };
