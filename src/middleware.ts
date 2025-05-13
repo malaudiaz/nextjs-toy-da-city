@@ -39,6 +39,6 @@ export const config = {
     '/((?!.+\\.[\\w]+$|_next|_vercel|.*\\..*).*)', // Clerk
     '/', 
     '/(en|es)/:path*',   // next-intl
-    '/api/:path*'
+    '/(en|es)/api/:path*'
   ],
 };
