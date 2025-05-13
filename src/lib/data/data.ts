@@ -35,3 +35,72 @@ export const slides = [
       image: "/Group.png",
     },
   ]
+
+  export const Card = [
+    {
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, ...",
+      image: "/princess.png",
+      price: "299",
+      discount: "25%OFF",
+      condition: "BARTER",
+      status: "Like new",
+    },
+    {
+      description: "Simple Mobile 4G LTE Prepaid Smartphone",
+      image: "/dinosaurs.png",
+      price: "220",
+      discount: "25%OFF",
+      condition: "SALE",
+      status: "Acceptable",
+    },
+    {
+      description: "Simple Mobile 4G LTE Prepaid Smartphone",
+      image: "/lego.png",
+      price: "220",
+      discount: "25%OFF",
+      condition: "DONATION",
+      status: "Like new",
+    },
+    {
+      description: "Simple Mobile 4G LTE Prepaid Smartphone",
+      image: "/lego.png",
+      price: "220",
+      discount: "25%OFF",
+      condition: "DONATION",
+      status: "Like new",
+    },
+    {
+      description: "Simple Mobile 4G LTE Prepaid Smartphone",
+      image: "/lego.png",
+      price: "220",
+      discount: "25%OFF",
+      condition: "DONATION",
+      status: "Like new",
+    },
+    {
+      description: "Simple Mobile 4G LTE Prepaid Smartphone",
+      image: "/lego.png",
+      price: "220",
+      discount: "25%OFF",
+      condition: "DONATION",
+      status: "Like new",
+    },
+    {
+      description: "Simple Mobile 4G LTE Prepaid Smartphones",
+      image: "/lego.png",
+      price: "220",
+      discount: "25%OFF",
+      condition: "DONATION",
+      status: "Like new",
+    }
+    ,    {
+      description: "Simple Mobile 4G LTE Prepaid Smartphone",
+      image: "/lego.png",
+      price: "220",
+      discount: "25%OFF",
+      condition: "DONATION",
+      status: "Like new",
+    }
+  ]
+
+  
