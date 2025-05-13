@@ -1,13 +1,17 @@
 "use client";
 
 import BannerCarousel from "@/components/shared/banner/BannerCarousel";
-import ProductHome from "@/components/shared/home/ProductHome";
+import BestDeals from "@/components/shared/home/BestDeals";
+import HeroSection from "@/components/shared/home/HeroSection";
 
 export default function Home() {
   return (
     <>
-      <BannerCarousel />
-      <ProductHome />
+    <HeroSection/>
+    <div className="mt-20"></div>
+    <BestDeals/>
+      {/* <BannerCarousel /> */}
+      {/* <ProductHome /> */}
     </>
   );
 }

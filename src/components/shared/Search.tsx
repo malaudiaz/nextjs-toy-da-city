@@ -1,22 +1,23 @@
 import { Input } from '@/components/ui/input'
 import { SearchIcon } from 'lucide-react'
 import React from 'react'
+import { Button } from '../ui/button'
 
 const Search = () => {
   return (
-    <form action="" className="w-full flex  items-stretch h-9 ">
+    <form action="" className="w-[646px] flex  h-9 ">
         <Input
-      className="flex-1 rounded-none dark:border-gray-200 bg-gray-100 text-black text-base h-full"
+      className="flex-1 rounded-none bg-gray-100 text-black text-base h-full"
       placeholder={`look for a toy`}
       name="q"
       type="search"
     />
-    <button
+    <Button
       type="submit"
-      className="test2 text-primary-foreground rounded-s-none rounded-e-md h-full px-3 py-2 "
+      className="bg-white rounded-none h-full px-3 py-2 "
     >
-      <SearchIcon className="w-6 h-6" />
-    </button>
+      <SearchIcon className="w-6 h-6 text-gray-500" />
+    </Button>
   </form>
   )
 }
