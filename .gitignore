@@ -44,6 +44,3 @@ next-env.d.ts
 /.clerk/
 
 .vscode
-
-package.json
-package-lock.json

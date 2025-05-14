@@ -5,10 +5,14 @@ import { CategorySchema, PaginationSchema } from "@/lib/schemas/category";
 import { getTranslations } from "next-intl/server";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { getAuthUserFromRequest } from "@/lib/auth";
 
 // GET - Obtener todas las categorías con paginado
 export async function GET(req: NextApiRequest) {
-  const { userId } = await auth();
+
+  const { userId } = await getAuthUserFromRequest(req);
+
+  //const { userId } = await auth();
 
   if (!userId) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
