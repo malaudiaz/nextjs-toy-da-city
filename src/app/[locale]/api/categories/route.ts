@@ -12,8 +12,6 @@ export async function GET(req: NextApiRequest) {
 
   const { userId } = await getAuthUserFromRequest(req);
 
-  //const { userId } = await auth();
-
   if (!userId) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
