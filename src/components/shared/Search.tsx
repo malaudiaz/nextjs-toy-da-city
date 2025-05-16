@@ -1,25 +1,29 @@
-import { Input } from '@/components/ui/input'
-import { SearchIcon } from 'lucide-react'
-import React from 'react'
-import { Button } from '../ui/button'
+import { Input } from "@/components/ui/input";
+import { SearchIcon } from "lucide-react";
+import React from "react";
+import { Button } from "../ui/button";
 
 const Search = () => {
   return (
-    <form action="" className="w-[646px] flex  h-9 ">
+    <form action="" className="w-full flex  h-9 ">
+      <div className="relative w-full">
         <Input
-      className="flex-1 rounded-none bg-gray-100 text-black text-base h-full"
-      placeholder={`look for a toy`}
-      name="q"
-      type="search"
-    />
-    <Button
+          className="flex-1 rounded-md bg-gray-100 text-black text-base h-full"
+          placeholder={`look for a toy`}
+          name="q"
+          type="search"
+        />
+        <Button
       type="submit"
-      className="bg-white rounded-none h-full px-3 py-2 "
+      className="rounded-md bg-[#e07a5f] hover:bg-[#bb664f] md:bg-[#4c754b] h-full px-3 py-2 absolute right-0 top-0"
     >
-      <SearchIcon className="w-6 h-6 text-gray-500" />
-    </Button>
-  </form>
-  )
-}
+      <SearchIcon className="w-6 h-6 text-white" />
+    </Button> 
+      </div>
+    </form>
+  );
+};
 
-export default Search
+export default Search;
+
+
