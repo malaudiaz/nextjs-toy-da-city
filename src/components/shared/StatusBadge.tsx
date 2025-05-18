@@ -11,7 +11,9 @@ const statusBadge = () => {
         case 'Like new':
             return "bg-blue-500"
         case 'Acceptable':
-            return "bg-green-500"
+            return "bg-brown-500"
+        case 'New':
+            return "bg-green-700"
         default:
             return "bg-red-500"
     }

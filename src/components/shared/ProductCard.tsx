@@ -25,15 +25,31 @@ const ProductCard = ({
 }: ProductCardProps) => {
   return (
     <Card className="flex flex-col h-[300px] overflow-hidden py-0">
-    <div className="w-full h-1/2 relative">
-      <Image src={image || "/placeholder.svg"} alt="product" fill className="object-cover" />
-    </div>
-    <CardContent className="flex flex-col flex-grow px-4 h-1/2">
-      <h1 className="text-lg font-semibold">{status}</h1>
-      <p className="line-clamp-2 min-h-[40px] text-gray-600 my-2">{description}</p>
-      <span className="text-sm text-green-700 mt-auto font-medium">{price}</span>
-    </CardContent>
-  </Card>
+      <div className="w-full h-1/2 relative">
+        {condition && (
+          <ConditionBadge
+            condition={condition}
+            className="absolute top-3 left-4 z-10 bg-red-500 text-white px-2"
+          />
+        )}
+        <Image
+          src={image || "/placeholder.svg"}
+          alt="product"
+          fill
+          className="object-cover"
+        />
+      </div>
+      <CardContent className="flex flex-col flex-grow px-3 h-1/2">
+        <span className="text-md text-green-700 font-medium">${price}</span>
+        <h1 className="text-lg font-semibold">
+          {" "}
+          {<StatusBadge status={status} />}
+        </h1>
+        <p className="line-clamp-2 min-h-[40px] mt-auto text-gray-600 my-2">
+          {description}
+        </p>
+      </CardContent>
+    </Card>
   );
 };
 

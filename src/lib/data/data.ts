@@ -1,9 +1,9 @@
 export const slides = [
     {
       id: 1,
-      title: "Welcome to",
+      title: "welcome to",
       subtitle: "Toydacity",
-      tagline: "Keep the Adventure Alive",
+      tagline: "Sustainable Toy Marketplace",
       image: "/Group.png",
     },
     {
