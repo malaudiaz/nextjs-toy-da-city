@@ -20,10 +20,10 @@ const statusBadge = () => {
 }
 
   return (
-    <h3 className='flex gap-2 items-center min-h-[24px]'>
+    <div className='flex gap-2 items-center min-h-[24px]'>
     <div className={`rounded-full size-4 ${statusBadge()}`}></div>
     <span className="line-clamp-1">{status}</span>
-  </h3>
+  </div>
   )
 }
 
