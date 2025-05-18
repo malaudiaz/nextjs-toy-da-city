@@ -57,7 +57,7 @@ export async function GET(req: NextApiRequest) {
   }
 }
 
-// app/api/categories/route.ts
+// POST - Insertar nueva categoría.
 export async function POST(request: Request) {
   const { userId } = await auth();
 
@@ -77,7 +77,12 @@ export async function POST(request: Request) {
 
     // 3. Crear categoría en Prisma
     const category = await prisma.category.create({
-      data: validatedData,
+      //data: validatedData,
+      data: {
+        name:validatedData.name,
+        description: validatedData.description,
+        //userId: userId
+      }      
     });
 
     return NextResponse.json(
