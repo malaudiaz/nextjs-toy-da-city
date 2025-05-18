@@ -1,0 +1,33 @@
+1. Crear Migración Inicial
+
+    Ejecuta este comando para generar y aplicar tu primera migración:
+
+    npx prisma migrate dev --name init
+
+
+2. Modificar una Tabla Existente
+
+    Paso 1: Edita el modelo en schema.prisma para agregar nuevos campos:
+
+    prisma
+    model User {
+      id        Int      @id @default(autoincrement())
+      name      String
+      email     String   @unique
+      // Nuevos campos:
+      age       Int?
+      createdAt DateTime @default(now())
+      updatedAt DateTime @updatedAt
+    }
+
+    Paso 2: Genera y aplica la migración:
+
+    npx prisma migrate dev --name add_user_fields
+
+
+3. Comandos Clave para Migraciones
+
+    npx prisma migrate dev	    Crea y aplica migraciones (desarrollo)
+    npx prisma migrate deploy	Aplica migraciones en producción
+    npx prisma migrate reset	Borra y recrea la base de datos (solo dev)
+    npx prisma migrate status	Muestra el estado de las migraciones
