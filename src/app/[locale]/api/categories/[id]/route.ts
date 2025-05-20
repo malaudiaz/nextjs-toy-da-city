@@ -82,9 +82,17 @@ export async function DELETE(
       return NextResponse.json({ error: t("InvalidId") }, { status: 400 });
     }
 
-    await prisma.category.delete({
+    await prisma.category.update({
       where: { id: Number(categoryId) },
-    });
+      data: {
+        isActive: false,
+        userId: userId
+      }
+    })
+
+    //await prisma.category.delete({
+    //where: { id: Number(categoryId) },
+    //});
 
     return NextResponse.json(
       { message: t("DeletedSuccessfully") },

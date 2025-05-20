@@ -37,6 +37,9 @@ export async function GET(req: NextApiRequest) {
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: "desc" },
+        where: {
+          isActive: true
+        }        
       }),
       prisma.category.count(),
     ]);
@@ -81,7 +84,7 @@ export async function POST(request: Request) {
       data: {
         name:validatedData.name,
         description: validatedData.description,
-        //userId: userId
+        userId: userId
       }      
     });
 
