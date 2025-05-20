@@ -64,7 +64,7 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
+export async function DEACTIVATE(
   request: Request,
   { params }: { params: { id: string } }
 ) {
@@ -89,10 +89,40 @@ export async function DELETE(
         userId: userId
       }
     })
+  } catch (error) {
+    // Manejo de errores con PrismaClientKnownRequestError
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      // ¡Ahora funciona!
+      if (error.code === "P2025") {
+        return NextResponse.json({ error: t("NotFound") }, { status: 404 });
+      }
+    }
 
-    //await prisma.category.delete({
-    //where: { id: Number(categoryId) },
-    //});
+    return NextResponse.json({ error: t("ServerError") }, { status: 500 });
+  }
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  }
+
+  const t = await getTranslations("Categories.errors");
+  const categoryId = params.id;
+
+  try {
+    if (!categoryId || isNaN(Number(categoryId))) {
+      return NextResponse.json({ error: t("InvalidId") }, { status: 400 });
+    }
+
+    await prisma.category.delete({
+      where: { id: Number(categoryId) },
+    });
 
     return NextResponse.json(
       { message: t("DeletedSuccessfully") },
