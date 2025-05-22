@@ -4,9 +4,19 @@
       "text": "Texto",
       "subtitle": "Paquete de pequeños juguetes",
       "description": "250 piezas coloridas, incluye manual y 5 modelos de edificios..."
-  },
+      },
   "Categories": {
     "errors": {
+        "InvalidParams": "Parámetros inválidos",
+        "ValidationsErrors": "Errores de validación",
+        "ServerError": "Error interno del servidor",
+        "NotFound": "Categoría no encontrada",
+        "UpdateError": "Error actualizando categoría",
+        "DeleteError": "Error eliminando categoría"
+        }
+      },
+    "Status": {
+      "errors": {
         "InvalidParams": "Parámetros inválidos",
         "ValidationsErrors": "Errores de validación",
         "ServerError": "Error interno del servidor",
