@@ -1,7 +1,7 @@
 import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { NextApiRequest } from "next";
-import { StatusSchema, PaginationSchema, StatusUpdateSchema } from "@/lib/schemas/status";
+import { StatusSchema, PaginationSchema} from "@/lib/schemas/status";
 import { getTranslations } from "next-intl/server";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
@@ -33,7 +33,7 @@ export async function GET(request: NextApiRequest) {
       limit: l,
     });
 
-    const [statuses, total] = await Promise.all([
+    const [status, total] = await Promise.all([
       prisma.status.findMany({
         skip: (page - 1) * limit,
         take: limit,
@@ -47,7 +47,7 @@ export async function GET(request: NextApiRequest) {
 
     return NextResponse.json({
       status: 200,
-      data: statuses,
+      data: status,
       meta: {
         total,
         page,
