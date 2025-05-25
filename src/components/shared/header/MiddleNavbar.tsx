@@ -1,8 +1,6 @@
-import Image from "next/image";
 import React from "react";
 import Search from "../Search";
 import Link from "next/link";
-import { Heart, ShoppingCart, User } from "lucide-react";
 
 import {
   SignedIn,
@@ -11,7 +9,6 @@ import {
   SignUpButton,
   UserButton,
 } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
 
 const MiddleNavbar = () => {
   return (
