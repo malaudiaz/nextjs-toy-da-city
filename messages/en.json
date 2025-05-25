@@ -14,5 +14,15 @@
             "UpdateError": "Error updating category",
             "DeleteError": "Error deleting category"
         }
+    },
+    "Status": {
+        "errors": {
+            "InvalidParams": "Parámetros inválidos",
+            "ValidationsErrors": "Errores de validación",
+            "ServerError": "Error interno del servidor",
+            "NotFound": "Categoría no encontrada",
+            "UpdateError": "Error actualizando categoría",
+            "DeleteError": "Error eliminando categoría"
+        }
     }
 }

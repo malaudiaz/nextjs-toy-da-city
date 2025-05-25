@@ -1,29 +1,30 @@
 import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { NextApiRequest } from "next";
-import { CategorySchema, PaginationSchema } from "@/lib/schemas/category";
+import { StatusSchema, PaginationSchema, StatusUpdateSchema } from "@/lib/schemas/status";
 import { getTranslations } from "next-intl/server";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/auth";
 
-// GET - Obtener todas las categorías con paginado
-export async function GET(req: NextApiRequest) {
 
-  const { userId } = await getAuthUserFromRequest(req);
+// GET all statuses con paginación y búsqueda
+export async function GET(request: NextApiRequest) {
+  
+  const { userId } = await getAuthUserFromRequest(request);
 
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized User" }, { status: 401 });
   }
 
-  const t = await getTranslations("Categories.errors");
+  const t = await getTranslations("Status.errors");
 
   let p =1;
   let l = 10;
 
-  if (req.query) {
-    p = req.query.page ? parseInt(req.query.page as string) : p;
-    l = req.query.limit ? parseInt(req.query.limit as string) : l;  
+  if (request.query) {
+    p = request.query.page ? parseInt(request.query.page as string) : p;
+    l = request.query.limit ? parseInt(request.query.limit as string) : l;  
   }
 
   try {
@@ -32,8 +33,8 @@ export async function GET(req: NextApiRequest) {
       limit: l,
     });
 
-    const [categories, total] = await Promise.all([
-      prisma.category.findMany({
+    const [statuses, total] = await Promise.all([
+      prisma.status.findMany({
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: "desc" },
@@ -41,12 +42,12 @@ export async function GET(req: NextApiRequest) {
           isActive: true
         }        
       }),
-      prisma.category.count(),
+      prisma.status.count(),
     ]);
 
     return NextResponse.json({
       status: 200,
-      data: categories,
+      data: statuses,
       meta: {
         total,
         page,
@@ -60,15 +61,16 @@ export async function GET(req: NextApiRequest) {
   }
 }
 
-// POST - Insertar nueva categoría.
+
+// POST create a new status
 export async function POST(request: Request) {
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized User" }, { status: 401 });
   }
 
-  const t = await getTranslations("Categories.errors");
+  const t = await getTranslations("Status.errors");
 
   try {
     // 1. Obtener el cuerpo de la solicitud
@@ -76,10 +78,10 @@ export async function POST(request: Request) {
     console.log(body); // Verifica los datos recibidos
 
     // 2. Validar con Zod
-    const validatedData = CategorySchema.parse(body);
+    const validatedData = StatusSchema.parse(body);
 
-    // 3. Crear categoría en Prisma
-    const category = await prisma.category.create({
+    // 3. Crear status en Prisma
+    const status = await prisma.status.create({
       //data: validatedData,
       data: {
         name:validatedData.name,
@@ -89,7 +91,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(
-      { data: category },
+      { data: status },
       { status: 201 }
     );
 
@@ -107,7 +109,7 @@ export async function POST(request: Request) {
 
     // Otros errores (ej: fallo en Prisma)
     return NextResponse.json(
-      { error: t("ServerError") },
+      { error: t("Failed to create status") },
       { status: 500 }
     );
   }
