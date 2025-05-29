@@ -11,6 +11,7 @@ import { esES } from "@clerk/localizations";
 import { dark } from "@clerk/themes";
 import Navbar from "@/components/shared/header/Navbar";
 import Footer from "@/components/shared/footer/Footer";
+import ScrollToTop from "@/components/shared/ScrollToTop";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,6 +48,7 @@ export default async function RootLayout({
           <NextIntlClientProvider>
             <Navbar />
             {children}
+            <ScrollToTop/>
             <Footer />
           </NextIntlClientProvider>
         </body>

@@ -17,7 +17,7 @@ const MiddleNavbar = () => {
         <div className="md:hidden">
         <Search />
         <div className="flex items-center justify-between gap-2 pt-2 px-1">
-          <Link href={"/"} className="text-white font-medium">
+          <Link href={"/en/post"} className="text-white font-medium">
             Post Toy
           </Link>
           <div className="flex items-center gap-2">

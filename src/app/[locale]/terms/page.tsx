@@ -1,3 +1,4 @@
+"use client";
 import Head from 'next/head';
 import styles from './terms.module.css';
 
@@ -11,7 +12,7 @@ export default function TermsConditions() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Términos y Condiciones de ToydaCity</h1>
-        <p className={styles.effectiveDate}>Última actualización: {new Date().toLocaleDateString()}</p>
+        <p className={styles.effectiveDate}>Última actualización: 21/05/2025</p>
 
         <section className={styles.section}>
           <h2>1. Aceptación de los Términos</h2>

@@ -15,7 +15,7 @@ const Search = () => {
         />
         <Button
       type="submit"
-      className="rounded-md bg-[#e07a5f] hover:bg-[#bb664f] md:bg-[#4c754b] h-full px-3 py-2 absolute right-0 top-0"
+      className="rounded-md bg-[#e07a5f] hover:bg-[#bb664f] h-full px-3 py-2 absolute right-0 top-0"
     >
       <SearchIcon className="w-6 h-6 text-white" />
     </Button> 

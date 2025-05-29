@@ -85,7 +85,7 @@ export default function PrivacyPolicy() {
         <section className={styles.section}>
           <h2>7. Cambios en esta política</h2>
           <p>Actualizaremos esta política cuando sea necesario. Te notificaremos sobre cambios significativos.</p>
-          <p>Última actualización: {new Date().toLocaleDateString()}</p>
+          <p>Última actualización: 21/05/2025</p>
         </section>
 
         <section className={styles.contact}>
