@@ -22,12 +22,12 @@ import {
 
 const TopNavbar = () => {
   return (
-    <header className="bg-[#f2cc8f] w-full p-4">
+    <header className="bg-[#FAF1DE] w-full p-4">
       <div className="mx-auto max-w-7xl">
         {/* Versión móvil */}
         <div className="flex md:hidden items-center justify-between">
          <div className="flex items-center gap-1">
-         <Button className="bg-[#f2cc8f] hover:bg-[#caaa77] shadow-none p-2">
+         <Button className="bg-[#FAF1DE] hover:bg-[#FAF1DE] shadow-none p-2">
             <LucideMenu className="text-black size-5" />
           </Button>
           <Image src="/Logo.png" alt="logo" width={140} height={28} />
@@ -45,7 +45,7 @@ const TopNavbar = () => {
 
           <div className="flex items-center gap-6">
             <Button className="whitespace-nowrap bg-[#4c754b] text-white px-4">
-              Publish a Toy
+              <Link href={"/en/post"}>Post a Toy</Link>
             </Button>
 
             <div className="flex flex-col items-start gap-1">
