@@ -15,6 +15,7 @@ model Category {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  toys        Toy[] 
 }
 
 model Status {
@@ -25,5 +26,21 @@ model Status {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  toys        Toy[]
   
+}
+
+model Toy {
+  id              Int       @id @default(autoincrement())
+  description     String
+  userId          String
+  price           Float
+  location        String
+  recommendedAge  Int
+  category        Category @relation(fields: [categoryId], references: [id])
+  categoryId      Int
+  status          Status    @relation(fields: [statusId], references: [id])
+  statusId        Int
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }

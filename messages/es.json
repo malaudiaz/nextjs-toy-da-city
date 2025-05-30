@@ -23,6 +23,16 @@
         "NotFound": "Categoría no encontrada",
         "UpdateError": "Error actualizando categoría",
         "DeleteError": "Error eliminando categoría"
+      }
+    },
+    "Toy": {
+      "errors": {
+        "InvalidParams": "Parámetros inválidos",
+        "ValidationsErrors": "Errores de validación",
+        "ServerError": "Error interno del servidor",
+        "NotFound": "Juguete no encontrado",
+        "UpdateError": "Error actualizando juguete",
+        "DeleteError": "Error eliminando juguete"
+      }
     }
-  }
 }

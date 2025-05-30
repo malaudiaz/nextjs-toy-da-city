@@ -17,12 +17,22 @@
     },
     "Status": {
         "errors": {
-            "InvalidParams": "Parámetros inválidos",
-            "ValidationsErrors": "Errores de validación",
-            "ServerError": "Error interno del servidor",
-            "NotFound": "Categoría no encontrada",
-            "UpdateError": "Error actualizando categoría",
-            "DeleteError": "Error eliminando categoría"
+            "InvalidParams": "Invalid Params",
+            "ValidationsErrors": "Validations Errors",
+            "ServerError": "Internal Server Error",
+            "NotFound": "Status not found",
+            "UpdateError": "Error updating status",
+            "DeleteError": "Error deleting status"
         }
+    },
+    "Toy": {
+      "errors": {
+        "InvalidParams": "Invalid Params",
+        "ValidationsErrors": "Validations Errors",
+        "ServerError": "Internal Server Error",
+        "NotFound": "Toy not found",
+        "UpdateError": "Error updating toy",
+        "DeleteError": "Error deleting toy"
+      }
     }
 }
