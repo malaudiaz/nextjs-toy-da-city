@@ -43,4 +43,18 @@ model Toy {
   statusId        Int
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+  media           Media[]   // Relación uno a muchos con Media
+}
+
+model Media {
+  id        String    @id @default(uuid())
+  fileUrl   String
+  type      FileType
+  toyId     Int
+  toy       Toy       @relation(fields: [toyId], references: [id])
+}
+
+enum FileType {
+  IMAGE
+  VIDEO
 }
