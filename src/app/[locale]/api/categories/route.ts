@@ -1,41 +1,33 @@
 import { z } from "zod";
 import prisma from "@/lib/prisma";
-import { NextApiRequest } from "next";
 import { CategorySchema, PaginationSchema } from "@/lib/schemas/category";
 import { getTranslations } from "next-intl/server";
-import { auth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/auth";
 
 // GET - Obtener todas las categorías con paginado
-export async function GET(req: NextApiRequest) {
+export async function GET(req: NextRequest) {
 
-  const { userId } = await getAuthUserFromRequest(req);
+  const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!success && !userId) {
+    return NextResponse.json({ error: error}, { status: code });
   }
 
   const t = await getTranslations("Categories.errors");
 
-  let p =1;
-  let l = 10;
-
-  if (req.query) {
-    p = req.query.page ? parseInt(req.query.page as string) : p;
-    l = req.query.limit ? parseInt(req.query.limit as string) : l;  
-  }
-
   try {
-    const { page, limit } = PaginationSchema.parse({
-      page: p,
-      limit: l,
+    const { searchParams } = new URL(req.url!)
+
+    const pagination = PaginationSchema.parse({
+      page: searchParams.get('page'),
+      limit: searchParams.get('limit')
     });
 
     const [categories, total] = await Promise.all([
       prisma.category.findMany({
-        skip: (page - 1) * limit,
-        take: limit,
+        skip: (pagination.page - 1) * pagination.limit,
+        take: pagination.limit,
         orderBy: { createdAt: "desc" },
         where: {
           isActive: true
@@ -49,9 +41,9 @@ export async function GET(req: NextApiRequest) {
       data: categories,
       meta: {
         total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
+        page:pagination.page,
+        llimit:pagination.limit,
+        totalPages: Math.ceil(total / pagination.limit),
       },
     });
   } catch (error) {
@@ -61,18 +53,18 @@ export async function GET(req: NextApiRequest) {
 }
 
 // POST - Insertar nueva categoría.
-export async function POST(request: Request) {
-  const { userId } = await auth();
+export async function POST(req: Request) {
+  const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
-  if (!userId) {
-    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  if (!success && !userId) {
+    return NextResponse.json({ error: error}, { status: code });
   }
 
   const t = await getTranslations("Categories.errors");
 
   try {
     // 1. Obtener el cuerpo de la solicitud
-    const body = await request.json();
+    const body = await req.json();
     console.log(body); // Verifica los datos recibidos
 
     // 2. Validar con Zod
@@ -84,7 +76,7 @@ export async function POST(request: Request) {
       data: {
         name:validatedData.name,
         description: validatedData.description,
-        userId: userId
+        userId: userId!
       }      
     });
 

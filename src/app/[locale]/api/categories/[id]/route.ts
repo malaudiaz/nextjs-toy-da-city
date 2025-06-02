@@ -1,4 +1,3 @@
-
 // app/api/categories/[id]/route.ts
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -8,26 +7,27 @@ import { getTranslations } from "next-intl/server";
 import { Prisma } from "@prisma/client";
 import { auth } from "@clerk/nextjs/server";
 import { CategoryUpdateSchema } from "@/lib/schemas/category";
+import { getAuthUserFromRequest } from "@/lib/auth";
 
 export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const { userId } = await auth();
+  const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
-  if (!userId) {
-    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  if (!success && !userId) {
+    return NextResponse.json({ error: error }, { status: code });
   }
-
-  //const { id: categoryId } = await params;
-  const categoryId = params.id;
 
   const t = await getTranslations("Categories.errors");
 
   try {
     // Validar ID
-    if (!categoryId || isNaN(Number(categoryId))) {
-      return NextResponse.json({ error: t("InvalidId") }, { status: 400 });
+    if (!params.id || isNaN(Number(params.id))) {
+      return NextResponse.json(
+        { error: t("Invalid Category ID") },
+        { status: 400 }
+      );
     }
 
     // Obtener y validar cuerpo
@@ -36,7 +36,7 @@ export async function PUT(
 
     // Actualizar categoría
     const updatedCategory = await prisma.category.update({
-      where: { id: Number(categoryId) },
+      where: { id: Number(params.id) },
       data: validatedData,
     });
 
@@ -86,9 +86,9 @@ export async function DEACTIVATE(
       where: { id: Number(categoryId) },
       data: {
         isActive: false,
-        userId: userId
-      }
-    })
+        userId: userId,
+      },
+    });
   } catch (error) {
     // Manejo de errores con PrismaClientKnownRequestError
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -103,29 +103,31 @@ export async function DEACTIVATE(
 }
 
 export async function DELETE(
-  request: Request,
+  req: Request,
   { params }: { params: { id: string } }
 ) {
-  const { userId } = await auth();
+  const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
-  if (!userId) {
-    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  if (!success && !userId) {
+    return NextResponse.json({ error: error }, { status: code });
   }
 
   const t = await getTranslations("Categories.errors");
-  const categoryId = params.id;
 
   try {
-    if (!categoryId || isNaN(Number(categoryId))) {
-      return NextResponse.json({ error: t("InvalidId") }, { status: 400 });
+    if (!params.id || isNaN(Number(params.id))) {
+      return NextResponse.json(
+        { error: t("Invalid Category Id") },
+        { status: 400 }
+      );
     }
 
     await prisma.category.delete({
-      where: { id: Number(categoryId) },
+      where: { id: Number(params.id) },
     });
 
     return NextResponse.json(
-      { message: t("DeletedSuccessfully") },
+      { message: t("Deleted Category Successfully") },
       { status: 200 }
     );
   } catch (error) {
@@ -142,47 +144,52 @@ export async function DELETE(
 }
 
 export async function PATCH(
-  request: Request,
+  req: Request,
   { params }: { params: { id: string } }
 ) {
-  try {
-    // 1. Obtener y validar ID
-    const categoryId = params.id;
-    if (!categoryId || isNaN(Number(categoryId))) {
-      return NextResponse.json(
-        { error: "ID de categoría inválido" },
-        { status: 400 }
-      );
-    }
+  const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
+  if (!success && !userId) {
+    return NextResponse.json({ error: error }, { status: code });
+  }
+
+  const t = await getTranslations("Categories.errors");
+
+  if (!params.id || isNaN(Number(params.id))) {
+    return NextResponse.json(
+      { error: "ID de categoría inválido" },
+      { status: 400 }
+    );
+  }
+
+  try {
     // 2. Parsear cuerpo
-    const body = await request.json();
-    
+    const body = await req.json();
+
     // 3. Validación parcial (schema diferente al POST)
     const validatedData = CategoryUpdateSchema.parse(body);
 
     // 4. Actualizar solo campos proporcionados
     const updatedCategory = await prisma.category.update({
-      where: { id: Number(categoryId) },
+      where: { id: Number(params.id) },
       data: validatedData, // Solo actualiza los campos enviados
     });
 
     return NextResponse.json(updatedCategory, { status: 200 });
-
   } catch (error) {
     // Manejo de errores específicos
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { 
+        {
           error: "Error de validación",
-          details: error.errors.map(e => `${e.path}: ${e.message}`)
+          details: error.errors.map((e) => `${e.path}: ${e.message}`),
         },
         { status: 400 }
       );
     }
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === 'P2025') {
+      if (error.code === "P2025") {
         return NextResponse.json(
           { error: "Categoría no encontrada" },
           { status: 404 }

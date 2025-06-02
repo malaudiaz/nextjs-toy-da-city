@@ -58,8 +58,8 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url!)
 
     const pagination = PaginationSchema.parse({
-      page: request.nextUrl.searchParams.get('page'),
-      limit: request.nextUrl.searchParams.get('limit')
+      page: searchParams.get('page'),
+      limit: searchParams.get('limit')
     });
 
     const filters = ToyFilterSchema.parse({
