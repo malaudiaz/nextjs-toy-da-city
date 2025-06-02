@@ -27,13 +27,11 @@ model Status {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   toys        Toy[]
-  
 }
 
 model Toy {
-  id              Int       @id @default(autoincrement())
+  id              String    @id @default(uuid())
   description     String
-  userId          String
   price           Float
   location        String
   recommendedAge  Int
@@ -41,8 +39,10 @@ model Toy {
   categoryId      Int
   status          Status    @relation(fields: [statusId], references: [id])
   statusId        Int
+  userId          String
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+  isActive        Boolean  @default(true)
   media           Media[]   // Relación uno a muchos con Media
 }
 
@@ -50,7 +50,7 @@ model Media {
   id        String    @id @default(uuid())
   fileUrl   String
   type      FileType
-  toyId     Int
+  toyId     String
   toy       Toy       @relation(fields: [toyId], references: [id])
 }
 

@@ -1,9 +1,15 @@
 // lib/authUtils.ts
 import { auth } from "@clerk/nextjs/server";
 import { verifyToken } from "@clerk/clerk-sdk-node";
-import { NextApiRequest } from "next";
 
-export async function getAuthUserFromRequest(req: NextApiRequest) {
+declare interface AuthResponse {
+  success: boolean
+  userId?: string,
+  error: string
+  code?: number
+}
+
+export async function getAuthUserFromRequest(req: Request): Promise<AuthResponse> {
 
   if (req.headers instanceof Headers) {
    
@@ -27,10 +33,10 @@ export async function getAuthUserFromRequest(req: NextApiRequest) {
           issuer: issuer,
         });
 
-        return { userId: decoded.sub };
+        return { success: true, userId: decoded.sub, error: "", code: 200 };
       } catch (error) {
         console.log(error);
-        throw new Error("Invalid Bearer token");
+        return { success: false, userId: "", error: "Invalid Bearer token", code: 401 };
       }
     }
   }
@@ -38,12 +44,14 @@ export async function getAuthUserFromRequest(req: NextApiRequest) {
   // Caso 2: Si viene del navegador, usa `auth()` (lee las cookies)
   try {
     const { userId } = await auth();
-    if (!userId) throw new Error("No user found in session");
+    if (!userId) {
+        return { success: false, userId: "", error: "No user found in session", code: 401 };
+    }
 
-    return { userId };
+    return { success: true, userId: userId!, error: "", code: 200 };
   } catch (error) {
     console.log(error);
-    throw new Error("Not authenticated");
+      return { success: false, userId: "", error: "Not Authenticate", code: 401 };
   }
 
 }

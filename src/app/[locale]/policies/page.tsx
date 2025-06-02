@@ -35,7 +35,7 @@ export default function Policies() {
           Opt-Out: Toggle off "Personalized Ads" in Settings.
         </p>
 
-        <Link href={"/"}>Full Document Link</Link>
+        <Link href={"/deletedata"}>Full Document Link</Link>
       </div>
     </div>
   );

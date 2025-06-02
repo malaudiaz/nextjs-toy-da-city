@@ -1,115 +1,297 @@
-import { z } from "zod";
 import prisma from "@/lib/prisma";
-import { NextApiRequest } from "next";
-import { ToySchema, PaginationSchema} from "@/lib/schemas/toy";
+import { join } from 'path'
+import { v4 as uuidv4 } from 'uuid'
+import { writeFile, mkdir } from 'fs/promises'
+import { PaginationSchema, ToyFilterSchema, ToySchema} from "@/lib/schemas/toy";
 import { getTranslations } from "next-intl/server";
-import { auth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/auth";
+import { ToyResponseSuccess, ToyResponseError, ToyWhereInput } from "@/types/toy";
+
+const ALLOWED_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+  'video/mp4',
+  'video/quicktime',
+  'video/webm'
+]
+
+const UPLOADS_DIR = join(process.cwd(), 'public', 'uploads')
+const MAX_FILES_PER_TOY = 10 // Límite de archivos por post
+const EARTH_RADIUS_KM = 6371
+
+
+async function ensureUploadsDirExists() {
+  try {
+    await mkdir(UPLOADS_DIR, { recursive: true })
+  } catch (error) {
+    console.error('Error creating uploads directory:', error)
+  }
+}
+
+// Función para calcular distancia haversine
+function haversineDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const dLat = (lat2 - lat1) * Math.PI / 180
+  const dLon = (lon2 - lon1) * Math.PI / 180
+  const a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+  return EARTH_RADIUS_KM * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+}
 
 
 // GET all toys con paginación y búsqueda
-export async function GET(request: NextApiRequest) {
+export async function GET(request: NextRequest) {
   
-  const { userId } = await getAuthUserFromRequest(request);
+  const { success, userId, error, code } = await getAuthUserFromRequest(request);
 
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized User" }, { status: 401 });
+  if (!success && !userId) {
+    return NextResponse.json({ error: error}, { status: code });
   }
 
   const t = await getTranslations("Toy.errors");
 
-  let p =1;
-  let l = 10;
-
-  if (request.query) {
-    p = request.query.page ? parseInt(request.query.page as string) : p;
-    l = request.query.limit ? parseInt(request.query.limit as string) : l;  
-  }
-
   try {
-    const { page, limit } = PaginationSchema.parse({
-      page: p,
-      limit: l,
+    const { searchParams } = new URL(request.url!)
+
+    const pagination = PaginationSchema.parse({
+      page: request.nextUrl.searchParams.get('page'),
+      limit: request.nextUrl.searchParams.get('limit')
     });
 
-    const [toy, total] = await Promise.all([
-      prisma.status.findMany({
-        skip: (page - 1) * limit,
-        take: limit,
-        orderBy: { createdAt: "desc" }       
-      }),
-      prisma.toy.count(),
-    ]);
+    const filters = ToyFilterSchema.parse({
+      minPrice: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined,
+      maxPrice: searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined,
+      ageRange: searchParams.get('minAge') && searchParams.get('maxAge') 
+        ? [Number(searchParams.get('minAge')), Number(searchParams.get('maxAge'))] 
+        : undefined,
+      locationRadius: searchParams.get('lat') && searchParams.get('lng') && searchParams.get('radius')
+        ? {
+            lat: Number(searchParams.get('lat')),
+            lng: Number(searchParams.get('lng')),
+            radius: Number(searchParams.get('radius'))
+          }
+        : undefined,
+      search: searchParams.get('search') || undefined
+    })
+
+    // Construir query de filtrado
+    const where: ToyWhereInput = {isActive: true}
+
+    // Filtro por precio
+    if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {
+      where.price = {
+        gte: filters.minPrice,
+        lte: filters.maxPrice
+      }
+    }
+
+    // Filtro por edad recomendada
+    if (filters.ageRange) {
+      where.recommendedAge = {
+        gte: filters.ageRange[0],
+        lte: filters.ageRange[1]
+      }
+    }
+
+    // Filtro por texto (búsqueda)
+    if (filters.search) {
+      where.description = {
+        contains: filters.search,
+        mode: 'insensitive'
+      }
+    }
+
+    // Consulta base
+    const query = {
+      where,
+      include: { media: true },
+      skip: (pagination.page - 1) * pagination.limit,
+      take: pagination.limit
+    }
+
+    // Ejecutar consulta
+    const [toys, totalCount] = await Promise.all([
+      prisma.toy.findMany(query),
+      prisma.toy.count({ where })
+    ])
+
+    // Filtro por ubicación (post-query por simplicidad)
+    let filteredToys = toys
+    if (filters.locationRadius) {
+      filteredToys = toys.filter(toy => {
+        const [lat, lng] = toy.location.split(',').map(Number)
+        const distance = haversineDistance(
+          filters.locationRadius!.lat,
+          filters.locationRadius!.lng,
+          lat,
+          lng
+        )
+        return distance <= filters.locationRadius!.radius
+      })
+    }
 
     return NextResponse.json({
-      status: 200,
-      data: toy,
-      meta: {
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      },
-    });
+      success: true,
+      data: filteredToys,
+      pagination: {
+        total: totalCount,
+        totalPages: Math.ceil(totalCount / pagination.limit),
+        currentPage: pagination.page,
+        perPage: pagination.limit
+      }
+    })
   } catch (error) {
     console.log(error);
     return NextResponse.json({ error: t("InvalidParams") }, { status: 400 });
   }
 }
 
-
 // POST create a new toy
-export async function POST(request: Request) {
-  const { userId } = await auth();
+export async function POST(request: Request): Promise<NextResponse<ToyResponseSuccess | ToyResponseError>> {
+  const { success, userId, error, code } = await getAuthUserFromRequest(request);
 
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized User" }, { status: 401 });
+  if (!success && !userId) {
+    return NextResponse.json(
+        { 
+          success: success, 
+          error: error 
+        },
+        { status: code }
+      )    
   }
 
   const t = await getTranslations("Toy.errors");
 
   try {
-    // 1. Obtener el cuerpo de la solicitud
-    const body = await request.json();
-    console.log(body); // Verifica los datos recibidos
+    await ensureUploadsDirExists()
 
-    // 2. Validar con Zod
-    const validatedData = ToySchema.parse(body);
+    const formData = await request.formData()
 
-    // 3. Crear toy en Prisma
-    const toy = await prisma.toy.create({
-      //data: validatedData,
-      data: {
-        description: validatedData.description,
-        price: validatedData.price,
-        location: validatedData.location,
-        recommendedAge: validatedData.recommendedAge,
-        userId: userId
-      }      
-    });
+    // Validar con Zod
+    const toyData = ToySchema.parse({
+      description: formData.get('description'),
+      location: formData.get('location'),
+      recommendedAge: Number(formData.get('recommendedAge')),
+      price: Number(formData.get('price')),
+      categoryId: Number(formData.get('categoryId')),
+      statusId: Number(formData.get('statusId'))
+    })
 
-    return NextResponse.json(
-      { data: toy },
-      { status: 201 }
-    );
+    const files = formData.getAll('files') as Blob[]
 
-  } catch (error) {
-    // Manejo de errores específicos de Zod
-    if (error instanceof z.ZodError) {
+    // Validar número de archivos
+    if (files.length > MAX_FILES_PER_TOY) {
       return NextResponse.json(
-        {
-          error: t("ValidationsErrors"),
-          details: error.errors.map((e) => `${e.path}: ${e.message}`),
+        { 
+          success: false, 
+          error: `Maximum ${MAX_FILES_PER_TOY} files allowed per post` 
         },
         { status: 400 }
-      );
+      )
     }
 
-    // Otros errores (ej: fallo en Prisma)
+    // Crear el primer toy
+    const toy = await prisma.toy.create({
+      data: {
+        description: toyData.description,
+        price: toyData.price,
+        location:toyData.location,
+        recommendedAge: toyData.recommendedAge,
+        userId: userId!,
+        categoryId: toyData.categoryId,
+        statusId:toyData.statusId,
+        media: {
+          create: [] // Inicializar array vacío
+        }
+      }
+    })
+
+    // Procesar cada archivo
+    const mediaItems = []
+    
+    for (const file of files) {
+      // Validar tipo de archivo
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        await prisma.toy.delete({ where: { id: toy.id } }) // Rollback
+        return NextResponse.json(
+          { success: false, error: `Unsupported file type: ${file.type}` },
+          { status: 400 }
+        )
+      }
+
+      // Generar nombre único
+      const extension = file.type.split('/')[1]
+      const filename = `${uuidv4()}.${extension}`
+      const filePath = join(UPLOADS_DIR, filename)
+
+      // Guardar archivo
+      const buffer = Buffer.from(await file.arrayBuffer())
+      await writeFile(filePath, buffer)
+
+      // Crear media asociada al toy
+      const media = await prisma.media.create({
+        data: {
+          fileUrl: `/uploads/${filename}`,
+          type: file.type.startsWith('image') ? 'IMAGE' : 'VIDEO',
+          toyId: toy.id
+        }
+      })
+      
+      mediaItems.push(media)
+    }
+
+    // Obtener el post actualizado con los media
+    const updatedPost = await prisma.toy.findUnique({
+      where: { id: toy.id },
+      include: { media: true }
+    })
+
+    // Estructurar la respuesta para que coincida con PostResponse
+    const responseData: ToyResponseSuccess = {
+      success: true,
+      data: {
+        id: updatedPost!.id,
+        description: updatedPost!.description,
+        price: updatedPost!.price,
+        location: updatedPost!.location,
+        recommendedAge: updatedPost!.recommendedAge,
+        createdAt: updatedPost!.createdAt,
+        updatedAt: updatedPost!.updatedAt,
+        userId: userId!,
+        categoryId: updatedPost!.categoryId,
+        statusId: updatedPost!.statusId,
+        isActive: updatedPost!.isActive,
+        media: updatedPost!.media.map(media => ({
+          id: media.id,
+          fileUrl: media.fileUrl,
+          type: media.type,
+          toyId: media.toyId
+        }))
+      }
+    }    
+
     return NextResponse.json(
-      { error: t("Failed to create status") },
+      responseData,
+      { status: 201 }
+    )
+  } catch (error: unknown) {
+    console.error('Error:', error)
+    
+    let errorMessage = 'Internal server error'
+    if (error instanceof Error) {
+      errorMessage = error.message
+    }
+
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: errorMessage 
+      },
       { status: 500 }
-    );
+    )
   }
 }

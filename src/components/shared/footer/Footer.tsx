@@ -34,8 +34,8 @@ const Footer = () => {
       </div>
       <div className='flex items-center justify-center gap-2 w-full mt-1'>
           <span className='text-white border-r-2 border-white/50 pr-2'>© 2023 Toydacity</span>
-          <span className='text-white border-r-2 border-white/50 pr-2'>Terms of use</span>
-          <span className='text-white'>Privacy policy</span>
+          <Link href={"/terms"} className='text-white border-r-2 border-white/50 pr-2'>Terms of use</Link>
+          <Link href={"/policies"} className='text-white'>Privacy policy</Link>
       </div>
     </div>
   )
