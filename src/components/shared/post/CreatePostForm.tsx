@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import React, { ChangeEvent, useRef, useState } from "react";
 import SelectItems from "./SelectItems";
-import { Input } from "@/components/ui/input";
+import Image from "next/image";
 
 const categories = [
   "Toy",
@@ -20,8 +20,8 @@ const MAX_FILES = 6
 
 const CreatePostForm = () => {
   const [files, setFiles] = useState<File[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isLoading] = useState(false);
+  const [, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -54,7 +54,7 @@ const CreatePostForm = () => {
           {files.map((file, index) => (
             <div key={index} className="relative group">
               {file.type.startsWith('image') && (
-                 <img 
+                 <Image 
                     src={URL.createObjectURL(file)} 
                     alt={`Preview ${index}`}
                     className="w-full h-32 object-cover rounded border"

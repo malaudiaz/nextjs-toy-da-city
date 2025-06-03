@@ -5,7 +5,6 @@ import prisma from "@/lib/prisma";
 import { StatusSchema } from "@/lib/schemas/status";
 import { getTranslations } from "next-intl/server";
 import { Prisma } from "@prisma/client";
-import { auth } from "@clerk/nextjs/server";
 import { StatusUpdateSchema } from "@/lib/schemas/status";
 import { getAuthUserFromRequest } from "@/lib/auth";
 
@@ -20,9 +19,11 @@ export async function GET(
     return NextResponse.json({ error: error }, { status: code });
   }
 
+  const { id } = params; // Safe to use
+
   try {
     const status = await prisma.status.findUnique({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
     });
 
     if (!status) {
@@ -51,9 +52,11 @@ export async function PUT(
 
   const t = await getTranslations("Status.errors");
 
+  const { id } = params; // Safe to use
+
   try {
     // Validar ID
-    if (!params.id || isNaN(Number(params.id))) {
+    if (!id || isNaN(Number(id))) {
       return NextResponse.json({ error: t("InvalidId") }, { status: 400 });
     }
 
@@ -61,9 +64,9 @@ export async function PUT(
     const body = await req.json();
     const validatedData = StatusSchema.parse(body);
 
-    // Actualizar estadi
+    // Actualizar estado
     const updatedStatus = await prisma.status.update({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
       data: validatedData,
     });
 
@@ -103,13 +106,15 @@ export async function DELETE(
 
   const t = await getTranslations("Status.errors");
 
+  const { id } = params; // Safe to use
+
   try {
-    if (!params.id || isNaN(Number(params.id))) {
+    if (!id || isNaN(Number(id))) {
       return NextResponse.json({ error: t("InvalidId") }, { status: 400 });
     }
 
     await prisma.status.delete({
-      where: { id: Number(params.id) },
+      where: { id: Number(id), isActive: false },
     });
 
     return NextResponse.json(
@@ -142,9 +147,11 @@ export async function PATCH(
 
   const t = await getTranslations("Status.errors");
 
+  const { id } = params; // Safe to use
+
   try {
     // 1. Obtener y validar ID
-    if (!params.id || isNaN(Number(params.id))) {
+    if (!id || isNaN(Number(id))) {
       return NextResponse.json(
         { error: t("Invalid Category ID") },
         { status: 400 }
@@ -159,7 +166,7 @@ export async function PATCH(
 
     // 4. Actualizar solo campos proporcionados
     const updatedStatus = await prisma.status.update({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
       data: validatedData, // Solo actualiza los campos enviados
     });
 

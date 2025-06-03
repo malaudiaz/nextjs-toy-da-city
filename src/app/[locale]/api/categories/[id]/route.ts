@@ -8,6 +8,38 @@ import { Prisma } from "@prisma/client";
 import { CategoryUpdateSchema } from "@/lib/schemas/category";
 import { getAuthUserFromRequest } from "@/lib/auth";
 
+// Obtener un estado por ID
+export async function GET(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+
+  if (!success && !userId) {
+    return NextResponse.json({ error: error }, { status: code });
+  }
+
+  const { id } = params; // Safe to use
+
+  try {
+    const status = await prisma.category.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!status) {
+      return NextResponse.json({ error: "Category not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(status);
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { error: "Failed to fetch status" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function PUT(
   req: Request,
   { params }: { params: { id: string } }
@@ -20,11 +52,13 @@ export async function PUT(
 
   const t = await getTranslations("Categories.errors");
 
+  const { id } = params; // Safe to use
+
   try {
     // Validar ID
-    if (!params.id || isNaN(Number(params.id))) {
+    if (!params.id || isNaN(Number(id))) {
       return NextResponse.json(
-        { error: t("Invalid Category ID") },
+        { error: t("InvalidCategoryID") },
         { status: 400 }
       );
     }
@@ -35,7 +69,7 @@ export async function PUT(
 
     // Actualizar categoría
     const updatedCategory = await prisma.category.update({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
       data: validatedData,
     });
 
@@ -75,16 +109,18 @@ export async function DELETE(
 
   const t = await getTranslations("Categories.errors");
 
+  const { id } = params; // Safe to use
+
   try {
-    if (!params.id || isNaN(Number(params.id))) {
+    if (!params.id || isNaN(Number(id))) {
       return NextResponse.json(
-        { error: t("Invalid Category Id") },
+        { error: t("InvalidCategoryId") },
         { status: 400 }
       );
     }
 
     await prisma.category.delete({
-      where: { id: Number(params.id) },
+      where: { id: Number(id), isActive: false },
     });
 
     return NextResponse.json(
@@ -116,9 +152,11 @@ export async function PATCH(
 
   const t = await getTranslations("Categories.errors");
 
-  if (!params.id || isNaN(Number(params.id))) {
+  const { id } = params; // Safe to use
+
+  if (!id || isNaN(Number(id))) {
     return NextResponse.json(
-      { error: t("Invalid Category Id") },
+      { error: t("InvalidCategoryId") },
       { status: 400 }
     );
   }
@@ -132,7 +170,7 @@ export async function PATCH(
 
     // 4. Actualizar solo campos proporcionados
     const updatedCategory = await prisma.category.update({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
       data: validatedData, // Solo actualiza los campos enviados
     });
 

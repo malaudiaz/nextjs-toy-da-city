@@ -38,7 +38,7 @@ export async function GET(
     });
 
     if (!toy) {
-      return NextResponse.json({ error: "Toy not found" }, { status: 404 });
+      return NextResponse.json({ error: t("Toy not found") }, { status: 404 });
     }
 
     return NextResponse.json(toy);
@@ -55,6 +55,8 @@ export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  const { id } = params;
+
   const { success, userId, error, code } = await getAuthUserFromRequest(
     request
   );
@@ -90,7 +92,7 @@ export async function PUT(
 
     // 3. Obtener juguete actual para validación
     const currentToy = await prisma.toy.findUnique({
-      where: { id: params.id },
+      where: { id: id },
       include: { media: true },
     });
 
@@ -139,7 +141,7 @@ export async function PUT(
 
       // Actualizar juguete
       return await tx.toy.update({
-        where: { id: params.id },
+        where: { id: id },
         data: {
           ...toyData,
           userId,
@@ -209,7 +211,7 @@ export async function DELETE(
     if (inactiveToys.length === 0) {
       return NextResponse.json({
         success: true,
-        message: "No hay juguetes inactivos para eliminar",
+        message: t("No hay juguetes inactivos para eliminar"),
       });
     }
 

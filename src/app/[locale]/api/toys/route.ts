@@ -58,8 +58,8 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url!)
 
     const pagination = PaginationSchema.parse({
-      page: searchParams.get('page'),
-      limit: searchParams.get('limit')
+      page: searchParams.get('page') || 1,
+      limit: searchParams.get('limit') || 10
     });
 
     const filters = ToyFilterSchema.parse({
@@ -281,7 +281,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
   } catch (error: unknown) {
     console.error('Error:', error)
     
-    let errorMessage = 'Internal server error'
+    let errorMessage = t('InternalServerError')
     if (error instanceof Error) {
       errorMessage = error.message
     }

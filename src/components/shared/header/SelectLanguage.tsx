@@ -5,13 +5,10 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
 import { ChevronDown } from 'lucide-react';
-import { revalidatePath } from 'next/cache';
-  
+ 
 
 const SelectLanguage = () => {
     // Estado para guardar el idioma actual (por defecto: inglés "EN")

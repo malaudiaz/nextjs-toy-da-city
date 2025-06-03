@@ -33,7 +33,7 @@ export async function PATCH(
 
     if (!existingToy) {
       return NextResponse.json(
-        { success: false, error: 'Juguete no encontrado' },
+        { success: false, error: t('ToyNotFound') },
         { status: 404 }
       )
     }

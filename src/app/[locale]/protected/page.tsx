@@ -21,7 +21,7 @@ export default function ProtectedPage() {
     try {
       // Obtiene el token JWT desde Clerk
       const jwt = await getToken({ template: "Toydacity" });
-      console.log("Token obtenido:", jwt);
+      console.log("Token obtenido: Bearer", jwt);
     } catch (error) {
       console.error("Error al obtener token:", error);
     }

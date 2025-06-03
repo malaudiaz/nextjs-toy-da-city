@@ -26,14 +26,14 @@ export async function PATCH(
   const t = await getTranslations("Toy.errors");
 
   try {
-    // 1. Verificar si la categoria existe
+    // 1. Verificar si el estado existe
     const existingStatus = await prisma.status.findUnique({
       where: { id: params.id }
     })
 
     if (!existingStatus) {
       return NextResponse.json(
-        { success: false, error: t("Invalid Category ID") },
+        { success: false, error: t("InvalidSatusID") },
         { status: 404 }
       )
     }

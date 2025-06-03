@@ -1,42 +1,35 @@
 import { z } from "zod";
 import prisma from "@/lib/prisma";
-import { NextApiRequest } from "next";
 import { StatusSchema, PaginationSchema} from "@/lib/schemas/status";
 import { getTranslations } from "next-intl/server";
-import { auth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/auth";
 
 
 // GET all statuses con paginación y búsqueda
-export async function GET(request: NextApiRequest) {
+export async function GET(req: NextRequest) {
   
-  const { userId } = await getAuthUserFromRequest(request);
+  const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized User" }, { status: 401 });
+  if (!success && !userId) {
+    return NextResponse.json({ error: error}, { status: code });
   }
 
   const t = await getTranslations("Status.errors");
 
-  let p =1;
-  let l = 10;
-
-  if (request.query) {
-    p = request.query.page ? parseInt(request.query.page as string) : p;
-    l = request.query.limit ? parseInt(request.query.limit as string) : l;  
-  }
 
   try {
-    const { page, limit } = PaginationSchema.parse({
-      page: p,
-      limit: l,
+    const { searchParams } = new URL(req.url!)
+
+    const pagination = PaginationSchema.parse({
+      page: searchParams.get('page') || 1,
+      limit: searchParams.get('limit') || 10
     });
 
     const [status, total] = await Promise.all([
       prisma.status.findMany({
-        skip: (page - 1) * limit,
-        take: limit,
+        skip: (pagination.page - 1) * pagination.limit,
+        take: pagination.limit,
         orderBy: { createdAt: "desc" },
         where: {
           isActive: true
@@ -50,9 +43,9 @@ export async function GET(request: NextApiRequest) {
       data: status,
       meta: {
         total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
+        page: pagination.page,
+        limit: pagination.limit,
+        totalPages: Math.ceil(total / pagination.limit),
       },
     });
   } catch (error) {
@@ -63,19 +56,18 @@ export async function GET(request: NextApiRequest) {
 
 
 // POST create a new status
-export async function POST(request: Request) {
-  const { userId } = await auth();
+export async function POST(req: Request) {
+  const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized User" }, { status: 401 });
+  if (!success && !userId) {
+    return NextResponse.json({ error: error}, { status: code });
   }
 
   const t = await getTranslations("Status.errors");
 
   try {
     // 1. Obtener el cuerpo de la solicitud
-    const body = await request.json();
-    console.log(body); // Verifica los datos recibidos
+    const body = await req.json();
 
     // 2. Validar con Zod
     const validatedData = StatusSchema.parse(body);
@@ -86,7 +78,7 @@ export async function POST(request: Request) {
       data: {
         name:validatedData.name,
         description: validatedData.description,
-        userId: userId
+        userId: userId!
       }      
     });
 

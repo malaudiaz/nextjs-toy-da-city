@@ -16,7 +16,7 @@ const links = [
 
 
 const ProfilePage = () => {
-  const { isSignedIn, user } = useUser();
+  const { user } = useUser();
   console.log(user);
   return (
     <div className="w-full h-full bg-[#fbfaf4]">
