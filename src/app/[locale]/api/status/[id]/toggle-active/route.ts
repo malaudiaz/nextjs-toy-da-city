@@ -33,7 +33,7 @@ export async function PATCH(
 
     if (!existingStatus) {
       return NextResponse.json(
-        { success: false, error: 'Estado no encontrado' },
+        { success: false, error: t("Invalid Category ID") },
         { status: 404 }
       )
     }

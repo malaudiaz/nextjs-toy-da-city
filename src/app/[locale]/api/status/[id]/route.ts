@@ -7,66 +7,63 @@ import { getTranslations } from "next-intl/server";
 import { Prisma } from "@prisma/client";
 import { auth } from "@clerk/nextjs/server";
 import { StatusUpdateSchema } from "@/lib/schemas/status";
+import { getAuthUserFromRequest } from "@/lib/auth";
 
 // Obtener un estado por ID
 export async function GET(
-    request: Request,
-    { params }: { params: { id: string } }
-  ) {
-    const { userId } = await auth();
-
-    if (!userId) {
-        return NextResponse.json({ error: "Unauthorized User" }, { status: 401 });
-    }
-
-    try {
-      const status = await prisma.status.findUnique({
-        where: { id: params.id },
-      })
-  
-      if (!status) {
-        return NextResponse.json(
-          { error: 'Status not found' },
-          { status: 404 }
-        )
-      }
-  
-      return NextResponse.json(status)
-    } catch (error) {
-      return NextResponse.json(
-        { error: 'Failed to fetch status' },
-        { status: 500 }
-      )
-    }
-  }
-
-export async function PUT(
-  request: Request,
+  req: Request,
   { params }: { params: { id: string } }
 ) {
-  const { userId } = await auth();
+  const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized User" }, { status: 401 });
+  if (!success && !userId) {
+    return NextResponse.json({ error: error }, { status: code });
   }
 
-  const statusId = params.id;
+  try {
+    const status = await prisma.status.findUnique({
+      where: { id: Number(params.id) },
+    });
+
+    if (!status) {
+      return NextResponse.json({ error: "Status not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(status);
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { error: "Failed to fetch status" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+
+  if (!success && !userId) {
+    return NextResponse.json({ error: error }, { status: code });
+  }
 
   const t = await getTranslations("Status.errors");
 
   try {
     // Validar ID
-    if (!statusId || isNaN(Number(statusId))) {
+    if (!params.id || isNaN(Number(params.id))) {
       return NextResponse.json({ error: t("InvalidId") }, { status: 400 });
     }
 
     // Obtener y validar cuerpo
-    const body = await request.json();
+    const body = await req.json();
     const validatedData = StatusSchema.parse(body);
 
     // Actualizar estadi
     const updatedStatus = await prisma.status.update({
-      where: { id: Number(statusId) },
+      where: { id: Number(params.id) },
       data: validatedData,
     });
 
@@ -94,64 +91,25 @@ export async function PUT(
   }
 }
 
-export async function DEACTIVATE(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
-  const { userId } = await auth();
-
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized User" }, { status: 401 });
-  }
-
-  const t = await getTranslations("Status.errors");
-  const statusId = params.id;
-
-  try {
-    if (!statusId || isNaN(Number(statusId))) {
-      return NextResponse.json({ error: t("InvalidId") }, { status: 400 });
-    }
-
-    await prisma.status.update({
-      where: { id: Number(statusId) },
-      data: {
-        isActive: false,
-        userId: userId
-      }
-    })
-  } catch (error) {
-    // Manejo de errores con PrismaClientKnownRequestError
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      // ¡Ahora funciona!
-      if (error.code === "P2025") {
-        return NextResponse.json({ error: t("NotFound") }, { status: 404 });
-      }
-    }
-
-    return NextResponse.json({ error: t("ServerError") }, { status: 500 });
-  }
-}
-
 export async function DELETE(
-  request: Request,
+  req: Request,
   { params }: { params: { id: string } }
 ) {
-  const { userId } = await auth();
+  const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized User" }, { status: 401 });
+  if (!success && !userId) {
+    return NextResponse.json({ error: error }, { status: code });
   }
 
   const t = await getTranslations("Status.errors");
-  const statusId = params.id;
 
   try {
-    if (!statusId || isNaN(Number(statusId))) {
+    if (!params.id || isNaN(Number(params.id))) {
       return NextResponse.json({ error: t("InvalidId") }, { status: 400 });
     }
 
     await prisma.status.delete({
-      where: { id: Number(statusId) },
+      where: { id: Number(params.id) },
     });
 
     return NextResponse.json(
@@ -172,47 +130,54 @@ export async function DELETE(
 }
 
 export async function PATCH(
-  request: Request,
+  req: Request,
   { params }: { params: { id: string } }
 ) {
+
+  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+
+  if (!success && !userId) {
+    return NextResponse.json({ error: error }, { status: code });
+  }
+
+  const t = await getTranslations("Status.errors");
+
   try {
     // 1. Obtener y validar ID
-    const statusId = params.id;
-    if (!statusId || isNaN(Number(statusId))) {
+    if (!params.id || isNaN(Number(params.id))) {
       return NextResponse.json(
-        { error: "ID de estado inválido" },
+        { error: t("Invalid Category ID") },
         { status: 400 }
       );
     }
 
     // 2. Parsear cuerpo
-    const body = await request.json();
-    
+    const body = await req.json();
+
     // 3. Validación parcial (schema diferente al POST)
     const validatedData = StatusUpdateSchema.parse(body);
 
     // 4. Actualizar solo campos proporcionados
     const updatedStatus = await prisma.status.update({
-      where: { id: Number(statusId) },
+      where: { id: Number(params.id) },
       data: validatedData, // Solo actualiza los campos enviados
     });
 
     return NextResponse.json(updatedStatus, { status: 200 });
-
   } catch (error) {
     // Manejo de errores específicos
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { 
+        {
           error: "Error de validación",
-          details: error.errors.map(e => `${e.path}: ${e.message}`)
+          details: error.errors.map((e) => `${e.path}: ${e.message}`),
         },
         { status: 400 }
       );
     }
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === 'P2025') {
+      if (error.code === "P2025") {
         return NextResponse.json(
           { error: "Estado no encontrado" },
           { status: 404 }

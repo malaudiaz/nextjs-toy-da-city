@@ -5,12 +5,11 @@ import prisma from "@/lib/prisma";
 import { CategorySchema } from "@/lib/schemas/category";
 import { getTranslations } from "next-intl/server";
 import { Prisma } from "@prisma/client";
-import { auth } from "@clerk/nextjs/server";
 import { CategoryUpdateSchema } from "@/lib/schemas/category";
 import { getAuthUserFromRequest } from "@/lib/auth";
 
 export async function PUT(
-  request: Request,
+  req: Request,
   { params }: { params: { id: string } }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
@@ -31,7 +30,7 @@ export async function PUT(
     }
 
     // Obtener y validar cuerpo
-    const body = await request.json();
+    const body = await req.json();
     const validatedData = CategorySchema.parse(body);
 
     // Actualizar categoría
@@ -58,44 +57,6 @@ export async function PUT(
       error.code === "P2025"
     ) {
       return NextResponse.json({ error: t("NotFound") }, { status: 404 });
-    }
-
-    return NextResponse.json({ error: t("ServerError") }, { status: 500 });
-  }
-}
-
-export async function DEACTIVATE(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
-  const { userId } = await auth();
-
-  if (!userId) {
-    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
-  }
-
-  const t = await getTranslations("Categories.errors");
-  const categoryId = params.id;
-
-  try {
-    if (!categoryId || isNaN(Number(categoryId))) {
-      return NextResponse.json({ error: t("InvalidId") }, { status: 400 });
-    }
-
-    await prisma.category.update({
-      where: { id: Number(categoryId) },
-      data: {
-        isActive: false,
-        userId: userId,
-      },
-    });
-  } catch (error) {
-    // Manejo de errores con PrismaClientKnownRequestError
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      // ¡Ahora funciona!
-      if (error.code === "P2025") {
-        return NextResponse.json({ error: t("NotFound") }, { status: 404 });
-      }
     }
 
     return NextResponse.json({ error: t("ServerError") }, { status: 500 });
@@ -157,7 +118,7 @@ export async function PATCH(
 
   if (!params.id || isNaN(Number(params.id))) {
     return NextResponse.json(
-      { error: "ID de categoría inválido" },
+      { error: t("Invalid Category Id") },
       { status: 400 }
     );
   }
