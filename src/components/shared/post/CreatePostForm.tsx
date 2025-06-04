@@ -53,6 +53,7 @@ const CreatePostForm = () => {
           {files.map((file, index) => (
             <div key={index} className="relative group">
               {file.type.startsWith('image') && (
+                 // eslint-disable-next-line @next/next/no-img-element
                  <img 
                     src={URL.createObjectURL(file)} 
                     alt={`Preview ${index}`}
