@@ -57,7 +57,7 @@ const TopNavbar = () => {
               
             {
               SearchLinks.map((link) => (
-                <Link key={link.name} href={link.href} className="w-full flex flex-col">
+                <Link key={link.name} href={link.href} className="w-full flex flex-col" onClick={() => setIsMenuOpen(false)}>
                   {link.name}
                 </Link>
               ))
