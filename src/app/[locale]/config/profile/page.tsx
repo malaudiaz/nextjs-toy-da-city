@@ -6,18 +6,17 @@ import Link from "next/link";
 import React from "react";
 
 const links = [
-    { name: "Ventas", href: "#" , icon: <Coins/>},
-    { name: "Compras", href: "#", icon: <ShoppingBag/> },
-    { name: "Intercambios", href: "#" , icon: <Repeat/> },
-    { name: "Regalos", href: "#" , icon: <Gift/> },
-    { name: "Favoritos", href: "#" , icon: <Heart/> },
+    { name: "Ventas", href: "/config/profile/ventas" , icon: <Coins/> },
+    { name: "Compras", href: "/config/profile/compras", icon: <ShoppingBag/> },
+    { name: "Intercambios", href: "/config/profile/intercambios" , icon: <Repeat/> },
+    { name: "Regalos", href: "/config/profile/regalos" , icon: <Gift/> },
+    { name: "Favoritos", href: "/config/profile/favoritos" , icon: <Heart/> },
     { name: "Ver tu Reputacion", href: "#" , icon: <Star/> },
 ]
 
 
 const ProfilePage = () => {
   const { user } = useUser();
-  console.log(user);
   return (
     <div className="w-full h-full bg-[#fbfaf4]">
       <div className="px-10 py-2 bg-[#F0F5F0] mt-5">
