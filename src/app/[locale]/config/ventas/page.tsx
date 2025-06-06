@@ -1,3 +1,4 @@
+import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import ProfileInfo from "@/components/shared/profile/ProfileInfo";
 import React from "react";
 
@@ -21,7 +22,8 @@ export const products = [
 const VentasPage = () => {
   return (
     <div className="w-full h-full bg-[#fbfaf4]">
-      <div className="px-10 py-2 bg-[#F0F5F0] mt-5">
+      <div className="px-5 py-2 bg-[#F0F5F0] mt-5">
+         <Breadcrumbs/>
         <h1 className="text-lg font-bold">Tus Ventas</h1>
       </div>
 
