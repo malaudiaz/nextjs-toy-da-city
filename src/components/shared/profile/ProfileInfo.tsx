@@ -20,7 +20,7 @@ const ProfileInfo = ({ title, secondaryTitle, produts, hideSecondaryTitle}: Prof
   return (
     <>
       {title && (
-        <div className="w-full h-full  px-3 py-2 mt-4">
+        <div className="w-full h-full  px-5 py-2 mt-4">
           <h1 className="font-bold text-lg">{title}</h1>
 
           <div className="bg-[#F0F5F0] flex flex-col gap-2 mt-2 rounded-md shadow-sm">
@@ -47,7 +47,7 @@ const ProfileInfo = ({ title, secondaryTitle, produts, hideSecondaryTitle}: Prof
         </div>
       )}
       {secondaryTitle && (
-        <div className="px-3 py-2 mt-2">
+        <div className="px-5 py-2 mt-2">
           {hideSecondaryTitle ? null : <h1 className="font-bold text-lg">{secondaryTitle}</h1>}
           <div className="bg-[#F0F5F0] flex flex-col gap-2 mt-2 rounded-md shadow-sm">
             {produts.map((product) => (
