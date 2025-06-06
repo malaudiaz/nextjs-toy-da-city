@@ -4,6 +4,7 @@ import { z } from "zod";
 // Esquema para creación/actualización
 export const ToySchema = z.object({
   description: z.string().min(3).max(500),
+  title: z.string().min(3).max(500),
   price: z.number().min(0).max(10000),
   location: z.string()
     .regex(/^-?\d{1,3}\.\d+,-?\d{1,3}\.\d+$/, {
@@ -15,16 +16,19 @@ export const ToySchema = z.object({
     }, {
       message: 'Valores inválidos. Latitud (-90 a 90) y Longitud (-180 a 180)'
   }),
-  recommendedAge: z.number().min(0).max(100),
   categoryId: z.number().min(0).max(10000),
+  conditionId: z.number().min(0).max(10000),
   statusId: z.number().min(0).max(10000),
+  forSell: z.boolean().default(true),
+  forGifts: z.boolean().default(false),
+  forChanges: z.boolean().default(false),
+  forOthers: z.boolean().default(false),
 })
 
 // Esquema para filtros
 export const ToyFilterSchema = z.object({
   minPrice: z.number().min(0).optional(),
   maxPrice: z.number().max(10000).optional(),
-  ageRange: z.tuple([z.number().min(0), z.number().max(100)]).optional(),
   locationRadius: z.object({
     lat: z.number(),
     lng: z.number(),

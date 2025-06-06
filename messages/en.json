@@ -25,6 +25,16 @@
             "DeleteError": "Error deleting status"
         }
     },
+    "Condition": {
+        "errors": {
+            "InvalidParams": "Invalid Params",
+            "ValidationsErrors": "Validations Errors",
+            "ServerError": "Internal Server Error",
+            "NotFound": "Condition not found",
+            "UpdateError": "Error updating condition",
+            "DeleteError": "Error deleting condition"
+        }
+    },
     "Toy": {
       "errors": {
         "InvalidParams": "Invalid Params",
