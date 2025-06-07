@@ -9,17 +9,24 @@ export interface Media {
 
 export interface Toy {
   id: string
+  title: string
   description: string
   price: number
   location: string
   categoryId: number
   statusId: number
-  recommendedAge: number
+  conditionId: number
+  forSell: boolean
+  forGifts: boolean
+  forChanges: boolean
+  forOthers: boolean
   createdAt?: Date
   updatedAt?: Date
   userId: string
   isActive: boolean
   media: Media[]
+  likes: ToyLikes[]
+  comments: ToyComments[]
 }
 
 
@@ -40,13 +47,25 @@ interface ToyWhereInput {
     gte?: number
     lte?: number
   }
-  recommendedAge?: {
-    gte?: number
-    lte?: number
-  }
   description?: {
     contains: string
     mode: 'insensitive'
+  }
+  title?: {
+    contains: string
+    mode: 'insensitive'
+  }
+  forSell?: {
+    contains: boolean
+  }
+  forGifts?: {
+    contains: boolean
+  }
+  forChanges?: {
+    contains: boolean
+  }
+  forOthers?: {
+    contains: boolean
   }
   // Agrega otros campos según necesites
 }

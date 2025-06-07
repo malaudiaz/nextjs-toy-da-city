@@ -1,34 +1,27 @@
-import React from "react";
-import { Card, CardContent } from "../ui/card";
-import Image from "next/image";
-import ConditionBadge from "./ConditionBadge";
-import StatusBadge from "./StatusBadge";
+import React from 'react';
+import Image from 'next/image';
+import { Heart } from 'lucide-react';
+import StatusBadge from './StatusBadge';
 
 type ProductCardProps = {
   description: string;
-  image: string;
+  image?: string;
   price: string;
-  discount?: string;
-  condition?: string;
   status: string;
+  location: string;
 };
 
 const ProductCard = ({
   description,
   image,
   price,
-  condition,
+  location,
   status,
 }: ProductCardProps) => {
   return (
-    <Card className="flex flex-col h-[300px] overflow-hidden py-0">
-      <div className="w-full h-1/2 relative">
-        {condition && (
-          <ConditionBadge
-            condition={condition}
-            className="absolute top-3 left-4 z-10 bg-red-500 text-white px-2"
-          />
-        )}
+    <div className="flex flex-col h-[300px] overflow-hidden bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+      {/* Imagen */}
+      <div className="w-full h-1/2 relative bg-gray-200">
         <Image
           src={image || "/placeholder.svg"}
           alt="product"
@@ -36,17 +29,31 @@ const ProductCard = ({
           className="object-cover"
         />
       </div>
-      <CardContent className="flex flex-col flex-grow px-3 h-1/2">
-        <span className="text-md text-green-700 font-medium">${price}</span>
-        <h1 className="text-lg font-semibold">
-          {" "}
-          {<StatusBadge status={status} />}
-        </h1>
-        <p className="line-clamp-2 min-h-[40px] mt-auto text-gray-600 my-2">
+
+      {/* Contenido inferior */}
+      <div className="flex flex-col p-3 flex-grow">
+        <div className="flex justify-between items-center mb-2">
+          <span className="text-xl text-green-700 font-medium">${price}</span>
+          <button
+            type="button"
+            aria-label="Agregar a favoritos"
+            className="bg-white p-1.5 rounded-full hover:bg-gray-50 transition-colors"
+          >
+            <Heart className="h-6 w-6 text-black" />
+          </button>
+        </div>
+
+         <StatusBadge status={status}/>
+
+        {/* Descripción truncada */}
+        <p className="line-clamp-2 min-h-[40px] text-gray-600 mb-2 flex-grow">
           {description}
         </p>
-      </CardContent>
-    </Card>
+
+        {/* Ubicación */}
+        <p className="text-sm text-gray-500">{location}</p>
+      </div>
+    </div>
   );
 };
 

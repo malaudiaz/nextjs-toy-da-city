@@ -25,6 +25,16 @@
         "DeleteError": "Error eliminando categoría"
       }
     },
+    "Condition": {
+      "errors": {
+        "InvalidParams": "Parámetros inválidos",
+        "ValidationsErrors": "Errores de validación",
+        "ServerError": "Error interno del servidor",
+        "NotFound": "Condición no encontrada",
+        "UpdateError": "Error actualizando condición del juguete",
+        "DeleteError": "Error eliminando condición del juguete"
+      }
+    },
     "Toy": {
       "errors": {
         "InvalidParams": "Parámetros inválidos",

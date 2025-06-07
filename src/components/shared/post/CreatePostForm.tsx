@@ -4,7 +4,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import React, { ChangeEvent, useRef, useState } from "react";
 import SelectItems from "./SelectItems";
-import Image from "next/image";
 
 const categories = [
   "Toy",
@@ -54,7 +53,8 @@ const CreatePostForm = () => {
           {files.map((file, index) => (
             <div key={index} className="relative group">
               {file.type.startsWith('image') && (
-                 <Image 
+                 // eslint-disable-next-line @next/next/no-img-element
+                 <img 
                     src={URL.createObjectURL(file)} 
                     alt={`Preview ${index}`}
                     className="w-full h-32 object-cover rounded border"

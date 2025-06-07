@@ -24,7 +24,7 @@ const SearchLinks = [
   { name: "Toys" , href: "#"},
   { name: "Categories" , href: "#"},
   { name: "Brands" , href: "#"},
-  { name: "Configurations" , href: "/en/config/profile"},
+  { name: "Configurations" , href: "/en/config"},
 ]
 
 
@@ -41,11 +41,11 @@ const TopNavbar = () => {
       <div className="mx-auto max-w-7xl">
         {/* Versión móvil */}
         <div className="flex md:hidden items-center justify-between">
-          <div className="flex items-center gap-1">
-            <Button className="bg-[#FAF1DE] hover:bg-[#FAF1DE] shadow-none p-2" onClick={toggleMenu}>
+          <div className="flex items-center ">
+            <Button className="bg-[#FAF1DE] hover:bg-[#cbc9b9] shadow-none p-2" onClick={toggleMenu}>
               {isMenuOpen ? <X className="text-black size-5" /> : <LucideMenu className="text-black size-5" />}
             </Button>
-            <Image src="/Logo.png" alt="logo" width={140} height={28} />
+            <Image src="/Logo.png" alt="logo" width={140} height={28} className="h-[50px] flex-shrink-0" />
           </div>
           <SelectLanguage />
         </div>
@@ -57,7 +57,7 @@ const TopNavbar = () => {
               
             {
               SearchLinks.map((link) => (
-                <Link key={link.name} href={link.href} className="w-full flex flex-col">
+                <Link key={link.name} href={link.href} className="w-full flex flex-col" onClick={() => setIsMenuOpen(false)}>
                   {link.name}
                 </Link>
               ))
@@ -104,7 +104,7 @@ const TopNavbar = () => {
             <Link href="/" className="text-black hover:text-gray-700">
               <ShoppingCart className="size-5" />
             </Link>
-            <Link href="/en/config/profile" className="text-black hover:text-gray-700">
+            <Link href="/en/config" className="text-black hover:text-gray-700">
               <Settings className="size-5" />
             </Link>
           </div>
@@ -115,47 +115,3 @@ const TopNavbar = () => {
 };
 
 export default TopNavbar;
-
-{
-  /* <header className="bg-[#3D5D3C] w-full pt-2 border-b border-white/50">
-    <div className="mx-auto max-w-7xl py-3 flex justify-between items-center border-white">
-      <h3 className="text-white">
-        Welcome to Toydacity: The Sustainable Toy Marketplace
-      </h3>
-      <div className="flex items-center justify-center gap-2">
-        <p className="text-white text-sm">Follow us:</p>
-        <div className="flex gap-x-1">
-          <Link href="https://twitter.com/toydacity" className="text-white">
-            <Twitter />
-          </Link>
-          <Link href="https://twitter.com/toydacity" className="text-white">
-            <Facebook />
-          </Link>
-          <Link href="https://twitter.com/toydacity" className="text-white">
-            <Youtube />
-          </Link>
-          <Link href="https://twitter.com/toydacity" className="text-white border-r border-white/30 pr-4">
-            <Instagram />
-          </Link>
-          <SelectLanguage/>
-        </div>
-      </div>
-    </div>
-</header> */
-}
-
-//  <SignedOut>
-// <SignUpButton mode="modal">
-//   <span className="text-sm text-white sm:inline cursor-pointer hover:underline">
-//     ▸ Create your account
-//   </span>
-// </SignUpButton>
-// <SignInButton mode="modal">
-//   <span className="text-sm text-white sm:inline cursor-pointer hover:underline">
-//     ▸ Login
-//   </span>
-// </SignInButton>
-// </SignedOut>
-// <SignedIn>
-// <UserButton />
-// </SignedIn>

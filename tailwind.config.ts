@@ -23,6 +23,7 @@ const config: Config = {
     fontFamily: {
       sans: ["var(--font-inter)"],
       mono: ["var(--font-roboto-mono)"],
+      poppins: ["var(--font-poppins)"],
     },
     borderRadius: {
       "figma-sm": "4px",
