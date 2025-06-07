@@ -3,9 +3,34 @@ import createNextIntlPlugin from 'next-intl/plugin';
  
 const nextConfig: NextConfig = {
 // Habilita el dominio en la optimización de imágenes (opcional)
- images: {
-      domains: ["toydacity.com", "www.toydacity.com", 'img.clerk.com'],
+//  images: {
+//       domains: ["toydacity.com", "www.toydacity.com", 'img.clerk.com'],
+//   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'toydacity.com',
+        // Opcional: restringir por path
+        //pathname: '/images/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.toydacity.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.clerk.com',
+      }
+    ],
   },
+  allowedDevOrigins: [
+    'toydacity.com',
+    // También puedes incluir variantes de localhost:
+    'localhost',
+    'localhost:3000',
+    '127.0.0.1',
+  ],
   async headers() {
     return [
       {
@@ -23,6 +48,11 @@ const nextConfig: NextConfig = {
             key: "X-XSS-Protection",
             value: "1; mode=block",
           },
+          //esto es para cuando este en produccion
+          // {
+          //  key: "Access-Control-Allow-Origin",
+          //  value: "https://toydacity.com" // Solo permitir tu dominio
+          // }
         ],
       },
     ];
