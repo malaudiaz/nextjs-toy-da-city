@@ -3,12 +3,8 @@ import createNextIntlPlugin from 'next-intl/plugin';
  
 const nextConfig: NextConfig = {
 // Habilita el dominio en la optimización de imágenes (opcional)
-  images: {
-<<<<<<< HEAD
-    domains: ["toydacity.com", "www.toydacity.com"],
-=======
-    domains: ["toydacity.com", "www.toydacity.com", 'img.clerk.com'],
->>>>>>> cff5aaedb177ad0220fd1a41187ba548f4fba873
+ images: {
+      domains: ["toydacity.com", "www.toydacity.com", 'img.clerk.com'],
   },
   async headers() {
     return [
