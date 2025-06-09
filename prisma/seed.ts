@@ -1,5 +1,9 @@
 // prisma/seed.ts
 import { PrismaClient } from '@prisma/client';
+import dotenv from 'dotenv';
+
+// Cargar variables de entorno (opcional, ya que usamos -r dotenv/config)
+dotenv.config();
 
 const prisma = new PrismaClient();
 
