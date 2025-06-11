@@ -78,12 +78,16 @@ export async function PUT(
 
     // Validar con Zod
     const toyData = ToySchema.parse({
+      title: formData.get("title"),
       description: formData.get("description"),
       location: formData.get("location"),
-      recommendedAge: Number(formData.get("recommendedAge")),
       price: Number(formData.get("price")),
       categoryId: Number(formData.get("categoryId")),
       statusId: Number(formData.get("statusId")),
+      conditionId: Number(formData.get("conditionId")),
+      forSell: Number(formData.get("forSell")),
+      forGifts: Number(formData.get("forGifts")),
+      forChanges: Number(formData.get("forChanges")),
     });
 
     // 2. Procesar archivos nuevos

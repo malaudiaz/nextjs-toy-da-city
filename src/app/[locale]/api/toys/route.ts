@@ -89,14 +89,6 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Filtro por edad recomendada
-    if (filters.ageRange) {
-      where.recommendedAge = {
-        gte: filters.ageRange[0],
-        lte: filters.ageRange[1]
-      }
-    }
-
     // Filtro por texto (búsqueda)
     if (filters.search) {
       where.description = {
@@ -173,12 +165,17 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
 
     // Validar con Zod
     const toyData = ToySchema.parse({
+      title: formData.get('title'),
       description: formData.get('description'),
       location: formData.get('location'),
-      recommendedAge: Number(formData.get('recommendedAge')),
       price: Number(formData.get('price')),
       categoryId: Number(formData.get('categoryId')),
-      statusId: Number(formData.get('statusId'))
+      statusId: Number(formData.get('statusId')),
+      conditionId: Number(formData.get('conditionId')),
+      forSell: Boolean(formData.get('forSell')),
+      forGifts: Boolean(formData.get('forGifts')),
+      forChanges: Boolean(formData.get('forChanges')),
+      forOthers: Boolean(formData.get('forOthers'))
     })
 
     const files = formData.getAll('files') as Blob[]
@@ -197,13 +194,18 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
     // Crear el primer toy
     const toy = await prisma.toy.create({
       data: {
+        title: toyData.title,
         description: toyData.description,
         price: toyData.price,
         location:toyData.location,
-        recommendedAge: toyData.recommendedAge,
         userId: userId!,
         categoryId: toyData.categoryId,
-        statusId:toyData.statusId,
+        statusId: toyData.statusId,
+        conditionId: toyData.conditionId,
+        forSell: toyData.forSell,
+        forGifts: toyData.forGifts,
+        forChanges: toyData.forChanges,
+        forOthers: toyData.forOthers,
         media: {
           create: [] // Inicializar array vacío
         }
@@ -255,15 +257,20 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       success: true,
       data: {
         id: updatedPost!.id,
+        title: updatedPost!.title,
         description: updatedPost!.description,
         price: updatedPost!.price,
         location: updatedPost!.location,
-        recommendedAge: updatedPost!.recommendedAge,
         createdAt: updatedPost!.createdAt,
         updatedAt: updatedPost!.updatedAt,
         userId: userId!,
         categoryId: updatedPost!.categoryId,
         statusId: updatedPost!.statusId,
+        conditionId: updatedPost!.conditionId,
+        forSell: updatedPost!.forSell,
+        forGifts: updatedPost!.forGifts,
+        forChanges: updatedPost!.forChanges,
+        forOthers: toyData.forOthers,
         isActive: updatedPost!.isActive,
         media: updatedPost!.media.map(media => ({
           id: media.id,
