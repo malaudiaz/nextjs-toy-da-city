@@ -56,7 +56,6 @@ model Toy {
   forSell         Boolean
   forGifts        Boolean
   forChanges      Boolean
-  forOthers       Boolean
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   isActive        Boolean  @default(true)

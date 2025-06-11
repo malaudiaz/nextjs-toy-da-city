@@ -174,8 +174,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       conditionId: Number(formData.get('conditionId')),
       forSell: Boolean(formData.get('forSell')),
       forGifts: Boolean(formData.get('forGifts')),
-      forChanges: Boolean(formData.get('forChanges')),
-      forOthers: Boolean(formData.get('forOthers'))
+      forChanges: Boolean(formData.get('forChanges'))
     })
 
     const files = formData.getAll('files') as Blob[]
@@ -205,7 +204,6 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
         forSell: toyData.forSell,
         forGifts: toyData.forGifts,
         forChanges: toyData.forChanges,
-        forOthers: toyData.forOthers,
         media: {
           create: [] // Inicializar array vacío
         }
@@ -270,7 +268,6 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
         forSell: updatedPost!.forSell,
         forGifts: updatedPost!.forGifts,
         forChanges: updatedPost!.forChanges,
-        forOthers: toyData.forOthers,
         isActive: updatedPost!.isActive,
         media: updatedPost!.media.map(media => ({
           id: media.id,

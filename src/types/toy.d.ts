@@ -19,7 +19,6 @@ export interface Toy {
   forSell: boolean
   forGifts: boolean
   forChanges: boolean
-  forOthers: boolean
   createdAt?: Date
   updatedAt?: Date
   userId: string
@@ -62,9 +61,6 @@ interface ToyWhereInput {
     contains: boolean
   }
   forChanges?: {
-    contains: boolean
-  }
-  forOthers?: {
     contains: boolean
   }
   // Agrega otros campos según necesites

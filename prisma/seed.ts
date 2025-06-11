@@ -43,15 +43,16 @@ async function main() {
   await prisma.toy.createMany({
     data: [
       { title: 'Barbie', description: 'Beautiful barbie', price: 5.00, location:'', categoryId: 1, statusId: 1, conditionId: 1, 
-        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: true, forOthers: false, isActive: true},
+        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: true, isActive: true},
       { title: 'bicycles', description: 'Bicycles', price: 0.00, location:'', categoryId:4, statusId: 1, conditionId: 1, 
-        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: false, forGifts: true, forChanges: false, forOthers: false, isActive: true},
+        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: false, forGifts: true, forChanges: false, isActive: true},
       { title: 'domino', description: 'Domino', price: 3.00, location:'', categoryId:3, statusId: 1, conditionId: 1, 
-        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: true, forOthers: false, isActive: true},
+        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: true, isActive: true},
       { title: 'chess', description: 'Chess', price: 0.00, location:'', categoryId:2, statusId: 1, conditionId: 1, 
-        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: false, forGifts: true, forChanges: false, forOthers: false, isActive: true}
-    ],
-    skipDuplicates: true,
+        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: false, forGifts: true, forChanges: false, isActive: true},
+      { title: 'chess big', description: 'Chess Big', price: 10.00, location:'', categoryId:2, statusId: 1, conditionId: 1, 
+        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true}
+    ]
   });
 
 }
