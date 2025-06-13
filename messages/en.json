@@ -44,5 +44,25 @@
         "UpdateError": "Error updating toy",
         "DeleteError": "Error deleting toy"
       }
+    },
+    "Comments": {
+      "errors": {
+        "InvalidParams": "Invalid Params",
+        "ValidationsErrors": "Validations Errors",
+        "ServerError": "Internal Server Error",
+        "NotFound": "Comments not found",
+        "UpdateError": "Error updating comments",
+        "DeleteError": "Error deleting comments"
+      }
+    },
+    "Likes": {
+      "errors": {
+        "InvalidParams": "Invalid Params",
+        "ValidationsErrors": "Validations Errors",
+        "ServerError": "Internal Server Error",
+        "NotFound": "Likes not found",
+        "UpdateError": "Error updating likes",
+        "DeleteError": "Error deleting likes"
+      }
     }
 }

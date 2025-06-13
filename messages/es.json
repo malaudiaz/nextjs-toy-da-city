@@ -44,5 +44,25 @@
         "UpdateError": "Error actualizando juguete",
         "DeleteError": "Error eliminando juguete"
       }
+    },
+    "Comments": {
+      "errors": {
+        "InvalidParams": "Parámetros inválidos",
+        "ValidationsErrors": "Errores de validación",
+        "ServerError": "Error interno del servidor",
+        "NotFound": "Comentario no encontrado",
+        "UpdateError": "Error actualizando comentario",
+        "DeleteError": "Error eliminando comentario"
+      }
+    },
+    "Likes": {
+      "errors": {
+        "InvalidParams": "Parámetros inválidos",
+        "ValidationsErrors": "Errores de validación",
+        "ServerError": "Error interno del servidor",
+        "NotFound": "Me gusta no encontrado",
+        "UpdateError": "Error actualizando Me gusta",
+        "DeleteError": "Error eliminando Me gusta"
+      }
     }
 }
