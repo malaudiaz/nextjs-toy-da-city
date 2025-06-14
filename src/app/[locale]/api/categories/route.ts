@@ -8,12 +8,6 @@ import { getAuthUserFromRequest } from "@/lib/auth";
 // GET - Obtener todas las categorías con paginado
 export async function GET(req: NextRequest) {
 
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
-
-  if (!success && !userId) {
-    return NextResponse.json({ error: error}, { status: code });
-  }
-
   const t = await getTranslations("Categories.errors");
 
   try {

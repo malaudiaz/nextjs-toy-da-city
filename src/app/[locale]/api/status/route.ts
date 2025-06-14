@@ -9,14 +9,7 @@ import { getAuthUserFromRequest } from "@/lib/auth";
 // GET all statuses con paginación y búsqueda
 export async function GET(req: NextRequest) {
   
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
-
-  if (!success && !userId) {
-    return NextResponse.json({ error: error}, { status: code });
-  }
-
   const t = await getTranslations("Status.errors");
-
 
   try {
     const { searchParams } = new URL(req.url!)

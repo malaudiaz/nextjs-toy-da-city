@@ -43,9 +43,9 @@ model Condition {
 model Toy {
   id              String    @id @default(uuid())
   title           String
-  description     String
+  description     String?
   price           Float
-  location        String
+  location        String?
   category        Category @relation(fields: [categoryId], references: [id])
   categoryId      Int
   status          Status    @relation(fields: [statusId], references: [id])
@@ -53,12 +53,12 @@ model Toy {
   condition       Condition    @relation(fields: [conditionId], references: [id])
   conditionId     Int
   userId          String
-  forSell         Boolean
-  forGifts        Boolean
-  forChanges      Boolean
+  forSell         Boolean   @default(true)
+  forGifts        Boolean   @default(true)
+  forChanges      Boolean   @default(true)
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
-  isActive        Boolean  @default(true)
+  isActive        Boolean   @default(true)
   media           Media[]   // Relación uno a muchos con Media
   likes           ToyLikes[]  
   comments        ToyComments[]   
@@ -79,8 +79,8 @@ enum FileType {
 
 model ToyLikes {
   id          String    @id @default(uuid())
-  toyId       String
-  toy         Toy       @relation(fields: [toyId], references: [id])
+  toyId       String?
+  toy         Toy?      @relation(fields: [toyId], references: [id])
   userId      String
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
@@ -89,8 +89,8 @@ model ToyLikes {
 
 model ToyComments {
   id          String    @id @default(uuid())
-  toyId       String
-  toy         Toy       @relation(fields: [toyId], references: [id])
+  toyId       String?
+  toy         Toy?      @relation(fields: [toyId], references: [id])
   summary     String
   userId      String
   isActive    Boolean  @default(true)
@@ -102,8 +102,8 @@ model ToyComments {
 
 model CommentsLikes {
   id          String    @id @default(uuid())
-  commentId   String
-  comment     ToyComments  @relation(fields: [commentId], references: [id])
+  commentId   String?
+  comment     ToyComments?  @relation(fields: [commentId], references: [id])
   userId      String
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
@@ -112,8 +112,8 @@ model CommentsLikes {
 
 model CommentsComments {
   id          String    @id @default(uuid())
-  commentId   String
-  comment     ToyComments  @relation(fields: [commentId], references: [id])
+  commentId   String?
+  comment     ToyComments?  @relation(fields: [commentId], references: [id])
   summary     String
   userId      String
   isActive    Boolean  @default(true)

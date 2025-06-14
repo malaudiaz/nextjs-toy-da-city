@@ -46,12 +46,6 @@ function haversineDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
 // GET all toys con paginación y búsqueda
 export async function GET(request: NextRequest) {
   
-  const { success, userId, error, code } = await getAuthUserFromRequest(request);
-
-  if (!success && !userId) {
-    return NextResponse.json({ error: error}, { status: code });
-  }
-
   const t = await getTranslations("Toy.errors");
 
   try {
@@ -249,7 +243,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       where: { id: toy.id },
       include: { media: true }
     })
-
+      
     // Estructurar la respuesta para que coincida con PostResponse
     const responseData: ToyResponseSuccess = {
       success: true,
@@ -274,7 +268,9 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
           fileUrl: media.fileUrl,
           type: media.type,
           toyId: media.toyId
-        }))
+        })),
+        likes: [],
+        comments: []
       }
     }    
 
