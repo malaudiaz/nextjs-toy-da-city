@@ -57,19 +57,19 @@ export async function PUT(
 ) {
   const { id } = params;
 
-  // const { success, userId, error, code } = await getAuthUserFromRequest(
-  //   request
-  // );
+  const { success, userId, error, code } = await getAuthUserFromRequest(
+    request
+  );
 
-  // if (!success && !userId) {
-  //   return NextResponse.json(
-  //     {
-  //       success: success,
-  //       error: error,
-  //     },
-  //     { status: code }
-  //   );
-  // }
+  if (!success && !userId) {
+    return NextResponse.json(
+      {
+        success: success,
+        error: error,
+      },
+      { status: code }
+    );
+  }
 
   const t = await getTranslations("Toy.errors");
 
@@ -153,7 +153,7 @@ export async function PUT(
       );
 
       // Actualizar juguete
-      const userId = 'user_2wY8ZRoOrheojD7zQXtwk9fg00x'
+      // const userId = 'user_2wY8ZRoOrheojD7zQXtwk9fg00x'
       return await tx.toy.update({
         where: { id: id },
         data: {
