@@ -59,9 +59,6 @@ export async function GET(request: NextRequest) {
     const filters = ToyFilterSchema.parse({
       minPrice: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined,
       maxPrice: searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined,
-      ageRange: searchParams.get('minAge') && searchParams.get('maxAge') 
-        ? [Number(searchParams.get('minAge')), Number(searchParams.get('maxAge'))] 
-        : undefined,
       locationRadius: searchParams.get('lat') && searchParams.get('lng') && searchParams.get('radius')
         ? {
             lat: Number(searchParams.get('lat')),
@@ -157,6 +154,15 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
 
     const formData = await request.formData()
 
+    const stringforSell = formData.get("forSell") || "false"
+    const booleanforSell = stringforSell === "true"
+
+    const stringforGifts = formData.get("forGifts") || "false"
+    const booleanforGifts = stringforGifts === "true"
+
+    const stringforChanges = formData.get("forChanges") || "false"
+    const booleanforChanges = stringforChanges === "true"
+
     // Validar con Zod
     const toyData = ToySchema.parse({
       title: formData.get('title'),
@@ -166,9 +172,9 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       categoryId: Number(formData.get('categoryId')),
       statusId: Number(formData.get('statusId')),
       conditionId: Number(formData.get('conditionId')),
-      forSell: Boolean(formData.get('forSell')),
-      forGifts: Boolean(formData.get('forGifts')),
-      forChanges: Boolean(formData.get('forChanges'))
+      forSell: booleanforSell,
+      forGifts: booleanforGifts,
+      forChanges: booleanforChanges
     })
 
     const files = formData.getAll('files') as Blob[]
@@ -250,7 +256,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       data: {
         id: updatedPost!.id,
         title: updatedPost!.title,
-        description: updatedPost!.description,
+        description: updatedPost.description,
         price: updatedPost!.price,
         location: updatedPost!.location,
         createdAt: updatedPost!.createdAt,

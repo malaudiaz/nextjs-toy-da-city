@@ -43,9 +43,9 @@ model Condition {
 model Toy {
   id              String    @id @default(uuid())
   title           String
-  description     String?
+  description     String
   price           Float
-  location        String?
+  location        String
   category        Category @relation(fields: [categoryId], references: [id])
   categoryId      Int
   status          Status    @relation(fields: [statusId], references: [id])
