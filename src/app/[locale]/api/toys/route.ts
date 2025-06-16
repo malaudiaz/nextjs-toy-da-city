@@ -135,17 +135,17 @@ export async function GET(request: NextRequest) {
 
 // POST create a new toy
 export async function POST(request: Request): Promise<NextResponse<ToyResponseSuccess | ToyResponseError>> {
-  // const { success, userId, error, code } = await getAuthUserFromRequest(request);
+  const { success, userId, error, code } = await getAuthUserFromRequest(request);
 
-  // if (!success && !userId) {
-  //   return NextResponse.json(
-  //       { 
-  //         success: success, 
-  //         error: error 
-  //       },
-  //       { status: code }
-  //     )    
-  // }
+  if (!success && !userId) {
+    return NextResponse.json(
+        { 
+          success: success, 
+          error: error 
+        },
+        { status: code }
+      )    
+  }
 
   const t = await getTranslations("Toy.errors");
 
@@ -191,7 +191,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
     }
 
     // Crear el primer toy
-    const userId = 'user_2wY8ZRoOrheojD7zQXtwk9fg00x'
+    // const userId = 'user_2wY8ZRoOrheojD7zQXtwk9fg00x'
     const toy = await prisma.toy.create({
       data: {
         title: toyData.title,
