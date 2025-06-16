@@ -256,7 +256,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       data: {
         id: updatedPost!.id,
         title: updatedPost!.title,
-        description: updatedPost.description,
+        description: updatedPost!.description,
         price: updatedPost!.price,
         location: updatedPost!.location,
         createdAt: updatedPost!.createdAt,

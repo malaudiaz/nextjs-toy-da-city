@@ -54,7 +54,7 @@ interface ToyWhereInput {
     contains: string
     mode: 'insensitive'
   }
-  forSell?: {
+/*   forSell?: {
     contains: boolean
   }
   forGifts?: {
@@ -63,5 +63,5 @@ interface ToyWhereInput {
   forChanges?: {
     contains: boolean
   }
-  // Agrega otros campos según necesites
+ */  // Agrega otros campos según necesites
 }
