@@ -45,7 +45,9 @@ const TopNavbar = () => {
             <Button className="bg-[#FAF1DE] hover:bg-[#cbc9b9] shadow-none p-2" onClick={toggleMenu}>
               {isMenuOpen ? <X className="text-black size-5" /> : <LucideMenu className="text-black size-5" />}
             </Button>
+            <Link href={"/"}>
             <Image src="/Logo.png" alt="logo" width={140} height={28} className="h-[50px] flex-shrink-0" />
+            </Link>
           </div>
           <SelectLanguage />
         </div>
@@ -74,7 +76,9 @@ const TopNavbar = () => {
 
         {/* Versión desktop */}
         <div className="hidden md:flex items-center justify-between gap-8">
+          <Link href={"/"}>
           <Image src="/Logo.png" alt="logo" width={160} height={32} />
+          </Link>
 
           <div className="flex-1 max-w-xl">
             <Search />
