@@ -191,6 +191,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
     }
 
     // Crear el primer toy
+    // const userId = 'user_2wY8ZRoOrheojD7zQXtwk9fg00x'
     const toy = await prisma.toy.create({
       data: {
         title: toyData.title,
