@@ -6,8 +6,8 @@ import StatusBadge from './StatusBadge';
 type ProductCardProps = {
   description: string;
   image?: string;
-  price: string;
-  status: string;
+  price: number;
+  conditionId: number;
   location: string;
 };
 
@@ -16,22 +16,23 @@ const ProductCard = ({
   image,
   price,
   location,
-  status,
+  conditionId,
 }: ProductCardProps) => {
   return (
-    <div className="flex flex-col h-[300px] overflow-hidden bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow h-full flex flex-col w-[180px] md:w-[200px] lg:w-[220px] xl:w-[250px]">
       {/* Imagen */}
-      <div className="w-full h-1/2 relative bg-gray-200">
+      <div className="w-full h-48 relative bg-gray-200 overflow-hidden rounded-t-lg">
         <Image
-          src={image || "/placeholder.svg"}
-          alt="product"
+          src={image || '/image 4.png'}
+          alt={description}
           fill
-          className="object-cover"
+          className="object-cover transition-transform duration-300 hover:scale-105"
+          sizes="(max-width: 640px) 90vw, (max-width: 768px) 45vw, (max-width: 1024px) 22vw, 15vw"
         />
       </div>
 
       {/* Contenido inferior */}
-      <div className="flex flex-col p-3 flex-grow">
+      <div className="flex flex-col flex-grow p-4">
         <div className="flex justify-between items-center mb-2">
           <span className="text-xl text-green-700 font-medium">${price}</span>
           <button
@@ -43,15 +44,15 @@ const ProductCard = ({
           </button>
         </div>
 
-         <StatusBadge status={status}/>
+        <StatusBadge status={conditionId} />
 
         {/* Descripción truncada */}
-        <p className="line-clamp-2 min-h-[40px] text-gray-600 mb-2 flex-grow">
+        <p className="line-clamp-2 min-h-[3em] text-gray-600 mb-2 flex-grow">
           {description}
         </p>
 
         {/* Ubicación */}
-        <p className="text-sm text-gray-500">{location}</p>
+        <p className="text-sm text-gray-500 truncate">{location}</p>
       </div>
     </div>
   );
