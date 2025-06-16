@@ -1,27 +1,29 @@
-import React from "react";
+import React from 'react';
 
-type statusBadgeProps = {
-  status: string;
+type StatusBadgeProps = {
+  status: number;
 };
 
-const StatusBadge = ({ status }: statusBadgeProps) => {
-  const statusBadge = () => {
+const StatusBadge = ({ status }: StatusBadgeProps) => {
+  const getStatusConfig = () => {
     switch (status) {
-      case "Like new":
-        return "bg-blue-500";
-      case "Acceptable":
-        return "bg-brown-500";
-      case "New":
-        return "bg-green-700";
+      case 1:
+        return { text: 'New', bg: 'bg-green-600' };
+      case 2:
+        return { text: 'Like new', bg: 'bg-blue-500' };
+      case 3:
+        return { text: 'Acceptable', bg: 'bg-amber-600' };
       default:
-        return "bg-red-500";
+        return { text: 'To Repair', bg: 'bg-red-500' };
     }
   };
 
+  const { text, bg } = getStatusConfig();
+
   return (
     <div className="flex gap-1 items-center min-h-[24px] mb-1">
-      <div className={`rounded-full size-4 ${statusBadge()}`}></div>
-      <span className="line-clamp-1">{status}</span>
+      <div className={`rounded-full size-4 ${bg}`}></div>
+      <span className="line-clamp-1 text-sm">{text}</span>
     </div>
   );
 };

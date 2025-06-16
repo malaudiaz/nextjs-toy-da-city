@@ -28,7 +28,7 @@ const ConfigurationsPage = () => {
         <div className="flex flex-row gap-4">
           <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center shadow-sm">
             <Image
-              src={user?.imageUrl || "/tren.png"}
+              src={user?.imageUrl || "/no-image.png"}
               alt="avatar"
               width={76}
               height={76}
