@@ -60,12 +60,18 @@ async function main() {
     data: [
       {id: 'media_001', fileUrl: '/images/princess.png', type: FileType.IMAGE, toyId: 'toy_001'},
       {id: 'media_002', fileUrl: '/images/Casita.png', type: FileType.IMAGE, toyId: 'toy_001'},
-      //{id: 'media_003', fileUrl: 'https://example.com/videos/switch.mp4', type: FileType.VIDEO, toyId: 'toy_002'},
+      {id: 'media_003', fileUrl: '/images/video_inicial.mp4', type: FileType.VIDEO, toyId: 'toy_001'},
+      {id: 'media_004', fileUrl: '/images/Carros.png', type: FileType.IMAGE, toyId: 'toy_002'},
+      {id: 'media_005', fileUrl: '/images/tren.png', type: FileType.IMAGE, toyId: 'toy_002'},
+      {id: 'media_006', fileUrl: '/images/Domino.jpeg', type: FileType.IMAGE, toyId: 'toy_003'},
+      {id: 'media_007', fileUrl: '/images/chess.jpeg', type: FileType.IMAGE, toyId: 'toy_004'},
+      {id: 'media_008', fileUrl: '/images/chess.jpeg', type: FileType.IMAGE, toyId: 'toy_005'},
+      {id: 'media_009', fileUrl: '/images/video_inicial.mp4', type: FileType.VIDEO, toyId: 'toy_005'}
     ],
     skipDuplicates: true,
   });
 
-
+  
 }
 
 main()
