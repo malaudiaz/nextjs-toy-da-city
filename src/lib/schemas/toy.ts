@@ -22,6 +22,7 @@ export const ToySchema = z.object({
   forSell: z.boolean().default(true),
   forGifts: z.boolean().default(false),
   forChanges: z.boolean().default(false), 
+  media: z.array(z.string().url()).optional(),
 })
 
 // Esquema para filtros
