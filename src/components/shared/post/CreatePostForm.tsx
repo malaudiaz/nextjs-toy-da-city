@@ -2,9 +2,16 @@
 
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@radix-ui/react-dropdown-menu";
-import React, { ChangeEvent, useRef, useState, useEffect } from "react";
+import React, {
+  ChangeEvent,
+  useRef,
+  useState,
+  useEffect,
+  useActionState,
+} from "react";
 import SelectItems from "./SelectItems";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
+import { createToy } from "@/lib/actions/toysAction";
 
 const MAX_FILES = 6;
 
@@ -22,6 +29,13 @@ type Condition = {
   isActive: boolean;
 };
 
+type Status = {
+  id: number;
+  name: string;
+  description: string;
+  isActive: boolean;
+};
+
 type CreatePostFormProps = {
   categories: {
     data: Category[];
@@ -29,37 +43,57 @@ type CreatePostFormProps = {
   conditions: {
     data: Condition[];
   };
+  statuses: {
+    data: Status[];
+  };
 };
-const POST_TYPES = ['For Sell', 'For Gifts', 'For Exchange'];
-type PostType = (typeof POST_TYPES)[number];
 
 // Importación dinámica con exportación por defecto correcta
 const MapComponent = dynamic(
-  () => import('../MapComponent').then((mod) => mod.default),
-  { 
+  () => import("../MapComponent").then((mod) => mod.default),
+  {
     ssr: false,
-    loading: () => <div className="h-[400px] w-full bg-gray-200 flex items-center justify-center">Cargando mapa...</div>
+    loading: () => (
+      <div className="h-[400px] w-full bg-gray-200 flex items-center justify-center">
+        Cargando mapa...
+      </div>
+    ),
   }
 );
+const POST_TYPES = ["For Sell", "For Gifts", "For Exchange"];
 
-
-const CreatePostForm = ({ categories, conditions }: CreatePostFormProps) => {
-  const [postType, setPostType] = useState<PostType | null>(null);
+const CreatePostForm = ({
+  categories,
+  conditions,
+  statuses,
+}: CreatePostFormProps) => {
+  const [postType, setPostType] = useState<string | null>(null);
+  const [forSell, setForSell] = useState(false);
+  const [forGifts, setForGifts] = useState(false);
+  const [forChanges, setForChanges] = useState(false);
+  const [categoryId, setCategoryId] = useState<number | null>(null);
+  const [conditionId, setConditionId] = useState<number | null>(null);
+  const [statusId, setStatusId] = useState<number | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [isLoading] = useState(false);
   const [, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
-
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(
+    null
+  );
+  const [state, action] = useActionState(createToy, undefined);
 
   const getUserLocation = () => {
     setError(null);
-    
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setUserLocation([position.coords.latitude, position.coords.longitude]);
+          setUserLocation([
+            position.coords.latitude,
+            position.coords.longitude,
+          ]);
         },
         (err) => {
           setError(err.message);
@@ -67,18 +101,17 @@ const CreatePostForm = ({ categories, conditions }: CreatePostFormProps) => {
         {
           enableHighAccuracy: true,
           timeout: 5000,
-          maximumAge: 0
+          maximumAge: 0,
         }
       );
     } else {
-      setError('Geolocation is not supported by your browser');
+      setError("Geolocation is not supported by your browser");
     }
   };
 
   useEffect(() => {
     getUserLocation();
   }, []);
-
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -101,7 +134,7 @@ const CreatePostForm = ({ categories, conditions }: CreatePostFormProps) => {
   };
 
   return (
-    <form className="flex flex-col gap-2 px-3 py-4">
+    <form action={action} className="flex flex-col gap-2 px-3 py-4">
       {/* Campo de título */}
       <div className="flex flex-col gap-1">
         <Label>Title</Label>
@@ -111,6 +144,11 @@ const CreatePostForm = ({ categories, conditions }: CreatePostFormProps) => {
           className="border border-gray-300 rounded p-2"
           required
         />
+        {state?.errors?.title && (
+          <p className="text-red-500 text-sm">
+            {state.errors.title.join(", ")}
+          </p>
+        )}
       </div>
 
       {/* Descripción */}
@@ -122,51 +160,136 @@ const CreatePostForm = ({ categories, conditions }: CreatePostFormProps) => {
           className="h-20 border-gray-500"
           required
         />
+        {state?.errors?.description && (
+          <p className="text-red-500 text-sm">
+            {state.errors.description.join(", ")}
+          </p>
+        )}
       </div>
 
       {/* Precio */}
-     {(postType === 'For Sell' ) && (
-        <div className="flex flex-col gap-1">
-          <label>Price</label>
-          <input
-            name="price"
-            type="number"
-            min="0"
-            className="border border-gray-300 rounded p-2"
-            required
-          />
-        </div>
-      )}
-
-      {/* Ubicación */}
       <div className="flex flex-col gap-1">
-        <Label>Location</Label>
+        <label>Price</label>
         <input
-          name="location"
-          placeholder="Ciudad, País"
+          name="price"
+          type="number"
+          min="0"
           className="border border-gray-300 rounded p-2"
           required
         />
+        {state?.errors?.price && (
+          <p className="text-red-500 text-sm">
+            {state.errors.price.join(", ")}
+          </p>
+        )}
       </div>
 
       {/* Categoría */}
       <SelectItems
         label="Select a category"
         items={categories.data.map((category) => category.description)}
+        onValueChange={(value) => {
+          const selected = categories.data.find(
+            (category) => category.description === value
+          );
+          if (selected) {
+            setCategoryId(selected.id);
+          }
+        }}
       />
+      <input type="hidden" name="categoryId" value={categoryId || ""} />
 
       {/* Estado (statusId) */}
       <SelectItems
         label="What type of post is this?"
-        items={POST_TYPES}
-        onValueChange={(value) => setPostType(value as PostType)}
+        items={statuses.data.map((status) => status.description)}
+        onValueChange={(value) => {
+          const selected = statuses.data.find(
+            (status) => status.description === value
+          );
+          if (selected) {
+            setStatusId(selected.id);
+          }
+        }}
       />
+      <input type="hidden" name="statusId" value={statusId || ""} />
 
       {/* Condición (conditionId) */}
       <SelectItems
         label="Condition"
         items={conditions.data.map((condition) => condition.description)}
+        onValueChange={(value) => {
+          const selected = conditions.data.find(
+            (condition) => condition.description === value
+          );
+          if (selected) {
+            setConditionId(selected.id);
+          }
+        }}
       />
+      <input type="hidden" name="conditionId" value={conditionId || ""} />
+
+      {/* Opciones adicionales */}
+      <div className="flex flex-wrap gap-4">
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            name="forSell"
+            defaultChecked={postType === "For Sell"}
+            onChange={(e) => {
+              setPostType(e.target.checked ? "For Sell" : null);
+              setForSell(e.target.checked);
+              if (e.target.checked) {
+                setForGifts(false);
+                setForChanges(false);
+              }
+            }}
+            className="w-5 h-5 accent-green-700"
+          />
+          For Sale
+        </label>
+
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            name="forGifts"
+            defaultChecked={postType === "For Gifts"}
+            onChange={(e) => {
+              setPostType(e.target.checked ? "For Gifts" : null);
+              setForGifts(e.target.checked);
+              if (e.target.checked) {
+                setForSell(false);
+                setForChanges(false);
+              }
+            }}
+            className="w-5 h-5 accent-blue-600"
+          />
+          For Gifts
+        </label>
+
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            name="forChanges"
+            defaultChecked={postType === "For Exchange"}
+            onChange={(e) => {
+              setPostType(e.target.checked ? "For Exchange" : null);
+              setForChanges(e.target.checked);
+              if (e.target.checked) {
+                setForSell(false);
+                setForGifts(false);
+              }
+            }}
+            className="w-5 h-5 accent-yellow-600"
+          />
+          For Exchange
+        </label>
+      </div>
+
+      {/* Campos ocultos que se envían al servidor */}
+      <input type="hidden" name="forSell" value={String(forSell)} />
+      <input type="hidden" name="forGifts" value={String(forGifts)} />
+      <input type="hidden" name="forChanges" value={String(forChanges)} />
 
       {/* Imágenes */}
       <div className="flex flex-col gap-2 px-3 py-3 border-dashed border-2 border-gray-300 rounded-md">
@@ -215,14 +338,19 @@ const CreatePostForm = ({ categories, conditions }: CreatePostFormProps) => {
           max={MAX_FILES}
         />
       </div>
+      
 
       <div className="h-[200px] w-full border-dashed border-2 border-gray-300 rounded-md overflow-hidden">
-        <MapComponent 
-          onLocationChange={handleLocationChange} 
-          initialPosition={userLocation} 
+        <MapComponent
+          onLocationChange={handleLocationChange}
+          initialPosition={userLocation}
+        />
+        <input
+          type="hidden"
+          name="location"
+          value={userLocation ? `${userLocation[0]},${userLocation[1]}` : ""}
         />
       </div>
-
 
       {/* Botón de submit */}
       <button
