@@ -2,8 +2,9 @@
 
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@radix-ui/react-dropdown-menu";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useRef, useState, useEffect } from "react";
 import SelectItems from "./SelectItems";
+import dynamic from 'next/dynamic';
 
 const MAX_FILES = 6;
 
@@ -32,12 +33,52 @@ type CreatePostFormProps = {
 const POST_TYPES = ['For Sell', 'For Gifts', 'For Exchange'];
 type PostType = (typeof POST_TYPES)[number];
 
+// Importación dinámica con exportación por defecto correcta
+const MapComponent = dynamic(
+  () => import('../MapComponent').then((mod) => mod.default),
+  { 
+    ssr: false,
+    loading: () => <div className="h-[400px] w-full bg-gray-200 flex items-center justify-center">Cargando mapa...</div>
+  }
+);
+
+
 const CreatePostForm = ({ categories, conditions }: CreatePostFormProps) => {
   const [postType, setPostType] = useState<PostType | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [isLoading] = useState(false);
   const [, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+
+
+  const getUserLocation = () => {
+    setError(null);
+    
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation([position.coords.latitude, position.coords.longitude]);
+        },
+        (err) => {
+          setError(err.message);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        }
+      );
+    } else {
+      setError('Geolocation is not supported by your browser');
+    }
+  };
+
+  useEffect(() => {
+    getUserLocation();
+  }, []);
+
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -55,6 +96,9 @@ const CreatePostForm = ({ categories, conditions }: CreatePostFormProps) => {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const handleLocationChange = (lat: number, lng: number) => {
+    setUserLocation([lat, lng]);
+  };
 
   return (
     <form className="flex flex-col gap-2 px-3 py-4">
@@ -133,6 +177,7 @@ const CreatePostForm = ({ categories, conditions }: CreatePostFormProps) => {
           {files.map((file, index) => (
             <div key={index} className="relative group">
               {file.type.startsWith("image") && (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={URL.createObjectURL(file)}
                   alt={`Preview ${index}`}
@@ -171,7 +216,13 @@ const CreatePostForm = ({ categories, conditions }: CreatePostFormProps) => {
         />
       </div>
 
-      {/* Mensaje de error global */}
+      <div className="h-[200px] w-full border-dashed border-2 border-gray-300 rounded-md overflow-hidden">
+        <MapComponent 
+          onLocationChange={handleLocationChange} 
+          initialPosition={userLocation} 
+        />
+      </div>
+
 
       {/* Botón de submit */}
       <button
