@@ -8,10 +8,12 @@ interface ToysProps {
 }
 
 export default async function Home({ searchParams }: ToysProps) {
- const resolvedSearchParams = await searchParams;
+  const resolvedSearchParams = await searchParams;
 
   const currentPage = parseInt((resolvedSearchParams.page as string) || "1");
-  const postsPerPage = parseInt((resolvedSearchParams.pageSize as string) || "8");
+  const postsPerPage = parseInt(
+    (resolvedSearchParams.pageSize as string) || "8"
+  );
 
   const { toys, totalPosts } = await getToys(currentPage, postsPerPage);
 
