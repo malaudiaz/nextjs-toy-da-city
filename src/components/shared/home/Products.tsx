@@ -16,7 +16,7 @@ const Products = ({ toys }: ProductCardProps) => {
         {toys?.data?.map((toy) => (
           <ProductCard
             key={toy.id}
-            image={"/image 4.png"}
+            image={toy.media[0].fileUrl}
             description={toy.description}
             price={toy.price}
             location={toy.location}
@@ -24,6 +24,7 @@ const Products = ({ toys }: ProductCardProps) => {
           />
         ))}    
         </div>  
+
     </div>
   );
 };

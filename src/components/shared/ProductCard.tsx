@@ -34,7 +34,7 @@ const ProductCard = ({
       {/* Contenido inferior */}
       <div className="flex flex-col flex-grow p-4">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-xl text-green-700 font-medium">${price}</span>
+          <span className="text-xl text-green-700 font-medium">${price.toFixed(2)}</span>
           <button
             type="button"
             aria-label="Agregar a favoritos"
