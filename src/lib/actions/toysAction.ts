@@ -4,8 +4,6 @@ import { CreateToyFormState } from "@/types/formState";
 import { BACKEND_URL } from "../utils";
 import { ToySchema } from "../schemas/toy";
 import { auth } from "@clerk/nextjs/server";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 export async function getToys(page: number, perPage: number) {
   const start = page - 1 + 1 || 1;
