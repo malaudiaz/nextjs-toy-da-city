@@ -10,31 +10,40 @@ import { getAuthUserFromRequest } from "@/lib/auth";
 
 const MAX_MEDIA_FILES = 6;
 
-// Obtener un estado por ID
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(
-    request
-  );
-
-  if (!success && !userId) {
-    return NextResponse.json(
-      {
-        success: success,
-        error: error,
-      },
-      { status: code }
-    );
-  }
-
+// Obtener un juguete por ID
+export async function GET(request: Request, { params }: { params: { id: string } })
+  {
+  
   const t = await getTranslations("Toy.errors");
 
   try {
+    
     const toy = await prisma.toy.findUnique({
       where: { id: params.id, isActive: true },
-      include: { media: true },
+      include: {
+        media: true,
+        comments: {
+          where: { isActive: true },
+          select: {      // Selecciona solo los campos necesarios
+            id: true,
+            summary: true,
+            userId: true
+          },
+          take: 4,      // Límite de 10 comentarios
+          skip: 0,       // Opcional: Saltar los primeros X (útil para paginación)
+          orderBy: { createdAt: 'desc' },
+        },
+        _count: {
+          select: {
+            likes: {
+              where: { isActive: true }, // Filtra solo comentarios activos
+            },
+            comments: {
+              where: { isActive: true }, // Filtra solo comentarios activos
+            },
+          },
+        },
+      },
     });
 
     if (!toy) {

@@ -15,8 +15,8 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url!)
 
     const pagination = PaginationSchema.parse({
-      page: searchParams.get('page') || 1,
-      limit: searchParams.get('limit') || 10
+      page: parseInt(searchParams.get('page') || "1"),
+      limit: parseInt(searchParams.get('limit') || "10")
     });
 
     const [comments, total] = await Promise.all([

@@ -106,7 +106,85 @@ async function main() {
     skipDuplicates: true,
   });
 
+  await prisma.toyComments.createMany({
+    data: [
+      {id: 'comment_001', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_002', summary: 'I Like', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_003', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_004', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_005', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_006', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_007', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_008', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_009', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_010', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_011', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_002'},
+      {id: 'comment_012', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_003'},
+      {id: 'comment_013', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_004'},
+      {id: 'comment_014', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_005'},
+    ],
+    skipDuplicates: true,
+  });
+
+  await prisma.toyLikes.createMany({
+    data: [
+      {id: 'like_001', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'like_002', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'like_003', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'like_004', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'like_005', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'like_006', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'like_007', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'like_008', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'like_009', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'like_010', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
+      {id: 'like_011', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_002'},
+      {id: 'like_012', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_003'},
+      {id: 'like_013', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_004'},
+      {id: 'like_014', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_005'},
+    ],
+    skipDuplicates: true,
+  });
+
+  await prisma.commentsComments.createMany({
+    data: [
+      {id: 'comment_001', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
+      {id: 'comment_002', summary: 'I Like', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
+      {id: 'comment_003', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
+      {id: 'comment_004', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
+      {id: 'comment_005', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
+      {id: 'comment_006', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
+      {id: 'comment_007', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
+      {id: 'comment_008', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_002'},
+      {id: 'comment_009', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_002'},
+      {id: 'comment_010', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_002'},
+      {id: 'comment_011', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_003'},
+      {id: 'comment_012', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_004'},
+      {id: 'comment_013', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_004'},
+      {id: 'comment_014', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_004'},
+    ],
+    skipDuplicates: true,
+  });
   
+  await prisma.commentsLikes.createMany({
+    data: [
+      {id: 'like_001', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
+      {id: 'like_002', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
+      {id: 'like_003', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
+      {id: 'like_004', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
+      {id: 'like_005', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
+      {id: 'like_006', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
+      {id: 'like_007', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
+      {id: 'like_008', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
+      {id: 'like_009', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
+      {id: 'like_010', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_002'},
+      {id: 'like_011', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_002'},
+      {id: 'like_012', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_003'},
+      {id: 'like_013', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_003'},
+      {id: 'like_014', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_003'},
+    ],
+    skipDuplicates: true,
+  });
 }
 
 main()
