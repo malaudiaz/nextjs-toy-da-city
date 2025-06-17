@@ -1,6 +1,6 @@
 import SkeletonProductCard from "@/components/shared/SkeletonProductCard";
 
-const count = 10;
+const count = 8;
 
 export default function loading() {
   return (

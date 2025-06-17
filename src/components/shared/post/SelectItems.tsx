@@ -11,12 +11,13 @@ import React from 'react'
 type SelectItemsProps = {
     label: string
     items: string[]
+    onValueChange?: (value: string) => void;
 }
 
-const SelectItems = ({ label, items }: SelectItemsProps) => {
+const SelectItems = ({ label, items, onValueChange }: SelectItemsProps) => {
 
   return (
-    <Select>
+    <Select onValueChange={onValueChange}>
       <SelectTrigger className="w-full border-2 h-10 border-gray-500 rounded-md">
         <SelectValue placeholder={label} className='text-start'/>
       </SelectTrigger>
