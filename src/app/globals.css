@@ -136,15 +136,3 @@ html {
 h1 {
   font-family: var(--font-poppins);
 }
-
-.toy-price {
-    font-weight: bold;
-    color: #B12704;
-    font-size: calc(14px + 0.5vw); /* Tamaño responsive */
-}
-
-.toy-price .decimals {
-    font-size: 0.7em; /* 70% del tamaño del precio base */
-    vertical-align: super;
-    margin-left: 1px;
-}

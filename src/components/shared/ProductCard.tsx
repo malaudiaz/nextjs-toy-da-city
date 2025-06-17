@@ -1,7 +1,7 @@
-import React from 'react';
-import Image from 'next/image';
-import { Heart } from 'lucide-react';
-import StatusBadge from './StatusBadge';
+import React from "react";
+import Image from "next/image";
+import { Heart } from "lucide-react";
+import StatusBadge from "./StatusBadge";
 
 type ProductCardProps = {
   description: string;
@@ -23,7 +23,7 @@ const ProductCard = ({
       {/* Imagen */}
       <div className="w-full h-48 relative bg-gray-200 overflow-hidden rounded-t-lg">
         <Image
-          src={image || '/image 4.png'}
+          src={image || "/image 4.png"}
           alt={description}
           fill
           className="object-cover transition-transform duration-300 hover:scale-105"
@@ -34,7 +34,12 @@ const ProductCard = ({
       {/* Contenido inferior */}
       <div className="flex flex-col flex-grow p-4">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-xl text-green-700 font-medium">${price.toFixed(2)}</span>
+          <span className="font-bold text-[calc(14px_+_0.5vw)] text-green-700">
+            ${price.toFixed(2).split(".")[0]}
+            <span className="text-[0.7em] align-super ml-px">
+              {price.toFixed(2).split(".")[1] || "00"}
+            </span>
+          </span>
           <button
             type="button"
             aria-label="Agregar a favoritos"
