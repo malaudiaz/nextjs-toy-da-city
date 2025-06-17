@@ -108,7 +108,7 @@ const CreatePostForm = ({ categories, conditions }: CreatePostFormProps) => {
       {/* Categoría */}
       <SelectItems
         label="Select a category"
-        items={categories.data.map((category) => category.name)}
+        items={categories.data.map((category) => category.description)}
       />
 
       {/* Estado (statusId) */}
@@ -121,7 +121,7 @@ const CreatePostForm = ({ categories, conditions }: CreatePostFormProps) => {
       {/* Condición (conditionId) */}
       <SelectItems
         label="Condition"
-        items={conditions.data.map((condition) => condition.name)}
+        items={conditions.data.map((condition) => condition.description)}
       />
 
       {/* Imágenes */}
