@@ -2,16 +2,13 @@
 
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@radix-ui/react-dropdown-menu";
-import React, {
-  ChangeEvent,
-  useRef,
-  useState,
-  useEffect,
-  useActionState,
-} from "react";
-import SelectItems from "./SelectItems";
+import React, { ChangeEvent, useRef, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { createToy } from "@/lib/actions/toysAction";
+import { BACKEND_URL } from "../../../lib/utils";
+import { toyFormSchema, ToyFormValues } from "@/lib/schemas/toy";
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "@clerk/nextjs";
 
 const MAX_FILES = 6;
 
@@ -60,29 +57,51 @@ const MapComponent = dynamic(
     ),
   }
 );
-const POST_TYPES = ["For Sell", "For Gifts", "For Exchange"];
 
 const CreatePostForm = ({
   categories,
   conditions,
   statuses,
 }: CreatePostFormProps) => {
-  const [postType, setPostType] = useState<string | null>(null);
-  const [forSell, setForSell] = useState(false);
-  const [forGifts, setForGifts] = useState(false);
-  const [forChanges, setForChanges] = useState(false);
-  const [categoryId, setCategoryId] = useState<number | null>(null);
-  const [conditionId, setConditionId] = useState<number | null>(null);
-  const [statusId, setStatusId] = useState<number | null>(null);
   const [files, setFiles] = useState<File[]>([]);
-  const [isLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
   const [, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
     null
   );
-  const [state, action] = useActionState(createToy, undefined);
+
+  const { getToken } = useAuth();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+    control,
+  } = useForm<ToyFormValues>({
+    resolver: zodResolver(toyFormSchema),
+    mode: "onChange", // ← Asegúrate de tener esto
+    defaultValues: {
+      forSale: false,
+      forGift: false,
+      forChange: false,
+      categoryId: undefined,
+      statusId: undefined,
+      conditionId: undefined,
+    },
+  });
+
+  // Observamos el valor de forSale para mostrar/ocultar el precio
+  const forSaleValue = useWatch({
+    control,
+    name: "forSale",
+  });
 
   const getUserLocation = () => {
     setError(null);
@@ -122,271 +141,352 @@ const CreatePostForm = ({
         return;
       }
 
-      setFiles((prev) => [...prev, ...newFiles]);
+      setFiles([...files, ...newFiles]);
     }
   };
   const removeFile = (index: number) => {
-    setFiles((prev) => prev.filter((_, i) => i !== index));
+    const newFiles = [...files];
+    newFiles.splice(index, 1);
+    setFiles(newFiles);
   };
 
   const handleLocationChange = (lat: number, lng: number) => {
     setUserLocation([lat, lng]);
   };
 
+  const onSubmit = async (data: ToyFormValues) => {
+    const token = await getToken({ template: "Toydacity" });
+
+    setIsSubmitting(true);
+    setSubmitError(null);
+    setSubmitSuccess(false);
+
+    try {
+      const formData = new FormData();
+
+      // Agregar campos del formulario
+      Object.entries(data).forEach(([key, value]) => {
+        // No agregar el precio si no está en venta
+        if (key === "price" && !data.forSale) {
+          return;
+        }
+        formData.append(key, value?.toString() ?? "");
+      });
+
+      //Agregar la localizacion
+      const location = userLocation ? `${userLocation[0]},${userLocation[1]}` : "";
+      formData.append("location", location);
+
+      // Agregar archivos
+      if (files.length > 0) {
+        files.forEach((file) => {
+          formData.append("files", file);
+        });
+      } else {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });        
+        setSubmitError("Debe subir al menos un archivo");
+        return;
+      }
+
+      const response = await fetch(`${BACKEND_URL}/api/toys`, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al enviar el formulario");
+      }
+
+      const result = await response.json();
+      console.log("Success:", result);
+      setSubmitSuccess(true);
+      reset();
+      setFiles([]);
+    } catch (error) {
+      console.error("Error:", error);
+      setSubmitError(
+        error instanceof Error ? error.message : "Error desconocido"
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <form action={action} className="flex flex-col gap-2 px-3 py-4">
-      {/* Campo de título */}
-      <div className="flex flex-col gap-1">
-        <Label>Title</Label>
-        <input
-          name="title"
-          placeholder="Nombre del producto"
-          className="border border-gray-300 rounded p-2"
-          required
-        />
-        {state?.errors?.title && (
-          <p className="text-red-500 text-sm">
-            {state.errors.title.join(", ")}
-          </p>
-        )}
-      </div>
+    <>
+      {submitSuccess && (
+        <div className="mb-4 p-4 bg-green-100 text-green-700 rounded">
+          ¡El juguete se ha añadido correctamente!
+        </div>
+      )}
 
-      {/* Descripción */}
-      <div className="flex flex-col gap-1">
-        <Label>Description</Label>
-        <Textarea
-          name="description"
-          placeholder="Describe tu producto"
-          className="h-20 border-gray-500"
-          required
-        />
-        {state?.errors?.description && (
-          <p className="text-red-500 text-sm">
-            {state.errors.description.join(", ")}
-          </p>
-        )}
-      </div>
+      {submitError && (
+        <div className="mb-4 p-4 bg-red-100 text-red-700 rounded">
+          Error: {submitError}
+        </div>
+      )}
 
-      {/* Precio */}
-      <div className="flex flex-col gap-1">
-        <label>Price</label>
-        <input
-          name="price"
-          type="number"
-          min="0"
-          className="border border-gray-300 rounded p-2"
-          required
-        />
-        {state?.errors?.price && (
-          <p className="text-red-500 text-sm">
-            {state.errors.price.join(", ")}
-          </p>
-        )}
-      </div>
-
-      {/* Categoría */}
-      <SelectItems
-        label="Select a category"
-        items={categories.data.map((category) => category.description)}
-        onValueChange={(value) => {
-          const selected = categories.data.find(
-            (category) => category.description === value
-          );
-          if (selected) {
-            setCategoryId(selected.id);
-          }
-        }}
-      />
-      <input type="hidden" name="categoryId" value={categoryId || ""} />
-
-      {/* Estado (statusId) */}
-      <SelectItems
-        label="What type of post is this?"
-        items={statuses.data.map((status) => status.description)}
-        onValueChange={(value) => {
-          const selected = statuses.data.find(
-            (status) => status.description === value
-          );
-          if (selected) {
-            setStatusId(selected.id);
-          }
-        }}
-      />
-      <input type="hidden" name="statusId" value={statusId || ""} />
-
-      {/* Condición (conditionId) */}
-      <SelectItems
-        label="Condition"
-        items={conditions.data.map((condition) => condition.description)}
-        onValueChange={(value) => {
-          const selected = conditions.data.find(
-            (condition) => condition.description === value
-          );
-          if (selected) {
-            setConditionId(selected.id);
-          }
-        }}
-      />
-      <input type="hidden" name="conditionId" value={conditionId || ""} />
-
-      {/* Opciones adicionales */}
-      <div className="flex flex-wrap gap-4">
-        <label className="flex items-center gap-2">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-2 px-3 py-4"
+      >
+        {/* Campo de título */}
+        <div className="flex flex-col gap-1">
+          <Label>Title</Label>
           <input
-            type="checkbox"
-            name="forSell"
-            defaultChecked={postType === "For Sell"}
-            onChange={(e) => {
-              setPostType(e.target.checked ? "For Sell" : null);
-              setForSell(e.target.checked);
-              if (e.target.checked) {
-                setForGifts(false);
-                setForChanges(false);
-              }
-            }}
-            className="w-5 h-5 accent-green-700"
+            id="title"
+            placeholder="Nombre del producto"
+            className="border border-gray-300 rounded p-2"
+            {...register("title")}
+            required
           />
-          For Sale
-        </label>
+          {errors.title && (
+            <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
+          )}
+        </div>
 
-        <label className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            name="forGifts"
-            defaultChecked={postType === "For Gifts"}
-            onChange={(e) => {
-              setPostType(e.target.checked ? "For Gifts" : null);
-              setForGifts(e.target.checked);
-              if (e.target.checked) {
-                setForSell(false);
-                setForChanges(false);
-              }
-            }}
-            className="w-5 h-5 accent-blue-600"
+        {/* Descripción */}
+        <div className="flex flex-col gap-1">
+          <Label>Description</Label>
+          <Textarea
+            id="description"
+            placeholder="Describe tu producto"
+            className="h-20 border-gray-500"
+            rows={4}
+            {...register("description")}
+            required
           />
-          For Gifts
-        </label>
+          {errors.description && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.description.message}
+            </p>
+          )}
+        </div>
 
-        <label className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            name="forChanges"
-            defaultChecked={postType === "For Exchange"}
-            onChange={(e) => {
-              setPostType(e.target.checked ? "For Exchange" : null);
-              setForChanges(e.target.checked);
-              if (e.target.checked) {
-                setForSell(false);
-                setForGifts(false);
-              }
-            }}
-            className="w-5 h-5 accent-yellow-600"
-          />
-          For Exchange
-        </label>
-      </div>
+        {/* Opciones adicionales */}
+        <div className="flex flex-wrap gap-4">
+          {/* For Sell */}
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="forSale"
+              className="w-5 h-5 accent-green-700"
+              {...register("forSale")}
+            />
+            <label htmlFor="forSale">Sale</label>
+          </div>
 
-      {/* Campos ocultos que se envían al servidor */}
-      <input type="hidden" name="forSell" value={String(forSell)} />
-      <input type="hidden" name="forGifts" value={String(forGifts)} />
-      <input type="hidden" name="forChanges" value={String(forChanges)} />
+          {/* For Gift */}
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="forGift"
+              className="w-5 h-5 accent-green-700"
+              {...register("forGift")}
+            />
+            <label htmlFor="forGift">Free</label>
+          </div>
 
-      {/* Imágenes */}
-      <div className="flex flex-col gap-2 px-3 py-3 border-dashed border-2 border-gray-300 rounded-md">
-        <Label>
-          Take picture of your item and upload them to improve the result
-        </Label>
-        <div className="grid grid-cols-3 gap-2">
-          {files.map((file, index) => (
-            <div key={index} className="relative group">
-              {file.type.startsWith("image") && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={URL.createObjectURL(file)}
-                  alt={`Preview ${index}`}
-                  className="w-full h-32 object-cover rounded border"
-                />
-              )}
-              <button
-                type="button"
-                onClick={() => removeFile(index)}
-                className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                &times;
-              </button>
-            </div>
-          ))}
-
-          {/* Botón para añadir más */}
-          <div
-            className={`border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer h-32 ${
-              files.length >= MAX_FILES ? "hidden" : ""
-            }`}
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <span className="text-gray-500">+ Add More</span>
+          {/* For Exchange */}
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="forChange"
+              {...register("forChange")}
+              className="w-5 h-5 accent-green-700"
+            />
+            <label htmlFor="forChange">Swap</label>
           </div>
         </div>
 
-        <input
-          type="file"
-          ref={fileInputRef}
-          accept="image/*"
-          onChange={handleFileChange}
-          className="hidden"
-          multiple
-          max={MAX_FILES}
-        />
-      </div>
-      
-
-      <div className="h-[200px] w-full border-dashed border-2 border-gray-300 rounded-md overflow-hidden">
-        <MapComponent
-          onLocationChange={handleLocationChange}
-          initialPosition={userLocation}
-        />
-        <input
-          type="hidden"
-          name="location"
-          value={userLocation ? `${userLocation[0]},${userLocation[1]}` : ""}
-        />
-      </div>
-
-      {/* Botón de submit */}
-      <button
-        type="submit"
-        disabled={isLoading}
-        className="w-full bg-[#3D5D3C] text-white py-3 rounded-lg font-medium hover:bg-[#3e6e3c] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {isLoading ? (
-          <span className="flex items-center justify-center">
-            <svg
-              className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-            Uploading...
-          </span>
-        ) : (
-          "Create Post"
+        {forSaleValue && (
+          <div className="flex flex-col gap-1">
+            <label>Price</label>
+            <input
+              id="price"
+              type="number"
+              min="0"
+              className="border border-gray-300 rounded p-2"
+              {...register("price", { valueAsNumber: true })}
+              required
+            />
+            {errors.price && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.price.message}
+              </p>
+            )}
+          </div>
         )}
-      </button>
-    </form>
+
+        {/* Categoría */}
+        <div>
+          <label htmlFor="categoryId" className="block mb-1">
+            Category*
+          </label>
+          <select
+            id="categoryId"
+            className="w-full p-2 border rounded"
+            {...register("categoryId", { valueAsNumber: true })}
+            required
+          >
+            {categories.data.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.description}
+              </option>
+            ))}
+          </select>
+          {errors.categoryId && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.categoryId.message}
+            </p>
+          )}
+        </div>
+
+        {/* Status */}
+        <div>
+          <label htmlFor="statusId" className="block mb-1">
+            Status*
+          </label>
+          <select
+            id="statusId"
+            className="w-full p-2 border rounded"
+            {...register("statusId", { valueAsNumber: true })}
+            required
+          >
+            {statuses.data.map((status) => (
+              <option key={status.id} value={status.id}>
+                {status.description}
+              </option>
+            ))}
+          </select>
+          {errors.statusId && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.statusId.message}
+            </p>
+          )}
+        </div>
+
+        {/* Conditions */}
+        <div>
+          <label htmlFor="conditionId" className="block mb-1">
+            Condition*
+          </label>
+          <select
+            id="conditionId"
+            className="w-full p-2 border rounded"
+            {...register("conditionId", { valueAsNumber: true })}
+            required
+          >
+            {conditions.data.map((condition) => (
+              <option key={condition.id} value={condition.id}>
+                {condition.description}
+              </option>
+            ))}
+          </select>
+          {errors.conditionId && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.conditionId.message}
+            </p>
+          )}
+        </div>
+
+        {/* Imágenes */}
+        <div className="flex flex-col gap-2 px-3 py-3 border-dashed border-2 border-gray-300 rounded-md">
+          <Label>
+            Take picture of your item and upload them to improve the result
+          </Label>
+          <div className="grid grid-cols-3 gap-2">
+            {files.map((file, index) => (
+              <div key={index} className="relative group">
+                {file.type.startsWith("image") && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt={`Preview ${index}`}
+                    className="w-full h-32 object-cover rounded border"
+                  />
+                )}
+                <button
+                  type="button"
+                  onClick={() => removeFile(index)}
+                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  &times;
+                </button>
+              </div>
+            ))}
+
+            {/* Botón para añadir más */}
+            <div
+              className={`border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer h-32 ${
+                files.length >= MAX_FILES ? "hidden" : ""
+              }`}
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <span className="text-gray-500">+ Add More</span>
+            </div>
+          </div>
+
+          <input
+            type="file"
+            ref={fileInputRef}
+            accept="image/*,video/*"
+            onChange={handleFileChange}
+            className="hidden"
+            multiple
+            max={MAX_FILES}
+          />
+        </div>
+
+        <div className="h-[200px] w-full border-dashed border-2 border-gray-300 rounded-md overflow-hidden">
+          <MapComponent
+            onLocationChange={handleLocationChange}
+            initialPosition={userLocation}
+          />
+        </div>
+
+        {/* Botón de submit */}
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full bg-[#3D5D3C] text-white py-3 rounded-lg font-medium hover:bg-[#3e6e3c] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isSubmitting ? (
+            <span className="flex items-center justify-center">
+              <svg
+                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Uploading...
+            </span>
+          ) : (
+            "Create Post"
+          )}
+        </button>
+      </form>
+    </>
   );
 };
 

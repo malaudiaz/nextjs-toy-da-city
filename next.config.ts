@@ -61,6 +61,11 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_BASE_URL: "https://toydacity.com",
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb',
+    },
+  },  
 };
  
 const withNextIntl = createNextIntlPlugin();

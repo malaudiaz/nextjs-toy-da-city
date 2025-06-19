@@ -147,12 +147,16 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       )    
   }
 
-  const t = await getTranslations("Toy.errors");
+  //const t = await getTranslations("Toy.errors");
+  const clonedRequest = request.clone();
+  let formData: FormData;
+
+  
 
   try {
     await ensureUploadsDirExists()
 
-    const formData = await request.formData()
+    formData = await clonedRequest.formData();
 
     const stringforSell = formData.get("forSell") || "false"
     const booleanforSell = stringforSell === "true"
@@ -288,7 +292,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
   } catch (error: unknown) {
     console.error('Error:', error)
     
-    let errorMessage = t('InternalServerError')
+    let errorMessage = 'InternalServerError'
     if (error instanceof Error) {
       errorMessage = error.message
     }
