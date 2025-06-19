@@ -15,6 +15,7 @@ const Products = ({ toys }: ProductCardProps) => {
         {toys?.data?.map((toy) => (
           <ProductCard
             key={toy.id}
+            id={toy.id}
             image={toy.media[0].fileUrl}
             description={toy.description}
             price={toy.price}

@@ -7,12 +7,12 @@ import Link from "next/link";
 import React from "react";
 
 const links = [
-    { name: "Ventas", href: "/config/ventas" , icon: <Coins/> },
-    { name: "Compras", href: "/config/compras", icon: <ShoppingBag/> },
-    { name: "Intercambios", href: "/config/intercambios" , icon: <Repeat/> },
-    { name: "Regalos", href: "/config/regalos" , icon: <Gift/> },
-    { name: "Favoritos", href: "/config/favoritos" , icon: <Heart/> },
-    { name: "Ver tu Reputacion", href: "#" , icon: <Star/> },
+    { name: "Sales", href: "/config/ventas" , icon: <Coins/> },
+    { name: "Purchases", href: "/config/compras", icon: <ShoppingBag/> },
+    { name: "Trades", href: "/config/intercambios" , icon: <Repeat/> },
+    { name: "Gifts", href: "/config/regalos" , icon: <Gift/> },
+    { name: "Favorites", href: "/config/favoritos" , icon: <Heart/> },
+    { name: "Your Reputation", href: "#" , icon: <Star/> },
 ]
 
 
@@ -22,7 +22,7 @@ const ConfigurationsPage = () => {
     <div className="w-full h-full bg-[#fbfaf4]">
       <div className="px-10 py-2 bg-[#F0F5F0] mt-5">
         <Breadcrumbs/>
-        <h1 className="text-lg font-semibold">Tu Perfil</h1>
+        <h1 className="text-lg font-semibold">Your Profile</h1>
       </div>
       <div className="px-6 py-4 flex flex-row gap-4 justify-between">
         <div className="flex flex-row gap-4">
@@ -46,7 +46,7 @@ const ConfigurationsPage = () => {
       </div>
 
        <div className="px-10 py-2 bg-[#F0F5F0] mt-5">
-        <h1 className="text-lg font-semibold">Tu Actividad</h1>
+        <h1 className="text-lg font-semibold">Your Activity</h1>
       </div>
 
  {/* probar con space-y-2 */}

@@ -2,8 +2,10 @@ import React from "react";
 import Image from "next/image";
 import { Heart } from "lucide-react";
 import StatusBadge from "./StatusBadge";
+import Link from "next/link";
 
 type ProductCardProps = {
+  id:string
   description: string;
   image?: string;
   price: number;
@@ -12,6 +14,7 @@ type ProductCardProps = {
 };
 
 const ProductCard = ({
+  id,
   description,
   image,
   price,
@@ -19,7 +22,11 @@ const ProductCard = ({
   conditionId,
 }: ProductCardProps) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow h-full flex flex-col w-[180px] md:w-[200px] lg:w-[220px] xl:w-[250px]">
+    <Link
+      href={`/toys/${id}`}
+      className="bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow h-full flex flex-col w-[180px] md:w-[200px] lg:w-[220px] xl:w-[250px]"
+      aria-label={`Ver detalles de ${description}`}
+    >
       {/* Imagen */}
       <div className="w-full h-48 relative bg-gray-200 overflow-hidden rounded-t-lg">
         <Image
@@ -59,7 +66,7 @@ const ProductCard = ({
         {/* Ubicación */}
         <p className="text-sm text-gray-500 truncate">{location}</p>
       </div>
-    </div>
+    </Link>
   );
 };
 

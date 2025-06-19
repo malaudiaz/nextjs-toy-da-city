@@ -20,7 +20,7 @@ export async function getToys(page: number, perPage: number) {
   const toys = await response.json();
   const totalPosts = toys.pagination.total;
 
-  return { toys, totalPosts };
+  return { toys ,totalPosts };
 }
 
 export async function createToy(

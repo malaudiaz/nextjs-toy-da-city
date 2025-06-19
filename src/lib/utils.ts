@@ -6,25 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000";
 
-export const getSectionNameFromPath = (path: string): string => {
-  const sectionMap: Record<string, string> = {
-    'ventas': 'Ventas',
-    'compras': 'Compras',
-    'intercambios': 'Intercambios',
-    'regalos': 'Regalos',
-    'favoritos': 'Favoritos',
-    'reputacion': 'Ver tu reputación',
-  };
-
-  const match = path.match(/profile\/([^/]+)/);
-  const key = match ? match[1] : '';
-
-  return sectionMap[key] || 'Perfil';
-};
-
 export const getBreadcrumbs = (pathname: string): { label: string; href?: string }[] => {
   const paths = pathname.split('/').filter(Boolean);
-  const breadcrumbs = [{ label: 'Inicio', href: '/' }];
+  const breadcrumbs = [{ label: 'Home', href: '/' }];
   const ignoreSegments = ['en', ]; 
 
   let currentPath = '';
@@ -39,12 +23,12 @@ export const getBreadcrumbs = (pathname: string): { label: string; href?: string
     const labelMap: Record<string, string> = {
       profile: 'Profile',
       config: 'Configurations',
-      ventas: 'Ventas',
-      compras: 'Compras',
-      intercambios: 'Intercambios',
-      regalos: 'Regalos',
-      favoritos: 'Favoritos',
-      reputacion: 'Reputación',
+      ventas: 'Sales',
+      compras: 'Purchases',
+      intercambios: 'Trades',
+      regalos: 'Gifts',
+      favoritos: 'Favorites',
+      reputacion: 'Reputation',
     };
 
     const label = labelMap[path] || decodedLabel;
