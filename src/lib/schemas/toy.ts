@@ -43,7 +43,26 @@ export const PaginationSchema = z.object({
   limit: z.number().min(1).max(100).default(10)
 })
 
+// Esquema de validación con Zod
+export const toyFormSchema = z.object({
+  title: z.string().min(3, 'El título debe tener al menos 3 caracteres').max(100),
+  description: z.string().min(10, 'La descripción debe tener al menos 10 caracteres').max(1000),
+  price: z.number().min(0, 'El precio no puede ser negativo').optional(),
+  categoryId: z.number().int('Debe ser un número entero').min(1, 'Debes seleccionar una categoría'),
+  statusId: z.number().int('Debe ser un número entero').min(1, 'Debes seleccionar un estado'),
+  conditionId: z.number().int('Debe ser un número entero').min(1, 'Debes seleccionar una condición'),
+  forSale: z.boolean(),
+  forGift: z.boolean(),
+  forChange: z.boolean(),
+}).refine(data => !data.forSale || data.price !== undefined, {
+  message: "El precio es requerido cuando el juguete está en venta",
+  path: ["price"]
+});
+
+
+
 // Tipos inferidos
 export type ToyInput = z.infer<typeof ToySchema>
 export type ToyFilterInput = z.infer<typeof ToyFilterSchema>
 export type PaginationInput = z.infer<typeof PaginationSchema>
+export type ToyFormValues = z.infer<typeof toyFormSchema>;
