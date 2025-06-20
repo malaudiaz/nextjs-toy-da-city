@@ -1,4 +1,5 @@
 "use client";
+
 import { Toy } from "@/types/toy";
 import React, { useState } from "react";
 import {
@@ -63,6 +64,9 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
         <div className="space-y-4">
           <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden group">
             <div className="aspect-square relative">
+
+              {/* eslint-disable @next/next/no-img-element */}
+
               <img
                 src={data.media[selectedImage].fileUrl}
                 alt={data.title}
