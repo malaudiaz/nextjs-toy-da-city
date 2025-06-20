@@ -42,8 +42,8 @@ export async function GET(
 }
 
 export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: { id: string; locale: string } }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -53,7 +53,7 @@ export async function PUT(
 
   const t = await getTranslations("Categories.errors");
 
-  const { id } = params; // Safe to use
+  const { id } = await params; // Safe to use
 
   try {
     // Validar ID
@@ -99,8 +99,8 @@ export async function PUT(
 }
 
 export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: { id: string; locale: string } }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -110,7 +110,7 @@ export async function DELETE(
 
   const t = await getTranslations("Categories.errors");
 
-  const { id } = params; // Safe to use
+  const { id } = await params; // Safe to use
 
   try {
     if (!params.id || isNaN(Number(id))) {
@@ -142,8 +142,8 @@ export async function DELETE(
 }
 
 export async function PATCH(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: { id: string; locale: string } }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -153,7 +153,7 @@ export async function PATCH(
 
   const t = await getTranslations("Categories.errors");
 
-  const { id } = params; // Safe to use
+  const { id } = await params; // Safe to use
 
   if (!id || isNaN(Number(id))) {
     return NextResponse.json(

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import prisma from "@/lib/prisma";
-import { LikesToySchema} from "@/lib/schemas/likestoy";
+//import { LikesToySchema} from "@/lib/schemas/likestoy";
 import { getTranslations } from "next-intl/server";
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/auth";
@@ -12,6 +12,7 @@ export async function GET(req: NextRequest) {
   const t = await getTranslations("Likes.errors");
 
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { searchParams } = new URL(req.url!)
     
     const [toyLikes, total] = await Promise.all([
@@ -49,6 +50,7 @@ export async function POST(req: Request) {
 
   try {
     // 1. Obtener el cuerpo de la solicitud
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const body = await req.json();
 
     // 2. Crear toys likes en Prisma
