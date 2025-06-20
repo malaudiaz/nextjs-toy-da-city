@@ -9,10 +9,17 @@ import { Prisma } from "@prisma/client";
 import { CategoryUpdateSchema } from "@/lib/schemas/category";
 import { getAuthUserFromRequest } from "@/lib/auth";
 
+interface RequestContext {
+  params: {
+    id: string;
+    locale: string;
+  };
+}
+
 // Obtener un estado por ID
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string; locale: string } }
+  context: RequestContext
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -20,7 +27,7 @@ export async function GET(
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const { id } = await params; // Safe to use
+  const { id } = await context.params; // Safe to use
 
   try {
     const status = await prisma.category.findUnique({
