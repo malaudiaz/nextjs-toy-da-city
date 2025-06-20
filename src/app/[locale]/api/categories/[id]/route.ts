@@ -1,5 +1,6 @@
 // app/api/categories/[id]/route.ts
 import { NextResponse } from "next/server";
+import { NextRequest } from 'next/server';
 import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { CategorySchema } from "@/lib/schemas/category";
@@ -10,8 +11,8 @@ import { getAuthUserFromRequest } from "@/lib/auth";
 
 // Obtener un estado por ID
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: { id: string; locale: string } }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -19,7 +20,7 @@ export async function GET(
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const { id } = params; // Safe to use
+  const { id } = await params; // Safe to use
 
   try {
     const status = await prisma.category.findUnique({

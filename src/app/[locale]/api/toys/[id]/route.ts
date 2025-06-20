@@ -1,5 +1,6 @@
 // app/api/toy/[id]/route.ts
 import { NextResponse } from "next/server";
+import { NextRequest } from 'next/server';
 import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { ToySchema } from "@/lib/schemas/toy";
@@ -11,27 +12,32 @@ import { getAuthUserFromRequest } from "@/lib/auth";
 const MAX_MEDIA_FILES = 6;
 
 // Obtener un juguete por ID
-export async function GET(request: Request, { params }: { params: { id: string } })
-  {
-  
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string; locale: string } }
+
+) {
+
+  const { id } = await params;
+
   const t = await getTranslations("Toy.errors");
 
   try {
-    
     const toy = await prisma.toy.findUnique({
-      where: { id: params.id, isActive: true },
+      where: { id: id, isActive: true },
       include: {
         media: true,
         comments: {
           where: { isActive: true },
-          select: {      // Selecciona solo los campos necesarios
+          select: {
+            // Selecciona solo los campos necesarios
             id: true,
             summary: true,
-            userId: true
+            userId: true,
           },
-          take: 4,      // Límite de 10 comentarios
-          skip: 0,       // Opcional: Saltar los primeros X (útil para paginación)
-          orderBy: { createdAt: 'desc' },
+          take: 4, // Límite de 10 comentarios
+          skip: 0, // Opcional: Saltar los primeros X (útil para paginación)
+          orderBy: { createdAt: "desc" },
         },
         _count: {
           select: {
@@ -85,14 +91,14 @@ export async function PUT(
   try {
     const formData = await request.formData();
 
-    const stringforSell = formData.get("forSell") || "false"
-    const booleanforSell = stringforSell === "true"
+    const stringforSell = formData.get("forSell") || "false";
+    const booleanforSell = stringforSell === "true";
 
-    const stringforGifts = formData.get("forGifts") || "false"
-    const booleanforGifts = stringforGifts === "true"
+    const stringforGifts = formData.get("forGifts") || "false";
+    const booleanforGifts = stringforGifts === "true";
 
-    const stringforChanges = formData.get("forChanges") || "false"
-    const booleanforChanges = stringforChanges === "true"
+    const stringforChanges = formData.get("forChanges") || "false";
+    const booleanforChanges = stringforChanges === "true";
 
     // Validar con Zod
     const toyData = ToySchema.parse({
