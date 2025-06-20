@@ -61,7 +61,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="es" className={`${inter.variable} ${poppins.variable}`}>
+    <html lang={locale} className={`${inter.variable} ${poppins.variable}`}>
       <ClerkProvider localization={esES} appearance={{ baseTheme: dark }}>
         <body className={`min-h-screen flex flex-col antialiased font-inter`}>
           <NextIntlClientProvider>

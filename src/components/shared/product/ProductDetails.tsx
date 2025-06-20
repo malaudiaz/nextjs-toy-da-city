@@ -12,6 +12,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { NumberToCategory, NumberToCondition } from "@/lib/utils";
+import Image from "next/image";
 
 type ProductDetailsProps = {
   data: Toy;
@@ -67,9 +68,11 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
 
               {/* eslint-disable @next/next/no-img-element */}
 
-              <img
+              <Image
                 src={data.media[selectedImage].fileUrl}
                 alt={data.title}
+                width={400}
+                height={400}
                 className="w-full h-full object-cover"
               />
 
