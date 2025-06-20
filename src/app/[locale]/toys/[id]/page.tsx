@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import { getToy } from "@/lib/actions/toysAction";

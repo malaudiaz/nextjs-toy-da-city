@@ -30,7 +30,7 @@ export default function Policies() {
                   www.toydacity.com
                 </a>
                 ), mobile applications, and related services (collectively, the
-                "Toydacity Service"). This Privacy Policy explains how we
+                Toydacity Service). This Privacy Policy explains how we
                 collect, use, disclose, and safeguard your information when you
                 interact with our Service.
               </p>
@@ -38,13 +38,13 @@ export default function Policies() {
                 By accessing or using Toydacity, you consent to the practices
                 described herein. We may modify this policy periodically;
                 material changes will be communicated via email, in-app
-                notifications, or by updating the "Last Updated" date. Your
+                notifications, or by updating the Last Updated date. Your
                 continued use constitutes acceptance.
               </p>
               <p className="mb-3 text-gray-700 font-medium">
                 For residents of California, Florida, Virginia, Colorado,
                 Connecticut, and other jurisdictions with specific privacy laws,
-                refer to Section 9 ("State-Specific Disclosures").
+                refer to Section 9 (State-Specific Disclosures).
               </p>
             </section>
 
@@ -77,8 +77,8 @@ export default function Policies() {
                 </li>
                 <li>
                   <strong>Verifying identity</strong>: For enhanced trust
-                  programs (e.g., "Toydacity Verified Seller"), we may request
-                  government-issued IDs (e.g., driver's license) or utility
+                  programs (e.g., Toydacity Verified Seller), we may request
+                  government-issued IDs (e.g., drivers license) or utility
                   bills, processed securely via third-party services like Jumio.
                 </li>
                 <li>
@@ -170,8 +170,8 @@ export default function Policies() {
                   messaging, and payment confirmations.
                 </li>
                 <li>
-                  Personalize recommendations (e.g., "Trending LEGO Sets Near
-                  You").
+                  Personalize recommendations (e.g., Trending LEGO Sets Near
+                  You).
                 </li>
                 <li>
                   Verify identities to reduce fraud (e.g., flagging counterfeit
@@ -206,8 +206,8 @@ export default function Policies() {
                 </li>
                 <li>Conduct A/B testing to improve UI/UX.</li>
                 <li>
-                  Share aggregated trends with partners (e.g., "Most Traded Toys
-                  of 2025").
+                  Share aggregated trends with partners (e.g., Most Traded Toys
+                  of 2025).
                 </li>
               </ul>
             </section>
@@ -228,7 +228,7 @@ export default function Policies() {
                 </li>
                 <li>
                   <strong>Listings</strong>: Photos, descriptions, and
-                  approximate location (e.g., "3 miles away").
+                  approximate location (e.g., 3 miles away).
                 </li>
               </ul>
 
@@ -267,8 +267,8 @@ export default function Policies() {
                 4.4 Aggregate/De-Identified Data
               </h3>
               <p className="mb-4 text-gray-700">
-                Shared for market research (e.g., "70% of users trade toys
-                within 10 miles").
+                Shared for market research (e.g., 70% of users trade toys
+                within 10 miles).
               </p>
             </section>
 
@@ -361,12 +361,12 @@ export default function Policies() {
             {/* Sección 7 */}
             <section className="mt-6">
               <h2 className="text-2xl sm:text-3xl font-semibold  mb-3">
-                7. Children's Privacy
+                7. Children&lsquo;s Privacy
               </h2>
               <p className="mb-3 text-gray-700">
                 Toydacity is committed to protecting the privacy of children and
                 complying with all applicable laws, including the U.S.
-                Children's Online Privacy Protection Act (COPPA).
+                Children&lsquo;s Online Privacy Protection Act (COPPA).
               </p>
 
               <h3 className="text-xl sm:text-2xl font-medium text-[#16A085] mt-4 mb-2">
@@ -390,7 +390,7 @@ export default function Policies() {
               </h3>
               <p className="mb-3 text-gray-700">
                 <strong>Guardian Oversight</strong>: Parents/guardians must
-                review and approve their child's account creation and monitor
+                review and approve their child&lsquo;s account creation and monitor
                 activity.
               </p>
               <p className="mb-3 text-gray-700">
@@ -452,7 +452,7 @@ export default function Policies() {
                   <ul className="list-disc pl-5 mt-2 space-y-1">
                     <li>
                       Categories of personal data collected (e.g.,
-                      "identifiers," "commercial information," "geolocation").
+                      identifiers, commercial information, geolocation).
                     </li>
                     <li>
                       Specific pieces of data (e.g., message transcripts,
@@ -474,7 +474,7 @@ export default function Policies() {
                   <strong>Opt-Out of Sales/Sharing</strong>: Disable
                   ad-targeting via{" "}
                   <strong>
-                    Settings &gt; Privacy &gt; "Limit Data Sharing"
+                    Settings &gt; Privacy &gt; Limit Data Sharing
                   </strong>
                   .
                 </li>
@@ -499,7 +499,7 @@ export default function Policies() {
                   >
                     privacy@toydacity.com
                   </a>{" "}
-                  (subject line: "CA Privacy Request").
+                  (subject line: CA Privacy Request).
                 </li>
                 <li>Toll-Free: 1-800-555-TOYS (ext. 2).</li>
                 <li>
@@ -513,7 +513,7 @@ export default function Policies() {
                 July 2024)
               </h3>
               <p className="mb-3 text-gray-700">
-                As Toydacity's headquarters is in <strong>Miami, FL</strong>, we
+                As Toydacity&lsquo;s headquarters is in <strong>Miami, FL</strong>, we
                 adhere to the{" "}
                 <strong>Florida Digital Bill of Rights (FDBR)</strong>:
               </p>
@@ -529,7 +529,7 @@ export default function Policies() {
                   are automatically excluded from ad targeting. Adults may opt
                   out via{" "}
                   <strong>
-                    Settings &gt; Ads &gt; "Disable Personalized Ads"
+                    Settings &gt; Ads &gt; Disable Personalized Ads
                   </strong>
                   .
                 </li>
@@ -551,8 +551,8 @@ export default function Policies() {
               <ul className="list-disc pl-5 mb-3 space-y-2 text-gray-700">
                 <li>
                   <strong>Confirm Processing</strong>: Request disclosure of
-                  data categories (e.g., "payment records," "device
-                  identifiers").
+                  data categories (e.g., payment records, device
+                  identifiers).
                 </li>
                 <li>
                   <strong>Obtain Portable Data</strong>: Receive
@@ -619,7 +619,7 @@ export default function Policies() {
                 </li>
                 <li>
                   <strong>Data Minimization</strong>: Collect only what is
-                  "reasonably necessary" for toy transactions.
+                  reasonably necessary for toy transactions.
                 </li>
               </ul>
 
@@ -635,7 +635,7 @@ export default function Policies() {
                   >
                     optout@toydacity.com
                   </a>{" "}
-                  to exclude data from "sales" (defined narrowly under Nevada
+                  to exclude data from sales (defined narrowly under Nevada
                   law).
                 </li>
               </ul>

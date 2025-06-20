@@ -3,15 +3,12 @@ import { Toy } from "@/types/toy";
 import React, { useState } from "react";
 import {
   Heart,
-  Star,
   ShoppingCart,
   Truck,
   Shield,
   RotateCcw,
   ChevronLeft,
   ChevronRight,
-  Plus,
-  Minus,
 } from "lucide-react";
 import { NumberToCategory, NumberToCondition } from "@/lib/utils";
 

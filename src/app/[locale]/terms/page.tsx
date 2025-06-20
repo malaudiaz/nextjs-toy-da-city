@@ -16,7 +16,7 @@ export default function TermsOfUse() {
             {/* Introduction */}
             <section className="mt-4">
               <p className="mb-3 text-gray-700">
-                Welcome to Toydacity! These Terms of Service ("Terms") govern your access to and use of the Toydacity website, mobile applications, and related online services (collectively, the "Services"). Toydacity Inc. ("Toydacity," "we," "us," or "our") is a Florida-based platform created to support the buying, selling, trading, and gifting of secondhand toys. By using our Services, you agree to comply with and be bound by these Terms. If you do not agree, you must not use the Services.
+                Welcome to Toydacity! These Terms of Service (Terms) govern your access to and use of the Toydacity website, mobile applications, and related online services (collectively, the Services). Toydacity Inc. (Toydacity, we, us, or our) is a Florida-based platform created to support the buying, selling, trading, and gifting of secondhand toys. By using our Services, you agree to comply with and be bound by these Terms. If you do not agree, you must not use the Services.
               </p>
               <p className="mb-3 text-gray-700">
                 We may revise these Terms at any time. Updated Terms will be posted with a new effective date. Your continued use of the Services constitutes your acceptance of any updates.
@@ -42,7 +42,7 @@ export default function TermsOfUse() {
                 To use Toydacity, you must:
               </p>
               <ul className="list-disc pl-5 mb-4 space-y-2 text-gray-700">
-                <li>Be at least 13 years old (users under 18 require a guardian's supervision)</li>
+                <li>Be at least 13 years old (users under 18 require a guardian&lsquo;s supervision)</li>
                 <li>Reside in the United States or its territories</li>
                 <li>Not have been previously banned or suspended from the platform</li>
               </ul>
@@ -193,7 +193,7 @@ export default function TermsOfUse() {
               <ul className="list-disc pl-5 mb-4 space-y-2 text-gray-700">
                 <li>Defamatory, obscene, or discriminatory</li>
                 <li>Misleading or impersonating another individual</li>
-                <li>A violation of another's rights or privacy</li>
+                <li>A violation of another&lsquo;s rights or privacy</li>
               </ul>
               <p className="mb-3 text-gray-700">
                 We reserve the right to remove or restrict access to content that violates these Terms.
@@ -243,7 +243,7 @@ export default function TermsOfUse() {
               </p>
               <ul className="list-disc pl-5 mb-4 space-y-2 text-gray-700">
                 <li>A reporting mechanism for misconduct or fraud</li>
-                <li>Mediation for transactions completed through Toydacity's Payment Solution</li>
+                <li>Mediation for transactions completed through Toydacity&lsquo;s Payment Solution</li>
               </ul>
               <p className="mb-3 text-gray-700">
                 Unresolved disputes may be escalated through binding arbitration as described below.
@@ -282,7 +282,7 @@ export default function TermsOfUse() {
                 17. Disclaimers
               </h2>
               <p className="mb-3 text-gray-700">
-                We do not guarantee uninterrupted access, data accuracy, or the success of transactions. Services are provided "as is" without warranties of any kind, express or implied. Your use of the Services is at your own risk.
+                We do not guarantee uninterrupted access, data accuracy, or the success of transactions. Services are provided as is without warranties of any kind, express or implied. Your use of the Services is at your own risk.
               </p>
             </section>
 

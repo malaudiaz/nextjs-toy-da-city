@@ -1,4 +1,3 @@
-
 import React from "react";
 import Search from "../Search";
 import Link from "next/link";
@@ -9,7 +8,6 @@ import {
   SignInButton,
   SignUpButton,
   UserButton,
-  useUser,
 } from "@clerk/nextjs";
 
 const MiddleNavbar = () => {
