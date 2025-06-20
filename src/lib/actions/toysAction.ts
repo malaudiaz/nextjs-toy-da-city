@@ -19,3 +19,13 @@ export async function getToys(page: number, perPage: number) {
 
   return { toys: toys.data as Toy[], totalPosts: toys.pagination.total};
 }
+
+export async function getToy(id: string) {
+  const response = await fetch(`${BACKEND_URL}/api/toys/${id}`, {
+    method: "GET",
+  });
+
+  const toy = await response.json();
+
+  return toy
+}

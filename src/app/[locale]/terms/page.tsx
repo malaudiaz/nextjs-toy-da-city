@@ -340,7 +340,7 @@ export default function TermsOfUse() {
             {/* Additional Links */}
             <div className="mt-6 flex flex-col sm:flex-row gap-4">
               <Link
-                href="/privacy"
+                href="/policies"
                 className="inline-block bg-[#3498DB] text-white px-4 py-2 rounded hover:bg-[#2980B9] transition-colors text-center"
               >
                 Privacy Policy

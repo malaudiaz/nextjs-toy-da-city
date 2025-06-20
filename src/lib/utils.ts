@@ -49,3 +49,33 @@ export const getBreadcrumbs = (pathname: string): { label: string; href?: string
 
   return breadcrumbs;
 };
+
+export const NumberToCategory = (categoryId: number) => {
+  switch (categoryId) {
+    case 1:
+      return "Educational";
+    case 2:
+      return "Electronic";
+    case 3:
+      return "Board Games";
+    case 4:
+      return "Camping";
+    case 5:
+      return "Dolls";
+    case 6:
+      return "Stuffed Animals";
+  }
+};
+
+export const NumberToCondition = (conditionId: number) => {
+  switch (conditionId) {
+    case 1:
+      return "New";
+    case 2:
+      return "Like New";
+    case 3:
+      return "Acceptable";
+    case 4:
+      return "To Repair";
+  }
+};
