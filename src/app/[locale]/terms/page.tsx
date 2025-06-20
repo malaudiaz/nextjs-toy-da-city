@@ -1,3 +1,4 @@
+import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import Link from "next/link";
 
 export default function TermsOfUse() {
@@ -6,6 +7,7 @@ export default function TermsOfUse() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 sm:p-8">
           <div className="flex flex-col gap-4">
+            <Breadcrumbs/>
             <h1 className="text-3xl sm:text-4xl font-bold text-[#2C3E50] border-b-2 border-[#3498DB] pb-3">
               Toydacity Terms of Service
             </h1>

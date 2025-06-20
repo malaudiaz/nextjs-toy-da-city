@@ -1,7 +1,9 @@
 import BannerCarousel from "@/components/shared/banner/BannerCarousel";
 import Products from "@/components/shared/home/Products";
+import SkeletonProductCard from "@/components/shared/SkeletonProductCard";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import { getToys } from "@/lib/actions/toysAction";
+import { Suspense } from "react";
 
 interface ToysProps {
   searchParams: { [key: string]: string | undefined };
@@ -15,12 +17,19 @@ export default async function Home({ searchParams }: ToysProps) {
     (resolvedSearchParams.pageSize as string) || "8"
   );
 
-  const { toys, totalPosts } = await getToys(currentPage, postsPerPage);
+  const { totalPosts } = await getToys(currentPage, postsPerPage);
+  const toysPromise = getToys(currentPage, postsPerPage).then(data => ({
+    data: data.toys,
+  }));
+
+
 
   return (
     <>
       <BannerCarousel />
-      <Products toys={toys} />
+      <Suspense fallback={<SkeletonProductCard count={8}/>}>
+       <Products toysPromise={toysPromise} /> 
+      </Suspense>
       <div className="mt-8">
         <PaginationWithLinks
           page={currentPage}

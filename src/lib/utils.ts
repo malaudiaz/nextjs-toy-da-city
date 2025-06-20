@@ -9,7 +9,7 @@ export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localh
 export const getBreadcrumbs = (pathname: string): { label: string; href?: string }[] => {
   const paths = pathname.split('/').filter(Boolean);
   const breadcrumbs = [{ label: 'Home', href: '/' }];
-  const ignoreSegments = ['en', ]; 
+  const ignoreSegments = ['en', 'toys' ]; 
 
   let currentPath = '';
   for (let i = 0; i < paths.length; i++) {
@@ -29,6 +29,8 @@ export const getBreadcrumbs = (pathname: string): { label: string; href?: string
       regalos: 'Gifts',
       favoritos: 'Favorites',
       reputacion: 'Reputation',
+      terms: "Terms of Service",
+      policies: "Privacy Policy",
     };
 
     const label = labelMap[path] || decodedLabel;

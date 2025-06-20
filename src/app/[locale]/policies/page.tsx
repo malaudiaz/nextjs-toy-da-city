@@ -1,3 +1,4 @@
+import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import Link from "next/link";
 
 export default function Policies() {
@@ -6,6 +7,7 @@ export default function Policies() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 sm:p-8">
           <div className="flex flex-col gap-4">
+            <Breadcrumbs />
             <h1 className="text-3xl sm:text-4xl font-bold text-[#2C3E50] border-b-2 border-[#3498DB] pb-3">
               Toydacity Privacy Policy
             </h1>
@@ -17,8 +19,8 @@ export default function Policies() {
                 1. Introduction
               </h2>
               <p className="mb-3 text-gray-700">
-                Toydacity Inc. operates an online platform enabling users to buy,
-                sell, trade, and gift pre-owned toys through our website (
+                Toydacity Inc. operates an online platform enabling users to
+                buy, sell, trade, and gift pre-owned toys through our website (
                 <a
                   href="http://www.toydacity.com/"
                   target="_blank"
@@ -28,16 +30,16 @@ export default function Policies() {
                   www.toydacity.com
                 </a>
                 ), mobile applications, and related services (collectively, the
-                "Toydacity Service"). This Privacy Policy explains how we collect,
-                use, disclose, and safeguard your information when you interact with
-                our Service.
+                "Toydacity Service"). This Privacy Policy explains how we
+                collect, use, disclose, and safeguard your information when you
+                interact with our Service.
               </p>
               <p className="mb-3 text-gray-700">
                 By accessing or using Toydacity, you consent to the practices
-                described herein. We may modify this policy periodically; material
-                changes will be communicated via email, in-app notifications, or by
-                updating the "Last Updated" date. Your continued use constitutes
-                acceptance.
+                described herein. We may modify this policy periodically;
+                material changes will be communicated via email, in-app
+                notifications, or by updating the "Last Updated" date. Your
+                continued use constitutes acceptance.
               </p>
               <p className="mb-3 text-gray-700 font-medium">
                 For residents of California, Florida, Virginia, Colorado,
@@ -60,30 +62,31 @@ export default function Policies() {
               </p>
               <ul className="list-disc pl-5 mb-4 space-y-2 text-gray-700">
                 <li>
-                  <strong>Creating an account</strong>: Full name, email address,
-                  encrypted password, phone number, postal address (for local
-                  transactions), and profile photo.
+                  <strong>Creating an account</strong>: Full name, email
+                  address, encrypted password, phone number, postal address (for
+                  local transactions), and profile photo.
                 </li>
                 <li>
-                  <strong>Listing toys</strong>: Photographs, descriptions (e.g.,
-                  brand, age range, condition), pricing, and location tags.
+                  <strong>Listing toys</strong>: Photographs, descriptions
+                  (e.g., brand, age range, condition), pricing, and location
+                  tags.
                 </li>
                 <li>
                   <strong>Communicating</strong>: Messages with other users,
                   customer support tickets, and public reviews/ratings.
                 </li>
                 <li>
-                  <strong>Verifying identity</strong>: For enhanced trust programs
-                  (e.g., "Toydacity Verified Seller"), we may request
-                  government-issued IDs (e.g., driver's license) or utility bills,
-                  processed securely via third-party services like Jumio.
+                  <strong>Verifying identity</strong>: For enhanced trust
+                  programs (e.g., "Toydacity Verified Seller"), we may request
+                  government-issued IDs (e.g., driver's license) or utility
+                  bills, processed securely via third-party services like Jumio.
                 </li>
                 <li>
                   <strong>Payment processing</strong>: While Toydacity does not
                   directly handle payment details, we facilitate transactions
-                  through Stripe, Inc., which collects banking information, Social
-                  Security numbers (for sellers), and tax forms per their Privacy
-                  Policy.
+                  through Stripe, Inc., which collects banking information,
+                  Social Security numbers (for sellers), and tax forms per their
+                  Privacy Policy.
                 </li>
               </ul>
 
@@ -93,18 +96,18 @@ export default function Policies() {
               <ul className="list-disc pl-5 mb-4 space-y-2 text-gray-700">
                 <li>
                   <strong>Device/Log Data</strong>: IP address, browser type,
-                  operating system, hardware model, unique device identifiers (e.g.,
-                  IMEI), mobile network data, and timestamps.
+                  operating system, hardware model, unique device identifiers
+                  (e.g., IMEI), mobile network data, and timestamps.
                 </li>
                 <li>
                   <strong>Usage Analytics</strong>: Pages visited, clickstream
-                  patterns, search queries, time spent on listings, and interaction
-                  metrics (e.g., favorites, shares).
+                  patterns, search queries, time spent on listings, and
+                  interaction metrics (e.g., favorites, shares).
                 </li>
                 <li>
-                  <strong>Location Information</strong>: Precise GPS coordinates (if
-                  enabled via device permissions) or approximate location derived
-                  from IP addresses to facilitate local transactions.
+                  <strong>Location Information</strong>: Precise GPS coordinates
+                  (if enabled via device permissions) or approximate location
+                  derived from IP addresses to facilitate local transactions.
                 </li>
                 <li>
                   <strong>Cookies and Tracking Technologies</strong>:
@@ -119,12 +122,12 @@ export default function Policies() {
                     </li>
                     <li>
                       <strong>Advertising cookies</strong>: Facebook Pixel and
-                      Google Ads for retargeting (opt-out instructions in Section
-                      6.3).
+                      Google Ads for retargeting (opt-out instructions in
+                      Section 6.3).
                     </li>
                     <li>
-                      <strong>Web beacons</strong>: Embedded in emails to track open
-                      rates.
+                      <strong>Web beacons</strong>: Embedded in emails to track
+                      open rates.
                     </li>
                   </ul>
                 </li>
@@ -140,13 +143,14 @@ export default function Policies() {
                   lists) as permitted by their platforms.
                 </li>
                 <li>
-                  <strong>Background checks</strong>: For fraud prevention, we may
-                  cross-reference data with public databases (e.g., OFAC sanctions
-                  lists) via services like Socure.
+                  <strong>Background checks</strong>: For fraud prevention, we
+                  may cross-reference data with public databases (e.g., OFAC
+                  sanctions lists) via services like Socure.
                 </li>
                 <li>
-                  <strong>Payment processors</strong>: Stripe provides transaction
-                  confirmations, dispute records, and limited KYC data.
+                  <strong>Payment processors</strong>: Stripe provides
+                  transaction confirmations, dispute records, and limited KYC
+                  data.
                 </li>
               </ul>
             </section>
@@ -162,11 +166,12 @@ export default function Policies() {
               </h3>
               <ul className="list-disc pl-5 mb-4 space-y-2 text-gray-700">
                 <li>
-                  Facilitate toy transactions, including bid processing, messaging,
-                  and payment confirmations.
+                  Facilitate toy transactions, including bid processing,
+                  messaging, and payment confirmations.
                 </li>
                 <li>
-                  Personalize recommendations (e.g., "Trending LEGO Sets Near You").
+                  Personalize recommendations (e.g., "Trending LEGO Sets Near
+                  You").
                 </li>
                 <li>
                   Verify identities to reduce fraud (e.g., flagging counterfeit
@@ -183,8 +188,8 @@ export default function Policies() {
                   (e.g., recalled toys).
                 </li>
                 <li>
-                  Resolve disputes between users through transaction logs and chat
-                  histories.
+                  Resolve disputes between users through transaction logs and
+                  chat histories.
                 </li>
                 <li>
                   Comply with legal requests (e.g., subpoenas, tax reporting).
@@ -201,8 +206,8 @@ export default function Policies() {
                 </li>
                 <li>Conduct A/B testing to improve UI/UX.</li>
                 <li>
-                  Share aggregated trends with partners (e.g., "Most Traded Toys of
-                  2025").
+                  Share aggregated trends with partners (e.g., "Most Traded Toys
+                  of 2025").
                 </li>
               </ul>
             </section>
@@ -222,8 +227,8 @@ export default function Policies() {
                   response time.
                 </li>
                 <li>
-                  <strong>Listings</strong>: Photos, descriptions, and approximate
-                  location (e.g., "3 miles away").
+                  <strong>Listings</strong>: Photos, descriptions, and
+                  approximate location (e.g., "3 miles away").
                 </li>
               </ul>
 
@@ -235,7 +240,8 @@ export default function Policies() {
                   <strong>Cloud hosting</strong>: AWS for data storage.
                 </li>
                 <li>
-                  <strong>Customer support</strong>: Zendesk for ticket management.
+                  <strong>Customer support</strong>: Zendesk for ticket
+                  management.
                 </li>
                 <li>
                   <strong>Advertising networks</strong>: Meta and Google for
@@ -261,8 +267,8 @@ export default function Policies() {
                 4.4 Aggregate/De-Identified Data
               </h3>
               <p className="mb-4 text-gray-700">
-                Shared for market research (e.g., "70% of users trade toys within 10
-                miles").
+                Shared for market research (e.g., "70% of users trade toys
+                within 10 miles").
               </p>
             </section>
 
@@ -274,16 +280,16 @@ export default function Policies() {
               <p className="mb-3 text-gray-700">We implement:</p>
               <ul className="list-disc pl-5 mb-4 space-y-2 text-gray-700">
                 <li>
-                  <strong>Encryption</strong>: AES-256 for data at rest, TLS 1.3 for
-                  transmissions.
+                  <strong>Encryption</strong>: AES-256 for data at rest, TLS 1.3
+                  for transmissions.
                 </li>
                 <li>
                   <strong>Access controls</strong>: Role-based permissions for
                   employees.
                 </li>
                 <li>
-                  <strong>Audits</strong>: Annual penetration testing by third-party
-                  firms.
+                  <strong>Audits</strong>: Annual penetration testing by
+                  third-party firms.
                 </li>
               </ul>
               <p className="mb-4 text-gray-700 font-medium">
@@ -313,7 +319,8 @@ export default function Policies() {
                   <strong>Settings &gt; Account Management</strong>.
                 </li>
                 <li>
-                  Note: Transaction histories may be retained for legal compliance.
+                  Note: Transaction histories may be retained for legal
+                  compliance.
                 </li>
               </ul>
 
@@ -345,8 +352,8 @@ export default function Policies() {
                   .
                 </li>
                 <li>
-                  <strong>Mobile devices</strong>: Limit ad tracking in iOS/Android
-                  settings.
+                  <strong>Mobile devices</strong>: Limit ad tracking in
+                  iOS/Android settings.
                 </li>
               </ul>
             </section>
@@ -358,37 +365,38 @@ export default function Policies() {
               </h2>
               <p className="mb-3 text-gray-700">
                 Toydacity is committed to protecting the privacy of children and
-                complying with all applicable laws, including the U.S. Children's
-                Online Privacy Protection Act (COPPA).
+                complying with all applicable laws, including the U.S.
+                Children's Online Privacy Protection Act (COPPA).
               </p>
 
               <h3 className="text-xl sm:text-2xl font-medium text-[#16A085] mt-4 mb-2">
                 7.1 Age Restrictions
               </h3>
               <p className="mb-3 text-gray-700">
-                <strong>Under 13</strong>: The Toydacity Service is not intended for
-                children under 13 years of age. We do not knowingly collect, use, or
-                disclose personal information from children under 13 without
-                verifiable parental consent.
+                <strong>Under 13</strong>: The Toydacity Service is not intended
+                for children under 13 years of age. We do not knowingly collect,
+                use, or disclose personal information from children under 13
+                without verifiable parental consent.
               </p>
               <p className="mb-3 text-gray-700">
                 <strong>Ages 13–17</strong>: Minors aged 13–17 may only use
-                Toydacity under the supervision of a parent or legal guardian, who
-                assumes responsibility for their compliance with our Terms of
-                Service.
+                Toydacity under the supervision of a parent or legal guardian,
+                who assumes responsibility for their compliance with our Terms
+                of Service.
               </p>
 
               <h3 className="text-xl sm:text-2xl font-medium text-[#16A085] mt-4 mb-2">
                 7.2 Parental Controls & Responsibilities
               </h3>
               <p className="mb-3 text-gray-700">
-                <strong>Guardian Oversight</strong>: Parents/guardians must review
-                and approve their child's account creation and monitor activity.
+                <strong>Guardian Oversight</strong>: Parents/guardians must
+                review and approve their child's account creation and monitor
+                activity.
               </p>
               <p className="mb-3 text-gray-700">
-                <strong>Parental Consent</strong>: If we discover that a child under
-                13 has provided personal information (e.g., via falsified age
-                verification), we will:
+                <strong>Parental Consent</strong>: If we discover that a child
+                under 13 has provided personal information (e.g., via falsified
+                age verification), we will:
               </p>
               <ul className="list-disc pl-5 mb-3 space-y-2 text-gray-700">
                 <li>Immediately suspend the account.</li>
@@ -439,12 +447,12 @@ export default function Policies() {
               </p>
               <ul className="list-disc pl-5 mb-3 space-y-2 text-gray-700">
                 <li>
-                  <strong>Request Access/Portability</strong>: Receive a detailed
-                  report (covering the past 12 months) of:
+                  <strong>Request Access/Portability</strong>: Receive a
+                  detailed report (covering the past 12 months) of:
                   <ul className="list-disc pl-5 mt-2 space-y-1">
                     <li>
-                      Categories of personal data collected (e.g., "identifiers,"
-                      "commercial information," "geolocation").
+                      Categories of personal data collected (e.g.,
+                      "identifiers," "commercial information," "geolocation").
                     </li>
                     <li>
                       Specific pieces of data (e.g., message transcripts,
@@ -454,25 +462,25 @@ export default function Policies() {
                   </ul>
                 </li>
                 <li>
-                  <strong>Delete Data</strong>: Request erasure of personal data,
-                  except where retention is required (e.g., fraud investigations,
-                  tax compliance).
+                  <strong>Delete Data</strong>: Request erasure of personal
+                  data, except where retention is required (e.g., fraud
+                  investigations, tax compliance).
                 </li>
                 <li>
                   <strong>Correct Inaccuracies</strong>: Update outdated or
                   incorrect profile/transaction details.
                 </li>
                 <li>
-                  <strong>Opt-Out of Sales/Sharing</strong>: Disable ad-targeting
-                  via{" "}
+                  <strong>Opt-Out of Sales/Sharing</strong>: Disable
+                  ad-targeting via{" "}
                   <strong>
                     Settings &gt; Privacy &gt; "Limit Data Sharing"
                   </strong>
                   .
                 </li>
                 <li>
-                  <strong>Limit Sensitive Data Use</strong>: Restrict processing of
-                  government IDs or precise location.
+                  <strong>Limit Sensitive Data Use</strong>: Restrict processing
+                  of government IDs or precise location.
                 </li>
                 <li>
                   <strong>Non-Discrimination</strong>: No denial of services for
@@ -506,31 +514,33 @@ export default function Policies() {
               </h3>
               <p className="mb-3 text-gray-700">
                 As Toydacity's headquarters is in <strong>Miami, FL</strong>, we
-                adhere to the <strong>Florida Digital Bill of Rights (FDBR)</strong>
-                :
+                adhere to the{" "}
+                <strong>Florida Digital Bill of Rights (FDBR)</strong>:
               </p>
               <ul className="list-disc pl-5 mb-4 space-y-2 text-gray-700">
                 <li>
                   <strong>Parental Consent</strong>: Strictly prohibit data
-                  collection from users under <strong>18</strong> without verifiable
-                  parental consent (aligned with our general{" "}
+                  collection from users under <strong>18</strong> without
+                  verifiable parental consent (aligned with our general{" "}
                   <strong>under-13 prohibition</strong>).
                 </li>
                 <li>
-                  <strong>Targeted Advertising Opt-Out</strong>: Florida minors are
-                  automatically excluded from ad targeting. Adults may opt out via{" "}
+                  <strong>Targeted Advertising Opt-Out</strong>: Florida minors
+                  are automatically excluded from ad targeting. Adults may opt
+                  out via{" "}
                   <strong>
                     Settings &gt; Ads &gt; "Disable Personalized Ads"
                   </strong>
                   .
                 </li>
                 <li>
-                  <strong>Data Broker Prohibition</strong>: Toydacity does not sell
-                  data to third-party brokers.
+                  <strong>Data Broker Prohibition</strong>: Toydacity does not
+                  sell data to third-party brokers.
                 </li>
                 <li>
-                  <strong>Right to Appeal</strong>: Contest denied requests within{" "}
-                  <strong>30 days</strong> via our <strong>Privacy Portal</strong>.
+                  <strong>Right to Appeal</strong>: Contest denied requests
+                  within <strong>30 days</strong> via our{" "}
+                  <strong>Privacy Portal</strong>.
                 </li>
               </ul>
 
@@ -540,23 +550,25 @@ export default function Policies() {
               <p className="mb-3 text-gray-700">Residents may:</p>
               <ul className="list-disc pl-5 mb-3 space-y-2 text-gray-700">
                 <li>
-                  <strong>Confirm Processing</strong>: Request disclosure of data
-                  categories (e.g., "payment records," "device identifiers").
+                  <strong>Confirm Processing</strong>: Request disclosure of
+                  data categories (e.g., "payment records," "device
+                  identifiers").
                 </li>
                 <li>
-                  <strong>Obtain Portable Data</strong>: Receive machine-readable
-                  copies (JSON/CSV) of provided data.
+                  <strong>Obtain Portable Data</strong>: Receive
+                  machine-readable copies (JSON/CSV) of provided data.
                 </li>
                 <li>
-                  <strong>Correct Errors</strong>: Rectify inaccuracies in listings
-                  or account details.
+                  <strong>Correct Errors</strong>: Rectify inaccuracies in
+                  listings or account details.
                 </li>
                 <li>
                   <strong>Opt-Out of</strong>:
                   <ul className="list-disc pl-5 mt-2 space-y-1">
                     <li>Targeted advertising.</li>
                     <li>
-                      Profiling for automated decisions (e.g., fraud risk scoring).
+                      Profiling for automated decisions (e.g., fraud risk
+                      scoring).
                     </li>
                     <li>
                       Data sales (though Toydacity only shares data for service
@@ -570,18 +582,18 @@ export default function Policies() {
               </p>
 
               <h3 className="text-xl sm:text-2xl font-medium text-[#16A085] mt-4 mb-2">
-                9.4 Texas Residents (Texas Data Privacy and Security Act, Effective
-                July 2024)
+                9.4 Texas Residents (Texas Data Privacy and Security Act,
+                Effective July 2024)
               </h3>
               <ul className="list-disc pl-5 mb-4 space-y-2 text-gray-700">
                 <li>
-                  <strong>Universal Opt-Out Mechanism</strong>: Honor browser-based
-                  signals (e.g., Global Privacy Control) for data sales/targeted
-                  ads.
+                  <strong>Universal Opt-Out Mechanism</strong>: Honor
+                  browser-based signals (e.g., Global Privacy Control) for data
+                  sales/targeted ads.
                 </li>
                 <li>
-                  <strong>Biometric Data Notice</strong>: Toydacity does not collect
-                  facial recognition or fingerprint data.
+                  <strong>Biometric Data Notice</strong>: Toydacity does not
+                  collect facial recognition or fingerprint data.
                 </li>
                 <li>
                   <strong>Right to Appeal</strong>: Submit appeals via{" "}
@@ -596,7 +608,8 @@ export default function Policies() {
               </ul>
 
               <h3 className="text-xl sm:text-2xl font-medium text-[#16A085] mt-4 mb-2">
-                9.5 Utah Residents (Utah Consumer Privacy Act, Effective Dec 2024)
+                9.5 Utah Residents (Utah Consumer Privacy Act, Effective Dec
+                2024)
               </h3>
               <ul className="list-disc pl-5 mb-4 space-y-2 text-gray-700">
                 <li>
@@ -622,7 +635,8 @@ export default function Policies() {
                   >
                     optout@toydacity.com
                   </a>{" "}
-                  to exclude data from "sales" (defined narrowly under Nevada law).
+                  to exclude data from "sales" (defined narrowly under Nevada
+                  law).
                 </li>
               </ul>
             </section>
@@ -637,7 +651,9 @@ export default function Policies() {
                   <strong>Privacy Officer</strong>
                 </p>
                 <p className="mb-1 text-gray-700">Toydacity, Inc.</p>
-                <p className="mb-1 text-gray-700">123 Toy Lane, Seattle, WA 98101</p>
+                <p className="mb-1 text-gray-700">
+                  123 Toy Lane, Seattle, WA 98101
+                </p>
                 <p className="mb-1 text-gray-700">
                   Email:{" "}
                   <a
