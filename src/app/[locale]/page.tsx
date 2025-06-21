@@ -16,19 +16,18 @@ export default async function Home({ searchParams }: ToysProps) {
   const postsPerPage = parseInt(
     (resolvedSearchParams.pageSize as string) || "8"
   );
+  const searchQuery = (resolvedSearchParams.search as string) || "";
 
   const { totalPosts } = await getToys(currentPage, postsPerPage);
-  const toysPromise = getToys(currentPage, postsPerPage).then(data => ({
+  const toysPromise = getToys(currentPage, postsPerPage, searchQuery).then((data) => ({
     data: data.toys,
   }));
-
-
 
   return (
     <>
       <BannerCarousel />
-      <Suspense fallback={<SkeletonProductCard count={8}/>}>
-       <Products toysPromise={toysPromise} /> 
+      <Suspense key={searchQuery} fallback={<SkeletonProductCard count={8} />}>
+        <Products toysPromise={toysPromise} />
       </Suspense>
       <div className="mt-8">
         <PaginationWithLinks
