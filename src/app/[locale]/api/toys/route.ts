@@ -159,14 +159,9 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
     formData = await clonedRequest.formData();
 
     const stringforSell = formData.get("forSell") || "false"
-    const booleanforSell = stringforSell === "true"
-
     const stringforGifts = formData.get("forGifts") || "false"
-    const booleanforGifts = stringforGifts === "true"
-
     const stringforChanges = formData.get("forChanges") || "false"
-    const booleanforChanges = stringforChanges === "true"
-
+    
     // Validar con Zod
     const toyData = ToySchema.parse({
       title: formData.get('title'),
@@ -176,9 +171,9 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       categoryId: Number(formData.get('categoryId')),
       statusId: Number(formData.get('statusId')),
       conditionId: Number(formData.get('conditionId')),
-      forSell: booleanforSell,
-      forGifts: booleanforGifts,
-      forChanges: booleanforChanges
+      forSell: stringforSell === "true",
+      forGifts: stringforGifts === "true",
+      forChanges: stringforChanges === "true"
     })
 
     const files = formData.getAll('files') as Blob[]
@@ -189,6 +184,16 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
         { 
           success: false, 
           error: `Maximum ${MAX_FILES_PER_TOY} files allowed per post` 
+        },
+        { status: 400 }
+      )
+    }
+
+    if (files.length < 1 ) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: `You must upload at least one image per post.` 
         },
         { status: 400 }
       )

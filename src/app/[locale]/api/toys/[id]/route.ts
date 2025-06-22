@@ -20,8 +20,13 @@ export async function GET(
 
   const { id } = await params;
 
+  const { success, userId, error, code } = await getAuthUserFromRequest(
+    request
+  );
+
   const t = await getTranslations("Toy.errors");
 
+  // const userId = 'user_2wY8ZRoOrheojD7zQXtwk9fg00x'
   try {
     const toy = await prisma.toy.findUnique({
       where: { id: id, isActive: true },
@@ -35,7 +40,7 @@ export async function GET(
             summary: true,
             userId: true,
           },
-          take: 4, // Límite de 10 comentarios
+          take: 4, // Límite de 4 comentarios
           skip: 0, // Opcional: Saltar los primeros X (útil para paginación)
           orderBy: { createdAt: "desc" },
         },
@@ -49,6 +54,14 @@ export async function GET(
             },
           },
         },
+        // Subconsulta condicional: solo si hay un usuario logueado
+        ...(userId ? {
+          likes: {
+            where: { userId: userId },
+            select: { id: true },
+            take: 1,
+          },
+        } : {}),
       },
     });
 
@@ -56,7 +69,17 @@ export async function GET(
       return NextResponse.json({ error: t("Toy not found") }, { status: 404 });
     }
 
-    return NextResponse.json(toy);
+    // Determina si el usuario dio like (solo si existe UserId)
+    const isLikedByUser = userId ? toy.likes?.length > 0 : false;
+
+    // Formateamos el resultado final
+    const toyWithLikeStatus = {
+      ...toy,
+      isLikedByUser, // false si no hay usuario logueado
+      likes: undefined, // Eliminamos el array de likes (no necesario en la respuesta)
+    };
+
+    return NextResponse.json(toyWithLikeStatus);
   } catch (error) {
     console.log(error);
     return NextResponse.json(
@@ -92,14 +115,9 @@ export async function PUT(
     const formData = await request.formData();
 
     const stringforSell = formData.get("forSell") || "false";
-    const booleanforSell = stringforSell === "true";
-
     const stringforGifts = formData.get("forGifts") || "false";
-    const booleanforGifts = stringforGifts === "true";
-
     const stringforChanges = formData.get("forChanges") || "false";
-    const booleanforChanges = stringforChanges === "true";
-
+    
     // Validar con Zod
     const toyData = ToySchema.parse({
       title: formData.get("title"),
@@ -109,9 +127,9 @@ export async function PUT(
       categoryId: Number(formData.get("categoryId")),
       statusId: Number(formData.get("statusId")),
       conditionId: Number(formData.get("conditionId")),
-      forSell: booleanforSell,
-      forGifts: booleanforGifts,
-      forChanges: booleanforChanges,
+      forSell: stringforSell === "true",
+      forGifts: stringforGifts === "true",
+      forChanges: stringforChanges === "true",
     });
 
     // 2. Procesar archivos nuevos
