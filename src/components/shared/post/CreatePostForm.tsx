@@ -84,6 +84,8 @@ const CreatePostForm = ({
     reset,
     formState: { errors },
     control,
+    getValues,
+    setValue
   } = useForm<ToyFormValues>({
     resolver: zodResolver(toyFormSchema),
     mode: "onChange", // ← Asegúrate de tener esto
@@ -218,6 +220,20 @@ const CreatePostForm = ({
     }
   };
 
+  const handleCheckboxChange = (name: "forSale" | "forGift" | "forChange") => {
+    const currentValue = getValues(name);
+    // Si ya está activo, lo dejamos como está (opcional)
+    if (currentValue) return;
+
+    // Desactivamos todos
+    setValue("forSale", false);
+    setValue("forGift", false);
+    setValue("forChange", false);
+
+    // Activamos solo el seleccionado
+    setValue(name, true);
+  };  
+
   return (
     <>
       {submitSuccess && (
@@ -276,8 +292,9 @@ const CreatePostForm = ({
             <input
               type="checkbox"
               id="forSale"
+              checked={useWatch({ control, name: "forSale" })}
+              onChange={() => handleCheckboxChange("forSale")}
               className="w-5 h-5 accent-green-700"
-              {...register("forSale")}
             />
             <label htmlFor="forSale">Sale</label>
           </div>
@@ -287,8 +304,9 @@ const CreatePostForm = ({
             <input
               type="checkbox"
               id="forGift"
+              checked={useWatch({ control, name: "forGift" })}
+              onChange={() => handleCheckboxChange("forGift")}
               className="w-5 h-5 accent-green-700"
-              {...register("forGift")}
             />
             <label htmlFor="forGift">Free</label>
           </div>
@@ -298,7 +316,8 @@ const CreatePostForm = ({
             <input
               type="checkbox"
               id="forChange"
-              {...register("forChange")}
+              checked={useWatch({ control, name: "forChange" })}
+              onChange={() => handleCheckboxChange("forChange")}
               className="w-5 h-5 accent-green-700"
             />
             <label htmlFor="forChange">Swap</label>
