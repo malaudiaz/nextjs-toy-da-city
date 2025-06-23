@@ -18,10 +18,12 @@ export default async function Home({ searchParams }: ToysProps) {
   );
   const searchQuery = (resolvedSearchParams.search as string) || "";
 
-  const { totalPosts } = await getToys(currentPage, postsPerPage);
-  const toysPromise = getToys(currentPage, postsPerPage, searchQuery).then((data) => ({
-    data: data.toys,
-  }));
+  const { totalPosts } = await getToys(currentPage, postsPerPage, searchQuery);
+  const toysPromise = getToys(currentPage, postsPerPage, searchQuery).then(
+    (data) => ({
+      data: data.toys,
+    })
+  );
 
   return (
     <>
@@ -33,7 +35,7 @@ export default async function Home({ searchParams }: ToysProps) {
         <PaginationWithLinks
           page={currentPage}
           pageSize={postsPerPage}
-          totalCount={totalPosts}
+          totalCount={totalPosts }
         />
       </div>
     </>
