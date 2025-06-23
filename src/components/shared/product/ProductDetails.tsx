@@ -18,8 +18,6 @@ type ProductDetailsProps = {
   data: Toy;
 };
 
-
-
 const ProductDetails = ({ data }: ProductDetailsProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -65,7 +63,6 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
         <div className="space-y-4">
           <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden group">
             <div className="aspect-square relative">
-
               {/* eslint-disable @next/next/no-img-element */}
 
               <Image
