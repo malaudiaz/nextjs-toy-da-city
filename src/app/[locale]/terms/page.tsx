@@ -1,7 +1,10 @@
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
-export default function TermsOfUse() {
+
+export default async function TermsOfUse() {
+  const t = await getTranslations("terms");
   return (
     <div className="w-full bg-[#FAF1DE] min-h-screen py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -9,14 +12,14 @@ export default function TermsOfUse() {
           <div className="flex flex-col gap-4">
             <Breadcrumbs/>
             <h1 className="text-3xl sm:text-4xl font-bold text-[#2C3E50] border-b-2 border-[#3498DB] pb-3">
-              Toydacity Terms of Service
+              {t("Title")}
             </h1>
             <span className="text-gray-500 italic">Effective Date: Jun 18, 2025</span>
 
             {/* Introduction */}
             <section className="mt-4">
               <p className="mb-3 text-gray-700">
-                Welcome to Toydacity! These Terms of Service (Terms) govern your access to and use of the Toydacity website, mobile applications, and related online services (collectively, the Services). Toydacity Inc. (Toydacity, we, us, or our) is a Florida-based platform created to support the buying, selling, trading, and gifting of secondhand toys. By using our Services, you agree to comply with and be bound by these Terms. If you do not agree, you must not use the Services.
+                {t("Welcome")}
               </p>
               <p className="mb-3 text-gray-700">
                 We may revise these Terms at any time. Updated Terms will be posted with a new effective date. Your continued use of the Services constitutes your acceptance of any updates.

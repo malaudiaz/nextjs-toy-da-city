@@ -64,5 +64,9 @@
         "UpdateError": "Error updating likes",
         "DeleteError": "Error deleting likes"
       }
+    },
+    "terms": {
+      "Title": "Toydacity Terms of Service",
+      "Welcome": "Welcome to Toydacity! These Terms of Service (Terms) govern your access to and use of the Toydacity website, mobile applications, and related online services (collectively, the Services). Toydacity Inc. (Toydacity, we, us, or our) is a Florida-based platform created to support the buying, selling, trading, and gifting of secondhand toys. By using our Services, you agree to comply with and be bound by these Terms. If you do not agree, you must not use the Services."
     }
-}
+} 
