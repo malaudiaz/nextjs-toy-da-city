@@ -18,7 +18,7 @@ async function ProductDetailsPage({ params }: ProductDataProps) {
   return (
     <div className="min-h-screen bg-[#FAF1DE]">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Breadcrumbs productName={toy.description}/>
+        <Breadcrumbs productName={toy.title}/>
         <ProductDetails data={toy} />
       </main>
     </div>

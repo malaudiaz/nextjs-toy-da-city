@@ -1,71 +1,71 @@
 {
   "BestSellers": {
-      "Title": "Lo más vendido",
-      "text": "Texto",
-      "subtitle": "Paquete de pequeños juguetes",
-      "description": "250 piezas coloridas, incluye manual y 5 modelos de edificios..."
-      },
+    "Title": "Lo más vendido",
+    "text": "Texto",
+    "subtitle": "Paquete de pequeños juguetes",
+    "description": "250 piezas coloridas, incluye manual y 5 modelos de edificios..."
+  },
   "Categories": {
     "errors": {
-        "InvalidParams": "Parámetros inválidos",
-        "ValidationsErrors": "Errores de validación",
-        "ServerError": "Error interno del servidor",
-        "NotFound": "Categoría no encontrada",
-        "UpdateError": "Error actualizando categoría",
-        "DeleteError": "Error eliminando categoría"
-        }
-      },
-    "Status": {
-      "errors": {
-        "InvalidParams": "Parámetros inválidos",
-        "ValidationsErrors": "Errores de validación",
-        "ServerError": "Error interno del servidor",
-        "NotFound": "Categoría no encontrada",
-        "UpdateError": "Error actualizando categoría",
-        "DeleteError": "Error eliminando categoría"
-      }
-    },
-    "Condition": {
-      "errors": {
-        "InvalidParams": "Parámetros inválidos",
-        "ValidationsErrors": "Errores de validación",
-        "ServerError": "Error interno del servidor",
-        "NotFound": "Condición no encontrada",
-        "UpdateError": "Error actualizando condición del juguete",
-        "DeleteError": "Error eliminando condición del juguete"
-      }
-    },
-    "Toy": {
-      "errors": {
-        "InvalidParams": "Parámetros inválidos",
-        "ValidationsErrors": "Errores de validación",
-        "ServerError": "Error interno del servidor",
-        "NotFound": "Juguete no encontrado",
-        "UpdateError": "Error actualizando juguete",
-        "DeleteError": "Error eliminando juguete"
-      }
-    },
-    "Comments": {
-      "errors": {
-        "InvalidParams": "Parámetros inválidos",
-        "ValidationsErrors": "Errores de validación",
-        "ServerError": "Error interno del servidor",
-        "NotFound": "Comentario no encontrado",
-        "UpdateError": "Error actualizando comentario",
-        "DeleteError": "Error eliminando comentario"
-      }
-    },
-    "Likes": {
-      "errors": {
-        "InvalidParams": "Parámetros inválidos",
-        "ValidationsErrors": "Errores de validación",
-        "ServerError": "Error interno del servidor",
-        "NotFound": "Me gusta no encontrado",
-        "UpdateError": "Error actualizando Me gusta",
-        "DeleteError": "Error eliminando Me gusta"
-      }
-    },
-    "terms": {
+      "InvalidParams": "Parámetros inválidos",
+      "ValidationsErrors": "Errores de validación",
+      "ServerError": "Error interno del servidor",
+      "NotFound": "Categoría no encontrada",
+      "UpdateError": "Error actualizando categoría",
+      "DeleteError": "Error eliminando categoría"
+    }
+  },
+  "Status": {
+    "errors": {
+      "InvalidParams": "Parámetros inválidos",
+      "ValidationsErrors": "Errores de validación",
+      "ServerError": "Error interno del servidor",
+      "NotFound": "Categoría no encontrada",
+      "UpdateError": "Error actualizando categoría",
+      "DeleteError": "Error eliminando categoría"
+    }
+  },
+  "Condition": {
+    "errors": {
+      "InvalidParams": "Parámetros inválidos",
+      "ValidationsErrors": "Errores de validación",
+      "ServerError": "Error interno del servidor",
+      "NotFound": "Condición no encontrada",
+      "UpdateError": "Error actualizando condición del juguete",
+      "DeleteError": "Error eliminando condición del juguete"
+    }
+  },
+  "Toy": {
+    "errors": {
+      "InvalidParams": "Parámetros inválidos",
+      "ValidationsErrors": "Errores de validación",
+      "ServerError": "Error interno del servidor",
+      "NotFound": "Juguete no encontrado",
+      "UpdateError": "Error actualizando juguete",
+      "DeleteError": "Error eliminando juguete"
+    }
+  },
+  "Comments": {
+    "errors": {
+      "InvalidParams": "Parámetros inválidos",
+      "ValidationsErrors": "Errores de validación",
+      "ServerError": "Error interno del servidor",
+      "NotFound": "Comentario no encontrado",
+      "UpdateError": "Error actualizando comentario",
+      "DeleteError": "Error eliminando comentario"
+    }
+  },
+  "Likes": {
+    "errors": {
+      "InvalidParams": "Parámetros inválidos",
+      "ValidationsErrors": "Errores de validación",
+      "ServerError": "Error interno del servidor",
+      "NotFound": "Me gusta no encontrado",
+      "UpdateError": "Error actualizando Me gusta",
+      "DeleteError": "Error eliminando Me gusta"
+    }
+  },
+  "terms": {
     "Title": "Términos de Servicio de Toydacity",
     "Welcome": "¡Bienvenido a Toydacity! Estos Términos de Servicio (Términos) rigen su acceso y uso del sitio web, las aplicaciones móviles y los servicios en línea relacionados de Toydacity (en conjunto, los Servicios). Toydacity Inc. (Toydacity, nosotros, nos o nuestro) es una plataforma con sede en Florida creada para facilitar la compra, venta, intercambio y regalo de juguetes de segunda mano. Al usar nuestros Servicios, usted acepta cumplir y estar sujeto a estos Términos. Si no los acepta, no debe usar los Servicios.",
     "Subtitle": "Podemos revisar estos Términos en cualquier momento. Los Términos actualizados se publicarán con la nueva fecha de entrada en vigor. El uso continuado de los Servicios implica la aceptación de cualquier actualización.",
@@ -276,7 +276,7 @@
     "Section6Sub3Title": "6.3 Exclusión de Publicidad",
     "Section6Sub3ListItem1Title": "Alianza Digital de Publicidad",
     "Section6Sub3ListItem1LinkText": "YourAdChoices",
-    "Section6Sub3ListItem1Desc": "https://optout.aboutads.info/", 
+    "Section6Sub3ListItem1Desc": "https://optout.aboutads.info/",
     "Section6Sub3ListItem2Title": "Dispositivos móviles",
     "Section6Sub3ListItem2Desc": "Limite el seguimiento de anuncios en configuraciones de iOS/Android.",
 
@@ -330,7 +330,7 @@
     "Section9Sub1Method3Desc": "Requiere coincidencia de correo/telefono de la cuenta y documento oficial (para solicitudes sensibles).",
 
     "Section9Sub2Title": "9.2 Residentes de Florida (Florida Digital Bill of Rights, Efectiva Julio 2024)",
-   "Section9Sub2IntroStrong": "Como Toydacity tiene su sede en Miami, FL, nos adherimos a la Florida Digital Bill of Rights (FDBR):",
+    "Section9Sub2IntroStrong": "Como Toydacity tiene su sede en Miami, FL, nos adherimos a la Florida Digital Bill of Rights (FDBR):",
     "Section9Sub2ListItem1Title": "Consentimiento Paterno",
     "Section9Sub2ListItem1Desc": "Prohibimos estrictamente la recopilación de datos de usuarios menores de 18 años sin consentimiento paterno verificable (alineado con nuestra prohibición general para menores de 13 años).",
     "Section9Sub2ListItem2Title": "Exclusión de Publicidad Dirigida",
@@ -381,6 +381,23 @@
     "Section10Contact5": "Teléfono: (800) 555-TOYS",
 
     "DeleteDataLink": "Eliminar Datos"
+  },
+  "config": {
+    "YourProfile": "Tu Perfil",
+    "YourActivity": "Tu Actividad",
+    "Sales": "Ventas",
+    "Purchases": "Compras",
+    "Trades": "Intercambios",
+    "Gifts": "Regalos",
+    "Favorites": "Favoritos",
+    "YourReputation": "Tu Reputación"
+  },
+  "sales": {
+    "Title": "Tus Ventas",
+    "Text": "En progreso",
+    "Subtitle": "Hechas"
+  },
+  "purchases": {
+    "Title": "Tus Compras"
   }
-  
 }

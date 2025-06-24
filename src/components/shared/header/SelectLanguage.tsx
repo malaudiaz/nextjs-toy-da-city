@@ -35,7 +35,7 @@ const SelectLanguage = () => {
       <DropdownMenu>
         <DropdownMenuTrigger className="pl-2 flex items-center gap-1 text-black focus:outline-none">
           {/* Mostrar emoji según el idioma */}
-          {currentLocale === 'es' ? '🇪🇸' : '🇬🇧'}
+          {currentLocale === 'es' ? '🇪🇸' : '🇺🇸'}
           <span>{currentLocale.toUpperCase()}</span>
           <ChevronDown className="h-4 w-4 opacity-70" />
         </DropdownMenuTrigger>
@@ -59,7 +59,7 @@ const SelectLanguage = () => {
               currentLocale === 'en' ? 'opacity-50 cursor-not-allowed' : ''
             } flex items-center gap-2`}
           >
-            <span>🇬🇧</span>
+            <span>🇺🇸</span>
             <span>EN</span>
           </DropdownMenuItem>
         </DropdownMenuContent>

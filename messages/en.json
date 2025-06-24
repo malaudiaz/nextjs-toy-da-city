@@ -164,8 +164,8 @@
     "Section21Email": "Email: support@toydacity.com",
     "Section21Address": "Address: Toydacity Inc., 2617 NW 55TH ST, FORT LAUDERDALE, FL 33309.",
     "Section21ThankYou": "Thank you for using Toydacity and helping promote sustainable, joyful toy sharing!",
-        "PrivacyPolicy": "Privacy Policy",
-"RequestDataDeletion": "Request Data Deletion"
+    "PrivacyPolicy": "Privacy Policy",
+    "RequestDataDeletion": "Request Data Deletion"
   },
   "policies": {
     "Title": "Toydacity Privacy Policy",
@@ -276,7 +276,7 @@
     "Section6Sub3Title": "6.3 Advertising Opt-Outs",
     "Section6Sub3ListItem1Title": "Digital Advertising Alliance",
     "Section6Sub3ListItem1LinkText": "YourAdChoices",
-    "Section6Sub3ListItem1Desc": "https://optout.aboutads.info/", 
+    "Section6Sub3ListItem1Desc": "https://optout.aboutads.info/",
     "Section6Sub3ListItem2Title": "Mobile devices",
     "Section6Sub3ListItem2Desc": "Limit ad tracking in iOS/Android settings.",
 
@@ -383,5 +383,23 @@
     "Section10Contact5": "Phone: (800) 555-TOYS",
 
     "DeleteDataLink": "Delete Data Link"
+  },
+  "config": {
+    "YourProfile": "Your Profile",
+    "YourActivity": "Your Activity",
+    "Sales": "Sales",
+    "Purchases": "Purchases",
+    "Trades": "Trades",
+    "Gifts": "Gifts",
+    "Favorites": "Favorites",
+    "YourReputation": "Your Reputation"
+  },
+  "sales": {
+    "Title": "Your Sales",
+    "Text": "In progress",
+    "Subtitle": "Made"
+  },
+  "purchases": {
+    "Title": "Your Purchases"
   }
 }

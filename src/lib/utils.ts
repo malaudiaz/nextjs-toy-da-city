@@ -25,7 +25,7 @@ export const getBreadcrumbs = (
     // Mapeo de rutas a nombres amigables
     const labelMap: Record<string, string> = {
       profile: 'Perfil',
-      config: 'Configuración',
+      config: 'Configuration',
       sales: 'Ventas',
       purchases: 'Compras',
       trades: 'Intercambios',
