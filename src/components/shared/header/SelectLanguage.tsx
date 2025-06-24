@@ -1,42 +1,71 @@
-"use client"
-import React, { useState } from 'react'
+"use client";
 
+import React from 'react';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-  } from "@/components/ui/dropdown-menu"
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { ChevronDown } from 'lucide-react';
- 
+import { useLocaleSwitcher } from '@/hooks/useLocalSwitcher';
+
 
 const SelectLanguage = () => {
-    // Estado para guardar el idioma actual (por defecto: inglés "EN")
-    const [currentLanguage, setCurrentLanguage] = useState<"EN" | "ES">("EN");
-  
-    // Función para alternar entre idiomas
-    const toggleLanguage = () => {
-      setCurrentLanguage(currentLanguage === "EN" ? "ES" : "EN");
-    };
-  
-    return (
+  const switchLocale = useLocaleSwitcher();
+
+  const [currentLocale, setCurrentLocale] = React.useState<'en' | 'es'>('en');
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const locale = window.location.pathname.split('/')[1];
+      if (locale === 'en' || locale === 'es') {
+        setCurrentLocale(locale as 'en' | 'es');
+      }
+    }
+  }, []);
+
+  const handleLanguageChange = (newLocale: 'en' | 'es') => {
+    setCurrentLocale(newLocale);
+    switchLocale(newLocale);
+  };
+
+  return (
+    <div className="relative">
       <DropdownMenu>
-        <DropdownMenuTrigger className="pl-2 flex items-center gap-1 text-white focus:outline-none">
-          {currentLanguage}
+        <DropdownMenuTrigger className="pl-2 flex items-center gap-1 text-black focus:outline-none">
+          {/* Mostrar emoji según el idioma */}
+          {currentLocale === 'es' ? '🇪🇸' : '🇬🇧'}
+          <span>{currentLocale.toUpperCase()}</span>
           <ChevronDown className="h-4 w-4 opacity-70" />
         </DropdownMenuTrigger>
-        
-        <DropdownMenuContent className="w-20 bg-white border border-gray-200 rounded-md shadow-sm">
-          {/* Botón para cambiar a Español (si está en inglés) o viceversa */}
-          <DropdownMenuItem 
-            className="cursor-pointer hover:bg-gray-100"
-            onClick={toggleLanguage}
+
+        <DropdownMenuContent className="w-32 bg-white border border-gray-200 rounded-md shadow-sm">
+          <DropdownMenuItem
+            onClick={() => handleLanguageChange('es')}
+            disabled={currentLocale === 'es'}
+            className={`cursor-pointer hover:bg-gray-100 px-2 py-1 ${
+              currentLocale === 'es' ? 'opacity-50 cursor-not-allowed' : ''
+            } flex items-center gap-2`}
           >
-            {currentLanguage === "EN" ? "ES" : "EN"}
+            <span>🇪🇸</span>
+            <span>ES</span>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            onClick={() => handleLanguageChange('en')}
+            disabled={currentLocale === 'en'}
+            className={`cursor-pointer hover:bg-gray-100 px-2 py-1 ${
+              currentLocale === 'en' ? 'opacity-50 cursor-not-allowed' : ''
+            } flex items-center gap-2`}
+          >
+            <span>🇬🇧</span>
+            <span>EN</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    );
-  };
+    </div>
+  );
+};
 
-export default SelectLanguage
+export default SelectLanguage;
