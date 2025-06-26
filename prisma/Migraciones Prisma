@@ -31,3 +31,6 @@
     npx prisma migrate deploy	Aplica migraciones en producción
     npx prisma migrate reset	Borra y recrea la base de datos (solo dev)
     npx prisma migrate status	Muestra el estado de las migraciones
+
+4.- Para ejecutar el seed.
+    npx prisma db seed
