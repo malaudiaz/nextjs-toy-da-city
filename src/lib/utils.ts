@@ -6,40 +6,43 @@ export function cn(...inputs: ClassValue[]) {
 }
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000";
 
-export const getBreadcrumbs = (pathname: string): { label: string; href?: string }[] => {
+export const getBreadcrumbs = (
+  pathname: string,
+  productName?: string
+): { label: string; href?: string }[] => {
   const paths = pathname.split('/').filter(Boolean);
   const breadcrumbs = [{ label: 'Home', href: '/' }];
-  const ignoreSegments = ['en', 'toys' ]; 
+  const ignoreSegments = ['en', 'es', 'toys'];
 
   let currentPath = '';
   for (let i = 0; i < paths.length; i++) {
     const path = paths[i];
 
-     if (ignoreSegments.includes(path)) continue;
+    if (ignoreSegments.includes(path)) continue;
 
     const decodedLabel = decodeURIComponent(path.replace(/-/g, ' '));
 
-    // Traducción personalizada si necesitas nombres más bonitos
+    // Mapeo de rutas a nombres amigables
     const labelMap: Record<string, string> = {
-      profile: 'Profile',
-      config: 'Configurations',
-      ventas: 'Sales',
-      compras: 'Purchases',
-      intercambios: 'Trades',
-      regalos: 'Gifts',
-      favoritos: 'Favorites',
-      reputacion: 'Reputation',
-      terms: "Terms of Service",
-      policies: "Privacy Policy",
+      profile: 'Perfil',
+      config: 'Configuration',
+      sales: 'Ventas',
+      purchases: 'Compras',
+      trades: 'Intercambios',
+      gifts: 'Regalos',
+      favorites: 'Favoritos',
+      reputation: 'Reputación',
+      terms: "Términos",
+      policies: "Políticas",
     };
 
     const label = labelMap[path] || decodedLabel;
 
-    if (i === paths.length - 1) {
-      // Último elemento no es link
+    if (i === paths.length - 1 && productName) {
+      // ✅ Último segmento y hay `productName`
       breadcrumbs.push({
-        label,
-        href: ""
+        label: productName,
+        href: ''
       });
     } else {
       currentPath += `/${path}`;
@@ -78,4 +81,31 @@ export const NumberToCondition = (conditionId: number) => {
     case 4:
       return "To Repair";
   }
+};
+
+export const calculateDistance = (
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+): number => {
+  const R = 6371; // Radio de la Tierra en km
+  const dLat = toRadians(lat2 - lat1);
+  const dLon = toRadians(lon2 - lon1);
+  
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRadians(lat1)) * 
+    Math.cos(toRadians(lat2)) * 
+    Math.sin(dLon / 2) * 
+    Math.sin(dLon / 2);
+  
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // Distancia en km
+  
+  return distance;
+};
+
+const toRadians = (degrees: number): number => {
+  return degrees * (Math.PI / 180);
 };

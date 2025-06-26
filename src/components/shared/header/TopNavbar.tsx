@@ -111,6 +111,7 @@ const TopNavbar = () => {
             <Link href="/en/config" className="text-black hover:text-gray-700">
               <Settings className="size-5" />
             </Link>
+            <SelectLanguage />
           </div>
         </div>
       </div>

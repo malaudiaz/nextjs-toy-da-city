@@ -5,9 +5,13 @@ import Link from 'next/link';
 import { getBreadcrumbs } from '@/lib/utils';
 import { ChevronRight } from 'lucide-react';
 
-export default function Breadcrumbs() {
+interface BreadcrumbsProps {
+  productName?: string;
+}
+
+export default function Breadcrumbs({ productName }: BreadcrumbsProps) {
   const pathname = usePathname();
-  const breadcrumbs = getBreadcrumbs(pathname);
+  const breadcrumbs = getBreadcrumbs(pathname,productName);
 
   return (
     <nav aria-label="Breadcrumb" className="mb-3">
