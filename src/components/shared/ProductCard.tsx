@@ -42,9 +42,9 @@ const ProductCard = ({
       <div className="flex flex-col flex-grow p-4">
         <div className="flex justify-between items-center mb-2">
           <span className="font-bold text-[calc(14px_+_0.5vw)] text-green-700">
-            ${price.toFixed(2).split(".")[0]}
+            {price === 0 ? <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm">FREE</span> : `$${price.toFixed(2).split(".")[0]}`}
             <span className="text-[0.7em] align-super ml-px">
-              {price.toFixed(2).split(".")[1] || "00"}
+              {price === 0 ? "" : price.toFixed(2).split(".")[1] || "00"}
             </span>
           </span>
           <button

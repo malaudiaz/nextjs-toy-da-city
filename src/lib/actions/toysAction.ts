@@ -3,15 +3,37 @@
 import { Toy } from "@/types/toy";
 import { BACKEND_URL } from "../utils";
 
-export async function getToys(page: number, perPage: number, search?: string) {
+export type Filters = {
+  search?: string | null;
+  minPrice?: number | null;
+  maxPrice?: number | null;
+  locationRadius?: {
+    lat: number;
+    lng: number;
+    radius: number;
+  }
+}
+
+export async function getToys(page: number, perPage: number, filters: Filters) {
   const start = page - 1 + 1 || 1;
 
   const url = new URL(`${BACKEND_URL}/api/toys`);
   url.searchParams.set("page", String(start));
   url.searchParams.set('limit', String(perPage));
 
-  if (search && search.trim()) {
-    url.searchParams.set('search', encodeURIComponent(search.trim()));
+  if (typeof filters.search === 'string' && filters.search.trim()) {
+    url.searchParams.set('search', encodeURIComponent(filters.search.trim()));
+  }
+  if (filters.minPrice !== undefined && filters.minPrice !== null) {
+    url.searchParams.set("minPrice", String(filters.minPrice));
+  }
+  if (filters.maxPrice !== undefined && filters.maxPrice !== null) {
+    url.searchParams.set("maxPrice", String(filters.maxPrice));
+  }
+  if (filters.locationRadius) {
+    url.searchParams.set("lat", String(filters.locationRadius.lat));
+    url.searchParams.set("lng", String(filters.locationRadius.lng));
+    url.searchParams.set("radius", String(filters.locationRadius.radius));
   }
 
   const response = await fetch(
