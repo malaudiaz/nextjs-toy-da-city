@@ -412,5 +412,15 @@
     "Post": "Publicar un juguete",
     "Login": "Iniciar sesión",
     "Create your account": "Crea tu cuenta"
+  },
+  "footer":{
+    "Footer1": "Nuestra misión",
+    "Footer2": "Contacto",
+    "Footer3": "Intercambiar",
+    "Footer4": "Dar un regalo",
+    "Footer5": "Comprar/Vender",
+    "Footer6": "Términos de uso",
+    "Footer7": "Política de privacidad",
+    "Footer8": "Borrar datos"
   }
 }

@@ -414,5 +414,15 @@
     "Post": "Post a toy",
     "Login": "Login",
     "Create your account": "Create your account"
+  },
+  "footer":{
+    "Footer1": "Our mission",
+    "Footer2": "Contact",
+    "Footer3": "Swap",
+    "Footer4": "Give a gift",
+    "Footer5": "Buy/Sell",
+    "Footer6": "Terms of use",
+    "Footer7": "Privacy policy",
+    "Footer8": "Delete data"
   }
 }
