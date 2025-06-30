@@ -161,6 +161,8 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
     const stringforSell = formData.get("forSell") || "false"
     const stringforGifts = formData.get("forGifts") || "false"
     const stringforChanges = formData.get("forChanges") || "false"
+
+    console.log("Valor de location:", formData.get('location'));
     
     // Validar con Zod
     const toyData = ToySchema.parse({
