@@ -5,8 +5,10 @@ import { SearchIcon, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const Search = () => {
+  const t = useTranslations("navbar");
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -45,7 +47,7 @@ const Search = () => {
       <div className="relative w-full">
         <Input
           className="flex-1 rounded-md bg-gray-100 text-black text-base h-full pl-4 pr-10"
-          placeholder="Search toys..."
+          placeholder={t("Search")}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           type="text"

@@ -18,6 +18,7 @@ import {
   SignedIn,
   UserButton,
 } from "@clerk/nextjs";
+import { useTranslations } from "next-intl";
 
 
 const SearchLinks = [
@@ -29,7 +30,7 @@ const SearchLinks = [
 
 
 const TopNavbar = () => {
-
+  const t = useTranslations("navbar");
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const toggleMenu = () => {
@@ -65,9 +66,9 @@ const TopNavbar = () => {
               ))
             }
 
-              <Button className="w-full bg-[#4c754b] text-white px-4 py-2">
+              <Button className="w-full bg-[#4c754b] hover:bg-[#558d54] text-white px-4 py-2">
                 <Link href={"/en/post"} className="w-full">
-                  Post a Toy
+                  {t("Post")}
                 </Link>
               </Button>
             </div>
@@ -85,19 +86,19 @@ const TopNavbar = () => {
           </div>
 
           <div className="flex items-center gap-6">
-            <Button className="whitespace-nowrap bg-[#4c754b] text-white px-4">
-              <Link href={"/en/post"}>Post a Toy</Link>
+            <Button className="whitespace-nowrap bg-[#4c754b] hover:bg-[#558d54] text-white px-4">
+              <Link href={"/en/post"}>{t("Post")}</Link>
             </Button>
 
             <div className="flex flex-col items-start gap-1">
               <SignedOut>
                 <SignUpButton mode="modal">
                   <span className="text-sm text-black sm:inline cursor-pointer hover:underline">
-                    ▸ Create your account
+                    ▸ {t("Create your account")}
                   </span>
                 </SignUpButton>
                 <SignInButton mode="modal">
-                  <span className="text-sm text-black sm:inline cursor-pointer hover:underline">▸ Login</span>
+                  <span className="text-sm text-black sm:inline cursor-pointer hover:underline">▸ {t("Login")}</span>
                 </SignInButton>
               </SignedOut>
               <SignedIn>

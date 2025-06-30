@@ -401,5 +401,18 @@
   },
   "purchases": {
     "Title": "Your Purchases"
+  },
+  "filter":{
+    "Title": "Filter",
+    "Filter1": "Max Distance",
+    "Filter2": "Price Range",
+    "Buttom1": "Apply",
+    "Buttom2": "Clear"
+  },
+  "navbar": {
+    "Search": "Search toys...",
+    "Post": "Post a toy",
+    "Login": "Login",
+    "Create your account": "Create your account"
   }
 }

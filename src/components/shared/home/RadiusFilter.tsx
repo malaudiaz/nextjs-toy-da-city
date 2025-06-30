@@ -1,6 +1,7 @@
 "use client";
 
 import { MapPin } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React, { useState } from "react";
 import { Range } from "react-range";
 
@@ -10,11 +11,11 @@ export default function RadiusFilter({
   onChange: (radius: number) => void;
 }) {
   const [value, setValue] = useState<number>(50);
-
+  const t = useTranslations("filter");
   return (
     <div className="space-y-4 px-4 py-2">
       <div className="flex flex-col gap-1">
-        <h3 className="font-semibold text-gray-800 flex gap-1 items-center"><MapPin className="size-5"/> Max Distance</h3>
+        <h3 className="font-semibold text-gray-800 flex gap-1 items-center"><MapPin className="size-5"/> {t("Filter1")}</h3>
 
       {/* Vista del valor actual */}
       <span className="mb-2 text-md font-medium">{value} miles</span>

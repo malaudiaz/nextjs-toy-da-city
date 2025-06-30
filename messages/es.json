@@ -399,5 +399,18 @@
   },
   "purchases": {
     "Title": "Tus Compras"
+  },
+    "filter":{
+    "Title": "Filtros",
+    "Filter1": "Maxima Distancia",
+    "Filter2": "Rango de Precios",
+    "Buttom1": "Aplicar",
+    "Buttom2": "Limpiar"
+  },
+    "navbar": {
+    "Search": "Buscar juguetes...",
+    "Post": "Publicar un juguete",
+    "Login": "Iniciar sesión",
+    "Create your account": "Crea tu cuenta"
   }
 }

@@ -7,8 +7,10 @@ import React, { useEffect, useState } from "react";
 import PriceRangeFilter from "./PriceRangeFilter";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import RadiusFilter from "./RadiusFilter";
+import { useTranslations } from "next-intl";
 
 export default function FilterBar() {
+  const t = useTranslations("filter");
   const router = useRouter();
   const searchParams = useSearchParams();
   const [priceRange, setPriceRange] = useState<[number, number]>(() => {
@@ -95,7 +97,7 @@ export default function FilterBar() {
           onClick={() => setIsOpen(!isOpen)}
           className="bg-white border border-gray-300 px-4 py-2 rounded-md shadow-sm text-md font-medium text-gray-700 hover:bg-gray-50 focus:outline-none flex gap-1 items-center"
         >
-          Filtrar <Filter className="size-4" />
+          {t("Title")} <Filter className="size-4" />
         </Button>
 
         {isOpen && (
@@ -109,7 +111,7 @@ export default function FilterBar() {
                 onClick={applyFilters}
                 className="bg-[#3D5D3C] text-white px-4 py-2 rounded-md flex-1"
               >
-                Aplicar
+                {t("Buttom1")}
               </Button>
 
               {(searchParams.get("minPrice") ||
@@ -119,7 +121,7 @@ export default function FilterBar() {
                   onClick={clearFilters}
                   className="text-sm bg-[#e07a5f] hover:bg-[#bb664f]"
                 >
-                  Limpiar
+                  {t("Buttom2")}
                 </Button>
               )}
             </div>

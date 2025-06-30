@@ -47,7 +47,7 @@ export async function getToys(page: number, perPage: number, filters: Filters) {
 
   const toys = await response.json();
 
-  return { toys: toys.data as Toy[], totalPosts: toys.pagination.total };
+  return { toys: toys.data as Toy[], totalPosts: toys.pagination.total as number };
 }
 
 export async function getToy(id: string) {
