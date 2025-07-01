@@ -121,7 +121,7 @@ export default function FilterBar() {
                   onClick={clearFilters}
                   className="text-sm bg-[#e07a5f] hover:bg-[#bb664f]"
                 >
-                  {t("Buttom2")}
+                {t("Buttom2")}
                 </Button>
               )}
             </div>

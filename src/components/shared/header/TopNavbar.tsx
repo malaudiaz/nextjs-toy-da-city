@@ -50,7 +50,10 @@ const TopNavbar = () => {
             <Image src="/Logo.png" alt="logo" width={140} height={28} className="h-[50px] flex-shrink-0" />
             </Link>
           </div>
+          <div className="flex items-center gap-2">
+            <ShoppingCart className="size-5" />
           <SelectLanguage />
+          </div>
         </div>
 
         {/* Menú desplegable móvil */}
