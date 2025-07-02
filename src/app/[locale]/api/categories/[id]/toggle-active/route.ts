@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: number } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(
     request
@@ -25,10 +25,13 @@ export async function PATCH(
 
   const t = await getTranslations("Toy.errors");
 
+  const { id } = await params; // Safe to use
+
+
   try {
     // 1. Verificar si la categoria existe
     const existingCategory = await prisma.category.findUnique({
-      where: { id: params.id }
+      where: { id: Number(id) }
     })
 
     if (!existingCategory) {
@@ -40,7 +43,7 @@ export async function PATCH(
 
     // 2. Cambiar el estado isActive (toggle)
     const updatedCategory = await prisma.category.update({
-      where: { id: params.id },
+      where: { id: Number(id) },
       data: {
         isActive: !existingCategory.isActive
       }

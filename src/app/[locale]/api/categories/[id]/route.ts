@@ -9,17 +9,11 @@ import { Prisma } from "@prisma/client";
 import { CategoryUpdateSchema } from "@/lib/schemas/category";
 import { getAuthUserFromRequest } from "@/lib/auth";
 
-interface RequestContext {
-  params: {
-    id: string;
-    locale: string;
-  };
-}
 
 // Obtener un estado por ID
 export async function GET(
   req: NextRequest,
-  context: RequestContext
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -27,7 +21,7 @@ export async function GET(
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const { id } = await context.params; // Safe to use
+  const { id } = await params;
 
   try {
     const status = await prisma.category.findUnique({
@@ -50,7 +44,7 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string; locale: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -64,7 +58,7 @@ export async function PUT(
 
   try {
     // Validar ID
-    if (!params.id || isNaN(Number(id))) {
+    if (!id || isNaN(Number(id))) {
       return NextResponse.json(
         { error: t("InvalidCategoryID") },
         { status: 400 }
@@ -107,7 +101,7 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string; locale: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -120,7 +114,7 @@ export async function DELETE(
   const { id } = await params; // Safe to use
 
   try {
-    if (!params.id || isNaN(Number(id))) {
+    if (!id || isNaN(Number(id))) {
       return NextResponse.json(
         { error: t("InvalidCategoryId") },
         { status: 400 }
@@ -150,7 +144,7 @@ export async function DELETE(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string; locale: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
