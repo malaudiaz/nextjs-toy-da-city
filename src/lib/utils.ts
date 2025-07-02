@@ -34,6 +34,7 @@ export const getBreadcrumbs = (
       reputation: 'Reputación',
       terms: "Términos",
       policies: "Políticas",
+      post: 'Post',
     };
 
     const label = labelMap[path] || decodedLabel;
