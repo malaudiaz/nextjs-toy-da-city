@@ -30,6 +30,10 @@ const nextConfig: NextConfig = {
     'localhost',
     'localhost:3000',
     '127.0.0.1',
+    "www.toydacity.com",        
+    "http://www.toydacity.com",
+    "https://www.toydacity.com", 
+    "https://toydacity.com", 
   ],
   async headers() {
     return [

@@ -196,7 +196,7 @@ const CreatePostForm = ({
         return;
       }
 
-      const response = await fetch(`${BACKEND_URL}/api/toys`, {
+      const response = await fetch('/api/toys', {
         method: "POST",
         body: formData,
         headers: {

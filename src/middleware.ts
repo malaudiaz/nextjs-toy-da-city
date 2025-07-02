@@ -16,9 +16,12 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  // 1. Definir orígenes permitidos (Dev + Prod)
+  // Lista blanca de dominios permitidos (customiza con tus URLs)
+  const response = NextResponse.next();
+
   const allowedOrigins = [
     'http://localhost:3000',       // Desarrollo
+    'http://127.0.0.1:3000',       // Desarrollo
     'https://toydacity.com',       // Producción
     'https://www.toydacity.com',   // Producción (alternativo)
   ];
@@ -26,22 +29,14 @@ export default clerkMiddleware(async (auth, req) => {
   // 2. Obtener el origen de la solicitud
   const origin = req.headers.get('origin') || '';
   
-  // 3. Verificar si el origen está permitido
-  const isAllowedOrigin = allowedOrigins.includes(origin);
-
-  // Luego maneja la autenticación con Clerk
-  if (isProtectedRoute(req)) await auth.protect();
-
-  const response = NextResponse.next();
-
-  if (isAllowedOrigin) {
+  // Verifica si el origen está en la lista blanca
+  if (origin && allowedOrigins.includes(origin)) {
+    // Configura los headers CORS
     response.headers.set('Access-Control-Allow-Origin', origin);
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    response.headers.set('Access-Control-Allow-Credentials', 'true'); // Si usas cookies/tokens
   }
-
-  // Configura CORS
-  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  response.headers.set('Access-Control-Allow-Credentials', 'true');
 
   // 5. Manejar solicitud OPTIONS (Preflight)
   if (req.method === 'OPTIONS') {
@@ -53,6 +48,9 @@ export default clerkMiddleware(async (auth, req) => {
       },
     });
   }
+
+  // Luego maneja la autenticación con Clerk
+  if (isProtectedRoute(req)) await auth.protect();
 
   // Ejecuta el middleware de internacionalización
   const intlResponse = intlMiddleware(req);
