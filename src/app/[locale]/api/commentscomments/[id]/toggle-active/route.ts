@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import { getAuthUserFromRequest } from '@/lib/auth';
 import { getTranslations } from "next-intl/server";
@@ -6,11 +6,11 @@ import { getTranslations } from "next-intl/server";
 const prisma = new PrismaClient()
 
 export async function PATCH(
-  request: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest, 
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(
-    request
+    req
   );
 
   if (!success && !userId) {
@@ -25,10 +25,12 @@ export async function PATCH(
 
   const t = await getTranslations("Toy.errors");
 
+  const { id } = await params; // Safe to use
+
   try {
     // 1. Verificar si el comemtario existe
     const existingComments = await prisma.commentsComments.findUnique({
-      where: { id: params.id }
+      where: { id: id }
     })
 
     if (!existingComments) {
@@ -40,7 +42,7 @@ export async function PATCH(
 
     // 2. Cambiar el estado isActive (toggle)
     const updatedComments = await prisma.commentsComments.update({
-      where: { id: params.id },
+      where: { id: id },
       data: {
         isActive: !existingComments.isActive
       }

@@ -5,9 +5,7 @@ import { getToy } from "@/lib/actions/toysAction";
 import ProductDetails from "@/components/shared/product/ProductDetails";
 
 type ProductDataProps = {
-  params: {
-    id: string;
-  }
+  params: Promise<{ id: string }>;
 }
 
 async function ProductDetailsPage({ params }: ProductDataProps) {

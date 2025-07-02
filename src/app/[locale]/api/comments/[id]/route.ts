@@ -1,5 +1,6 @@
 // app/api/status/[id]/route.ts
 import { NextResponse } from "next/server";
+import { NextRequest } from 'next/server';
 import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { CommentsSchema } from "@/lib/schemas/comments";
@@ -10,8 +11,8 @@ import { getAuthUserFromRequest } from "@/lib/auth";
 
 // Obtener un commentario por ID
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -19,7 +20,7 @@ export async function GET(
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const { id } = params; // Safe to use
+  const { id } = await params;
 
   try {
     const comments = await prisma.toyComments.findUnique({
@@ -41,8 +42,8 @@ export async function GET(
 }
 
 export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -52,7 +53,7 @@ export async function PUT(
 
   const t = await getTranslations("Status.errors");
 
-  const { id } = params; // Safe to use
+  const { id } = await params;
 
   try {
     // Validar ID
@@ -95,8 +96,8 @@ export async function PUT(
 }
 
 export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -106,7 +107,7 @@ export async function DELETE(
 
   const t = await getTranslations("Comments.errors");
 
-  const { id } = params; // Safe to use
+  const { id } = await params; // Safe to use
 
   try {
     if (!id ) {
@@ -135,8 +136,8 @@ export async function DELETE(
 }
 
 export async function PATCH(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
 
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
@@ -147,7 +148,7 @@ export async function PATCH(
 
   const t = await getTranslations("Status.errors");
 
-  const { id } = params; // Safe to use
+  const { id } = await params; // Safe to use
 
   try {
     // 1. Obtener y validar ID

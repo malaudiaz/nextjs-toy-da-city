@@ -6,11 +6,8 @@ import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import { Filters, getToys } from "@/lib/actions/toysAction";
 import { Suspense } from "react";
 
-interface ToysProps {
-  searchParams: { [key: string]: string | undefined };
-}
 
-export default async function Home({ searchParams }: ToysProps) {
+export default async function Home({ searchParams }: { searchParams: Promise<{ [key: string]: string | undefined }> }) {
   const resolvedSearchParams = await searchParams;
 
   const currentPage = parseInt((resolvedSearchParams.page as string) || "1");

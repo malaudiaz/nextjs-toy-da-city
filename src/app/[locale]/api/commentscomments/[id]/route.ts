@@ -1,5 +1,5 @@
 // app/api/status/[id]/route.ts
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { CommentsCommentsSchema } from "@/lib/schemas/comments";
@@ -10,8 +10,8 @@ import { getAuthUserFromRequest } from "@/lib/auth";
 
 // Obtener un commentario por ID
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest, 
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -19,11 +19,11 @@ export async function GET(
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const { id } = params; // Safe to use
+  const { id } = await params; // Safe to use
 
   try {
     const com_comments = await prisma.commentsComments.findUnique({
-      where: { id: String(id) },
+      where: { id: id },
     });
 
     if (!com_comments) {
@@ -41,8 +41,8 @@ export async function GET(
 }
 
 export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest, 
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -52,7 +52,7 @@ export async function PUT(
 
   const t = await getTranslations("Status.errors");
 
-  const { id } = params; // Safe to use
+  const { id } = await params; // Safe to use
 
   try {
     // Validar ID
@@ -66,7 +66,7 @@ export async function PUT(
 
     // Actualizar estado
     const updatedCommentsCommetns = await prisma.commentsComments.update({
-      where: { id: String(id) },
+      where: { id: id },
       data: validatedData,
     });
 
@@ -95,8 +95,8 @@ export async function PUT(
 }
 
 export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest, 
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -106,7 +106,7 @@ export async function DELETE(
 
   const t = await getTranslations("Comments.errors");
 
-  const { id } = params; // Safe to use
+  const { id } = await params; // Safe to use
 
   try {
     if (!id ) {
@@ -114,7 +114,7 @@ export async function DELETE(
     }
 
     await prisma.commentsComments.delete({
-      where: { id: String(id), isActive: false },
+      where: { id: id, isActive: false },
     });
 
     return NextResponse.json(
@@ -135,8 +135,8 @@ export async function DELETE(
 }
 
 export async function PATCH(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest, 
+  { params }: { params: Promise<{ id: string }> }
 ) {
 
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
@@ -147,7 +147,7 @@ export async function PATCH(
 
   const t = await getTranslations("Status.errors");
 
-  const { id } = params; // Safe to use
+  const { id } = await params; // Safe to use
 
   try {
     // 1. Obtener y validar ID
@@ -166,7 +166,7 @@ export async function PATCH(
 
     // 4. Actualizar solo campos proporcionados
     const updatedCommentsComments = await prisma.commentsComments.update({
-      where: { id: String(id) },
+      where: { id: id },
       data: validatedData, // Solo actualiza los campos enviados
     });
 

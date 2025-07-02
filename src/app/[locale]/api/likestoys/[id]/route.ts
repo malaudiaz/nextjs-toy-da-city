@@ -1,5 +1,5 @@
 // app/api/status/[id]/route.ts
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { LikesToySchema } from "@/lib/schemas/likestoy";
@@ -9,8 +9,8 @@ import { getAuthUserFromRequest } from "@/lib/auth";
 
 // Obtener un like por ID
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -18,11 +18,11 @@ export async function GET(
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const { id } = params; // Safe to use
+  const { id } = await params; // Safe to use
 
   try {
     const toy_likes = await prisma.toyLikes.findUnique({
-      where: { id: String(id) },
+      where: { id: id },
     });
 
     if (!toy_likes) {
@@ -40,8 +40,8 @@ export async function GET(
 }
 
 export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -51,7 +51,7 @@ export async function PUT(
 
   const t = await getTranslations("Likes.errors");
 
-  const { id } = params; // Safe to use
+  const { id } = await params; // Safe to use
 
   try {
     // Validar ID
@@ -65,7 +65,7 @@ export async function PUT(
 
     // Actualizar likes
     const updatedLikesToy = await prisma.toyLikes.update({
-      where: { id: String(id) },
+      where: { id: id },
       data: validatedData,
     });
 
@@ -94,8 +94,8 @@ export async function PUT(
 }
 
 export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -105,7 +105,7 @@ export async function DELETE(
 
   const t = await getTranslations("Likes.errors");
 
-  const { id } = params; // Safe to use
+  const { id } = await params; // Safe to use
 
   try {
     if (!id ) {
@@ -113,7 +113,7 @@ export async function DELETE(
     }
 
     await prisma.toyLikes.delete({
-      where: { id: String(id), isActive: false },
+      where: { id: id, isActive: false },
     });
 
     return NextResponse.json(
@@ -134,8 +134,8 @@ export async function DELETE(
 }
 
 export async function PATCH(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
 
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
@@ -146,7 +146,7 @@ export async function PATCH(
 
   const t = await getTranslations("Likes.errors");
 
-  const { id } = params; // Safe to use
+  const { id } = await params; // Safe to use
 
   try {
     // 1. Obtener y validar ID
@@ -165,7 +165,7 @@ export async function PATCH(
 
     // 4. Actualizar solo campos proporcionados
     const updatedtoyLikes = await prisma.toyLikes.update({
-      where: { id: String(id) },
+      where: { id: id },
       data: validatedData, // Solo actualiza los campos enviados
     });
 

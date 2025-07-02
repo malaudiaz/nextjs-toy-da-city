@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import { getAuthUserFromRequest } from '@/lib/auth';
 import { getTranslations } from "next-intl/server";
@@ -6,12 +6,10 @@ import { getTranslations } from "next-intl/server";
 const prisma = new PrismaClient()
 
 export async function PATCH(
-  request: Request,
-  { params }: { params: { id: number } }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(
-    request
-  );
+  const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
   if (!success && !userId) {
     return NextResponse.json(
@@ -24,11 +22,12 @@ export async function PATCH(
   }
 
   const t = await getTranslations("Toy.errors");
+  const { id } = await params;
 
   try {
     // 1. Verificar si la condicion existe
     const existingCondition = await prisma.condition.findUnique({
-      where: { id: params.id }
+      where: { id: Number(id) }
     })
 
     if (!existingCondition) {
@@ -40,7 +39,7 @@ export async function PATCH(
 
     // 2. Cambiar el estado isActive (toggle)
     const updatedCondition = await prisma.condition.update({
-      where: { id: params.id },
+      where: { id: Number(id) },
       data: {
         isActive: !existingCondition.isActive
       }

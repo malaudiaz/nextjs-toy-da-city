@@ -13,16 +13,13 @@ const MAX_MEDIA_FILES = 6;
 
 // Obtener un juguete por ID
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string; locale: string } }
-
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
 
   const { id } = await params;
 
-  const { userId } = await getAuthUserFromRequest(
-    request
-  );
+  const { userId } = await getAuthUserFromRequest(req);
 
   const t = await getTranslations("Toy.errors");
 
@@ -90,14 +87,12 @@ export async function GET(
 }
 
 export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+  const { id } = await params;
 
-  const { success, userId, error, code } = await getAuthUserFromRequest(
-    request
-  );
+  const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
   if (!success && !userId) {
     return NextResponse.json(
@@ -112,7 +107,7 @@ export async function PUT(
   const t = await getTranslations("Toy.errors");
 
   try {
-    const formData = await request.formData();
+    const formData = await req.formData();
 
     const stringforSell = formData.get("forSell") || "false";
     const stringforGifts = formData.get("forGifts") || "false";
@@ -229,12 +224,10 @@ export async function PUT(
 
 // Este debe ser para cambiar el estdo del juguete... ver para cuales puede pasar.
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(
-    request
-  );
+  const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
   if (!success && !userId) {
     return NextResponse.json(
@@ -247,11 +240,12 @@ export async function DELETE(
   }
 
   const t = await getTranslations("Toy.errors");
+  const { id } = await params; // Safe to use
 
   try {
     // 1. Encontrar todos los juguetes inactivos
     const inactiveToys = await prisma.toy.findMany({
-      where: { id: params.id, isActive: false },
+      where: { id: id, isActive: false },
       include: { media: true },
     });
 

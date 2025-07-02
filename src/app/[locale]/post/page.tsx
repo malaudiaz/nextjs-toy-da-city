@@ -3,13 +3,14 @@ import Sigin from '@/components/shared/Sigin';
 import { getCategories } from '@/lib/actions/categoriesAction';
 import { getConditions } from '@/lib/actions/conditionActions';
 import { getStatuses } from '@/lib/actions/statusActions';
-import { getAuthUserFromRequest } from "@/lib/auth";
 
-const PostPage = async (request: Request) => {
+import { getAuthUser } from "@/lib/auth";
+
+export default async function PostPage() {
   const categories = await getCategories();
   const condition = await getConditions();
   const statuses = await getStatuses();
-  const { success } = await getAuthUserFromRequest(request);
+  const { success } = await getAuthUser();
 
   return (
     <div>
@@ -21,5 +22,3 @@ const PostPage = async (request: Request) => {
     </div>
   )
 }
-
-export default PostPage

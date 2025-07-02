@@ -3,7 +3,7 @@ import ProfileInfo from "@/components/shared/profile/ProfileInfo";
 import { getTranslations } from "next-intl/server";
 import React from "react";
 
-export const products = [
+const products = [
   {
     image: "/image 4.png",
     price: 200,

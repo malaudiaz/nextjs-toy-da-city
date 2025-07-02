@@ -7,9 +7,15 @@ import { getAuthUserFromRequest } from "@/lib/auth";
 
 
 // GET all comments con paginación y búsqueda
-export async function GET(req: NextRequest, { params }: { params: { toyId: string } }) {
+export async function GET(
+  req: NextRequest, 
+  { params }: { params: Promise<{ toyId: string }> }
+) {
   
   const t = await getTranslations("Comments.errors");
+
+  const { toyId } = await params;
+
 
   try {
     const { searchParams } = new URL(req.url!)
@@ -24,7 +30,7 @@ export async function GET(req: NextRequest, { params }: { params: { toyId: strin
         skip: (pagination.page - 1) * pagination.limit,
         take: pagination.limit,
         orderBy: { createdAt: "desc" },
-        where: {isActive: true, toyId: params.toyId}        
+        where: {isActive: true, toyId: toyId}        
       }),
       prisma.toyComments.count(),
     ]);

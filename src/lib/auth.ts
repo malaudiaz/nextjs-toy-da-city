@@ -1,6 +1,7 @@
 // lib/authUtils.ts
 import { auth } from "@clerk/nextjs/server";
 import { verifyToken } from "@clerk/clerk-sdk-node";
+import { cookies } from 'next/headers';
 
 declare interface AuthResponse {
   success: boolean
@@ -54,4 +55,15 @@ export async function getAuthUserFromRequest(req: Request): Promise<AuthResponse
       return { success: false, userId: "", error: "Not Authenticate", code: 401 };
   }
 
+}
+
+export async function getAuthUser() {
+  const cookieStore = await cookies(); // ⚠️ Aquí usamos await
+  const token = cookieStore.get('auth_token')?.value;
+
+  if (!token) {
+    return { success: false };
+  }
+
+  return { success: true };
 }
