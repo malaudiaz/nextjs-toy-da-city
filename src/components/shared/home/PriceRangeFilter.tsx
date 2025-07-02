@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 const MIN_PRICE = 0;
 const MAX_PRICE = 500;
 
+
 export default function PriceRangeFilter({ onChange }: { onChange: (values: [number, number] | null) => void }) {
   const searchParams = useSearchParams();
   const t = useTranslations("filter");
@@ -21,7 +22,7 @@ export default function PriceRangeFilter({ onChange }: { onChange: (values: [num
 
     useEffect(() => {
     onChange(values);
-  }, [values]);
+  }, [onChange, values]);
 
 
 

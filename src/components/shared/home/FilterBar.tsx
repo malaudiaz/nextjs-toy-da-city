@@ -31,7 +31,7 @@ export default function FilterBar() {
         .then(() => setHasLocation(true))
         .catch(() => {});
     }
-  }, [isOpen]);
+  }, [getLocationAsync, hasLocation, isOpen]);
 
   const applyFilters = () => {
     const current = new URLSearchParams(searchParams.toString());

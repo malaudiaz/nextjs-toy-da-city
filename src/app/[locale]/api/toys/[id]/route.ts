@@ -20,7 +20,7 @@ export async function GET(
 
   const { id } = await params;
 
-  const { success, userId, error, code } = await getAuthUserFromRequest(
+  const { userId } = await getAuthUserFromRequest(
     request
   );
 

@@ -13,7 +13,7 @@ const Search = () => {
   const searchParams = useSearchParams();
 
   const [inputValue, setInputValue] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [, setSearchQuery] = useState("");
 
   useEffect(() => {
     const currentQuery = searchParams.get("search") || "";
