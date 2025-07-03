@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx"
+import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -10,9 +11,11 @@ export const getBreadcrumbs = (
   pathname: string,
   productName?: string
 ): { label: string; href?: string }[] => {
+  const t = useTranslations("breadcrumbs");
   const paths = pathname.split('/').filter(Boolean);
-  const breadcrumbs = [{ label: 'Home', href: '/' }];
+  const breadcrumbs = [{ label: t("Home"), href: '/' }];
   const ignoreSegments = ['en', 'es', 'toys'];
+
 
   let currentPath = '';
   for (let i = 0; i < paths.length; i++) {
@@ -24,17 +27,17 @@ export const getBreadcrumbs = (
 
     // Mapeo de rutas a nombres amigables
     const labelMap: Record<string, string> = {
-      profile: 'Perfil',
-      config: 'Configuration',
-      sales: 'Ventas',
-      purchases: 'Compras',
-      trades: 'Intercambios',
-      gifts: 'Regalos',
-      favorites: 'Favoritos',
-      reputation: 'Reputación',
-      terms: "Términos",
-      policies: "Políticas",
-      post: 'Post',
+      profile: t("Profile"),
+      config: t("Config"),
+      sales: t("Sales"),
+      purchases: t("Purchases"),
+      trades: t("Trades"),
+      gifts: t("Gifts"),
+      favorites: t("Favorites"),
+      reputation: t("Reputation"),
+      terms: t("Terms"),
+      policies: t("Policies"),
+      post: t("Post"),
     };
 
     const label = labelMap[path] || decodedLabel;

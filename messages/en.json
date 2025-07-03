@@ -424,5 +424,37 @@
     "Footer6": "Terms of use",
     "Footer7": "Privacy policy",
     "Footer8": "Delete data"
+  },
+  "createPostForm":{
+    "Title": "Title",
+    "TitlePlaceholder": "Name of the product",
+    "Description": "Description",
+    "DescriptionPlaceholder": "Describe your product",
+    "ForSale": "Sale",
+    "ForGift": "Free",
+    "ForChange": "Swap",
+    "Category": "Category",
+    "Status": "Status",
+    "Condition": "Condition",
+    "Image": "Take picture of your item and upload them to improve the result",
+    "Add More": "+ Add More",
+    "Submit": "Create Post",
+    "Uploading": "Uploading",
+    "Success Message": "Toy created successfully!"
+  },
+  "breadcrumbs":{
+    "Home": "Home",
+    "Post": "Post",
+    "Profile": "Profile",
+    "Config": "Configuration",
+    "Sales": "Sales",
+    "Purchases": "Purchases",
+    "Trades": "Trades",
+    "Gifts": "Gifts",
+    "Favorites": "Favorites",
+    "Reputation": "Reputation",
+    "Terms": "Terms",
+    "Policies": "Policies"
+
   }
 }

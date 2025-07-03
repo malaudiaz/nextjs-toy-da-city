@@ -9,6 +9,7 @@ import { toyFormSchema, ToyFormValues } from "@/lib/schemas/toy";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@clerk/nextjs";
+import { useTranslations } from "next-intl";
 
 const MAX_FILES = 6;
 
@@ -63,6 +64,7 @@ const CreatePostForm = ({
   conditions,
   statuses,
 }: CreatePostFormProps) => {
+  const t = useTranslations("createPostForm");
   const [files, setFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -241,7 +243,7 @@ const CreatePostForm = ({
     <>
       {submitSuccess && (
         <div className="mb-4 p-4 bg-green-100 text-green-700 rounded">
-          ¡El juguete se ha añadido correctamente!
+          {t("Success Message")}
         </div>
       )}
 
@@ -257,10 +259,10 @@ const CreatePostForm = ({
       >
         {/* Campo de título */}
         <div className="flex flex-col gap-1">
-          <Label>Title</Label>
+          <Label>{t("Title")}</Label>
           <input
             id="title"
-            placeholder="Nombre del producto"
+            placeholder={t("TitlePlaceholder")}
             className="border border-gray-300 rounded p-2"
             {...register("title")}
             required
@@ -272,10 +274,10 @@ const CreatePostForm = ({
 
         {/* Descripción */}
         <div className="flex flex-col gap-1">
-          <Label>Description</Label>
+          <Label>{t("Description")}</Label>
           <Textarea
             id="description"
-            placeholder="Describe tu producto"
+            placeholder={t("DescriptionPlaceholder")}
             className="h-20 border-gray-500"
             rows={4}
             {...register("description")}
@@ -299,7 +301,7 @@ const CreatePostForm = ({
               onChange={() => handleCheckboxChange("forSale")}
               className="w-5 h-5 accent-green-700"
             />
-            <label htmlFor="forSale">Sale</label>
+            <label htmlFor="forSale">{t("ForSale")}</label>
           </div>
 
           {/* For Gift */}
@@ -311,7 +313,7 @@ const CreatePostForm = ({
               onChange={() => handleCheckboxChange("forGift")}
               className="w-5 h-5 accent-green-700"
             />
-            <label htmlFor="forGift">Free</label>
+            <label htmlFor="forGift">{t("ForGift")}</label>
           </div>
 
           {/* For Exchange */}
@@ -323,13 +325,13 @@ const CreatePostForm = ({
               onChange={() => handleCheckboxChange("forChange")}
               className="w-5 h-5 accent-green-700"
             />
-            <label htmlFor="forChange">Swap</label>
+            <label htmlFor="forChange">{t("ForChange")}</label>
           </div>
         </div>
 
         {forSaleValue && (
           <div className="flex flex-col gap-1">
-            <label>Price</label>
+            <label>{t("Price")}</label>
             <input
               id="price"
               type="number"
@@ -349,7 +351,7 @@ const CreatePostForm = ({
         {/* Categoría */}
         <div>
           <label htmlFor="categoryId" className="block mb-1">
-            Category*
+            {t("Category")}
           </label>
           <select
             id="categoryId"
@@ -373,7 +375,7 @@ const CreatePostForm = ({
         {/* Status */}
         <div>
           <label htmlFor="statusId" className="block mb-1">
-            Status*
+            {t("Status")}
           </label>
           <select
             id="statusId"
@@ -397,7 +399,7 @@ const CreatePostForm = ({
         {/* Conditions */}
         <div>
           <label htmlFor="conditionId" className="block mb-1">
-            Condition*
+            {t("Condition")}
           </label>
           <select
             id="conditionId"
@@ -421,7 +423,7 @@ const CreatePostForm = ({
         {/* Imágenes */}
         <div className="flex flex-col gap-2 px-3 py-3 border-dashed border-2 border-gray-300 rounded-md">
           <Label>
-            Take picture of your item and upload them to improve the result
+            {t("Image")}
           </Label>
           <div className="grid grid-cols-3 gap-2">
             {files.map((file, index) => (
@@ -451,7 +453,7 @@ const CreatePostForm = ({
               }`}
               onClick={() => fileInputRef.current?.click()}
             >
-              <span className="text-gray-500">+ Add More</span>
+              <span className="text-gray-500">{t("Add More")}</span>
             </div>
           </div>
 
@@ -501,10 +503,10 @@ const CreatePostForm = ({
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 ></path>
               </svg>
-              Uploading...
+              {t("Uploading")}
             </span>
           ) : (
-            "Create Post"
+            t("Submit")
           )}
         </button>
       </form>

@@ -400,20 +400,20 @@
   "purchases": {
     "Title": "Tus Compras"
   },
-    "filter":{
+  "filter": {
     "Title": "Filtros",
     "Filter1": "Maxima Distancia",
     "Filter2": "Rango de Precios",
     "Buttom1": "Aplicar",
     "Buttom2": "Limpiar"
   },
-    "navbar": {
+  "navbar": {
     "Search": "Buscar juguetes...",
     "Post": "Publicar un juguete",
     "Login": "Iniciar sesión",
     "Create your account": "Crea tu cuenta"
   },
-  "footer":{
+  "footer": {
     "Footer1": "Nuestra misión",
     "Footer2": "Contacto",
     "Footer3": "Intercambiar",
@@ -422,5 +422,36 @@
     "Footer6": "Términos de uso",
     "Footer7": "Política de privacidad",
     "Footer8": "Borrar datos"
+  },
+  "createPostForm": {
+    "Title": "Titulo",
+    "TitlePlaceholder": "Nombre del producto",
+    "Description": "Descripción",
+    "DescriptionPlaceholder": "Describe tu producto",
+    "ForSale": "Venta",
+    "ForGift": "Gratis",
+    "ForChange": "Intercambio",
+    "Category": "Categoría",
+    "Status": "Estado",
+    "Condition": "Condición",
+    "Image": "Toma una foto de tu artículo y sube ellas para mejorar el resultado",
+    "Add More": "+ Añadir más",
+    "Submit": "Crear publicación",
+    "Uploading": "Subiendo",
+    "Success Message": "¡Juguete creado correctamente!"
+  },
+  "breadcrumbs": {
+    "Home": "Inicio",
+    "Post": "Publicar",
+    "Profile": "Perfil",
+    "Config": "Configuration",
+    "Sales": "Ventas",
+    "Purchases": "Compras",
+    "Trades": "Intercambios",
+    "Gifts": "Regalos",
+    "Favorites": "Favoritos",
+    "Reputation": "Reputación",
+    "Terms": "Términos",
+    "Policies": "Políticas"
   }
 }
