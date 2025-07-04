@@ -455,6 +455,8 @@
     "Reputation": "Reputation",
     "Terms": "Terms",
     "Policies": "Policies"
-
+  },
+  "toys": {
+    "free": "FREE"
   }
 }

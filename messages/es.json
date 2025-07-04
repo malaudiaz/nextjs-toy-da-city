@@ -453,5 +453,8 @@
     "Reputation": "Reputación",
     "Terms": "Términos",
     "Policies": "Políticas"
+  },
+  "toys": {
+    "free": "GRATIS"
   }
 }
