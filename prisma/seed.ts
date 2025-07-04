@@ -6,46 +6,294 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const prisma = new PrismaClient();
-
+  
 async function main() {
-  await prisma.condition.createMany({
-    data: [
-      { id: 1, name: 'new_sealed', description: 'New - sealed', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true },
-      { id: 2, name: 'new_open_box', description: 'New-open box', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true },
-      { id: 3, name: 'like_new', description: 'Like New', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true },
-      { id: 4, name: 'acceptable', description: 'Acceptable', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true },
-      { id: 5, name: 'good', description: 'Good', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true },
-      { id: 6, name: 'to_repair', description: 'To repair or part', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true }
-    ],
-    skipDuplicates: true,
-  });
 
-  await prisma.status.createMany({
-    data: [
-      { id: 1, name: 'available', description: 'Available', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true }, 
-      { id: 2, name: 'reserved', description: 'Reserved', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true },
-      { id: 3, name: 'sold', description: 'Sold', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true },
-      { id: 4, name: 'canceled', description: 'Canceled', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true }
-    ],
-    skipDuplicates: true,
-  });
 
-  await prisma.category.createMany({
-    data: [
-      { id: 1, name: 'educational', description: 'Educational', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true },
-      { id: 2, name: 'electronic', description: 'Electronic', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true },
-      { id: 3, name: 'board_games', description: 'Board games', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true },
-      { id: 4, name: 'mobility', description: 'Mobility', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true },
-      { id: 5, name: 'for_babies', description: 'For babies', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true },
-      { id: 6, name: 'stuffed_animals', description: 'Stuffed animals and dolls', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true },
-      { id: 7, name: 'rare_toys', description: 'Rare Toys', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true },
-      { id: 8, name: 'action_figures', description: 'Action figures', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true },
-      { id: 9, name: 'vintage', description: 'Vintage', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true },
-    ], 
-    skipDuplicates: true,
-  });
+  await prisma.$transaction(async (tx) => {
 
-  await prisma.toy.createMany({
+    await prisma.translation.deleteMany()
+    await prisma.language.deleteMany()
+  
+    await prisma.commentsLikes.deleteMany()
+    await prisma.commentsComments.deleteMany()
+    await prisma.toyLikes.deleteMany()
+    await prisma.toyComments.deleteMany()
+    await prisma.media.deleteMany()
+    await prisma.toy.deleteMany()
+  
+    await prisma.category.deleteMany()
+    await prisma.condition.deleteMany()
+    await prisma.status.deleteMany()
+
+    await prisma.language.createMany({
+      data: [
+        { id: 'en', code: 'en', name: 'English' },
+        { id: 'es', code: 'es', name: 'Español' },
+        { id: 'fr', code: 'fr', name: 'Francés' },
+      ],
+      skipDuplicates: true,
+    })
+
+          
+    // Nomenclador de Condiciones del Juguete
+    await tx.condition.create({
+      data: {
+        id: 1, name: 'new_sealed', description: 'New sealed', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'New sealed', languageId: 'en'},
+            {key: 'name', value: 'Nuevo - sellado', languageId: 'es' },
+            {key: 'name', value: 'Neuf - scellé', languageId: 'fr'}]
+        }
+      }
+    })
+
+    await tx.condition.create({
+      data: {
+        id: 2, name: 'new_open_box', description: 'New open box', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'New open box', languageId: 'en'},
+            {key: 'name', value: 'Nuevo - Caja abierta', languageId: 'es'},
+            {key: 'name', value: 'Nouvelle boîte ouverte', languageId: 'fr'}]
+        }
+      }
+    })
+
+    await tx.condition.create({
+      data: {
+        id: 3, name: 'like_new', description: 'Like new',  userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'like_new', languageId: 'en'},
+            {key: 'name', value: 'Como nuevo', languageId: 'es'},
+            {key: 'name', value: 'comme_nouvea', languageId: 'fr'}
+          ]
+        }
+      }
+    })
+
+    await tx.condition.create({
+      data: {
+        id: 4, name: 'acceptable', description: 'Acceptable', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'acceptable', languageId: 'en'},
+            {key: 'name', value: 'Aceptable', languageId: 'es'},
+            {key: 'name', value: 'Acceptable', languageId: 'fr'}
+          ]
+        }
+      }
+    })
+
+    await tx.condition.create({
+      data: {
+        id: 5, name: 'good', description: 'Good', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'Good', languageId: 'en'},
+            {key: 'name', value: 'Bueno', languageId: 'es'},
+            {key: 'name', value: 'Bien', languageId: 'fr'}
+          ]
+        }
+      }
+    })
+
+    await tx.condition.create({
+      data: {
+        id: 6, name: 'to_repair', description: 'To repair', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'To repair', languageId: 'en'},
+            {key: 'name', value: 'Para reparar', languageId: 'es'},
+            {key: 'name', value: 'à_réparer', languageId: 'fr'}
+          ]
+        }
+      }
+    })
+
+    // Nomenclador de Estados del Juguete del Juguete
+    await tx.status.create({
+      data: {
+        id: 1, name: 'available', description: 'available', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'Available', languageId: 'en'},
+            {key: 'name', value: 'Disponible', languageId: 'es'},
+            {key: 'name', value: 'Available', languageId: 'fr'}
+          ]
+        }
+      }
+    })
+
+    await tx.status.create({
+      data: {
+        id: 2, name: 'reserved', description: 'Reserved', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'Reserved', languageId: 'en'},
+            {key: 'name', value: 'Reservado', languageId: 'es'},
+            {key: 'name', value: 'Reserved', languageId: 'fr'}
+          ]
+        }
+      }
+    })
+
+    await tx.status.create({
+      data: {
+        id: 3, name: 'sold', description: 'Sold', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'Sold', languageId: 'en'},
+            {key: 'name', value: 'Vendido', languageId: 'es'},
+            {key: 'name', value: 'Sold', languageId: 'fr'}
+          ]
+        }
+      }
+    })
+
+    await tx.status.create({
+      data: {
+        id: 4, name: 'canceled', description: 'Canceled', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'Canceled', languageId: 'en'},
+            {key: 'name', value: 'Cancelado', languageId: 'es'},
+            {key: 'name', value: 'Canceled', languageId: 'fr'}
+          ]
+        }
+      }
+    })
+
+
+    // // Nomenclador de Categorias del Juguete
+    await tx.category.create({
+      data: {
+        id: 1, name: 'educational', description: 'Educational',
+        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'Educational', languageId: 'en'},
+            {key: 'name', value: 'Educacional', languageId: 'es'},
+            {key: 'name', value: 'Pédagogique', languageId: 'fr'}
+          ]
+        }
+      }
+    })
+
+    await tx.category.create({
+      data: {
+        id: 2, name: 'electronic', description: 'Electronic', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'Electronic', languageId: 'en'},
+            {key: 'name', value: 'Electrónicos', languageId: 'es'},
+            {key: 'name', value: 'Electronic', languageId: 'fr'}
+          ]
+        }
+      }
+    })
+
+    await tx.category.create({
+      data: {
+        id: 3, name: 'board_games', description: 'Board games', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'Board games', languageId: 'en'},
+            {key: 'name', value: 'Electrónicos', languageId: 'es'},
+            {key: 'name', value: 'board_games', languageId: 'fr'}
+          ]
+        }
+      }
+    })
+
+    await tx.category.create({
+      data: {
+        id: 4, name: 'mobility', description: 'Mobility', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'Mobility', languageId: 'en'},
+            {key: 'name', value: 'mobility', languageId: 'es'},
+            {key: 'name', value: 'mobility', languageId: 'fr'}
+          ]
+        }
+      }
+    })
+
+    await tx.category.create({
+      data: {
+        id: 5, name: 'for_babies', description: 'For babies', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'For babies', languageId: 'en'},
+            {key: 'name', value: 'Para Bebes', languageId: 'es'},
+            {key: 'name', value: 'for babies', languageId: 'fr'}
+          ]
+        }
+      }
+    })
+
+    await tx.category.create({
+      data: {
+        id: 6, name: 'stuffed_animals', description: 'Stuffed animals', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'Stuffed animals', languageId: 'en'},
+            {key: 'name', value: 'Stuffed animals', languageId: 'es'},
+            {key: 'name', value: 'Stuffed animals', languageId: 'fr'}
+          ]
+        }
+      }
+    })
+
+    
+    await tx.category.create({
+      data: {
+        id: 7, name: 'rare_toys', description: 'Rare toys', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'Rare Toys', languageId: 'en'},
+            {key: 'name', value: 'Juguetes Raros', languageId: 'es'},
+            {key: 'name', value: 'Rare Toys', languageId: 'fr'}
+          ]
+        }
+      }
+    })
+
+    await tx.category.create({
+      data: {
+        id: 8, name: 'action_figures', description: 'Action Figures', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'Action Figures', languageId: 'en'},
+            {key: 'name', value: 'Action Figures', languageId: 'es'},
+            {key: 'name', value: 'Action Figures', languageId: 'fr'}
+          ]
+        }
+      }
+    })
+
+    await tx.category.create({
+      data: {
+        id: 9, name: 'vintage', description: 'vintage', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        translations: {
+          create: [
+            {key: 'name', value: 'Vintage', languageId: 'en'},
+            {key: 'name', value: 'vintage', languageId: 'es'},
+            {key: 'name', value: 'Vintage', languageId: 'fr'}
+          ]
+        }
+      }
+    })
+
+  })
+
+  await prisma.$transaction(async (tx) => {
+
+    
+    //Session de los Juguetes
+    await prisma.toy.createMany({
     data: [
       { id: 'toy_001',
         title: '3 Pack Airplane Launcher Toys, 2 Flight Modes LED Foam Glider Catapult Plane, Outdoor Flying Toy for Kids, \
@@ -238,6 +486,8 @@ async function main() {
     ],
     skipDuplicates: true,
   });
+
+  })
 }
 
 main()

@@ -48,6 +48,14 @@ export async function GET(request: NextRequest) {
   
   const t = await getTranslations("Toy.errors");
 
+  const url = request.url || ''
+
+  // const userLanguageCode = 'en'
+
+  const lang = url.search('/condition')
+
+  const userLanguageCode = url.substring(lang-6, lang-4) 
+
   try {
     const { searchParams } = new URL(request.url!)
 
@@ -91,7 +99,33 @@ export async function GET(request: NextRequest) {
     // Consulta base
     const query = {
       where,
-      include: { media: true },
+      include: { 
+        media: true,
+        category: {
+          include: {
+            translations: {
+              where: {languageId: userLanguageCode, key: 'name'},
+              select: {value: true}
+            }
+          }  
+        }, 
+        condition: {
+          include: {
+            translations: {
+              where: {languageId: userLanguageCode, key: 'name' },
+              select: {value: true}
+            }
+          }  
+        }, 
+        status: {
+          include: {
+            translations: {
+              where: {languageId: userLanguageCode, key: 'name'},
+              select: {value: true}
+            }
+          }  
+        }, 
+      },
       skip: (pagination.page - 1) * pagination.limit,
       take: pagination.limit
     }
@@ -101,7 +135,7 @@ export async function GET(request: NextRequest) {
       prisma.toy.findMany(query),
       prisma.toy.count({ where })
     ])
-
+    
     // Filtro por ubicación (post-query por simplicidad)
     let filteredToys = toys
     if (filters.locationRadius) {
@@ -117,9 +151,25 @@ export async function GET(request: NextRequest) {
       })
     }
 
+    const processedToys = filteredToys
+    .map(toy => {
+      const {category, condition, status, ...toyData } = toy
+      return {
+        ...toyData,
+        categoryName: category.translations[0]?.value || category.name,
+        conditionName: condition.translations[0]?.value || condition.name,
+        statusName: status.translations[0]?.value || status.name,
+        // Opcional: eliminar relaciones innecesarias
+        translations: undefined,
+        createdAt: undefined,
+        updatedAt: undefined,
+        isActive: undefined,
+        userId: undefined
+      }})
+    
     return NextResponse.json({
       success: true,
-      data: filteredToys,
+      data: processedToys, //filteredToys,
       pagination: {
         total: totalCount,
         totalPages: Math.ceil(totalCount / pagination.limit),

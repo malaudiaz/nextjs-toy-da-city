@@ -5,14 +5,32 @@ import { getTranslations } from "next-intl/server";
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/auth";
 
-
 // GET all conditions con paginación y búsqueda
 export async function GET(req: NextRequest) {
   
   const t = await getTranslations("Condition.errors");
+  // const userLanguageCode = 'en'
 
   try {
     const { searchParams } = new URL(req.url!)
+
+    const url = req.url || ''
+
+    const lang = url.search('/condition')
+
+    const userLanguageCode = url.substring(lang-6, lang-4) 
+
+    console.log(userLanguageCode);
+
+    console.log('***********************')
+    
+    const languageExists = await prisma.language.findUnique({
+      where: { code: userLanguageCode }
+    });
+
+    if (!languageExists) {
+      throw new Error('Language ${userLanguageCode} not supported');
+    }
 
     const pagination = PaginationSchema.parse({
       page: parseInt(searchParams.get('page') || '1'),
@@ -24,6 +42,17 @@ export async function GET(req: NextRequest) {
         skip: (pagination.page - 1) * pagination.limit,
         take: pagination.limit,
         orderBy: { createdAt: "desc" },
+        include: {translations: 
+          {
+            where: {
+              language: { code: userLanguageCode },
+              key: "name" 
+            },
+            select: {
+              value: true
+            }
+          }
+        }, 
         where: {
           isActive: true
         }        
@@ -31,9 +60,16 @@ export async function GET(req: NextRequest) {
       prisma.condition.count(),
     ]);
 
+    const result_condition = condition.map(condition => ({
+      id: condition.id, name: condition.translations[0]?.value || condition.name,
+      description: condition.description, userId: condition.userId
+    })
+
+    )
+    
     return NextResponse.json({
       status: 200,
-      data: condition,
+      data: result_condition,
       meta: {
         total,
         page: pagination.page,

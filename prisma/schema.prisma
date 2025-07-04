@@ -7,6 +7,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Language {
+  id          String       @id @default(uuid())
+  code        String       @unique // e.g.: "en", "es", "fr"
+  name        String
+  translations Translation[]
+  createdAt   DateTime     @default(now())
+}
+
+model Translation {
+  id          String      @id @default(uuid())
+  key         String      // Field to translate
+  value       String      // Translated text
+  
+  language    Language    @relation(fields: [languageId], references: [id])
+  languageId  String
+
+  category    Category?   @relation(fields: [categoryId], references: [id])
+  categoryId  Int?
+
+  condition   Condition?  @relation(fields: [conditionId], references: [id])
+  conditionId Int?
+
+  status      Status?     @relation(fields: [statusId], references: [id])
+  statusId    Int?
+
+  createdAt   DateTime    @default(now())
+
+  // Asegurar que cada traducción pertenezca a solo una entidad
+  //@@assert(
+  //  (categoryId != null && conditionId == null && statusId == null) ||
+  //  (categoryId == null && conditionId != null && statusId == null) ||
+  //  (categoryId == null && conditionId == null && statusId != null)
+  //)
+
+  @@unique([languageId, key, categoryId, conditionId, statusId])
+
+}
+
 model Category {
   id          Int     @id @default(autoincrement())
   name        String  @unique
@@ -15,6 +53,7 @@ model Category {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  translations Translation[]
   toys        Toy[] 
 }
 
@@ -26,6 +65,7 @@ model Status {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  translations Translation[]
   toys        Toy[]
 }
 
@@ -37,6 +77,7 @@ model Condition {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  translations Translation[]
   toys        Toy[]
 }
 
@@ -46,12 +87,16 @@ model Toy {
   description     String
   price           Float
   location        String
+
   category        Category @relation(fields: [categoryId], references: [id])
   categoryId      Int
+
   status          Status    @relation(fields: [statusId], references: [id])
   statusId        Int
+
   condition       Condition    @relation(fields: [conditionId], references: [id])
   conditionId     Int
+  
   userId          String
   forSell         Boolean   @default(true)
   forGifts        Boolean   @default(true)
