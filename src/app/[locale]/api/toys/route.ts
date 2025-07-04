@@ -44,20 +44,19 @@ function haversineDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
 
 
 // GET all toys con paginación y búsqueda
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ locale: string }> }
+) {
   
+  const { locale } = await params;
+
   const t = await getTranslations("Toy.errors");
-
-  const url = request.url || ''
-
-  // const userLanguageCode = 'en'
-
-  const lang = url.search('/condition')
-
-  const userLanguageCode = url.substring(lang-6, lang-4) 
 
   try {
     const { searchParams } = new URL(request.url!)
+
+    const userLanguageCode = locale
 
     const pagination = PaginationSchema.parse({
       page: parseInt(searchParams.get('page') || "1"),
@@ -156,9 +155,12 @@ export async function GET(request: NextRequest) {
       const {category, condition, status, ...toyData } = toy
       return {
         ...toyData,
-        categoryName: category.translations[0]?.value || category.name,
-        conditionName: condition.translations[0]?.value || condition.name,
-        statusName: status.translations[0]?.value || status.name,
+        categoryName: category.name,
+        categoryDescription: category.translations[0]?.value || category.name,
+        conditionName: condition.name,
+        conditionDescription: condition.translations[0]?.value || condition.name,
+        statusName: status.name,
+        statusDescription: status.translations[0]?.value || status.name,
         // Opcional: eliminar relaciones innecesarias
         translations: undefined,
         createdAt: undefined,

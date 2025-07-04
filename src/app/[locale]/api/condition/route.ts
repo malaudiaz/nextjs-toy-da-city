@@ -13,19 +13,12 @@ export async function GET(
   
   const { locale } = await params;
 
-  console.log(locale);
-
   const t = await getTranslations("Condition.errors");
-  // const userLanguageCode = 'en'
-
+  
   try {
     const { searchParams } = new URL(req.url!)
-
-    const url = req.url || ''
-
-    const lang = url.search('/condition')
-
-    const userLanguageCode = url.substring(lang-6, lang-4) 
+    
+    const userLanguageCode = locale
    
     const languageExists = await prisma.language.findUnique({
       where: { code: userLanguageCode }
