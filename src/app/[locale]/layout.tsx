@@ -9,11 +9,11 @@ import { Inter } from "next/font/google";
 
 import "../globals.css";
 
-import { esES } from "@clerk/localizations";
 import { dark } from "@clerk/themes";
 import Navbar from "@/components/shared/header/Navbar";
 import Footer from "@/components/shared/footer/Footer";
 import ScrollToTop from "@/components/shared/ScrollToTop";
+import { clerkLocalizations } from "@/lib/clerkLocalization";
 
  const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -60,9 +60,12 @@ export default async function RootLayout({
     notFound();
   }
 
+  // Selecciona la localización de Clerk basada en el `locale`
+  const localization = clerkLocalizations[locale as keyof typeof clerkLocalizations];  
+
   return (
     <html lang={locale} className={`${inter.variable} ${poppins.variable}`} suppressHydrationWarning>
-      <ClerkProvider localization={esES} appearance={{ baseTheme: dark }}>
+      <ClerkProvider localization={localization} appearance={{ baseTheme: dark }}>
         <body className={`min-h-screen flex flex-col antialiased font-inter`}>
           <NextIntlClientProvider>
             <Navbar />

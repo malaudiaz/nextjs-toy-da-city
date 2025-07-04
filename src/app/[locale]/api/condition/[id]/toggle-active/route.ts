@@ -7,8 +7,13 @@ const prisma = new PrismaClient()
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string, locale: string }> }
 ) {
+
+  const { locale } = await params;
+
+  console.log(locale);
+
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
   if (!success && !userId) {

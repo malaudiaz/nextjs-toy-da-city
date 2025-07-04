@@ -6,8 +6,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/auth";
 
 // GET all conditions con paginación y búsqueda
-export async function GET(req: NextRequest) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ locale: string }> }
+) {
   
+  const { locale } = await params;
+
+  console.log(locale);
+
   const t = await getTranslations("Condition.errors");
   // const userLanguageCode = 'en'
 
@@ -19,11 +26,7 @@ export async function GET(req: NextRequest) {
     const lang = url.search('/condition')
 
     const userLanguageCode = url.substring(lang-6, lang-4) 
-
-    console.log(userLanguageCode);
-
-    console.log('***********************')
-    
+   
     const languageExists = await prisma.language.findUnique({
       where: { code: userLanguageCode }
     });
