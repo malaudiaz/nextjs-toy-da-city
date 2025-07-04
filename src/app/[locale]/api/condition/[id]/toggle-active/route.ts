@@ -10,7 +10,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string, locale: string }> }
 ) {
 
-  const { locale } = await params;
+  const { id, locale } = await params;
 
   console.log(locale);
 
@@ -27,7 +27,6 @@ export async function PATCH(
   }
 
   const t = await getTranslations("Toy.errors");
-  const { id } = await params;
 
   try {
     // 1. Verificar si la condicion existe
