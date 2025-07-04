@@ -1,15 +1,15 @@
 import React from "react";
 import Image from "next/image";
 import { Heart } from "lucide-react";
-import StatusBadge from "./StatusBadge";
 import Link from "next/link";
+import ConditionBadge from "./ConditionBadge";
 
 type ProductCardProps = {
   id:string
   description: string;
   image?: string;
   price: number;
-  conditionId: number;
+  conditionDescription: string;
   location: string;
 };
 
@@ -19,7 +19,7 @@ const ProductCard = ({
   image,
   price,
   location,
-  conditionId,
+  conditionDescription,
 }: ProductCardProps) => {
   return (
     <Link
@@ -56,7 +56,7 @@ const ProductCard = ({
           </button>
         </div>
 
-        <StatusBadge status={conditionId} />
+        <ConditionBadge condition={conditionDescription} />
 
         {/* Descripción truncada */}
         <p className="line-clamp-2 min-h-[3em] text-gray-600 mb-2 flex-grow">

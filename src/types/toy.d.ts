@@ -26,6 +26,9 @@ export interface Toy {
   likes: ToyLikes[]
   comments: ToyComments[]
   media: Media[]
+  categoryDescription: string
+  conditionDescription: string
+  statusDescription: string
 }
 
 

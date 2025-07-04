@@ -17,7 +17,7 @@ const ProductList = ({ toys }: ProductCardProps) => {
             image={toy.media[0]?.fileUrl}
             price={toy.price}
             location={toy.location}
-            conditionId={toy.conditionId}
+            conditionDescription={toy.conditionDescription}
             id={toy.id}
           />
         ))}
