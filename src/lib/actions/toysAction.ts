@@ -11,13 +11,14 @@ export type Filters = {
     lat: number;
     lng: number;
     radius: number;
-  }
+  };
+  locale?: string;
 }
 
-export async function getToys(page: number, perPage: number, filters: Filters) {
+export async function getToys(page: number, perPage: number,locale: string, filters: Filters) {
   const start = page - 1 + 1 || 1;
 
-  const url = new URL(`${BACKEND_URL}/api/toys`);
+  const url = new URL(`${BACKEND_URL}/${locale}/api/toys`);
   url.searchParams.set("page", String(start));
   url.searchParams.set('limit', String(perPage));
 

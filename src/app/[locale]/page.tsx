@@ -6,28 +6,47 @@ import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import { Filters, getToys } from "@/lib/actions/toysAction";
 import { Suspense } from "react";
 
+type Props = {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+  params: Promise<{ locale: string }>;
+};
 
-export default async function Home({ searchParams }: { searchParams: Promise<{ [key: string]: string | undefined }> }) {
+export default async function Home({ searchParams, params }: Props) {
   const resolvedSearchParams = await searchParams;
+  const { locale } = await params;
 
   const currentPage = parseInt((resolvedSearchParams.page as string) || "1");
-  const postsPerPage = parseInt((resolvedSearchParams.pageSize as string) || "8"
+  const postsPerPage = parseInt(
+    (resolvedSearchParams.pageSize as string) || "8"
   );
+
   const filters: Filters = {
     search: (resolvedSearchParams.search as string) || "",
-    minPrice: resolvedSearchParams.minPrice ? parseFloat(resolvedSearchParams.minPrice) : undefined,
-    maxPrice: resolvedSearchParams.maxPrice ? parseFloat(resolvedSearchParams.maxPrice) : undefined,
-    locationRadius: resolvedSearchParams.lat && resolvedSearchParams.lng && resolvedSearchParams.radius
-      ? {
-          lat: Number(resolvedSearchParams.lat),
-          lng: Number(resolvedSearchParams.lng),
-          radius: Number(resolvedSearchParams.radius)
-        }
-      : undefined
-  }
+    minPrice: resolvedSearchParams.minPrice
+      ? parseFloat(resolvedSearchParams.minPrice)
+      : undefined,
+    maxPrice: resolvedSearchParams.maxPrice
+      ? parseFloat(resolvedSearchParams.maxPrice)
+      : undefined,
+    locationRadius:
+      resolvedSearchParams.lat &&
+      resolvedSearchParams.lng &&
+      resolvedSearchParams.radius
+        ? {
+            lat: Number(resolvedSearchParams.lat),
+            lng: Number(resolvedSearchParams.lng),
+            radius: Number(resolvedSearchParams.radius),
+          }
+        : undefined,
+  };
 
-  const { totalPosts } = await getToys(currentPage, postsPerPage, filters);
-  const toysPromise = getToys(currentPage, postsPerPage, filters).then(
+  const { totalPosts } = await getToys(
+    currentPage,
+    postsPerPage,
+    locale,
+    filters
+  );
+  const toysPromise = getToys(currentPage, postsPerPage, locale, filters).then(
     (data) => ({
       data: data.toys,
     })
@@ -37,16 +56,19 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
     <>
       <BannerCarousel />
       <div className="w-full px-3">
-        <FilterBar/>
+        <FilterBar />
       </div>
-      <Suspense key={filters.search} fallback={<SkeletonProductCard count={8} />}>
+      <Suspense
+        key={filters.search}
+        fallback={<SkeletonProductCard count={8} />}
+      >
         <Products toysPromise={toysPromise} />
       </Suspense>
       <div className="mt-8">
         <PaginationWithLinks
           page={currentPage}
           pageSize={postsPerPage}
-          totalCount={totalPosts }
+          totalCount={totalPosts}
         />
       </div>
     </>
