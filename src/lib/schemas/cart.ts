@@ -2,14 +2,20 @@
 import { z } from "zod";
 
 export const CartItemSchema = z.object({
-  toyId: z.string().uuid("Invalid toy ID"),
+  toyId: z.string(),   //toyId: z.string().uuid("Invalid toy ID"), no lo puedo poner con el seed que tengo
   quantity: z.number().int().positive("The amount must be positive").default(1),
-  selected: z.boolean().default(true)
+  selected: z.union([
+    z.boolean(),
+    z.string().transform(val => val === 'true')
+  ]).default(true)
 });
 
 export const UpdateCartItemSchema = z.object({
   quantity: z.number().int().positive(),
-  selected: z.boolean()
+  selected: z.union([
+    z.boolean(),
+    z.string().transform(val => val === 'true')
+  ]).default(true)
 });
 
 export const PaginationSchema = z.object({

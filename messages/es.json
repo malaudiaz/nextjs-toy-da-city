@@ -82,7 +82,9 @@
       "ServerError": "Error interno del servidor",
       "NotFound": "Cart no encontrado",
       "UpdateError": "Error actualizando Carrito del usuario",
-      "DeleteError": "Error eliminando Carrito del usuario"
+      "DeleteError": "Error eliminando Carrito del usuario",
+      "ToyNotFound": "Juguete no encontrado",
+      "FailedCreateCart": "Fallo al crear el carrito del usuario"
     }
   },
   "terms": {

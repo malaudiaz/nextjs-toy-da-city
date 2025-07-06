@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   const t = await getTranslations("Cart.errors");
 
   try {
-    const { success, userId, error, code } = await getAuthUserFromRequest(req);
+    const { userId} = await getAuthUserFromRequest(req);
 
     const { searchParams } = new URL(req.url!)
 
@@ -69,26 +69,27 @@ export async function POST(req: Request) {
 
   const t = await getTranslations("Cart.errors");
 
-  const contentType = req.headers.get('Content-Type');
-
-  if (contentType !== 'application/json') {
-    return NextResponse.json(
-      { error: 'Content-Type must be application/json' },
-      { status: 415 },
-    );
-  }
-
   try {
     const body = await req.json();
 
-    const selectedItem = body.get("selected") || "false"
-  
-    const validatedData = CartItemSchema.parse(body);
+    console.log('valores en body');
+    console.log(body.toyId);
+
+    const validatedData = CartItemSchema.parse({
+      toyId: body.toyId,
+      quantity: Number(body.quantity) || 1,
+      selected: typeof body.selected === 'string' 
+        ? body.selected === 'true' 
+        : Boolean(body.selected)
+    });
+
+    console.log('valores');
+    console.log(validatedData.toyId);
 
     const toy = await prisma.toy.findUnique({ where: { id: validatedData.toyId } });
 
     if (!toy) {
-      return NextResponse.json({ error: 'Toy not found'}, { status: 404 });
+      return NextResponse.json({ error: 'ToyNotFound'}, { status: 404 });
     }
 
     const existingCart = await prisma.cart.findUnique({
@@ -103,7 +104,7 @@ export async function POST(req: Request) {
           create: {
             toyId: validatedData.toyId, 
             quantity: validatedData.quantity,
-            selected: selectedItem,
+            selected: validatedData.selected,
             priceAtAddition: toy.price
           }
         }
@@ -115,12 +116,12 @@ export async function POST(req: Request) {
             create: {
               toyId: validatedData.toyId, 
               quantity: validatedData.quantity,
-              selected: selectedItem,
+              selected: validatedData.selected,
               priceAtAddition: toy.price
             },
             update: {
               quantity: { increment: validatedData.quantity },
-              selected: selectedItem,
+              selected: validatedData.selected,
               priceAtAddition: toy.price
             }
           }
@@ -148,7 +149,7 @@ export async function POST(req: Request) {
 
     // Otros errores (ej: fallo en Prisma)
     return NextResponse.json(
-      { error: t("Failed to create cart") },
+      { error: t("FailedCreateCart") },
       { status: 500 }
     );
   }

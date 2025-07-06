@@ -199,14 +199,14 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       )    
   }
 
-  //const t = await getTranslations("Toy.errors");
+  const t = await getTranslations("Toy.errors");
   const clonedRequest = request.clone();
   let formData: FormData;
-
   
-
   try {
     await ensureUploadsDirExists()
+
+    // const userId = "user_2wY8ZRoOrheojD7zQXtwk9fg00x"
 
     formData = await clonedRequest.formData();
 
@@ -223,11 +223,10 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       location: formData.get('location'),
       price: Number(formData.get('price')),
       categoryId: Number(formData.get('categoryId')),
-      statusId: Number(formData.get('statusId')),
       conditionId: Number(formData.get('conditionId')),
-      forSell: stringforSell === "true",
-      forGifts: stringforGifts === "true",
-      forChanges: stringforChanges === "true"
+      forSell: formData.get("forSell"),  // stringforSell === "true",
+      forGifts: formData.get("forGifts"), //stringforGifts === "true",
+      forChanges: formData.get("forChanges"), //stringforChanges === "true"
     })
 
     const files = formData.getAll('files') as Blob[]
@@ -255,15 +254,27 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
 
     // Crear el primer toy
     // const userId = 'user_2wY8ZRoOrheojD7zQXtwk9fg00x'
+
+    const statusAvailable = await prisma.status.findUnique({ where: { name: "available" } });
+    if (!statusAvailable) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: `StatusNotFound.` 
+        },
+        { status: 400 }
+      )
+    }
+
     const toy = await prisma.toy.create({
       data: {
         title: toyData.title,
         description: toyData.description,
         price: toyData.price,
         location:toyData.location,
-        userId: userId!,
+        sellerId: userId!,
         categoryId: toyData.categoryId,
-        statusId: toyData.statusId,
+        statusId: statusAvailable.id,
         conditionId: toyData.conditionId,
         forSell: toyData.forSell,
         forGifts: toyData.forGifts,

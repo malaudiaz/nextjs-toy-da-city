@@ -82,7 +82,9 @@
       "ServerError": "Internal Server Error",
       "NotFound": "Cart not found",
       "UpdateError": "Error updating cart",
-      "DeleteError": "Error deleting cart"
+      "DeleteError": "Error deleting cart",
+      "ToyNotFound": "Toy Not Found",
+      "FailedCreateCart": "Failed to create cart"
     }
   },
   "terms": {

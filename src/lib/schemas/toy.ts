@@ -18,10 +18,18 @@ export const ToySchema = z.object({
   }),
   categoryId: z.number().min(0).max(10000),
   conditionId: z.number().min(0).max(10000),
-  statusId: z.number().min(0).max(10000),
-  forSell: z.boolean().default(true),
-  forGifts: z.boolean().default(false),
-  forChanges: z.boolean().default(false), 
+  forSell: z.union([
+    z.boolean(),
+    z.string().transform(val => val === 'true')
+  ]).default(true),
+  forGifts: z.union([
+    z.boolean(),
+    z.string().transform(val => val === 'true')
+  ]).default(true),
+  forChanges: z.union([
+    z.boolean(),
+    z.string().transform(val => val === 'true')
+  ]).default(true),
   media: z.array(z.string().url()).optional(),
 })
 
@@ -49,7 +57,6 @@ export const toyFormSchema = z.object({
   description: z.string().min(10, 'The description must have at least 10 characters').max(1000),
   price: z.number().min(0, 'The price cannot be negative').optional(),
   categoryId: z.number().int('Must be an integer').min(1, 'You must select a category'),
-  statusId: z.number().int('Must be an integer').min(1, 'You must select a status'),
   conditionId: z.number().int('Must be an integer').min(1, 'You must select a condition'),
   forSale: z.boolean(),
   forGift: z.boolean(),
