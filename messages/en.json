@@ -5,6 +5,16 @@
     "subtitle": "Little Toys Pack",
     "description": "250 colorful pieces, includes manual and 5 buildings models..."
   },
+  "user": {
+    "errors": {
+      "InvalidParams": "Invalid Params",
+      "ValidationsErrors": "Validations Errors",
+      "ServerError": "Internal Server Error",
+      "NotFound": "User not found",
+      "UpdateError": "Error updating user",
+      "DeleteError": "Error deleting user"
+    }
+  },
   "Categories": {
     "errors": {
       "InvalidParams": "Invalid Params",
@@ -63,6 +73,16 @@
       "NotFound": "Likes not found",
       "UpdateError": "Error updating likes",
       "DeleteError": "Error deleting likes"
+    }
+  },
+  "Cart": {
+    "errors": {
+      "InvalidParams": "Invalid Params",
+      "ValidationsErrors": "Validations Errors",
+      "ServerError": "Internal Server Error",
+      "NotFound": "Cart not found",
+      "UpdateError": "Error updating cart",
+      "DeleteError": "Error deleting cart"
     }
   },
   "terms": {

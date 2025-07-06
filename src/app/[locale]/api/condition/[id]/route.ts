@@ -3,14 +3,14 @@ import { NextResponse } from "next/server";
 import { NextRequest } from 'next/server';
 import { z } from "zod";
 import prisma from "@/lib/prisma";
-import { CategorySchema } from "@/lib/schemas/category";
+import { ConditionSchema } from "@/lib/schemas/condition";
 import { getTranslations } from "next-intl/server";
 import { Prisma } from "@prisma/client";
-import { CategoryUpdateSchema } from "@/lib/schemas/category";
+import { ConditionUpdateSchema } from "@/lib/schemas/condition";
 import { getAuthUserFromRequest } from "@/lib/auth";
 
 
-// Obtener una categotia  por ID
+// Obtener una condicion por su ID
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -24,12 +24,12 @@ export async function GET(
   const { id } = await params;
 
   try {
-    const category = await prisma.category.findUnique({
+    const status = await prisma.condition.findUnique({
       where: { id: Number(id) },
     });
 
-    if (!category) {
-      return NextResponse.json({ error: "Category not found" }, { status: 404 });
+    if (!status) {
+      return NextResponse.json({ error: "Condition not found" }, { status: 404 });
     }
 
     return NextResponse.json(status);
@@ -52,7 +52,7 @@ export async function PUT(
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const t = await getTranslations("Categories.errors");
+  const t = await getTranslations("Condition.errors");
 
   const { id } = await params; // Safe to use
 
@@ -60,22 +60,22 @@ export async function PUT(
     // Validar ID
     if (!id || isNaN(Number(id))) {
       return NextResponse.json(
-        { error: t("InvalidCategoryID") },
+        { error: t("InvalidConditionID") },
         { status: 400 }
       );
     }
 
     // Obtener y validar cuerpo
     const body = await req.json();
-    const validatedData = CategorySchema.parse(body);
+    const validatedData = ConditionSchema.parse(body);
 
-    // Actualizar categoría
-    const updatedCategory = await prisma.category.update({
+    // Actualizar condition
+    const updatedCondition = await prisma.condition.update({
       where: { id: Number(id) },
       data: validatedData,
     });
 
-    return NextResponse.json({ data: updatedCategory }, { status: 200 });
+    return NextResponse.json({ data: updatedCondition }, { status: 200 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -109,24 +109,24 @@ export async function DELETE(
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const t = await getTranslations("Categories.errors");
+  const t = await getTranslations("Condition.errors");
 
   const { id } = await params; // Safe to use
 
   try {
     if (!id || isNaN(Number(id))) {
       return NextResponse.json(
-        { error: t("InvalidCategoryId") },
+        { error: t("InvalidConditionId") },
         { status: 400 }
       );
     }
 
-    await prisma.category.delete({
+    await prisma.condition.delete({
       where: { id: Number(id), isActive: false },
     });
 
     return NextResponse.json(
-      { message: t("Deleted Category Successfully") },
+      { message: t("Deleted Condition Successfully") },
       { status: 200 }
     );
   } catch (error) {
@@ -152,13 +152,13 @@ export async function PATCH(
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const t = await getTranslations("Categories.errors");
+  const t = await getTranslations("Condition.errors");
 
   const { id } = await params; // Safe to use
 
   if (!id || isNaN(Number(id))) {
     return NextResponse.json(
-      { error: t("InvalidCategoryId") },
+      { error: t("InvalidConditionId") },
       { status: 400 }
     );
   }
@@ -168,15 +168,15 @@ export async function PATCH(
     const body = await req.json();
 
     // 3. Validación parcial (schema diferente al POST)
-    const validatedData = CategoryUpdateSchema.parse(body);
+    const validatedData = ConditionUpdateSchema.parse(body);
 
     // 4. Actualizar solo campos proporcionados
-    const updatedCategory = await prisma.category.update({
+    const updatedCondition = await prisma.condition.update({
       where: { id: Number(id) },
       data: validatedData, // Solo actualiza los campos enviados
     });
 
-    return NextResponse.json(updatedCategory, { status: 200 });
+    return NextResponse.json(updatedCondition, { status: 200 });
   } catch (error) {
     // Manejo de errores específicos
     if (error instanceof z.ZodError) {
@@ -192,7 +192,7 @@ export async function PATCH(
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2025") {
         return NextResponse.json(
-          { error: "Categoría no encontrada" },
+          { error: "Condition no encontrada" },
           { status: 404 }
         );
       }

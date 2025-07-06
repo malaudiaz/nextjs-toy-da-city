@@ -5,6 +5,16 @@
     "subtitle": "Paquete de pequeños juguetes",
     "description": "250 piezas coloridas, incluye manual y 5 modelos de edificios..."
   },
+  "User": {
+    "errors": {
+      "InvalidParams": "Parámetros inválidos",
+      "ValidationsErrors": "Errores de validación",
+      "ServerError": "Error interno del servidor",
+      "NotFound": "Usuario no encontrada",
+      "UpdateError": "Error actualizando usuario",
+      "DeleteError": "Error eliminando usuario"
+    }
+  },
   "Categories": {
     "errors": {
       "InvalidParams": "Parámetros inválidos",
@@ -63,6 +73,16 @@
       "NotFound": "Me gusta no encontrado",
       "UpdateError": "Error actualizando Me gusta",
       "DeleteError": "Error eliminando Me gusta"
+    }
+  },
+  "Cart": {
+    "errors": {
+      "InvalidParams": "Parámetros inválidos",
+      "ValidationsErrors": "Errores de validación",
+      "ServerError": "Error interno del servidor",
+      "NotFound": "Cart no encontrado",
+      "UpdateError": "Error actualizando Carrito del usuario",
+      "DeleteError": "Error eliminando Carrito del usuario"
     }
   },
   "terms": {

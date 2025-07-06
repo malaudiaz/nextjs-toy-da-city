@@ -7,12 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id              String        @id @default(uuid())
+  name            String
+  email           String?       @unique
+  phone           String?
+  toysForSale     Toy[]         @relation("Seller")
+  purchaseHistory Transaction[] @relation("Buyer")
+  salesHistory    Transaction[] @relation("Seller") 
+  cart            Cart? 
+  reputation      Float?        @default(0)
+  isActive        Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
 model Language {
-  id          String       @id @default(uuid())
-  code        String       @unique // e.g.: "en", "es", "fr"
-  name        String
+  id           String       @id @default(uuid())
+  code         String       @unique // e.g.: "en", "es", "fr"
+  name         String
   translations Translation[]
-  createdAt   DateTime     @default(now())
+  createdAt    DateTime     @default(now())
 }
 
 model Translation {
@@ -34,77 +49,78 @@ model Translation {
 
   createdAt   DateTime    @default(now())
 
-  // Asegurar que cada traducción pertenezca a solo una entidad
-  //@@assert(
-  //  (categoryId != null && conditionId == null && statusId == null) ||
-  //  (categoryId == null && conditionId != null && statusId == null) ||
-  //  (categoryId == null && conditionId == null && statusId != null)
-  //)
-
   @@unique([languageId, key, categoryId, conditionId, statusId])
 
 }
 
 model Category {
-  id          Int     @id @default(autoincrement())
-  name        String  @unique
-  description String?
-  userId      String
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           Int     @id @default(autoincrement())
+  name         String  @unique
+  description  String?
+  userId       String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   translations Translation[]
-  toys        Toy[] 
+  toys         Toy[] 
 }
 
 model Status {
-  id          Int     @id @default(autoincrement())
-  name        String  @unique
-  description String?
-  userId      String
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           Int     @id @default(autoincrement())
+  name         String  @unique
+  description  String?
+  userId       String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   translations Translation[]
-  toys        Toy[]
+  toys         Toy[]
+  transactions Transaction[]
+
 }
 
 model Condition {
-  id          Int     @id @default(autoincrement())
-  name        String  @unique
-  description String?
-  userId      String
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           Int     @id @default(autoincrement())
+  name         String  @unique
+  description  String?
+  userId       String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   translations Translation[]
-  toys        Toy[]
+  toys         Toy[]
 }
 
+
 model Toy {
-  id              String    @id @default(uuid())
+  id              String      @id @default(uuid())
   title           String
   description     String
   price           Float
   location        String
 
-  category        Category @relation(fields: [categoryId], references: [id])
+  category        Category    @relation(fields: [categoryId], references: [id])
   categoryId      Int
 
-  status          Status    @relation(fields: [statusId], references: [id])
+  status          Status      @relation(fields: [statusId], references: [id])
   statusId        Int
 
-  condition       Condition    @relation(fields: [conditionId], references: [id])
+  condition       Condition   @relation(fields: [conditionId], references: [id])
   conditionId     Int
   
-  userId          String
-  forSell         Boolean   @default(true)
-  forGifts        Boolean   @default(true)
-  forChanges      Boolean   @default(true)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  isActive        Boolean   @default(true)
-  media           Media[]   // Relación uno a muchos con Media
+  seller          User        @relation("Seller", fields: [sellerId], references: [id])
+  sellerId        String
+
+  transactions    Transaction[]
+  cartItems       CartItem[] 
+
+  forSell         Boolean     @default(true)
+  forGifts        Boolean     @default(true)
+  forChanges      Boolean     @default(true)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  isActive        Boolean     @default(true)
+  media           Media[]     // Relación uno a muchos con Media
   likes           ToyLikes[]  
   comments        ToyComments[]   
 }
@@ -164,4 +180,51 @@ model CommentsComments {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Transaction {
+  id            String    @id @default(uuid())
+  toy           Toy       @relation(fields: [toyId], references: [id])
+  toyId         String
+  buyer         User      @relation("Buyer", fields: [buyerId], references: [id])
+  buyerId       String
+  seller        User      @relation("Seller", fields: [sellerId], references: [id]) 
+  sellerId      String    
+  price         Float
+  date          DateTime  @default(now())
+  status        Status      @relation(fields: [statusId], references: [id])
+  statusId      Int
+  paymentMethod String
+
+  wasSold       Boolean     @default(true)
+  wasGifts      Boolean     @default(true)
+  wasChanged    Boolean     @default(true)
+
+}
+
+model Cart {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  items       CartItem[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([userId]) // Un usuario tiene un solo carrito activo
+}
+
+model CartItem {
+  id          String    @id @default(uuid())
+  cartId      String
+  cart        Cart      @relation(fields: [cartId], references: [id])
+  toyId       String
+  toy         Toy       @relation(fields: [toyId], references: [id])
+  quantity    Int       @default(1)
+  addedAt     DateTime  @default(now())
+  selected    Boolean   @default(true) // Para seleccionar qué items comprar
+
+  // Precio en el momento de agregar al carrito (para evitar cambios)
+  priceAtAddition Float  
+
+  @@unique([cartId, toyId]) // Un juguete solo puede aparecer una vez en el carrito
 }

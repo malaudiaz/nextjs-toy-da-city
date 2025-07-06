@@ -1,46 +1,12 @@
-// app/api/categories/[id]/route.ts
-import { NextResponse } from "next/server";
-import { NextRequest } from 'next/server';
+// app/api/status/[id]/route.ts
+import { NextResponse, NextRequest } from "next/server";
 import { z } from "zod";
 import prisma from "@/lib/prisma";
-import { CategorySchema } from "@/lib/schemas/category";
+import { CartItemSchema } from "@/lib/schemas/cart";
 import { getTranslations } from "next-intl/server";
 import { Prisma } from "@prisma/client";
-import { CategoryUpdateSchema } from "@/lib/schemas/category";
+import { UpdateCartItemSchema } from "@/lib/schemas/cart";
 import { getAuthUserFromRequest } from "@/lib/auth";
-
-
-// Obtener una categotia  por ID
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
-
-  if (!success && !userId) {
-    return NextResponse.json({ error: error }, { status: code });
-  }
-
-  const { id } = await params;
-
-  try {
-    const category = await prisma.category.findUnique({
-      where: { id: Number(id) },
-    });
-
-    if (!category) {
-      return NextResponse.json({ error: "Category not found" }, { status: 404 });
-    }
-
-    return NextResponse.json(status);
-  } catch (error) {
-    console.log(error);
-    return NextResponse.json(
-      { error: "Failed to fetch status" },
-      { status: 500 }
-    );
-  }
-}
 
 export async function PUT(
   req: NextRequest,
@@ -52,30 +18,26 @@ export async function PUT(
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const t = await getTranslations("Categories.errors");
+  const t = await getTranslations("Cart.errors");
 
   const { id } = await params; // Safe to use
 
   try {
-    // Validar ID
-    if (!id || isNaN(Number(id))) {
-      return NextResponse.json(
-        { error: t("InvalidCategoryID") },
-        { status: 400 }
-      );
+    if (!id) {
+      return NextResponse.json({ error: t("InvalidId") }, { status: 400 });
     }
 
-    // Obtener y validar cuerpo
     const body = await req.json();
-    const validatedData = CategorySchema.parse(body);
+    const validatedData = UpdateCartItemSchema.parse(body);
 
-    // Actualizar categoría
-    const updatedCategory = await prisma.category.update({
-      where: { id: Number(id) },
+    const updatedItem = await prisma.cartItem.update({
+      where: { id: id, 
+               cart: {userId: userId} },
       data: validatedData,
+      include: { toy: true }
     });
 
-    return NextResponse.json({ data: updatedCategory }, { status: 200 });
+    return NextResponse.json({ data: updatedItem }, { status: 200 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -101,7 +63,7 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ itemId: string }> }
 ) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -109,24 +71,21 @@ export async function DELETE(
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const t = await getTranslations("Categories.errors");
+  const t = await getTranslations("Cart.errors");
 
-  const { id } = await params; // Safe to use
+  const { itemId } = await params; // Safe to use
 
   try {
-    if (!id || isNaN(Number(id))) {
-      return NextResponse.json(
-        { error: t("InvalidCategoryId") },
-        { status: 400 }
-      );
+    if (!itemId) {
+      return NextResponse.json({ error: t("InvalidId") }, { status: 400 });
     }
 
-    await prisma.category.delete({
-      where: { id: Number(id), isActive: false },
+    await prisma.cartItem.delete({
+      where: { id: itemId, cart: {userId: userId } },
     });
 
     return NextResponse.json(
-      { message: t("Deleted Category Successfully") },
+      { message: t("DeletedSuccessfully") },
       { status: 200 }
     );
   } catch (error) {
@@ -144,39 +103,36 @@ export async function DELETE(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ itemId: string }> }
 ) {
+
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
   if (!success && !userId) {
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const t = await getTranslations("Categories.errors");
+  const t = await getTranslations("Status.errors");
 
-  const { id } = await params; // Safe to use
-
-  if (!id || isNaN(Number(id))) {
-    return NextResponse.json(
-      { error: t("InvalidCategoryId") },
-      { status: 400 }
-    );
-  }
+  const { itemId } = await params; // Safe to use
 
   try {
-    // 2. Parsear cuerpo
+    if (!itemId) {
+      return NextResponse.json({ error: t("InvalidId") }, { status: 400 });
+    }
+
     const body = await req.json();
+    const validatedData = UpdateCartItemSchema.parse(body);
 
-    // 3. Validación parcial (schema diferente al POST)
-    const validatedData = CategoryUpdateSchema.parse(body);
-
-    // 4. Actualizar solo campos proporcionados
-    const updatedCategory = await prisma.category.update({
-      where: { id: Number(id) },
-      data: validatedData, // Solo actualiza los campos enviados
+    const updatedItem = await prisma.cartItem.update({
+      where: { id: itemId, 
+               cart: {userId: userId} },
+      data: validatedData,
+      include: { toy: true }
     });
 
-    return NextResponse.json(updatedCategory, { status: 200 });
+    return NextResponse.json({ data: updatedItem }, { status: 200 });
+  
   } catch (error) {
     // Manejo de errores específicos
     if (error instanceof z.ZodError) {
@@ -192,7 +148,7 @@ export async function PATCH(
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2025") {
         return NextResponse.json(
-          { error: "Categoría no encontrada" },
+          { error: "Estado no encontrado" },
           { status: 404 }
         );
       }

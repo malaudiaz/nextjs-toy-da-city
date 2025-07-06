@@ -26,11 +26,21 @@ async function main() {
     await prisma.condition.deleteMany()
     await prisma.status.deleteMany()
 
+    // language
     await prisma.language.createMany({
       data: [
         { id: 'en', code: 'en', name: 'English' },
         { id: 'es', code: 'es', name: 'Español' },
         { id: 'fr', code: 'fr', name: 'Francés' },
+      ],
+      skipDuplicates: true,
+    })
+
+    // users
+    await prisma.user.createMany({
+      data: [
+        { id: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', name: 'Miguel Anegel Lau Díaz'},
+        { id: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', name: 'Miraidys Garcia Tornes' }
       ],
       skipDuplicates: true,
     })
@@ -121,7 +131,7 @@ async function main() {
           create: [
             {key: 'name', value: 'Available', languageId: 'en'},
             {key: 'name', value: 'Disponible', languageId: 'es'},
-            {key: 'name', value: 'Available', languageId: 'fr'}
+            {key: 'name', value: 'Disponible', languageId: 'fr'}
           ]
         }
       }
@@ -134,7 +144,7 @@ async function main() {
           create: [
             {key: 'name', value: 'Reserved', languageId: 'en'},
             {key: 'name', value: 'Reservado', languageId: 'es'},
-            {key: 'name', value: 'Reserved', languageId: 'fr'}
+            {key: 'name', value: 'Réservée', languageId: 'fr'}
           ]
         }
       }
@@ -147,7 +157,7 @@ async function main() {
           create: [
             {key: 'name', value: 'Sold', languageId: 'en'},
             {key: 'name', value: 'Vendido', languageId: 'es'},
-            {key: 'name', value: 'Sold', languageId: 'fr'}
+            {key: 'name', value: 'Vendue', languageId: 'fr'}
           ]
         }
       }
@@ -160,7 +170,7 @@ async function main() {
           create: [
             {key: 'name', value: 'Canceled', languageId: 'en'},
             {key: 'name', value: 'Cancelado', languageId: 'es'},
-            {key: 'name', value: 'Canceled', languageId: 'fr'}
+            {key: 'name', value: 'Annulé', languageId: 'fr'}
           ]
         }
       }
@@ -189,7 +199,7 @@ async function main() {
           create: [
             {key: 'name', value: 'Electronic', languageId: 'en'},
             {key: 'name', value: 'Electrónicos', languageId: 'es'},
-            {key: 'name', value: 'Electronic', languageId: 'fr'}
+            {key: 'name', value: 'Électronique', languageId: 'fr'}
           ]
         }
       }
@@ -201,8 +211,8 @@ async function main() {
         translations: {
           create: [
             {key: 'name', value: 'Board games', languageId: 'en'},
-            {key: 'name', value: 'Electrónicos', languageId: 'es'},
-            {key: 'name', value: 'board_games', languageId: 'fr'}
+            {key: 'name', value: 'Juegos de mesa', languageId: 'es'},
+            {key: 'name', value: 'Jeux de société', languageId: 'fr'}
           ]
         }
       }
@@ -214,8 +224,8 @@ async function main() {
         translations: {
           create: [
             {key: 'name', value: 'Mobility', languageId: 'en'},
-            {key: 'name', value: 'mobility', languageId: 'es'},
-            {key: 'name', value: 'mobility', languageId: 'fr'}
+            {key: 'name', value: 'Movilidad', languageId: 'es'},
+            {key: 'name', value: 'Mobilité', languageId: 'fr'}
           ]
         }
       }
@@ -228,7 +238,7 @@ async function main() {
           create: [
             {key: 'name', value: 'For babies', languageId: 'en'},
             {key: 'name', value: 'Para Bebes', languageId: 'es'},
-            {key: 'name', value: 'for babies', languageId: 'fr'}
+            {key: 'name', value: 'Pour les bébés', languageId: 'fr'}
           ]
         }
       }
@@ -240,8 +250,8 @@ async function main() {
         translations: {
           create: [
             {key: 'name', value: 'Stuffed animals', languageId: 'en'},
-            {key: 'name', value: 'Stuffed animals', languageId: 'es'},
-            {key: 'name', value: 'Stuffed animals', languageId: 'fr'}
+            {key: 'name', value: 'Peluches', languageId: 'es'},
+            {key: 'name', value: 'Peluches', languageId: 'fr'}
           ]
         }
       }
@@ -255,7 +265,7 @@ async function main() {
           create: [
             {key: 'name', value: 'Rare Toys', languageId: 'en'},
             {key: 'name', value: 'Juguetes Raros', languageId: 'es'},
-            {key: 'name', value: 'Rare Toys', languageId: 'fr'}
+            {key: 'name', value: 'Jouets rares', languageId: 'fr'}
           ]
         }
       }
@@ -267,8 +277,8 @@ async function main() {
         translations: {
           create: [
             {key: 'name', value: 'Action Figures', languageId: 'en'},
-            {key: 'name', value: 'Action Figures', languageId: 'es'},
-            {key: 'name', value: 'Action Figures', languageId: 'fr'}
+            {key: 'name', value: 'Figuras de acción', languageId: 'es'},
+            {key: 'name', value: "Figurines d'action", languageId: 'fr'}
           ]
         }
       }
@@ -280,8 +290,8 @@ async function main() {
         translations: {
           create: [
             {key: 'name', value: 'Vintage', languageId: 'en'},
-            {key: 'name', value: 'vintage', languageId: 'es'},
-            {key: 'name', value: 'Vintage', languageId: 'fr'}
+            {key: 'name', value: 'Antigua', languageId: 'es'},
+            {key: 'name', value: 'Ancienne', languageId: 'fr'}
           ]
         }
       }
@@ -314,55 +324,55 @@ async function main() {
                      ***✈Ideal Kids Gifts: Best birthday Christmas gift for 4-8 years of boys girls. Also, \
                      this will be a cool glider plane for kids, it is a good choice for toy gifts for kids on Easter, Christmas, Halloween, \
                      Thanksgiving Day, New Year, etc., Or being party favors for aviation and airplane themes, birthdays  ", 
-        price: 9.99, location:'', categoryId:1, statusId: 1, conditionId: 1, 
-        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},
+        price: 9.99, categoryId:1, statusId: 1, conditionId: 1, location:'',
+        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},
       { id: 'toy_002',
         title: 'Loftus Surprise Hand Buzzer', 
         description: '', 
-        price: 7.99, location:'', categoryId:7, statusId: 1, conditionId: 1, 
-        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},
+        price: 7.99, categoryId:7, statusId: 1, conditionId: 1, location:'',
+        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},
       { id: 'toy_003', 
         title: 'MV Akkey Second Hand Chew Hobby Goods', 
         description: "I'll swap it for some small, decent-sounding Bluetooth speakers.", 
         price: 0.00, location:'41.235433,-95.993834', 
         categoryId: 2, statusId: 1, conditionId: 3, 
-        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: false, forGifts: false, forChanges: true, isActive: true},
+        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: false, forGifts: false, forChanges: true, isActive: true},
       { id: 'toy_004',
         title: 'Lot of 100 Used US United States Postage Stamps', 
         description: '100 Exciting United States Stamps in Fine Used Condition. Includes Commemoratives and Large Pictorials only. Absolutely no duplicates.', 
-        price: 0.00, location:'', categoryId:3, statusId: 1, conditionId: 2, 
-        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: false, forGifts: true, forChanges: false, isActive: true},
+        price: 0.00, categoryId:3, statusId: 1, conditionId: 2, location:'',
+        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: false, forGifts: true, forChanges: false, isActive: true},
       { id: 'toy_005',
         title: 'Green Sprouts Glass Sip And Straw Cup, Pink', 
         description: 'A great sturdy sippy cup!', 
-        price: 0.00, location:'', categoryId:5, statusId: 1, conditionId: 1, 
-        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: false, forGifts: true, forChanges: false, isActive: true},
+        price: 0.00, categoryId:5, statusId: 1, conditionId: 1, location:'',
+        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: false, forGifts: true, forChanges: false, isActive: true},
       { id: 'toy_006',
         title: 'Playmates Teenage Mutant Ninja Turtles Tmnt Ghostbusters 6.5" Four Used Figures', 
         description: '', 
-        price: 67.32, location:'', categoryId:8, statusId: 1, conditionId: 4, 
-        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},
+        price: 67.32, categoryId:8, statusId: 1, conditionId: 4, location:'',
+        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},
       { id: 'toy_007', 
         title: 'Metal toy army military tanks', 
         description: 'they all need a paint job', 
         price: 32.99, location:'41.235433,-95.993834', 
         categoryId: 9, statusId: 1, conditionId: 5, 
-        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},  
+        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},  
       { id: 'toy_008',
         title: 'Easy-to-read Ben 10 analog watch for boys with a silver case and green faux leather.', 
         description: "It doesn't work, probably just the battery. I'm swap it for the 3.75' Ben 10 Ultimate Alien HUMUNGOUSAUR Action Figure", 
-        price: 0.00, location:'', categoryId:8, statusId: 1, conditionId: 6, 
-        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: false, forGifts: false, forChanges: true, isActive: true},
+        price: 0.00, categoryId:8, statusId: 1, conditionId: 6, location:'',
+        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: false, forGifts: false, forChanges: true, isActive: true},
       { id: 'toy_009',
         title: 'UNOFFICIAL Plants vs Zombies PvZ Plush Stuffed Toy 10 Piece Set Second Hand Used', 
         description: '', 
-        price: 19.99, location:'', categoryId:6, statusId: 1, conditionId: 5, 
-        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},
+        price: 19.99, categoryId:6, statusId: 1, conditionId: 5, location:'',
+        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},
       { id: 'toy_010',
         title: 'Pedimini 16" Kids MTB Style Bicycle Bike', 
         description: "Very good condition mechanically and aesthetically. Low rise bar for an MTB feel. A few scuffs and scratches on the frame are barely noticeable.", 
-        price: 49.99, location:'', categoryId:4, statusId: 1, conditionId: 3, 
-        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},
+        price: 49.99, categoryId:4, statusId: 1, conditionId: 3, location:'',
+        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},
   ],
     skipDuplicates: true,
   });

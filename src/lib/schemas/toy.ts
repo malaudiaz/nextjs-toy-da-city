@@ -8,13 +8,13 @@ export const ToySchema = z.object({
   price: z.number().min(0).max(10000),
   location: z.string()
     .regex(/^-?\d{1,3}\.\d+,-?\d{1,3}\.\d+$/, {
-      message: 'Formato inválido. Use "latitud,longitud" con decimales. Ejemplo: "40.7128,-74.0060"'
+      message: 'Invalid format. Use "latitude,longitude" with decimals. Example: "40.7128,-74.0060"'
     })
     .refine(val => {
       const [lat, lng] = val.split(',').map(Number)
       return Math.abs(lat) <= 90 && Math.abs(lng) <= 180
     }, {
-      message: 'Valores inválidos. Latitud (-90 a 90) y Longitud (-180 a 180)'
+      message: 'Invalid values. Latitude (-90 to 90) and Longitude (-180 to 180)'
   }),
   categoryId: z.number().min(0).max(10000),
   conditionId: z.number().min(0).max(10000),
@@ -45,17 +45,17 @@ export const PaginationSchema = z.object({
 
 // Esquema de validación con Zod
 export const toyFormSchema = z.object({
-  title: z.string().min(3, 'El título debe tener al menos 3 caracteres').max(100),
-  description: z.string().min(10, 'La descripción debe tener al menos 10 caracteres').max(1000),
-  price: z.number().min(0, 'El precio no puede ser negativo').optional(),
-  categoryId: z.number().int('Debe ser un número entero').min(1, 'Debes seleccionar una categoría'),
-  statusId: z.number().int('Debe ser un número entero').min(1, 'Debes seleccionar un estado'),
-  conditionId: z.number().int('Debe ser un número entero').min(1, 'Debes seleccionar una condición'),
+  title: z.string().min(3, 'The title must have at least 3 characters').max(100),
+  description: z.string().min(10, 'The description must have at least 10 characters').max(1000),
+  price: z.number().min(0, 'The price cannot be negative').optional(),
+  categoryId: z.number().int('Must be an integer').min(1, 'You must select a category'),
+  statusId: z.number().int('Must be an integer').min(1, 'You must select a status'),
+  conditionId: z.number().int('Must be an integer').min(1, 'You must select a condition'),
   forSale: z.boolean(),
   forGift: z.boolean(),
   forChange: z.boolean(),
 }).refine(data => !data.forSale || data.price !== undefined, {
-  message: "El precio es requerido cuando el juguete está en venta",
+  message: "Price is required when the toy is for sale",
   path: ["price"]
 });
 

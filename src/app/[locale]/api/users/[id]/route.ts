@@ -3,14 +3,14 @@ import { NextResponse } from "next/server";
 import { NextRequest } from 'next/server';
 import { z } from "zod";
 import prisma from "@/lib/prisma";
-import { CategorySchema } from "@/lib/schemas/category";
+import { UserSchema } from "@/lib/schemas/user";
 import { getTranslations } from "next-intl/server";
 import { Prisma } from "@prisma/client";
-import { CategoryUpdateSchema } from "@/lib/schemas/category";
+import { UserUpdateSchema } from "@/lib/schemas/user";
 import { getAuthUserFromRequest } from "@/lib/auth";
 
 
-// Obtener una categotia  por ID
+// Obtener un usuario por su ID
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -24,19 +24,19 @@ export async function GET(
   const { id } = await params;
 
   try {
-    const category = await prisma.category.findUnique({
-      where: { id: Number(id) },
+    const user = await prisma.user.findUnique({
+      where: { id: String(id) },
     });
 
-    if (!category) {
-      return NextResponse.json({ error: "Category not found" }, { status: 404 });
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json(status);
+    return NextResponse.json(user);
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { error: "Failed to fetch status" },
+      { error: "Failed to fetch user" },
       { status: 500 }
     );
   }
@@ -52,30 +52,30 @@ export async function PUT(
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const t = await getTranslations("Categories.errors");
+  const t = await getTranslations("User.errors");
 
   const { id } = await params; // Safe to use
 
   try {
     // Validar ID
-    if (!id || isNaN(Number(id))) {
+    if (!id) {
       return NextResponse.json(
-        { error: t("InvalidCategoryID") },
+        { error: t("InvaliduserID") },
         { status: 400 }
       );
     }
 
     // Obtener y validar cuerpo
     const body = await req.json();
-    const validatedData = CategorySchema.parse(body);
+    const validatedData = UserSchema.parse(body);
 
-    // Actualizar categoría
-    const updatedCategory = await prisma.category.update({
-      where: { id: Number(id) },
+    // Actualizar usuario
+    const updatedUser = await prisma.user.update({
+      where: { id: String(id) },
       data: validatedData,
     });
 
-    return NextResponse.json({ data: updatedCategory }, { status: 200 });
+    return NextResponse.json({ data: updatedUser }, { status: 200 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -109,24 +109,24 @@ export async function DELETE(
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const t = await getTranslations("Categories.errors");
+  const t = await getTranslations("User.errors");
 
   const { id } = await params; // Safe to use
 
   try {
-    if (!id || isNaN(Number(id))) {
+    if (!id) {
       return NextResponse.json(
-        { error: t("InvalidCategoryId") },
+        { error: t("InvalidUserId") },
         { status: 400 }
       );
     }
 
-    await prisma.category.delete({
-      where: { id: Number(id), isActive: false },
+    await prisma.user.deleteMany({
+      where: { id: String(id), isActive: false },
     });
 
     return NextResponse.json(
-      { message: t("Deleted Category Successfully") },
+      { message: t("Deleted User Successfully") },
       { status: 200 }
     );
   } catch (error) {
@@ -152,13 +152,13 @@ export async function PATCH(
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const t = await getTranslations("Categories.errors");
+  const t = await getTranslations("User.errors");
 
   const { id } = await params; // Safe to use
 
-  if (!id || isNaN(Number(id))) {
+  if (!id) {
     return NextResponse.json(
-      { error: t("InvalidCategoryId") },
+      { error: t("InvalidUserId") },
       { status: 400 }
     );
   }
@@ -168,15 +168,15 @@ export async function PATCH(
     const body = await req.json();
 
     // 3. Validación parcial (schema diferente al POST)
-    const validatedData = CategoryUpdateSchema.parse(body);
+    const validatedData = UserUpdateSchema.parse(body);
 
     // 4. Actualizar solo campos proporcionados
-    const updatedCategory = await prisma.category.update({
-      where: { id: Number(id) },
+    const updatedUser = await prisma.user.update({
+      where: { id: String(id) },
       data: validatedData, // Solo actualiza los campos enviados
     });
 
-    return NextResponse.json(updatedCategory, { status: 200 });
+    return NextResponse.json(updatedUser, { status: 200 });
   } catch (error) {
     // Manejo de errores específicos
     if (error instanceof z.ZodError) {
@@ -192,7 +192,7 @@ export async function PATCH(
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2025") {
         return NextResponse.json(
-          { error: "Categoría no encontrada" },
+          { error: "User no encontrada" },
           { status: 404 }
         );
       }
