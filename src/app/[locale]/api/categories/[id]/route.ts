@@ -32,7 +32,7 @@ export async function GET(
       return NextResponse.json({ error: "Category not found" }, { status: 404 });
     }
 
-    return NextResponse.json(status);
+    return NextResponse.json(category);
   } catch (error) {
     console.log(error);
     return NextResponse.json(

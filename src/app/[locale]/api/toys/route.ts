@@ -199,7 +199,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       )    
   }
 
-  const t = await getTranslations("Toy.errors");
+  //const t = await getTranslations("Toy.errors");
   const clonedRequest = request.clone();
   let formData: FormData;
   
@@ -209,10 +209,6 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
     // const userId = "user_2wY8ZRoOrheojD7zQXtwk9fg00x"
 
     formData = await clonedRequest.formData();
-
-    const stringforSell = formData.get("forSell") || "false"
-    const stringforGifts = formData.get("forGifts") || "false"
-    const stringforChanges = formData.get("forChanges") || "false"
 
     console.log("Valor de location:", formData.get('location'));
     
@@ -224,9 +220,9 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       price: Number(formData.get('price')),
       categoryId: Number(formData.get('categoryId')),
       conditionId: Number(formData.get('conditionId')),
-      forSell: formData.get("forSell"),  // stringforSell === "true",
-      forGifts: formData.get("forGifts"), //stringforGifts === "true",
-      forChanges: formData.get("forChanges"), //stringforChanges === "true"
+      forSell: formData.get("forSell"),
+      forGifts: formData.get("forGifts"),
+      forChanges: formData.get("forChanges"),
     })
 
     const files = formData.getAll('files') as Blob[]
@@ -322,7 +318,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
     // Obtener el post actualizado con los media
     const updatedPost = await prisma.toy.findUnique({
       where: { id: toy.id },
-      include: { media: true }
+      include: { media: true, category: true, condition: true, status: true }
     })
       
     // Estructurar la respuesta para que coincida con PostResponse
@@ -351,7 +347,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
           toyId: media.toyId
         })),
         likes: [],
-        comments: []
+        comments: [],
       }
     }    
 
