@@ -12,8 +12,6 @@ export async function PATCH(
 
   const { id, locale } = await params;
 
-  console.log(locale);
-
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
   if (!success && !userId) {

@@ -14,10 +14,12 @@ const MAX_MEDIA_FILES = 6;
 // Obtener un juguete por ID
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string, locale: string }> }
 ) {
 
-  const { id } = await params;
+  const { id, locale } = await params;
+
+  const userLanguageCode = locale
 
   const { userId } = await getAuthUserFromRequest(req);
 
@@ -29,6 +31,30 @@ export async function GET(
       where: { id: id, isActive: true },
       include: {
         media: true,
+        category: {
+          include: {
+            translations: {
+              where: {languageId: userLanguageCode, key: 'name'},
+              select: {value: true}
+            }
+          }  
+        }, 
+        condition: {
+          include: {
+            translations: {
+              where: {languageId: userLanguageCode, key: 'name' },
+              select: {value: true}
+            }
+          }  
+        }, 
+        status: {
+          include: {
+            translations: {
+              where: {languageId: userLanguageCode, key: 'name'},
+              select: {value: true}
+            }
+          }  
+        }, 
         comments: {
           where: { isActive: true },
           select: {
@@ -63,15 +89,22 @@ export async function GET(
     });
 
     if (!toy) {
-      return NextResponse.json({ error: t("Toy not found") }, { status: 404 });
+      return NextResponse.json({ error: t("ToyNotFound") }, { status: 404 });
     }
 
     // Determina si el usuario dio like (solo si existe UserId)
     const isLikedByUser = userId ? toy.likes?.length > 0 : false;
 
+    const {category, condition, status, ...toyData } = toy
     // Formateamos el resultado final
     const toyWithLikeStatus = {
-      ...toy,
+      ...toyData,
+      categoryName: category.name,
+      categoryDescription: category.translations[0]?.value || category.name,
+      conditionName: condition.name,
+      conditionDescription: condition.translations[0]?.value || condition.name,
+      statusName: status.name,
+      statusDescription: status.translations[0]?.value || status.name,
       isLikedByUser, // false si no hay usuario logueado
       likes: undefined, // Eliminamos el array de likes (no necesario en la respuesta)
     };
@@ -120,7 +153,6 @@ export async function PUT(
       location: formData.get("location"),
       price: Number(formData.get("price")),
       categoryId: Number(formData.get("categoryId")),
-      statusId: Number(formData.get("statusId")),
       conditionId: Number(formData.get("conditionId")),
       forSell: stringforSell === "true",
       forGifts: stringforGifts === "true",

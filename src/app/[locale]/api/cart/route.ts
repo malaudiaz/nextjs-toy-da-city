@@ -6,13 +6,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/auth";
 
 
-// GET all items of cart con paginación
+// GET all items of cart con paginación, del usuario logueado
 export async function GET(req: NextRequest) {
   
   const t = await getTranslations("Cart.errors");
 
   try {
     const { userId} = await getAuthUserFromRequest(req);
+    // const userId = 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z'
 
     const { searchParams } = new URL(req.url!)
 
@@ -21,31 +22,47 @@ export async function GET(req: NextRequest) {
       limit: parseInt(searchParams.get('limit') || '10')
     });
 
-    const [cart, total] = await Promise.all([
-      prisma.cart.findMany({
+    const [cartItems, total] = await Promise.all([
+      prisma.cartItem.findMany({
         skip: (pagination.page - 1) * pagination.limit,
         take: pagination.limit,
-        orderBy: { createdAt: "desc" },
-        where: {userId: userId},
-        include: {
-          items: {
-            include: {
-              toy: {
-                include: {
-                  media: true,
-                  category: true
-                }
-              }
+        orderBy: { addedAt: "desc" },
+        where: { 
+          cart: { userId: userId } // Filtra por usuario
+        },
+        select: {
+          id: true,          // ID del item del carrito
+          quantity: true,    // Cantidad
+          selected: true,    // Si está seleccionado
+          toy: {             // Datos específicos del juguete
+            select: {
+              id: true,      // ID del juguete (como toyId)
+              title: true,   // Título del juguete
+              price: true    // Precio del juguete
             }
           }
-        }        
+        }
       }),
-      prisma.cart.count(),
+      prisma.cartItem.count({
+        where: { 
+          cart: { userId: userId } 
+        }
+      }),
     ]);
+
+    // Transformar la estructura para aplanar el objeto toy
+    const formattedItems = cartItems.map(item => ({
+      id: item.id,
+      quantity: item.quantity,
+      selected: item.selected,
+      toyId: item.toy.id,    // Extraemos el ID del juguete
+      title: item.toy.title, // Extraemos el título
+      price: item.toy.price  // Extraemos el precio
+    }));
 
     return NextResponse.json({
       status: 200,
-      data: cart,
+      data: formattedItems, // Usamos los items formateados
       meta: {
         total,
         page: pagination.page,
@@ -53,6 +70,7 @@ export async function GET(req: NextRequest) {
         totalPages: Math.ceil(total / pagination.limit),
       },
     });
+
   } catch (error) {
     console.log(error);
     return NextResponse.json({ error: t("InvalidParams") }, { status: 400 });
@@ -72,9 +90,6 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    console.log('valores en body');
-    console.log(body.toyId);
-
     const validatedData = CartItemSchema.parse({
       toyId: body.toyId,
       quantity: Number(body.quantity) || 1,
@@ -82,9 +97,6 @@ export async function POST(req: Request) {
         ? body.selected === 'true' 
         : Boolean(body.selected)
     });
-
-    console.log('valores');
-    console.log(validatedData.toyId);
 
     const toy = await prisma.toy.findUnique({ where: { id: validatedData.toyId } });
 
