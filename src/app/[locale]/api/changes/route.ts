@@ -10,14 +10,14 @@ export async function GET(
     { params }: { params: Promise<{ locale: string }> }
   ) {
     
-    // const { success, userId, error, code } = await getAuthUserFromRequest(request);
+    const { success, userId, error, code } = await getAuthUserFromRequest(request);
    
-    // if (!success && !userId) {
-    //     return NextResponse.json({success: success, error: error}, { status: code }) 
-    // }
+    if (!success && !userId) {
+        return NextResponse.json({success: success, error: error}, { status: code }) 
+    }
 
-    const { success, error, code } = await getAuthUserFromRequest(request);
-    const userId = 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z'
+    // const { success, error, code } = await getAuthUserFromRequest(request);
+    // const userId = 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z'
 
     const { locale } = await params;
   
