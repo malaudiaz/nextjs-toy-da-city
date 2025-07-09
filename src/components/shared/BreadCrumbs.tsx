@@ -4,14 +4,16 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { getBreadcrumbs } from '@/lib/utils';
 import { ChevronRight } from 'lucide-react';
+import { useTranslations } from "next-intl";
 
 interface BreadcrumbsProps {
   productName?: string;
 }
 
 export default function Breadcrumbs({ productName }: BreadcrumbsProps) {
+  const t = useTranslations("breadcrumbs");
   const pathname = usePathname();
-  const breadcrumbs = getBreadcrumbs(pathname,productName);
+  const breadcrumbs = getBreadcrumbs(pathname, t, productName);
 
   return (
     <nav aria-label="Breadcrumb" className="mb-3">

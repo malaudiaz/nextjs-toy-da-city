@@ -1,5 +1,4 @@
 import { clsx, type ClassValue } from "clsx"
-import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -9,9 +8,14 @@ export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localh
 
 export const getBreadcrumbs = (
   pathname: string,
+  t: (key: string) => string, // Recibimos la función de traducción como parámetro
   productName?: string
-): { label: string; href?: string }[] => {
-  const t = useTranslations("breadcrumbs");
+): { 
+  
+  
+  label: string; href?: string 
+
+}[] => {
   const paths = pathname.split('/').filter(Boolean);
   const breadcrumbs = [{ label: t("Home"), href: '/' }];
   const ignoreSegments = ['en', 'es', 'toys'];

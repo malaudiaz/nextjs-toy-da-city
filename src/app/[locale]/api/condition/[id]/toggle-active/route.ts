@@ -10,7 +10,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string, locale: string }> }
 ) {
 
-  const { id, locale } = await params;
+  const { id } = await params;
 
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 

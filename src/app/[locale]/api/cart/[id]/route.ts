@@ -2,7 +2,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { z } from "zod";
 import prisma from "@/lib/prisma";
-import { CartItemSchema } from "@/lib/schemas/cart";
 import { getTranslations } from "next-intl/server";
 import { Prisma } from "@prisma/client";
 import { UpdateCartItemSchema } from "@/lib/schemas/cart";

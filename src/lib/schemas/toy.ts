@@ -58,6 +58,7 @@ export const toyFormSchema = z.object({
   price: z.number().min(0, 'The price cannot be negative').optional(),
   categoryId: z.number().int('Must be an integer').min(1, 'You must select a category'),
   conditionId: z.number().int('Must be an integer').min(1, 'You must select a condition'),
+  statusId: z.number().int('Must be an integer').min(1, 'You must select a status'),
   forSale: z.boolean(),
   forGift: z.boolean(),
   forChange: z.boolean(),

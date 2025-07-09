@@ -218,7 +218,6 @@ export async function PUT(
         where: { id: id },
         data: {
           ...toyData,
-          userId,
           media: {
             create: newMedia,
           },
