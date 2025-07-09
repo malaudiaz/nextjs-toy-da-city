@@ -32,14 +32,14 @@ export default function RadiusFilter({
           onChange(values[0]);
         }}
         renderTrack={({ props, children }) => (
-          <div {...props} className="h-2 bg-[#e07a5f] w-full rounded-md">
+          <div {...props} className="h-2 bg-[#4c754b] w-full rounded-md">
             {children}
           </div>
         )}
         renderThumb={({index, props }) => (
           <div {...props} key={index} className="focus:outline-none">
-            <div className="bg-white border-2 border-[#e07a5f] h-6 w-6 rounded-full shadow flex items-center justify-center">
-              <div className="w-4 h-4 rounded-full bg-[#e07a5f]" />
+            <div className="bg-white border-2 border-[#4c754b] h-6 w-6 rounded-full shadow flex items-center justify-center">
+              <div className="w-4 h-4 rounded-full bg-[#4c754b]" />
             </div>
           </div>
         )}

@@ -452,6 +452,7 @@
     "TitlePlaceholder": "Name of the product",
     "Description": "Description",
     "DescriptionPlaceholder": "Describe your product",
+    "Price": "Price",
     "ForSale": "Sale",
     "ForGift": "Free",
     "ForChange": "Swap",

@@ -90,7 +90,7 @@ export default function FilterBar() {
   };
 
   return (
-    <div className="mx-auto max-w-5xl px-1 sm:px-6 lg:px-8 mt-4">
+    <div className="mx-auto max-w-5xl px-1 sm:px-6  mt-4">
       <div className="relative inline-block text-left">
         <Button
           type="button"

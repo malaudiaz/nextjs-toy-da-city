@@ -68,7 +68,7 @@ const t = useTranslations("toys");
         </p>
 
         {/* Ubicación */}
-        <p className="text-sm text-gray-500 truncate">{location}</p>
+        {/* <p className="text-sm text-gray-500 truncate">{location}</p> */}
       </div>
     </Link>
   );
