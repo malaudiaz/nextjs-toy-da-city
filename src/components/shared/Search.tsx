@@ -28,7 +28,7 @@ const Search = () => {
       setInputValue(currentQuery);
       setSearchQuery(currentQuery);
     }
-  }, [inputValue, searchParams]);
+  }, [searchParams]);
 
   const applySearch = () => {
     const current = new URLSearchParams(searchParams.toString());
