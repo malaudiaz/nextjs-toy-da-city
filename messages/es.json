@@ -478,6 +478,10 @@
     "Policies": "Políticas",
     "Search": "Buscar"
   },
+  "expandableText": {
+    "ShowMore": "Ver más",
+    "ShowLess": "Ver menos"
+  },
   "toys": {
     "free": "GRATIS"
   }

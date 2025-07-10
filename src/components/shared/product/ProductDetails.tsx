@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { NumberToCategory, NumberToCondition } from "@/lib/utils";
 import Image from "next/image";
+import ExpandableText from "../ExpandableText";
 
 type ProductDetailsProps = {
   data: Toy;
@@ -175,7 +176,7 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
 
           {/* Features */}
           <div className="bg-yellow-50 rounded-xl p-6 border border-yellow-200">
-            <p>{data.description}</p>
+            <ExpandableText text={data.description} maxLength={200} />
           </div>
           <div className="">
             <div className="flex items-center">
