@@ -14,6 +14,21 @@ import {
 import { NumberToCategory, NumberToCondition } from "@/lib/utils";
 import Image from "next/image";
 import ExpandableText from "../ExpandableText";
+import dynamic from "next/dynamic";
+
+// Importación dinámica con exportación por defecto correcta
+const MapComponent = dynamic(
+  () => import("../MapComponent").then((mod) => mod.default),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[400px] w-full bg-gray-200 flex items-center justify-center">
+        Cargando mapa...
+      </div>
+    ),
+  }
+);
+
 
 type ProductDetailsProps = {
   data: Toy;
@@ -31,6 +46,8 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
       (prev) => (prev - 1 + data.media.length) % data.media.length
     );
   };
+
+  const coordinates = data.location.split(',').map(Number);  
 
   return (
     <div>
@@ -178,6 +195,16 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
           <div className="bg-yellow-50 rounded-xl p-6 border border-yellow-200">
             <ExpandableText text={data.description} maxLength={200} />
           </div>
+
+          {coordinates.length === 2 && (
+          <div className="h-[200px] w-full border-dashed border-2 border-gray-300 rounded-md overflow-hidden">
+            <MapComponent
+              onLocationChange={() => {}}
+              initialPosition={[coordinates[0], coordinates[1]]}
+              dragable={false}
+            />
+          </div>)}
+
           <div className="">
             <div className="flex items-center">
               <button className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 px-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 w-full">

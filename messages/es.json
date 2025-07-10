@@ -482,6 +482,9 @@
     "ShowMore": "Ver más",
     "ShowLess": "Ver menos"
   },
+  "MapLocation": {
+    "Location": "Ubicación"
+  },
   "toys": {
     "free": "GRATIS"
   }

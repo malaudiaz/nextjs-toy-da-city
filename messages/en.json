@@ -484,6 +484,9 @@
     "ShowMore": "Show more",
     "ShowLess": "Show less"
   },
+  "MapLocation": {
+    "Location": "Location"
+  },
   "toys": {
     "free": "FREE"
   }
