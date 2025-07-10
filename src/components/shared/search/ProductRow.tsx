@@ -1,6 +1,5 @@
 import { Toy } from "@/types/toy";
 import React from "react";
-import ProductCard from "../ProductCard";
 import ProductSearchCard from "./ProductSearchCard";
 
 type ProductCardProps = {

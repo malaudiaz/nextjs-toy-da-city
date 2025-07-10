@@ -24,7 +24,7 @@ export function useFilter() {
   );
 
   // Geolocalización
-  const { latitude, longitude, getLocationAsync } = useGeolocation();
+  const { latitude, longitude } = useGeolocation();
   const [hasLocation, setHasLocation] = useState(false);
 
   useEffect(() => {

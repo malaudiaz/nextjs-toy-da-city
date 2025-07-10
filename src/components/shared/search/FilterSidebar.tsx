@@ -1,9 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { useGeolocation } from "@/hooks/useGeolocation";
 import { useTranslations } from "next-intl";
 import PriceRangeFilter from "../home/PriceRangeFilter";
 import RadiusFilter from "../home/RadiusFilter";
@@ -12,13 +9,10 @@ import { useFilter } from "@/hooks/useFilters";
 export default function FilterSidebar() {
   const t = useTranslations("filter");
   const {
-    priceRange,
-    radius,
     handlePriceChange,
     handleRadiusChange,
     applyFilters,
     clearFilters,
-    loadingLocation,
     searchParams,
   } = useFilter();
   return (

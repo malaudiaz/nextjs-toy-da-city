@@ -19,7 +19,6 @@ const ProductCard = ({
   description,
   image,
   price,
-  location,
   conditionDescription,
 }: ProductCardProps) => {
 

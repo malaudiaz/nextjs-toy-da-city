@@ -2,7 +2,6 @@ import React from "react";
 import Image from "next/image";
 import { Heart, MapPin } from "lucide-react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
 import ConditionBadge from "../ConditionBadge";
 import { Button } from "@/components/ui/button";
 
@@ -20,10 +19,8 @@ const ProductSearchCard = ({
   description,
   image,
   price,
-  location,
   conditionDescription,
 }: ProductCardProps) => {
-  const t = useTranslations("toys");
 
   return (
     <Link
