@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import PriceRangeFilter from "../home/PriceRangeFilter";
 import RadiusFilter from "../home/RadiusFilter";
 import { useFilter } from "@/hooks/useFilters";
+import Breadcrumbs from "../BreadCrumbs";
 
 export default function FilterSidebar() {
   const t = useTranslations("filter");
@@ -16,7 +17,8 @@ export default function FilterSidebar() {
     searchParams,
   } = useFilter();
   return (
-    <div className="w-96 pt-6 ">
+    <div className="w-96 pt-6 shadow-md px-4">
+      <Breadcrumbs />
       <RadiusFilter onChange={handleRadiusChange} />
       <PriceRangeFilter onChange={handlePriceChange} />
       <div className="flex w-full gap-2 mt-4 p-3 justify-between">

@@ -8,7 +8,7 @@ type ProductCardProps = {
 
 const ProductRow = ({ toys }: ProductCardProps) => {
   return (
-    <div className="pr-5 pl-2 w-full mt-4">
+    <div className="pr-5 pl-2 w-full mt-8">
       <div className="grid grid-cols-1 gap-2">
         {toys?.map((toy) => (
           <ProductSearchCard

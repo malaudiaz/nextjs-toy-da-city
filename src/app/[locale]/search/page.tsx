@@ -42,7 +42,7 @@ const SearchPage = async ({ searchParams, params }: Props) => {
     })
   );
   return (
-    <div className="w-full flex bg-[#FAF1DE] min-h-screen ">
+    <div className="w-full flex bg-[#FBFAF4] min-h-screen ">
       <FilterSidebar />
       <Suspense
         key={filters.search}

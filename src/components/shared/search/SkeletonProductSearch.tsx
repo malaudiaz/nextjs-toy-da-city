@@ -13,9 +13,9 @@ export default function SkeletonProductSearch({ count = 6 }: SkeletonProps) {
         {Array(count)
           .fill(0)
           .map((_, index) => (
-            <div key={index} className="bg-white shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 h-70 flex w-full group cursor-pointer animate-pulse">
+            <div key={index} className="bg-white shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 lg:h-70 md:h-50 flex w-full group cursor-pointer animate-pulse">
       {/* Imagen */}
-      <div className="w-1/5 h-full bg-gray-200 relative flex-shrink-0">
+      <div className="md:w-1/4 h-full bg-gray-200 relative flex-shrink-0">
         <Skeleton className="h-full w-full" />
       </div>
 
