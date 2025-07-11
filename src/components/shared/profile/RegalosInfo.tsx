@@ -4,7 +4,7 @@ import { ProfileInfoProps } from './ProfileInfo';
 
 const RegalosInfo = ({ produts }: ProfileInfoProps) => {
   return (
-    <div className="w-full h-full  px-5 py-2 mt-4">
+    <div className="w-full h-full  px-5 py-2">
       <div className="bg-[#F0F5F0] flex flex-col gap-2 mt-2 rounded-md shadow-sm">
         {produts.map((product) => (
           <div

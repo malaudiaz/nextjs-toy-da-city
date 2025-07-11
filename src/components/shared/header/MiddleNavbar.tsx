@@ -14,7 +14,7 @@ import {
 
 const MiddleNavbar = () => {
   return (
-    <div className="bg-[#3D5D3C] w-full">
+    <div className="bg-[#3D5D3C] w-full md:hidden">
       <div className="mx-auto max-w-7xl flex flex-col py-3 px-3">
         <div className="md:hidden">
         <Search />
@@ -41,11 +41,11 @@ const MiddleNavbar = () => {
           </div>
         </div>
         </div>
-        <div className="hidden md:flex items-center justify-center gap-8">
+        {/* <div className="hidden md:flex items-center justify-center gap-8">
           <Link href={"/"} className="text-lg text-white border-r border-white/30 pr-2">Categories</Link>
           <Link href={"/"} className="text-lg text-white border-r border-white/30 pr-2">Recommend age</Link>
           <Link href={"/"} className="text-lg text-white">By Location</Link>
-        </div>
+        </div> */}
       </div>
     </div>
   );

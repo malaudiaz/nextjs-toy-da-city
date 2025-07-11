@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const FavoritesInfo = ({ produts }: ProfileInfoProps) => {
   return (
-    <div className="w-full h-full px-3 py-2 mt-4">
+    <div className="w-full h-full px-3 py-2">
       <div className="bg-[#F0F5F0] gap-2 mt-2 rounded-md shadow-sm overflow-x-auto">
         <div className="grid grid-cols-4 gap-2 px-3 py-2 font-semibold text-gray-700 border-b border-gray-300 bg-gray-100">
           <div>Imagen</div>
