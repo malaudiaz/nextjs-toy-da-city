@@ -137,7 +137,11 @@ export default function FilterBar({ conditions }: Props) {
 
   const handleConditionChange = (id: number) => {
     const newConditions = [...selections];
-    newConditions.push(id);
+    if (!newConditions.includes(id)) {
+      newConditions.push(id);
+    } else {
+      newConditions.splice(newConditions.indexOf(id), 1);
+    }
     setSelections(newConditions);
   }
 
