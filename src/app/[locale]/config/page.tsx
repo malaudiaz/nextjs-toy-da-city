@@ -26,7 +26,10 @@ const ConfigurationsPage = () => {
 
   const pathname = usePathname();
   const language = pathname.split("/")[1];
-  isMobile ? null : redirect(`/${language}/config/ventas`);
+
+  if (!isMobile) {
+    redirect(`/${language}/config/ventas`);
+  }
 
   return (
     <div className="w-full h-full bg-[#fbfaf4] md:hidden">

@@ -26,10 +26,11 @@ export default function FilterSidebar({ conditions }: Props) {
   return (
     <div className="w-96 pt-6 shadow-md px-4">
       <Breadcrumbs />
+      <TypeFilter onChange={handleTypeChange} typeSale={typeSale} typeFree={typeFree} typeSwap={typeSwap} />
+      {typeSale && <PriceRangeFilter onChange={handlePriceChange} />}
       <RadiusFilter onChange={handleRadiusChange} />
-      <PriceRangeFilter onChange={handlePriceChange} />
-      <TypeFilter/>
-      <ConditionFilter data={conditions} />
+      <ConditionFilter data={conditions} selections={selections} onChange={handleConditionChange} />
+
       <div className="flex w-full gap-2 mt-4 p-3 justify-between">
         <Button
           type="button"
