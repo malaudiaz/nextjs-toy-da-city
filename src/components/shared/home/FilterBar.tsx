@@ -34,7 +34,7 @@ export default function FilterBar({ conditions }: Props) {
   const [typeSale, setTypeSale] = useState(false);
   const [typeFree, setTypeFree] = useState(false);
   const [typeSwap, setTypeSwap] = useState(false);
-  const [condition, setCondition] = useState("");
+  const [selections, setSelections] = useState<number[]>([]);
 
   useEffect(() => {
     if (isOpen && !hasLocation) {
@@ -73,7 +73,21 @@ export default function FilterBar({ conditions }: Props) {
       current.delete("radius");
     }
 
-    // Aquí puedes agregar más parámetros como categoryId, location, etc.
+    if (typeSale || typeFree || typeSwap) {
+      current.set("forSale", typeSale.toString());
+      current.set("forFree", typeFree.toString());
+      current.set("forSwap", typeSwap.toString());
+    } else {
+      current.delete("forSale");
+      current.delete("forFree");
+      current.delete("forSwap");
+    }
+
+    if (selections.length > 0) {
+      current.set("conditions", selections.join(","));
+    } else {
+      current.delete("conditions");
+    }
 
     router.push(`?${current.toString()}`);
     setIsOpen(false);
@@ -90,7 +104,7 @@ export default function FilterBar({ conditions }: Props) {
     setTypeFree(false);
     setTypeSwap(false);
 
-    setCondition("");
+    setSelections([]);
 
     setPriceRange([0, 500]);
     router.push(`?${current.toString()}`);
@@ -121,6 +135,11 @@ export default function FilterBar({ conditions }: Props) {
     }
   };
 
+  const handleConditionChange = (id: number) => {
+    const newConditions = [...selections];
+    newConditions.push(id);
+    setSelections(newConditions);
+  }
 
   return (
     <div className="mx-auto max-w-5xl px-1 sm:px-6  mt-4">
@@ -135,10 +154,10 @@ export default function FilterBar({ conditions }: Props) {
 
         {isOpen && (
           <div className="origin-top-left absolute left-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
-            <RadiusFilter onChange={handleRadiusChange} />
-            <PriceRangeFilter onChange={handlePriceChange} />
             <TypeFilter onChange={handleTypeChange} typeSale={typeSale} typeFree={typeFree} typeSwap={typeSwap} />
-            <ConditionFilter data={conditions} />
+            {typeSale && <PriceRangeFilter onChange={handlePriceChange} />}
+            <RadiusFilter onChange={handleRadiusChange} />
+            <ConditionFilter data={conditions} selections={selections} onChange={handleConditionChange} />
 
             <div className="flex w-full gap-2 mt-4 p-3 justify-between">
               <Button

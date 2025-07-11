@@ -13,7 +13,7 @@ export default function RadiusFilter({
   const [value, setValue] = useState<number>(50);
   const t = useTranslations("filter");
   return (
-    <div className="space-y-4 px-4 py-2">
+    <div className="border-t-1 border-gray-200 px-4 space-y-4 py-2">
       <div className="flex flex-col gap-1">
         <h3 className="font-semibold text-gray-800 flex gap-1 items-center"><MapPin className="size-5"/> {t("Filter1")}</h3>
 
