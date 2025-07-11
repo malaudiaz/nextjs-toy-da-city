@@ -6,8 +6,15 @@ import PriceRangeFilter from "../home/PriceRangeFilter";
 import RadiusFilter from "../home/RadiusFilter";
 import { useFilter } from "@/hooks/useFilters";
 import Breadcrumbs from "../BreadCrumbs";
+import TypeFilter from "../home/TypeFilter";
+import { Condition } from "@/types/modelTypes";
+import ConditionFilter from "./ConditionFilter";
 
-export default function FilterSidebar() {
+type Props = {
+  conditions: Condition[];
+};
+
+export default function FilterSidebar({ conditions }: Props) {
   const t = useTranslations("filter");
   const {
     handlePriceChange,
@@ -21,6 +28,8 @@ export default function FilterSidebar() {
       <Breadcrumbs />
       <RadiusFilter onChange={handleRadiusChange} />
       <PriceRangeFilter onChange={handlePriceChange} />
+      <TypeFilter/>
+      <ConditionFilter data={conditions} />
       <div className="flex w-full gap-2 mt-4 p-3 justify-between">
         <Button
           type="button"

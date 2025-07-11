@@ -1,6 +1,7 @@
 import FilterSidebar from "@/components/shared/search/FilterSidebar";
 import ProductsSearch from "@/components/shared/search/ProductsSearch";
 import SkeletonProductSearch from "@/components/shared/search/SkeletonProductSearch";
+import { getConditions } from "@/lib/actions/conditionActions";
 import { Filters, getToys } from "@/lib/actions/toysAction";
 import React, { Suspense } from "react";
 
@@ -10,6 +11,7 @@ type Props = {
 };
 
 const SearchPage = async ({ searchParams, params }: Props) => {
+  const conditions = await getConditions();
   const resolvedSearchParams = await searchParams;
   const { locale } = await params;
   const currentPage = parseInt((resolvedSearchParams.page as string) || "1");
@@ -43,7 +45,7 @@ const SearchPage = async ({ searchParams, params }: Props) => {
   );
   return (
     <div className="w-full flex bg-[#FBFAF4] min-h-screen ">
-      <FilterSidebar />
+      <FilterSidebar conditions={conditions} />
       <Suspense
         key={filters.search}
         fallback={<SkeletonProductSearch count={3} />}

@@ -8,8 +8,15 @@ import PriceRangeFilter from "./PriceRangeFilter";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import RadiusFilter from "./RadiusFilter";
 import { useTranslations } from "next-intl";
+import TypeFilter from "./TypeFilter";
+import ConditionFilter from "../search/ConditionFilter";
+import { Condition } from "@/types/modelTypes";
 
-export default function FilterBar() {
+type Props = {
+  conditions: Condition[];
+};
+
+export default function FilterBar({ conditions }: Props) {
   const t = useTranslations("filter");
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -104,6 +111,8 @@ export default function FilterBar() {
           <div className="origin-top-left absolute left-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
             <RadiusFilter onChange={handleRadiusChange} />
             <PriceRangeFilter onChange={handlePriceChange} />
+            <TypeFilter/>
+            <ConditionFilter data={conditions} />
 
             <div className="flex w-full gap-2 mt-4 p-3 justify-between">
               <Button

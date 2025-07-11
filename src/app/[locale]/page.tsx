@@ -3,6 +3,7 @@ import FilterBar from "@/components/shared/home/FilterBar";
 import Products from "@/components/shared/home/Products";
 import SkeletonProductCard from "@/components/shared/SkeletonProductCard";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
+import { getConditions } from "@/lib/actions/conditionActions";
 import { Filters, getToys } from "@/lib/actions/toysAction";
 import { Suspense } from "react";
 
@@ -15,6 +16,7 @@ export default async function Home({ searchParams, params }: Props) {
   const resolvedSearchParams = await searchParams;
   const { locale } = await params;
 
+  const conditions = await getConditions();
   const currentPage = parseInt((resolvedSearchParams.page as string) || "1");
   const postsPerPage = parseInt(
     (resolvedSearchParams.pageSize as string) || "8"
@@ -56,7 +58,7 @@ export default async function Home({ searchParams, params }: Props) {
     <>
       <BannerCarousel />
       <div className="w-full px-3">
-        <FilterBar />
+        <FilterBar conditions={conditions} />
       </div>
       <Suspense
         key={filters.search}
