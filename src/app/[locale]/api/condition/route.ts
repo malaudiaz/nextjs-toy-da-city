@@ -60,7 +60,7 @@ export async function GET(
       id: condition.id, name: condition.translations[0]?.value || condition.name,
       description: condition.description, userId: condition.userId
     })
-
+    
     )
     
     return NextResponse.json({
