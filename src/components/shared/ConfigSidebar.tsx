@@ -59,9 +59,8 @@ const language = pathname.split("/")[1];
     <Sidebar {...props}>
       <SidebarHeader>
       </SidebarHeader>
-      <SidebarContent className="bg-[#F8F6E9]">
+      <SidebarContent className="bg-white">
         <SidebarGroup>
-          <SidebarGroupLabel>Navegación Principal</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navigationItems.map((item) => (
