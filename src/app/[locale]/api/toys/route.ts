@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { join } from 'path'
 import { v4 as uuidv4 } from 'uuid'
+import { Prisma } from '@prisma/client';
 import { writeFile, mkdir } from 'fs/promises'
 import { PaginationSchema, ToyFilterSchema, ToySchema} from "@/lib/schemas/toy";
 import { getTranslations } from "next-intl/server";
@@ -66,6 +67,11 @@ export async function GET(
     const filters = ToyFilterSchema.parse({
       minPrice: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined,
       maxPrice: searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined,
+      forSell: searchParams.get('forSell') ? String(searchParams.get('forSell')) : undefined,
+      forGifts: searchParams.get('forGifts') ? String(searchParams.get('forGifts')) : undefined,
+      forChanges: searchParams.get('forChanges') ? String(searchParams.get('forChanges')) : undefined,
+      categoryId: searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined,
+      conditions: searchParams.get('conditions') ? String(searchParams.get('conditions')) : undefined,
       locationRadius: searchParams.get('lat') && searchParams.get('lng') && searchParams.get('radius')
         ? {
             lat: Number(searchParams.get('lat')),
@@ -76,9 +82,14 @@ export async function GET(
       search: searchParams.get('search') || undefined
     })
 
-    // Construir query de filtrado
-    const where: ToyWhereInput = {isActive: true}
+    const conditionIds = filters.conditions 
+      ? filters.conditions.split(',').map(id => parseInt(id.trim()))
+      : [];
 
+    // Construir query de filtrado
+    
+    const where: Prisma.ToyWhereInput = {isActive: true};
+    
     // Filtro por precio
     if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {
       where.price = {
@@ -87,12 +98,29 @@ export async function GET(
       }
     }
 
-    // Filtro por texto (búsqueda)
-    if (filters.search) {
-      where.description = {
-        contains: filters.search,
-        mode: 'insensitive'
+    // Filtro por condicion
+    if (conditionIds) {
+      where.conditionId = { in: conditionIds }
       }
+
+    // Filtro por categoría y condición
+    if (filters.categoryId) where.categoryId = filters.categoryId;
+    if (filters.conditionId) where.conditionId = filters.conditionId;
+    
+    // Búsqueda por texto (en título o descripción)
+    if (filters.search) {
+      where.OR = [
+        { title: { contains: filters.search, mode: "insensitive" } },
+        { description: { contains: filters.search, mode: "insensitive" } },
+      ];
+    }
+
+    if (filters.forSell || filters.forGifts || filters.forChanges) {
+      where.OR = [
+        ...(filters.forSell ? [{ forSell: true }] : []),
+        ...(filters.forGifts ? [{ forGifts: true }] : []),
+        ...(filters.forChanges ? [{ forChanges: true }] : []),
+      ];
     }
 
     // Consulta base

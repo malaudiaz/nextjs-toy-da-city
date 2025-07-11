@@ -37,6 +37,12 @@ export const ToySchema = z.object({
 export const ToyFilterSchema = z.object({
   minPrice: z.number().min(0).optional(),
   maxPrice: z.number().max(10000).optional(),
+  forSell: z.string().optional(),
+  forGifts: z.string().optional(),
+  forChanges: z.string().optional(),
+  categoryId: z.number().optional(),
+  conditionId: z.number().optional(),
+  conditions: z.string().optional(),
   locationRadius: z.object({
     lat: z.number(),
     lng: z.number(),

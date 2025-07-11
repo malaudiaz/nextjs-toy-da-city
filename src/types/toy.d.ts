@@ -57,14 +57,33 @@ interface ToyWhereInput {
     contains: string
     mode: 'insensitive'
   }
-/*   forSell?: {
-    contains: boolean
+
+  forSell?: {
+    contains: string
+    mode: 'insensitive'
   }
+
   forGifts?: {
-    contains: boolean
+    contains: string
+    mode: 'insensitive'
   }
+
   forChanges?: {
-    contains: boolean
+    contains: string
+    mode: 'insensitive'
   }
- */  // Agrega otros campos según necesites
+
+  conditions?: {
+    contains: string
+    mode: 'insensitive'
+  }
+
+  // Filtros por relaciones (IDs)
+  categoryId?: number | { equals?: number }
+  conditionId?: number | { equals?: number }
+  
+  // Operadores lógicos (OR, AND, NOT)
+  OR?: ToyWhereInput | ToyWhereInput[];
+  
+  // Agrega otros campos según necesites
 }
