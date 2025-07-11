@@ -31,6 +31,10 @@ export default function FilterBar({ conditions }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const { latitude, longitude, getLocationAsync } = useGeolocation();
   const [hasLocation, setHasLocation] = useState(false);
+  const [typeSale, setTypeSale] = useState(false);
+  const [typeFree, setTypeFree] = useState(false);
+  const [typeSwap, setTypeSwap] = useState(false);
+  const [condition, setCondition] = useState("");
 
   useEffect(() => {
     if (isOpen && !hasLocation) {
@@ -82,6 +86,11 @@ export default function FilterBar({ conditions }: Props) {
     current.delete("lat");
     current.delete("lng");
     current.delete("radius");
+    setTypeSale(false);
+    setTypeFree(false);
+    setTypeSwap(false);
+
+    setCondition("");
 
     setPriceRange([0, 500]);
     router.push(`?${current.toString()}`);
@@ -95,6 +104,23 @@ export default function FilterBar({ conditions }: Props) {
   const handleRadiusChange = (newRadius: number) => {
     setRadius(newRadius);
   };
+
+  const handleTypeChange = (name: string) => {
+    setTypeSale(false);
+    setTypeFree(false);
+    setTypeSwap(false);
+
+    if (name === "typeSale") {
+      setTypeSale(true);
+    }
+    if (name === "typeFree") {
+      setTypeFree(true);
+    }
+    if (name === "typeSwap") {
+      setTypeSwap(true);
+    }
+  };
+
 
   return (
     <div className="mx-auto max-w-5xl px-1 sm:px-6  mt-4">
@@ -111,7 +137,7 @@ export default function FilterBar({ conditions }: Props) {
           <div className="origin-top-left absolute left-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
             <RadiusFilter onChange={handleRadiusChange} />
             <PriceRangeFilter onChange={handlePriceChange} />
-            <TypeFilter/>
+            <TypeFilter onChange={handleTypeChange} typeSale={typeSale} typeFree={typeFree} typeSwap={typeSwap} />
             <ConditionFilter data={conditions} />
 
             <div className="flex w-full gap-2 mt-4 p-3 justify-between">

@@ -66,7 +66,7 @@ export default async function Home({ searchParams, params }: Props) {
       >
         <Products toysPromise={toysPromise} />
       </Suspense>
-      <div className="mt-8">
+      <div className="mt-8 mb-4">
         <PaginationWithLinks
           page={currentPage}
           pageSize={postsPerPage}

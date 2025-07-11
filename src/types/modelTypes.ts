@@ -3,4 +3,5 @@ export type Condition = {
   name: string;
   description: string;
   userId: string;
+  isActive: boolean;
 };

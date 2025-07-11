@@ -426,6 +426,10 @@
     "Title": "Filtros",
     "Filter1": "Maxima Distancia",
     "Filter2": "Rango de Precios",
+    "Type": "Para",
+    "Sale": "Venta",
+    "Free": "Gratis",
+    "Swap": "Intercambio",
     "Buttom1": "Aplicar",
     "Buttom2": "Limpiar"
   },
@@ -484,6 +488,11 @@
   },
   "MapLocation": {
     "Location": "Ubicación"
+  },
+  "pagination": {
+    "Previous": "Anterior",
+    "Next": "Siguiente",
+    "MorePage": "Más Páginas"
   },
   "toys": {
     "free": "GRATIS"

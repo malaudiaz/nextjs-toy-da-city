@@ -428,6 +428,10 @@
     "Title": "Filter",
     "Filter1": "Max Distance",
     "Filter2": "Price Range",
+    "Type": "For",
+    "Sale": "Sale",
+    "Free": "Free",
+    "Swap": "Swap",
     "Buttom1": "Apply",
     "Buttom2": "Clear"
   },
@@ -486,6 +490,11 @@
   },
   "MapLocation": {
     "Location": "Location"
+  },
+  "pagination": {
+    "Previous": "Previous",
+    "Next": "Next",
+    "MorePage": "More pages"
   },
   "toys": {
     "free": "FREE"

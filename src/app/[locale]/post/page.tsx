@@ -19,7 +19,7 @@ export default async function PostPage() {
           <Breadcrumbs />
           <CreatePostForm
             categories={categories}
-            conditions={condition}
+            conditions={{ data: condition }}
             statuses={statuses}
           />
         </div>
