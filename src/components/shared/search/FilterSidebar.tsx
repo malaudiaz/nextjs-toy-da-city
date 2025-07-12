@@ -9,27 +9,35 @@ import Breadcrumbs from "../BreadCrumbs";
 import TypeFilter from "../home/TypeFilter";
 import { Condition } from "@/types/modelTypes";
 import ConditionFilter from "./ConditionFilter";
+import { useState } from "react";
 
 type Props = {
   conditions: Condition[];
 };
 
 export default function FilterSidebar({ conditions }: Props) {
+
   const t = useTranslations("filter");
   const {
     handlePriceChange,
     handleRadiusChange,
     applyFilters,
     clearFilters,
+    handleTypeChange,
+    handleConditionChange,
+    typeSale,
+    typeFree,
+    typeSwap,
+    selections,
     searchParams,
   } = useFilter();
   return (
     <div className="w-96 pt-6 shadow-md px-4">
       <Breadcrumbs />
       <RadiusFilter onChange={handleRadiusChange} />
-      <PriceRangeFilter onChange={handlePriceChange} />
-      <TypeFilter/>
-      <ConditionFilter data={conditions} />
+      <TypeFilter onChange={handleTypeChange} typeSale={typeSale} typeFree={typeFree} typeSwap={typeSwap}/>
+      {typeSale && <PriceRangeFilter onChange={handlePriceChange} />}
+      <ConditionFilter data={conditions} selections={selections} onChange={handleConditionChange} />
       <div className="flex w-full gap-2 mt-4 p-3 justify-between">
         <Button
           type="button"

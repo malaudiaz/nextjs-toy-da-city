@@ -1,4 +1,3 @@
-
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
 import { useGeolocation } from "@/hooks/useGeolocation";
@@ -6,16 +5,17 @@ import { useGeolocation } from "@/hooks/useGeolocation";
 export function useFilter() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [typeSale, setTypeSale] = useState(false);
+  const [typeFree, setTypeFree] = useState(false);
+  const [typeSwap, setTypeSwap] = useState(false);
+  const [selections, setSelections] = useState<number[]>([]);
 
   // Estados para precios
   const [priceRange, setPriceRange] = useState<[number, number]>(() => {
     const min = parseFloat(searchParams.get("minPrice") || "0");
     const max = parseFloat(searchParams.get("maxPrice") || "500");
 
-    return [
-      isNaN(min) ? 0 : min,
-      isNaN(max) ? 500 : max,
-    ];
+    return [isNaN(min) ? 0 : min, isNaN(max) ? 500 : max];
   });
 
   // Estado para radio
@@ -66,6 +66,21 @@ export function useFilter() {
       current.delete("lng");
       current.delete("radius");
     }
+    if (typeSale || typeFree || typeSwap) {
+      current.set("forSale", typeSale.toString());
+      current.set("forFree", typeFree.toString());
+      current.set("forSwap", typeSwap.toString());
+    } else {
+      current.delete("forSale");
+      current.delete("forFree");
+      current.delete("forSwap");
+    }
+
+    if (selections.length > 0) {
+      current.set("conditions", selections.join(","));
+    } else {
+      current.delete("conditions");
+    }
 
     router.push(`?${current.toString()}`);
   }, [priceRange, radius, latitude, longitude, router, searchParams]);
@@ -78,6 +93,11 @@ export function useFilter() {
     current.delete("lat");
     current.delete("lng");
     current.delete("radius");
+    setTypeSale(false);
+    setTypeFree(false);
+    setTypeSwap(false);
+
+    setSelections([]);
 
     setPriceRange([0, 500]);
     setRadius(50);
@@ -96,6 +116,32 @@ export function useFilter() {
     setRadius(newRadius);
   };
 
+  const handleTypeChange = (name: string) => {
+    setTypeSale(false);
+    setTypeFree(false);
+    setTypeSwap(false);
+
+    if (name === "typeSale") {
+      setTypeSale(true);
+    }
+    if (name === "typeFree") {
+      setTypeFree(true);
+    }
+    if (name === "typeSwap") {
+      setTypeSwap(true);
+    }
+  };
+
+  const handleConditionChange = (id: number) => {
+    const newConditions = [...selections];
+    if (!newConditions.includes(id)) {
+      newConditions.push(id);
+    } else {
+      newConditions.splice(newConditions.indexOf(id), 1);
+    }
+    setSelections(newConditions);
+  };
+
   return {
     searchParams,
     priceRange,
@@ -106,6 +152,12 @@ export function useFilter() {
     handleRadiusChange,
     applyFilters,
     clearFilters,
+    handleConditionChange,
+    handleTypeChange,
+    typeFree,
+    typeSale,
+    typeSwap,
+    selections,
     hasLocation: hasLocation || false,
     loadingLocation: !hasLocation && !latitude && !longitude,
   };
