@@ -9,7 +9,6 @@ import Breadcrumbs from "../BreadCrumbs";
 import TypeFilter from "../home/TypeFilter";
 import { Condition } from "@/types/modelTypes";
 import ConditionFilter from "./ConditionFilter";
-import { useState } from "react";
 
 type Props = {
   conditions: Condition[];

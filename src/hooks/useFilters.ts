@@ -93,9 +93,10 @@ export function useFilter() {
     current.delete("lat");
     current.delete("lng");
     current.delete("radius");
-    setTypeSale(false);
-    setTypeFree(false);
-    setTypeSwap(false);
+    current.delete("forSale");
+    current.delete("forFree");
+    current.delete("forSwap");
+    current.delete("search")
 
     setSelections([]);
 
