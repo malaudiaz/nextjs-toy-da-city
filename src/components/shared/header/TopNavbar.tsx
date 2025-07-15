@@ -109,7 +109,7 @@ const TopNavbar = () => {
               </SignedIn>
             </div>
 
-            <Link href="/" className="text-black hover:text-gray-700">
+            <Link href="/cart" className="text-black hover:text-gray-700">
               <ShoppingCart className="size-5" />
             </Link>
             <Link href="/en/config" className="text-black hover:text-gray-700">

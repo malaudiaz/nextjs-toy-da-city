@@ -43,6 +43,7 @@ export const getBreadcrumbs = (
       policies: t("Policies"),
       post: t("Post"),
       search: t("Search"),
+      cart: t("Cart"),
     };
 
     const label = labelMap[path] || decodedLabel;

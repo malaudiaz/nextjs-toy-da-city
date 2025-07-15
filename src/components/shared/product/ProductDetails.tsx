@@ -15,6 +15,7 @@ import { NumberToCategory, NumberToCondition } from "@/lib/utils";
 import Image from "next/image";
 import ExpandableText from "../ExpandableText";
 import dynamic from "next/dynamic";
+import { useCartStore } from "@/store/cartStore";
 
 // Importación dinámica con exportación por defecto correcta
 const MapComponent = dynamic(
@@ -28,7 +29,6 @@ const MapComponent = dynamic(
     ),
   }
 );
-
 
 type ProductDetailsProps = {
   data: Toy;
@@ -47,35 +47,18 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
     );
   };
 
-  const coordinates = data.location.split(',').map(Number);  
+  const addToCart = useCartStore((state) => state.addToCart);
+  const coordinates = data.location.split(",").map(Number);
 
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-900 mb-3">{data.title}</h1>
       <div className="flex items-center justify-between mb-2">
-        {/* <div className="flex items-center space-x-1">
-            <div className="flex items-center">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`size-3 ${
-                    i < Math.floor(productData.rating)
-                      ? "text-yellow-400 fill-current"
-                      : "text-gray-300"
-                  }`}
-                />
-              ))}
-            </div>
-            <span className="text-xs text-gray-600">
-              {productData.rating} ({productData.reviews} reviews)
-            </span>
-          </div> */}
         <span className="text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">
           {NumberToCategory(data.categoryId)}
         </span>
       </div>
 
-      {/* Rating */}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
         <div className="space-y-4">
@@ -197,20 +180,32 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
           </div>
 
           {coordinates.length === 2 && (
-          <div className="h-[200px] w-full border-dashed border-2 border-gray-300 rounded-md overflow-hidden">
-            <MapComponent
-              onLocationChange={() => {}}
-              initialPosition={[coordinates[0], coordinates[1]]}
-              dragable={false}
-            />
-          </div>)}
+            <div className="h-[200px] w-full border-dashed border-2 border-gray-300 rounded-md overflow-hidden">
+              <MapComponent
+                onLocationChange={() => {}}
+                initialPosition={[coordinates[0], coordinates[1]]}
+                dragable={false}
+              />
+            </div>
+          )}
 
           <div className="">
             <div className="flex items-center">
-              <button className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 px-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 w-full">
-                <ShoppingCart className="w-5 h-5" />
-                <span>Add to Cart</span>
-              </button>
+              {data.forSell ? (
+                <button
+                  onClick={() =>
+                    addToCart({
+                      ...data,
+                    })
+                  }
+                  className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 px-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 w-full"
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  <span>Add to Cart</span>
+                </button>
+              ) : (
+                ""
+              )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
