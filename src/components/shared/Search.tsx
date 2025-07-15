@@ -1,24 +1,33 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { SearchIcon, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+
 
 const Search = () => {
   const t = useTranslations("navbar");
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  // Detecta si es móvil o desktop
+  const isMobile = !useMediaQuery("(min-width: 768px)");
 
   const [inputValue, setInputValue] = useState("");
   const [, setSearchQuery] = useState("");
 
+  // Cargar valor inicial desde URL
   useEffect(() => {
     const currentQuery = searchParams.get("search") || "";
-    setInputValue(currentQuery);
-    setSearchQuery(currentQuery);
+    if (currentQuery !== inputValue) {
+      setInputValue(currentQuery);
+      setSearchQuery(currentQuery);
+    }
   }, [searchParams]);
 
   const applySearch = () => {
@@ -30,14 +39,24 @@ const Search = () => {
       current.delete("search");
     }
 
-    router.push(`?${current.toString()}`);
+    if (isMobile) {
+      router.push(`?${current.toString()}`);
+    } else {
+      const locale = pathname.split("/")[1];
+      router.push(`/${locale}/search?${current.toString()}`);
+    }
+
     setSearchQuery(inputValue);
   };
 
   const clearSearch = () => {
     const current = new URLSearchParams(searchParams.toString());
     current.delete("search");
-    router.push(`?${current.toString()}`);
+
+    const locale = pathname.split("/")[1];
+
+    router.push(`/${locale}?${current.toString()}`);
+
     setInputValue("");
     setSearchQuery("");
   };
@@ -53,7 +72,7 @@ const Search = () => {
           type="text"
         />
 
-        {/* Botón de limpiar */}
+        {/* Botón limpiar */}
         {inputValue && (
           <button
             type="button"
@@ -65,14 +84,13 @@ const Search = () => {
           </button>
         )}
 
-        {/* Botón de buscar */}
-          <Button
-            type="submit"
-            className="rounded-md bg-[#e07a5f] hover:bg-[#bb664f] h-full px-3 py-2 top-0 right-0 absolute"
-          >
-            <SearchIcon className="h-5 w-5" />
-          </Button>
-
+        {/* Botón buscar */}
+        <Button
+          type="submit"
+          className="rounded-md bg-[#e07a5f] hover:bg-[#bb664f] h-full px-3 py-2 absolute right-0 top-0"
+        >
+          <SearchIcon className="h-5 w-5 text-white" />
+        </Button>
       </div>
     </form>
   );

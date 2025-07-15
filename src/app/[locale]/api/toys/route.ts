@@ -79,7 +79,7 @@ export async function GET(
             radius: Number(searchParams.get('radius'))
           }
         : undefined,
-      search: searchParams.get('search') || undefined
+      search: searchParams.get('search') || undefined,
     })
 
     const conditionIds = filters.conditions 

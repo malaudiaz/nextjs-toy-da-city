@@ -44,7 +44,7 @@ export default function PriceRangeFilter({ onChange }: { onChange: (values: [num
           setValues(newValues as [number, number]);
         }}
         renderTrack={({ props, children }) => (
-          <div {...props} className="h-2 bg-[#e07a5f] w-full rounded-md">
+          <div {...props} className="h-2 bg-[#4c754b] w-full rounded-md">
             {children}
           </div>
         )}
@@ -54,8 +54,8 @@ export default function PriceRangeFilter({ onChange }: { onChange: (values: [num
             key={index}
             className="focus:outline-none"
           >
-            <div className="bg-white border-2 border-[#e07a5f] h-6 w-6 rounded-full shadow flex items-center justify-center">
-              <div className="w-4 h-4 rounded-full bg-[#e07a5f]" />
+            <div className="bg-white border-2 border-[#4c754b] h-6 w-6 rounded-full shadow flex items-center justify-center">
+              <div className="w-4 h-4 rounded-full bg-[#4c754b]" />
             </div>
           </div>
         )}

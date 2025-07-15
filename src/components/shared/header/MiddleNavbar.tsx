@@ -41,10 +41,10 @@ const MiddleNavbar = () => {
           </div>
         </div>
         </div>
-        <div className="hidden md:flex items-center justify-center gap-8">
-          <Link href={"/"} className="text-lg text-white border-r border-white/30 pr-2">Categories</Link>
+        <div className="hidden h-6 md:flex items-center justify-center gap-8">
+          {/* <Link href={"/"} className="text-lg text-white border-r border-white/30 pr-2">Categories</Link>
           <Link href={"/"} className="text-lg text-white border-r border-white/30 pr-2">Recommend age</Link>
-          <Link href={"/"} className="text-lg text-white">By Location</Link>
+          <Link href={"/"} className="text-lg text-white">By Location</Link> */}
         </div>
       </div>
     </div>

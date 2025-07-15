@@ -428,6 +428,10 @@
     "Title": "Filter",
     "Filter1": "Max Distance",
     "Filter2": "Price Range",
+    "Type": "Toys",
+    "Sale": "Sale",
+    "Free": "Free",
+    "Swap": "Swap",
     "Buttom1": "Apply",
     "Buttom2": "Clear"
   },
@@ -452,6 +456,7 @@
     "TitlePlaceholder": "Name of the product",
     "Description": "Description",
     "DescriptionPlaceholder": "Describe your product",
+    "Price": "Price",
     "ForSale": "Sale",
     "ForGift": "Free",
     "ForChange": "Swap",
@@ -476,7 +481,20 @@
     "Favorites": "Favorites",
     "Reputation": "Reputation",
     "Terms": "Terms",
-    "Policies": "Policies"
+    "Policies": "Policies",
+    "Search": "Search"
+  },
+  "expandableText": {
+    "ShowMore": "Show more",
+    "ShowLess": "Show less"
+  },
+  "MapLocation": {
+    "Location": "Location"
+  },
+  "pagination": {
+    "Previous": "Previous",
+    "Next": "Next",
+    "MorePage": "More pages"
   },
   "toys": {
     "free": "FREE"

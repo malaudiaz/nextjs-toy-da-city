@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { PaginationSchema, ToyFilterSchema, ToySchema} from "@/lib/schemas/toy";
+import { PaginationSchema } from "@/lib/schemas/toy";
 import { getTranslations } from "next-intl/server";
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/auth";

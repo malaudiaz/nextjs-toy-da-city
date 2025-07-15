@@ -426,6 +426,10 @@
     "Title": "Filtros",
     "Filter1": "Maxima Distancia",
     "Filter2": "Rango de Precios",
+    "Type": "Juguetes",
+    "Sale": "Venta",
+    "Free": "Gratis",
+    "Swap": "Intercambio",
     "Buttom1": "Aplicar",
     "Buttom2": "Limpiar"
   },
@@ -450,6 +454,7 @@
     "TitlePlaceholder": "Nombre del producto",
     "Description": "Descripción",
     "DescriptionPlaceholder": "Describe tu producto",
+    "Price": "Precio",
     "ForSale": "Venta",
     "ForGift": "Gratis",
     "ForChange": "Intercambio",
@@ -474,7 +479,20 @@
     "Favorites": "Favoritos",
     "Reputation": "Reputación",
     "Terms": "Términos",
-    "Policies": "Políticas"
+    "Policies": "Políticas",
+    "Search": "Buscar"
+  },
+  "expandableText": {
+    "ShowMore": "Ver más",
+    "ShowLess": "Ver menos"
+  },
+  "MapLocation": {
+    "Location": "Ubicación"
+  },
+  "pagination": {
+    "Previous": "Anterior",
+    "Next": "Siguiente",
+    "MorePage": "Más Páginas"
   },
   "toys": {
     "free": "GRATIS"

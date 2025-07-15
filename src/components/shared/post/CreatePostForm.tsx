@@ -4,7 +4,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import React, { ChangeEvent, useRef, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-//import { BACKEND_URL } from "../../../lib/utils";
 import { toyFormSchema, ToyFormValues } from "@/lib/schemas/toy";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,22 +26,12 @@ type Condition = {
   isActive: boolean;
 };
 
-type Status = {
-  id: number;
-  name: string;
-  description: string;
-  isActive: boolean;
-};
-
 type CreatePostFormProps = {
   categories: {
     data: Category[];
   };
   conditions: {
     data: Condition[];
-  };
-  statuses: {
-    data: Status[];
   };
 };
 
@@ -62,7 +51,6 @@ const MapComponent = dynamic(
 const CreatePostForm = ({
   categories,
   conditions,
-  statuses,
 }: CreatePostFormProps) => {
   const t = useTranslations("createPostForm");
   const [files, setFiles] = useState<File[]>([]);
@@ -361,37 +349,13 @@ const CreatePostForm = ({
           >
             {categories.data.map((category) => (
               <option key={category.id} value={category.id}>
-                {category.description}
+                {category.name}
               </option>
             ))}
           </select>
           {errors.categoryId && (
             <p className="mt-1 text-sm text-red-600">
               {errors.categoryId.message}
-            </p>
-          )}
-        </div>
-
-        {/* Status */}
-        <div>
-          <label htmlFor="statusId" className="block mb-1">
-            {t("Status")}
-          </label>
-          <select
-            id="statusId"
-            className="w-full p-2 border rounded"
-            {...register("statusId", { valueAsNumber: true })}
-            required
-          >
-            {statuses.data.map((status) => (
-              <option key={status.id} value={status.id}>
-                {status.description}
-              </option>
-            ))}
-          </select>
-          {errors.statusId && (
-            <p className="mt-1 text-sm text-red-600">
-              {errors.statusId.message}
             </p>
           )}
         </div>
@@ -409,7 +373,7 @@ const CreatePostForm = ({
           >
             {conditions.data.map((condition) => (
               <option key={condition.id} value={condition.id}>
-                {condition.description}
+                {condition.name}
               </option>
             ))}
           </select>

@@ -1,63 +1,57 @@
-"use client";
-
-import { Button } from "@/components/ui/button";
-import { Filter } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import PriceRangeFilter from "./PriceRangeFilter";
+import { useState, useCallback, useEffect } from "react";
 import { useGeolocation } from "@/hooks/useGeolocation";
-import RadiusFilter from "./RadiusFilter";
-import { useTranslations } from "next-intl";
-import TypeFilter from "./TypeFilter";
-import ConditionFilter from "../search/ConditionFilter";
-import { Condition } from "@/types/modelTypes";
 
-type Props = {
-  conditions: Condition[];
-};
-
-export default function FilterBar({ conditions }: Props) {
-  const t = useTranslations("filter");
+export function useFilter() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [priceRange, setPriceRange] = useState<[number, number]>(() => {
-    const min = parseFloat(searchParams.get("minPrice") || "0");
-    const max = parseFloat(searchParams.get("maxPrice") || "500");
-    return [isNaN(min) ? 0 : min, isNaN(max) ? 500 : max];
-  });
-  const [radius, setRadius] = useState<number>(
-    parseFloat(searchParams.get("radius") || "50")
-  );
-  const [isOpen, setIsOpen] = useState(false);
-  const { latitude, longitude, getLocationAsync } = useGeolocation();
-  const [hasLocation, setHasLocation] = useState(false);
   const [typeSale, setTypeSale] = useState(false);
   const [typeFree, setTypeFree] = useState(false);
   const [typeSwap, setTypeSwap] = useState(false);
   const [selections, setSelections] = useState<number[]>([]);
 
-  useEffect(() => {
-    if (isOpen && !hasLocation) {
-      getLocationAsync()
-        .then(() => setHasLocation(true))
-        .catch(() => {});
-    }
-  }, [getLocationAsync, hasLocation, isOpen]);
+  // Estados para precios
+  const [priceRange, setPriceRange] = useState<[number, number]>(() => {
+    const min = parseFloat(searchParams.get("minPrice") || "0");
+    const max = parseFloat(searchParams.get("maxPrice") || "500");
 
-  const applyFilters = () => {
+    return [isNaN(min) ? 0 : min, isNaN(max) ? 500 : max];
+  });
+
+  // Estado para radio
+  const [radius, setRadius] = useState<number>(
+    parseFloat(searchParams.get("radius") || "50")
+  );
+
+  // Geolocalización
+  const { latitude, longitude } = useGeolocation();
+  const [hasLocation, setHasLocation] = useState(false);
+
+  useEffect(() => {
+    if (!hasLocation && latitude && longitude) {
+      setHasLocation(true);
+    }
+  }, [latitude, longitude, hasLocation]);
+
+  // Aplicar filtros
+  const applyFilters = useCallback(() => {
     const current = new URLSearchParams(searchParams.toString());
 
+    // Precio mínimo
     if (priceRange[0] > 0) {
       current.set("minPrice", String(priceRange[0]));
     } else {
       current.delete("minPrice");
     }
 
+    // Precio máximo
     if (priceRange[1] < 500 && priceRange[1] > priceRange[0]) {
       current.set("maxPrice", String(priceRange[1]));
     } else {
       current.delete("maxPrice");
     }
+
+    // Radio + Ubicación
     if (latitude && longitude && radius >= 10) {
       current.set("lat", String(latitude));
       current.set("lng", String(longitude));
@@ -72,7 +66,6 @@ export default function FilterBar({ conditions }: Props) {
       current.delete("lng");
       current.delete("radius");
     }
-
     if (typeSale || typeFree || typeSwap) {
       current.set("forSale", typeSale.toString());
       current.set("forFree", typeFree.toString());
@@ -90,31 +83,36 @@ export default function FilterBar({ conditions }: Props) {
     }
 
     router.push(`?${current.toString()}`);
-    setIsOpen(false);
-  };
+  }, [priceRange, radius, latitude, longitude, router, searchParams]);
 
-  const clearFilters = () => {
+  // Limpiar filtros
+  const clearFilters = useCallback(() => {
     const current = new URLSearchParams(searchParams.toString());
     current.delete("minPrice");
     current.delete("maxPrice");
     current.delete("lat");
     current.delete("lng");
     current.delete("radius");
-    setTypeSale(false);
-    setTypeFree(false);
-    setTypeSwap(false);
+    current.delete("forSale");
+    current.delete("forFree");
+    current.delete("forSwap");
+    current.delete("search")
 
     setSelections([]);
 
     setPriceRange([0, 500]);
-    router.push(`?${current.toString()}`);
-  };
+    setRadius(50);
 
+    router.push(`?${current.toString()}`);
+  }, [router, searchParams]);
+
+  // Solo actualiza valores locales sin aplicar filtros
   const handlePriceChange = (values: [number, number] | null) => {
     if (values) {
       setPriceRange(values);
     }
   };
+
   const handleRadiusChange = (newRadius: number) => {
     setRadius(newRadius);
   };
@@ -143,49 +141,25 @@ export default function FilterBar({ conditions }: Props) {
       newConditions.splice(newConditions.indexOf(id), 1);
     }
     setSelections(newConditions);
-  }
+  };
 
-  return (
-    <div className="mx-auto max-w-5xl px-1 sm:px-6  mt-4">
-      <div className="relative inline-block text-left">
-        <Button
-          type="button"
-          onClick={() => setIsOpen(!isOpen)}
-          className="bg-white border border-gray-300 px-4 py-2 rounded-md shadow-sm text-md font-medium text-gray-700 hover:bg-gray-50 focus:outline-none flex gap-1 items-center"
-        >
-          {t("Title")} <Filter className="size-4" />
-        </Button>
-
-        {isOpen && (
-          <div className="origin-top-left absolute left-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
-            <TypeFilter onChange={handleTypeChange} typeSale={typeSale} typeFree={typeFree} typeSwap={typeSwap} />
-            {typeSale && <PriceRangeFilter onChange={handlePriceChange} />}
-            <RadiusFilter onChange={handleRadiusChange} />
-            <ConditionFilter data={conditions} selections={selections} onChange={handleConditionChange} />
-
-            <div className="flex w-full gap-2 mt-4 p-3 justify-between">
-              <Button
-                type="button"
-                onClick={applyFilters}
-                className="bg-[#3D5D3C] text-white px-4 py-2 rounded-md flex-1"
-              >
-                {t("Buttom1")}
-              </Button>
-
-              {(searchParams.get("minPrice") ||
-                searchParams.get("maxPrice")) && (
-                <Button
-                  type="button"
-                  onClick={clearFilters}
-                  className="text-sm bg-[#e07a5f] hover:bg-[#bb664f]"
-                >
-                {t("Buttom2")}
-                </Button>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  return {
+    searchParams,
+    priceRange,
+    setPriceRange,
+    radius,
+    setRadius,
+    handlePriceChange,
+    handleRadiusChange,
+    applyFilters,
+    clearFilters,
+    handleConditionChange,
+    handleTypeChange,
+    typeFree,
+    typeSale,
+    typeSwap,
+    selections,
+    hasLocation: hasLocation || false,
+    loadingLocation: !hasLocation && !latitude && !longitude,
+  };
 }

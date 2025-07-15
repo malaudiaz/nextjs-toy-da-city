@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { useTranslations } from "next-intl";
 
 const defaultIcon = new L.Icon({
   iconUrl: '/marked-icon-red.png',
@@ -16,9 +17,10 @@ const defaultIcon = new L.Icon({
 interface MapComponentProps {
   onLocationChange: (lat: number, lng: number) => void;
   initialPosition: [number, number] | null;
+  dragable?: boolean;
 }
 
-const MapComponent = ({ onLocationChange, initialPosition }: MapComponentProps) => {
+const MapComponent = ({ onLocationChange, initialPosition, dragable = true }: MapComponentProps) => {
   const LocationMarker = () => {
     const [position, setPosition] = useState<[number, number] | null>(initialPosition);
     const map = useMapEvents({
@@ -48,14 +50,16 @@ const MapComponent = ({ onLocationChange, initialPosition }: MapComponentProps) 
       onLocationChange(newPos.lat, newPos.lng);
     };
 
+    const t = useTranslations("MapLocation");
+
     return position === null ? null : (
       <Marker
         position={position}
         icon={defaultIcon}
-        draggable={true}
+        draggable={dragable}
         eventHandlers={{ dragend: handleDragEnd }}
       >
-        <Popup>Tu ubicación seleccionada</Popup>
+        <Popup>{t("Location")}: {`Lat: ${position[0]}, Lng: ${position[1]}`}</Popup>
       </Marker>
     );
   };
