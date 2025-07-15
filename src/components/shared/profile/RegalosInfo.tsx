@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from "next/image";
 import { Card, CardContent } from '@/components/ui/card';
-import { Calendar, Clock, Gift, User } from 'lucide-react';
+import {  Clock, Gift, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 type GiftsProps = {

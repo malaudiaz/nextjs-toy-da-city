@@ -2,9 +2,7 @@ import Image from "next/image";
 import {
   Calendar,
   RefreshCw,
-  Star,
   CheckCircle,
-  X,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";

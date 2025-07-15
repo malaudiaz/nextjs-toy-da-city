@@ -18,10 +18,10 @@ const MissionPage = () => {
             {/* Contenido */}
             <section className="mt-4">
               <p className="mb-4 text-gray-700">
-                At Toydacity, our mission is to create a sustainable and supportive ecosystem where families can give a second life to children's items—while also building meaningful connections with one another.
+                At Toydacity, our mission is to create a sustainable and supportive ecosystem where families can give a second life to children&rsquo;s items—while also building meaningful connections with one another.
               </p>
               <p className="mb-4 text-gray-700">
-                We believe that every toy, book, piece of clothing, or gear deserves the chance to bring joy to more than one child. By enabling parents to buy, sell, trade, or donate gently used children's products, we not only help reduce waste and unnecessary spending, but also promote a culture of sharing, empathy, and environmental responsibility.
+                We believe that every toy, book, piece of clothing, or gear deserves the chance to bring joy to more than one child. By enabling parents to buy, sell, trade, or donate gently used children&rsquo;s products, we not only help reduce waste and unnecessary spending, but also promote a culture of sharing, empathy, and environmental responsibility.
               </p>
               <p className="mb-4 text-gray-700">
                 More than just a marketplace, Toydacity is a community of parents helping parents—a place to find resources, ask questions, organize local events, and support one another in the journey of raising children.

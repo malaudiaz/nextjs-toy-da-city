@@ -1,6 +1,5 @@
 import React from "react";
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
-import { getTranslations } from "next-intl/server";
 import PurchasesInfo from "@/components/shared/profile/PurchasesInfo";
 
 const purchases = [
@@ -34,7 +33,6 @@ const purchases = [
 ];
 
 const ComprasPage = async () => {
-  const t = await getTranslations("purchases");
 
   return (
     <div>

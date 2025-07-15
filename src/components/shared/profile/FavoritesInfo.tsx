@@ -14,14 +14,6 @@ type FavoritesProps = {
     seller: string;
 }
 
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString("es-ES", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })
-}
-
 const FavoritesInfo = ({ favorites }: { favorites: FavoritesProps[] }) => {
   return (
      <div className="min-h-screen p-4 md:p-6">

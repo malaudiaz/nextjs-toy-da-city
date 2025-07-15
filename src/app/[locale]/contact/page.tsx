@@ -18,7 +18,7 @@ export default function ContactPage() {
             {/* Información de contacto */}
             <section className="mt-6">
               <p className="mb-6 text-gray-700">
-                We're here to help! Whether you have questions about the platform, need support with your account, or want to report an issue, feel free to reach out.
+                We&rsquo;re here to help! Whether you have questions about the platform, need support with your account, or want to report an issue, feel free to reach out.
               </p>
 
               <div className="bg-gray-100 rounded-lg p-6 space-y-4">

@@ -1,6 +1,5 @@
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import SaleInfo from "@/components/shared/profile/SaleInfo";
-import { getTranslations } from "next-intl/server";
 import React from "react";
 
 const salesInProgress = [
@@ -63,7 +62,6 @@ const completedSales = [
 ];
 
 const VentasPage = async () => {
-  const t = await getTranslations("sales");
   return (
     <div>
       <div className="px-5 py-3 md:hidden ">
