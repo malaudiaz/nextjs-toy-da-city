@@ -35,8 +35,8 @@ export const getBreadcrumbs = (
       config: t("Config"),
       ventas: t("Sales"),
       compras: t("Purchases"),
-      intercambios: t("Trades"),
-      regalos: t("Gifts"),
+      intercambios: t("Swap"),
+      regalos: t("Free"),
       favoritos: t("Favorites"),
       reputation: t("Reputation"),
       terms: t("Terms"),
@@ -44,6 +44,8 @@ export const getBreadcrumbs = (
       post: t("Post"),
       search: t("Search"),
       cart: t("Cart"),
+      contact: t("Contact"),
+      mission: t("Mission"),
     };
 
     const label = labelMap[path] || decodedLabel;

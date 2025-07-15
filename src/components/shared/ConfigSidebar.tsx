@@ -38,12 +38,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     icon: ShoppingBag,
   },
   {
-    title: t("Trades"),
+    title: t("Swap"),
     url: "/config/intercambios",
     icon: Repeat,
   },
   {
-    title: t("Gifts"),
+    title: t("Free"),
     url: "/config/regalos",
     icon: Gift,
   },
@@ -62,7 +62,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <div className="px-4 py-4 flex flex-col items-center justify-between border-b border-[#f0f0f0]">
+        <div className="px-4 py-4 flex flex-col items-center justify-between border-b border-[#f0f0f0] bg-white">
            <div className="w-full overflow-hidden">
              <Breadcrumbs/>
            </div>

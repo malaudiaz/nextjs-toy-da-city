@@ -411,15 +411,21 @@
     "YourActivity": "Your Activity",
     "Sales": "Sales",
     "Purchases": "Purchases",
-    "Trades": "Trades",
-    "Gifts": "Gifts",
+    "Swap": "Swap",
+    "Free": "Free",
     "Favorites": "Favorites",
     "YourReputation": "Your Reputation"
   },
   "sales": {
     "Title": "Your Sales",
     "Text": "In progress",
-    "Subtitle": "Made"
+    "Subtitle": "Made",
+    "ViewDetails": "View Details",
+    "EditProduct": "Edit Product",
+    "NoSales": "No sales yet",
+    "NoSalesCompleted": "No completed sales yet",
+    "Buyer": "Buyer",
+    "SaleDate": "Sale Date"
   },
   "purchases": {
     "Title": "Your Purchases"
@@ -476,14 +482,16 @@
     "Config": "Configuration",
     "Sales": "Sales",
     "Purchases": "Purchases",
-    "Trades": "Trades",
-    "Gifts": "Gifts",
+    "Swap": "Swap",
+    "Free": "Free",
     "Favorites": "Favorites",
     "Reputation": "Reputation",
     "Terms": "Terms",
     "Policies": "Policies",
     "Search": "Search",
-    "Cart": "Cart"
+    "Cart": "Cart",
+    "Contact": "Contact",
+    "Mission": "Our Mission"
   },
   "expandableText": {
     "ShowMore": "Show more",

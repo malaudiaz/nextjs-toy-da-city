@@ -1,41 +1,87 @@
 import React from "react";
-import { ProfileInfoProps } from "./ProfileInfo";
 import Image from "next/image";
+import { Card, CardContent } from "@/components/ui/card";
+import { Eye, Heart, ShoppingCart, Trash2, User } from "lucide-react";
+import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/ui/button";
 
-const FavoritesInfo = ({ produts }: ProfileInfoProps) => {
+
+type FavoritesProps = {
+    id: number;
+    productName: string;
+    price: number;
+    image: string;
+    seller: string;
+}
+
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("es-ES", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+}
+
+const FavoritesInfo = ({ favorites }: { favorites: FavoritesProps[] }) => {
   return (
-    <div className="w-full h-full px-3 py-2">
-      <div className="bg-[#F0F5F0] gap-2 mt-2 rounded-md shadow-sm overflow-x-auto">
-        <div className="grid grid-cols-4 gap-2 px-3 py-2 font-semibold text-gray-700 border-b border-gray-300 bg-gray-100">
-          <div>Imagen</div>
-          <div className="text-center">Nombre</div>
-          <div className="text-center">Dueño</div>
-          <div className="text-right">Precio</div>
-        </div>
+     <div className="min-h-screen p-4 md:p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              {favorites.map((favorite) => (
+                <Card
+                  key={favorite.id}
+                  className="bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-shadow"
+                >
+                  <CardContent className="p-6 space-y-4">
+                    <div className="flex items-start justify-between">
+                      <Heart className="h-5 w-5 text-red-600 fill-red-600" />
+                    </div>
 
-        {produts.map((product) => (
-          <div
-            key={product.data}
-            className="grid grid-cols-4 gap-2 px-3 py-2 items-center hover:bg-gray-50 transition-colors"
-          >
-            <div className="flex justify-center w-20 h-20 flex-shrink-0 rounded-md overflow-hidden">
-              <Image
-                src={product.image}
-                alt={product.name || "Producto"}
-                width={80}
-                height={80}
-                className="w-full h-full object-cover"
-              />
+                    <div className="text-center space-y-3">
+                      <Image
+                        src={favorite.image || "/placeholder.svg"}
+                        alt={favorite.productName}
+                        width={120}
+                        height={120}
+                        className="rounded-lg object-cover w-[120px] h-[120px] mx-auto"
+                      />
+                      <h3 className="font-semibold text-gray-900 leading-tight">{favorite.productName}</h3>
+
+                      <div className="space-y-1">
+                          <div className="flex items-center justify-center gap-2">
+                            <span className="text-lg line-through text-gray-400">
+                              €{favorite.price.toFixed(2)}
+                            </span>
+                          </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <User className="h-4 w-4" />
+                        <span>Vendedor: {favorite.seller}</span>
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    <div className="flex flex-col gap-2">
+                      <div className="flex gap-2">
+                        <Button size="sm" className="flex-1">
+                          <ShoppingCart className="h-4 w-4 mr-2" />
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
-
-            {/* Nombre  probar sin el truncate */}
-            <div className="text-center truncate max-w-xs">{product.name}</div>
-
-            <div className="text-center truncate max-w-xs">{product.owner}</div>
-
-            <div className="text-right font-medium">{`${product.price} €`}</div>
-          </div>
-        ))}
       </div>
     </div>
   );

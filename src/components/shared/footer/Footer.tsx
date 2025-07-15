@@ -12,10 +12,10 @@ const Footer = () => {
         <div className="grid grid-cols-2 gap-4 place-items-center">
           <div className="flex flex-col space-y-1">
             <Image src={"/Logo2.png"} alt={"Toy"} width={118} height={23} />
-            <Link href={"/"} className="text-white font-medium">
+            <Link href={"/mission"} className="text-white font-medium">
               {t("Footer1")}
             </Link>
-            <Link href={"/"} className="text-white font-medium">
+            <Link href={"/contact"} className="text-white font-medium">
               {t("Footer2")}
             </Link>
           </div>

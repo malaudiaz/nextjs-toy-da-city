@@ -1,38 +1,77 @@
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
-import ProfileInfo from "@/components/shared/profile/ProfileInfo";
+import SaleInfo from "@/components/shared/profile/SaleInfo";
 import { getTranslations } from "next-intl/server";
 import React from "react";
 
-const products = [
+const salesInProgress = [
   {
-    image: "/image 4.png",
-    price: 200,
-    data: "Sale from 2023-01-01",
-    name: "Car",
-    owner: "Miguel",
+    id: 1,
+    productName: "LEGO Creator Expert Big Ben",
+    price: 249.99,
+    image: "/lego.png",
+    description: "Jugador de videojuegos",
   },
   {
-    image: "/image 4.png",
-    price: 250,
-    data: "Sale from 2023-02-01",
-    name: "Buzz Lightyear",
-    owner: "Rodolfo",
+    id: 2,
+    productName: "LEGO Creator Expert Big Ben",
+    price: 249.99,
+    image: "/lego.png",
+    description: "Jugador de videojuegos",
+  },
+  {
+    id: 3,
+    productName: "LEGO Creator Expert Big Ben",
+    price: 249.99,
+    image: "/lego.png",
+    description: "Jugador de videojuegos",
+  },
+];
+
+const completedSales = [
+  {
+    id: 4,
+    productName: "Nintendo Switch OLED",
+    price: 349.99,
+    image: "/lego.png",
+    buyer: "Luis Fernández",
+    saleDate: "2024-01-10",
+  },
+  {
+    id: 5,
+    productName: "Monopoly Edición Especial",
+    price: 45.99,
+    image: "/lego.png",
+    buyer: "Luis Fernández",
+    saleDate: "2024-01-10",
+  },
+  {
+    id: 6,
+    productName: "Puzzle 1000 piezas Disney",
+    price: 24.99,
+    image: "/lego.png",
+    buyer: "Luis Fernández",
+    saleDate: "2024-01-10",
+  },
+  {
+    id: 7,
+    productName: "Peluche Pokémon Pikachu",
+    price: 19.99,
+    image: "/lego.png",
+    buyer: "Luis Fernández",
+    saleDate: "2024-01-10",
   },
 ];
 
 const VentasPage = async () => {
-  const t = await getTranslations("sales")
+  const t = await getTranslations("sales");
   return (
-    <div className="w-full bg-[#fbfaf4]">
-      <div className="px-5 py-2 bg-[#F0F5F0] md:hidden">
-         <Breadcrumbs/>
-        <h1 className="text-lg font-bold">{t("Title")}</h1>
+    <div>
+      <div className="px-5 py-3 md:hidden ">
+        <Breadcrumbs />
       </div>
-
-      <ProfileInfo
-        title={t("Text")}
-        secondaryTitle={t("Subtitle")}
-        produts={products}
+      <SaleInfo
+        salesInProgress={salesInProgress}
+        completedSales={completedSales}
       />
     </div>
   );
