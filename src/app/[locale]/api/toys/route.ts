@@ -335,7 +335,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
         userId: userId!,
         categoryId: updatedPost!.categoryId,
         categoryDescription: updatedPost!.category?.description ?? updatedPost!.category.name,
-        statusId: updatedPost!.statusId,
+        //statusId: updatedPost!.statusId,
         statusDescription: updatedPost!.status?.description ?? updatedPost!.status.name,
         conditionId: updatedPost!.conditionId,
         conditionDescription: updatedPost!.condition?.description ?? updatedPost!.condition.name,

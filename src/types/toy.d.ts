@@ -15,7 +15,7 @@ export interface Toy {
   location: string
   conditionId: number
   categoryId: number
-  statusId: number
+  //statusId: number
   forSell: boolean
   forGifts: boolean
   forChanges: boolean

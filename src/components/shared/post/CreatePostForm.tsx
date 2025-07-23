@@ -84,7 +84,7 @@ const CreatePostForm = ({
       forGift: false,
       forChange: false,
       categoryId: undefined,
-      statusId: undefined,
+      //statusId: undefined,
       conditionId: undefined,
     },
   });
@@ -168,7 +168,7 @@ const CreatePostForm = ({
       //Agregar la localizacion
       const location = userLocation ? `${userLocation[0]},${userLocation[1]}` : "";
 
-      console.log("Location:", location);
+      //console.log("Location:", location);
 
       formData.append("location", location);
 
