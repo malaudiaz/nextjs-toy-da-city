@@ -14,6 +14,7 @@ import Navbar from "@/components/shared/header/Navbar";
 import Footer from "@/components/shared/footer/Footer";
 import ScrollToTop from "@/components/shared/ScrollToTop";
 import { clerkLocalizations } from "@/lib/clerkLocalization";
+import { Toaster } from "sonner";
 
  const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -73,6 +74,7 @@ export default async function RootLayout({
             <ScrollToTop />
             <Footer />
           </NextIntlClientProvider>
+          <Toaster/>
         </body>
       </ClerkProvider>
     </html>

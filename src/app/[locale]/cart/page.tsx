@@ -34,11 +34,11 @@ const CartPage = () => {
           <div className="space-y-2">
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span>$150</span>
+              <span>{items.reduce((acc, item) => acc + item.price, 0)}</span>
             </div>
             <div className="border-t border-b py-2 flex justify-between font-semibold">
               <span>Total</span>
-              <span>$180</span>
+              <span>{(items.reduce((acc, item) => acc + item.price, 0) + (items.reduce((acc, item) => acc + item.price, 0)*0.1)).toFixed(2)}</span>
             </div>
           </div>
           <Button className="mt-6 w-full bg-[#4c754b] hover:bg-[#558d54]">

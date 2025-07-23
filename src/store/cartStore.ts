@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -38,9 +39,9 @@ export const useCartStore = create<CartState>()(
               ],
         });
         if (existingItem) {
-          console.log("Existing item found");
+          toast.error("Item already in cart")
         } else {
-          console.log("New item added");
+          toast.success("Item added to cart")
         }
       },
       removeFromCart: (id) => {
