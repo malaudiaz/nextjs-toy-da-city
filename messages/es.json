@@ -409,15 +409,21 @@
     "YourActivity": "Tu Actividad",
     "Sales": "Ventas",
     "Purchases": "Compras",
-    "Trades": "Intercambios",
-    "Gifts": "Regalos",
+    "Swap": "Intercambios",
+    "Free": "Regalos",
     "Favorites": "Favoritos",
     "YourReputation": "Tu Reputación"
   },
   "sales": {
     "Title": "Tus Ventas",
     "Text": "En progreso",
-    "Subtitle": "Hechas"
+    "Subtitle": "Hechas",
+    "ViewDetails": "Ver Detalles",
+    "EditProduct": "Editar Producto",
+    "NoSales": "No hay ventas todavía",
+    "NoSalesCompleted": "No hay ventas completadas todavía",
+    "Buyer": "Comprador",
+    "SaleDate": "Fecha de Venta"
   },
   "purchases": {
     "Title": "Tus Compras"
@@ -474,13 +480,16 @@
     "Config": "Configuration",
     "Sales": "Ventas",
     "Purchases": "Compras",
-    "Trades": "Intercambios",
-    "Gifts": "Regalos",
+    "Swap": "Intercambios",
+    "Free": "Regalos",
     "Favorites": "Favoritos",
     "Reputation": "Reputación",
     "Terms": "Términos",
     "Policies": "Políticas",
-    "Search": "Buscar"
+    "Search": "Buscar",
+    "Cart": "Carrito",
+    "Contact": "Contacto",
+    "Mission": "Nuestra Misión"
   },
   "expandableText": {
     "ShowMore": "Ver más",

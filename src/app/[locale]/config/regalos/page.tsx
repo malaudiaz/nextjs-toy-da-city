@@ -1,32 +1,55 @@
 import RegalosInfo from "@/components/shared/profile/RegalosInfo";
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 
-const products = [
+const gifts = [
   {
-    image: "/image 4.png",
-    price: 200,
-    data: "Sale from 2023-01-01",
-    name: "Car",
-    owner: "Miguel",
+    id: 1,
+    type: "sent",
+    productName: "Teddy Bear Premium",
+    price: 45.99,
+    image: "/lego.png",
+    sender: "Papá",
+    recipient: "Mi sobrina Emma",
+    occasion: "Cumpleaños",
+    date: "2024-01-10",
+    message: "¡Feliz cumpleaños princesa!",
+    status: "delivered",
   },
   {
-    image: "/image 4.png",
-    price: 250,
-    data: "Sale from 2023-02-01",
-    name: "Buzz Lightyear",
-    owner: "Rodolfo",
+    id: 2,
+    type: "received",
+    productName: "LEGO Architecture Set",
+    price: 79.99,
+    image: "/lego.png",
+    recipient: "Mi sobrina Emma",
+    sender: "Papá",
+    occasion: "Navidad",
+    date: "2023-12-25",
+    message: "Para mi arquitecto favorito",
+    status: "received",
   },
-];
+  {
+    id: 3,
+    type: "sent",
+    productName: "Puzzle 500 piezas",
+    price: 19.99,
+    image: "/lego.png",
+    sender: "Papá",
+    recipient: "Abuela Carmen",
+    occasion: "Día de la Madre",
+    date: "2024-01-14",
+    message: "¡Feliz cumpleaños princesa!",
+    status: "in_transit",
+  },
+]
 
 const RegalosPage = () => {
   return (
-    <div className="w-full h-full bg-[#fbfaf4]">
-      <div className="px-5 py-2 bg-[#F0F5F0] md:hidden">
-         <Breadcrumbs/>
-        <h1 className="text-lg font-bold">Your Gifts</h1>
+    <div>
+      <div className="px-5 py-3 md:hidden ">
+        <Breadcrumbs />
       </div>
-
-      <RegalosInfo produts={products} />
+      <RegalosInfo gifts={gifts} />
     </div>
   );
 };

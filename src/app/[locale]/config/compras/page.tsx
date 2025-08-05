@@ -1,38 +1,45 @@
-import ProfileInfo from "@/components/shared/profile/ProfileInfo";
 import React from "react";
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
-import { getTranslations } from "next-intl/server";
+import PurchasesInfo from "@/components/shared/profile/PurchasesInfo";
 
-const products = [
+const purchases = [
   {
-    image: "/image 4.png",
-    price: 200,
-    data: "Sale from 2023-01-01",
-    name: "Car",
-    owner: "Miguel",
+    id: 1,
+    productName: "PlayStation 5 Console",
+    price: 499.99,
+    image: "/lego.png",
+    category: "Juguetes",
+    seller: "TechStore Madrid",
+    orderDate: "2024-01-10",
   },
   {
-    image: "/image 4.png",
-    price: 250,
-    data: "Sale from 2023-02-01",
-    name: "Buzz Lightyear",
-    owner: "Rodolfo",
+    id: 2,
+    productName: "LEGO Millennium Falcon",
+    price: 159.99,
+    image: "/lego.png",
+    category: "Juguetes",
+    seller: "Juguetes Premium",
+    orderDate: "2024-01-12",
+  },
+  {
+    id: 3,
+    productName: "Nintendo Switch Games Bundle",
+    price: 89.99,
+    image: "/lego.png",
+    category: "Juguetes",
+    seller: "GameWorld",
+    orderDate: "2024-01-14",
   },
 ];
 
 const ComprasPage = async () => {
 
-  const t = await getTranslations("purchases")
-
   return (
-    <div className="w-full h-full bg-[#fbfaf4]">
-      <div className="px-5 py-2 bg-[#F0F5F0] md:hidden">  
-        <Breadcrumbs/>
-        <h1 className="text-lg font-bold">{t("Title")}</h1>
+    <div>
+      <div className="px-5 py-3 md:hidden ">
+        <Breadcrumbs />
       </div>
-
-
-        <ProfileInfo secondaryTitle="Your Purchases" produts={products} hideSecondaryTitle={true} />
+      <PurchasesInfo purchases={purchases} />
     </div>
   );
 };
