@@ -1,12 +1,23 @@
 "use client"
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import CartCard from "@/components/shared/cart/CartCard";
-import { Button } from "@/components/ui/button";
+import StripeCheckoutButton from "@/components/shared/StripeCheckoutButton";
 import { useCartStore } from "@/store/cartStore";
 import React from "react";
 
 const CartPage = () => {
   const items = useCartStore((state) => state.items);
+
+  const cartItems = items.map((item) => ({
+    id: item.id,
+    name: item.title,
+    price: item.price,
+    quantity: 1,
+    image: item.media[0]?.fileUrl,
+  }));
+
+
+
   return (
     <div className="max-w-8xl px-4 py-6 md:mx-auto">
       {/* Breadcrumb */}
@@ -41,19 +52,13 @@ const CartPage = () => {
               <span>{(items.reduce((acc, item) => acc + item.price, 0) + (items.reduce((acc, item) => acc + item.price, 0)*0.1)).toFixed(2)}</span>
             </div>
           </div>
-          <Button className="mt-6 w-full bg-[#4c754b] hover:bg-[#558d54]">
-            Proceder al pago
-          </Button>
+          <StripeCheckoutButton cartItems={cartItems} />
         </div>
       </div>
 
       {/* Botón de checkout para móvil */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-white shadow-md border-t border-gray-200 z-10">
-        <Button className="w-full rounded-2xl bg-[#4c754b] hover:bg-[#558d54]"
-          aria-label="Proceder al pago"
-        >
-          Checkout - $180
-        </Button>
+          <StripeCheckoutButton cartItems={cartItems} />
       </div>
     </div>
   );

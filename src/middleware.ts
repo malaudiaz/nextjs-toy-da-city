@@ -24,6 +24,7 @@ export default clerkMiddleware(async (auth, req) => {
     'http://127.0.0.1:3000',       // Desarrollo
     'https://toydacity.com',       // Producción
     'https://www.toydacity.com',   // Producción (alternativo)
+    'https://69f0c7248d04.ngrok-free.app'
   ];
 
   // 2. Obtener el origen de la solicitud

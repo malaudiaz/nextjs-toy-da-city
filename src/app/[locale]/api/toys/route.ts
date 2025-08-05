@@ -210,7 +210,10 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
 
     formData = await clonedRequest.formData();
 
-    console.log("Valor de location:", formData.get('location'));
+    const forSell = formData.get("forSell") === "true" ? true : false
+    const forGifts = formData.get("forGifts") === "true" ? true : false
+    const forChanges = formData.get("forChanges") === "true" ? true : false 
+    
     
     // Validar con Zod
     const toyData = ToySchema.parse({
@@ -220,9 +223,9 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       price: Number(formData.get('price')),
       categoryId: Number(formData.get('categoryId')),
       conditionId: Number(formData.get('conditionId')),
-      forSell: formData.get("forSell"),
-      forGifts: formData.get("forGifts"),
-      forChanges: formData.get("forChanges"),
+      forSell: forSell,
+      forGifts: forGifts,
+      forChanges: forChanges,
     })
 
     const files = formData.getAll('files') as Blob[]
