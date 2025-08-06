@@ -49,7 +49,7 @@ async function main() {
     // Nomenclador de Condiciones del Juguete
     await tx.condition.create({
       data: {
-        id: 1, name: 'new_sealed', description: 'New sealed', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 1, name: 'new_sealed', description: 'New sealed', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'New sealed', languageId: 'en'},
@@ -61,7 +61,7 @@ async function main() {
 
     await tx.condition.create({
       data: {
-        id: 2, name: 'new_open_box', description: 'New open box', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 2, name: 'new_open_box', description: 'New open box', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'New open box', languageId: 'en'},
@@ -73,7 +73,7 @@ async function main() {
 
     await tx.condition.create({
       data: {
-        id: 3, name: 'like_new', description: 'Like new',  userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 3, name: 'like_new', description: 'Like new',  userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'like_new', languageId: 'en'},
@@ -86,7 +86,7 @@ async function main() {
 
     await tx.condition.create({
       data: {
-        id: 4, name: 'acceptable', description: 'Acceptable', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 4, name: 'acceptable', description: 'Acceptable', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'acceptable', languageId: 'en'},
@@ -99,7 +99,7 @@ async function main() {
 
     await tx.condition.create({
       data: {
-        id: 5, name: 'good', description: 'Good', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 5, name: 'good', description: 'Good', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'Good', languageId: 'en'},
@@ -112,7 +112,7 @@ async function main() {
 
     await tx.condition.create({
       data: {
-        id: 6, name: 'to_repair', description: 'To repair', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 6, name: 'to_repair', description: 'To repair', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'To repair', languageId: 'en'},
@@ -126,7 +126,7 @@ async function main() {
     // Nomenclador de Estados del Juguete del Juguete
     await tx.status.create({
       data: {
-        id: 1, name: 'available', description: 'available', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 1, name: 'available', description: 'available', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'Available', languageId: 'en'},
@@ -139,7 +139,7 @@ async function main() {
 
     await tx.status.create({
       data: {
-        id: 2, name: 'reserved', description: 'Reserved', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 2, name: 'reserved', description: 'Reserved', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'Reserved', languageId: 'en'},
@@ -152,7 +152,7 @@ async function main() {
 
     await tx.status.create({
       data: {
-        id: 3, name: 'sold', description: 'Sold', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 3, name: 'sold', description: 'Sold', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'Sold', languageId: 'en'},
@@ -165,7 +165,7 @@ async function main() {
 
     await tx.status.create({
       data: {
-        id: 4, name: 'canceled', description: 'Canceled', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 4, name: 'canceled', description: 'Canceled', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'Canceled', languageId: 'en'},
@@ -181,7 +181,7 @@ async function main() {
     await tx.category.create({
       data: {
         id: 1, name: 'educational', description: 'Educational',
-        userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'Educational', languageId: 'en'},
@@ -194,7 +194,7 @@ async function main() {
 
     await tx.category.create({
       data: {
-        id: 2, name: 'electronic', description: 'Electronic', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 2, name: 'electronic', description: 'Electronic', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'Electronic', languageId: 'en'},
@@ -207,7 +207,7 @@ async function main() {
 
     await tx.category.create({
       data: {
-        id: 3, name: 'board_games', description: 'Board games', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 3, name: 'board_games', description: 'Board games', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'Board games', languageId: 'en'},
@@ -220,7 +220,7 @@ async function main() {
 
     await tx.category.create({
       data: {
-        id: 4, name: 'mobility', description: 'Mobility', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 4, name: 'mobility', description: 'Mobility', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'Mobility', languageId: 'en'},
@@ -233,7 +233,7 @@ async function main() {
 
     await tx.category.create({
       data: {
-        id: 5, name: 'for_babies', description: 'For babies', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 5, name: 'for_babies', description: 'For babies', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'For babies', languageId: 'en'},
@@ -246,7 +246,7 @@ async function main() {
 
     await tx.category.create({
       data: {
-        id: 6, name: 'stuffed_animals', description: 'Stuffed animals', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 6, name: 'stuffed_animals', description: 'Stuffed animals', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'Stuffed animals', languageId: 'en'},
@@ -260,7 +260,7 @@ async function main() {
     
     await tx.category.create({
       data: {
-        id: 7, name: 'rare_toys', description: 'Rare toys', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 7, name: 'rare_toys', description: 'Rare toys', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'Rare Toys', languageId: 'en'},
@@ -273,7 +273,7 @@ async function main() {
 
     await tx.category.create({
       data: {
-        id: 8, name: 'action_figures', description: 'Action Figures', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 8, name: 'action_figures', description: 'Action Figures', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'Action Figures', languageId: 'en'},
@@ -286,7 +286,7 @@ async function main() {
 
     await tx.category.create({
       data: {
-        id: 9, name: 'vintage', description: 'vintage', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x',
+        id: 9, name: 'vintage', description: 'vintage', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z',
         translations: {
           create: [
             {key: 'name', value: 'Vintage', languageId: 'en'},
@@ -325,54 +325,54 @@ async function main() {
                      this will be a cool glider plane for kids, it is a good choice for toy gifts for kids on Easter, Christmas, Halloween, \
                      Thanksgiving Day, New Year, etc., Or being party favors for aviation and airplane themes, birthdays  ", 
         price: 9.99, categoryId:1, statusId: 1, conditionId: 1, location:'',
-        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},
+        sellerId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', forSell: true, forGifts: false, forChanges: false, isActive: true},
       { id: 'toy_002',
         title: 'Loftus Surprise Hand Buzzer', 
         description: '', 
         price: 7.99, categoryId:7, statusId: 1, conditionId: 1, location:'',
-        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},
+        sellerId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', forSell: true, forGifts: false, forChanges: false, isActive: true},
       { id: 'toy_003', 
         title: 'MV Akkey Second Hand Chew Hobby Goods', 
         description: "I'll swap it for some small, decent-sounding Bluetooth speakers.", 
         price: 0.00, location:'41.235433,-95.993834', 
         categoryId: 2, statusId: 1, conditionId: 3, 
-        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: false, forGifts: false, forChanges: true, isActive: true},
+        sellerId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', forSell: false, forGifts: false, forChanges: true, isActive: true},
       { id: 'toy_004',
         title: 'Lot of 100 Used US United States Postage Stamps', 
         description: '100 Exciting United States Stamps in Fine Used Condition. Includes Commemoratives and Large Pictorials only. Absolutely no duplicates.', 
         price: 0.00, categoryId:3, statusId: 1, conditionId: 2, location:'',
-        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: false, forGifts: true, forChanges: false, isActive: true},
+        sellerId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', forSell: false, forGifts: true, forChanges: false, isActive: true},
       { id: 'toy_005',
         title: 'Green Sprouts Glass Sip And Straw Cup, Pink', 
         description: 'A great sturdy sippy cup!', 
         price: 0.00, categoryId:5, statusId: 1, conditionId: 1, location:'',
-        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: false, forGifts: true, forChanges: false, isActive: true},
+        sellerId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', forSell: false, forGifts: true, forChanges: false, isActive: true},
       { id: 'toy_006',
         title: 'Playmates Teenage Mutant Ninja Turtles Tmnt Ghostbusters 6.5" Four Used Figures', 
         description: '', 
         price: 67.32, categoryId:8, statusId: 1, conditionId: 4, location:'',
-        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},
+        sellerId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', forSell: true, forGifts: false, forChanges: false, isActive: true},
       { id: 'toy_007', 
         title: 'Metal toy army military tanks', 
         description: 'they all need a paint job', 
         price: 32.99, location:'41.235433,-95.993834', 
         categoryId: 9, statusId: 1, conditionId: 5, 
-        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},  
+        sellerId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', forSell: true, forGifts: false, forChanges: false, isActive: true},  
       { id: 'toy_008',
         title: 'Easy-to-read Ben 10 analog watch for boys with a silver case and green faux leather.', 
         description: "It doesn't work, probably just the battery. I'm swap it for the 3.75' Ben 10 Ultimate Alien HUMUNGOUSAUR Action Figure", 
         price: 0.00, categoryId:8, statusId: 1, conditionId: 6, location:'',
-        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: false, forGifts: false, forChanges: true, isActive: true},
+        sellerId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', forSell: false, forGifts: false, forChanges: true, isActive: true},
       { id: 'toy_009',
         title: 'UNOFFICIAL Plants vs Zombies PvZ Plush Stuffed Toy 10 Piece Set Second Hand Used', 
         description: '', 
         price: 19.99, categoryId:6, statusId: 1, conditionId: 5, location:'',
-        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},
+        sellerId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', forSell: true, forGifts: false, forChanges: false, isActive: true},
       { id: 'toy_010',
         title: 'Pedimini 16" Kids MTB Style Bicycle Bike', 
         description: "Very good condition mechanically and aesthetically. Low rise bar for an MTB feel. A few scuffs and scratches on the frame are barely noticeable.", 
         price: 49.99, categoryId:4, statusId: 1, conditionId: 3, location:'',
-        sellerId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', forSell: true, forGifts: false, forChanges: false, isActive: true},
+        sellerId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', forSell: true, forGifts: false, forChanges: false, isActive: true},
   ],
     skipDuplicates: true,
   });
@@ -419,80 +419,80 @@ async function main() {
 
   await prisma.toyComments.createMany({
     data: [
-      {id: 'comment_001', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'comment_002', summary: 'I Like', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'comment_003', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'comment_004', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'comment_005', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'comment_006', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'comment_007', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'comment_008', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'comment_009', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'comment_010', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'comment_011', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_002'},
-      {id: 'comment_012', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_003'},
-      {id: 'comment_013', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_004'},
-      {id: 'comment_014', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_005'},
+      {id: 'comment_001', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_002', summary: 'I Like', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_003', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_004', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_005', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_006', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_007', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_008', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_009', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_010', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'comment_011', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_002'},
+      {id: 'comment_012', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_003'},
+      {id: 'comment_013', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_004'},
+      {id: 'comment_014', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_005'},
     ],
     skipDuplicates: true,
   });
 
   await prisma.toyLikes.createMany({
     data: [
-      {id: 'like_001', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'like_002', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'like_003', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'like_004', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'like_005', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'like_006', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'like_007', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'like_008', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'like_009', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'like_010', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_001'},
-      {id: 'like_011', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_002'},
-      {id: 'like_012', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_003'},
-      {id: 'like_013', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_004'},
-      {id: 'like_014', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, toyId: 'toy_005'},
+      {id: 'like_001', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'like_002', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'like_003', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'like_004', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'like_005', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'like_006', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'like_007', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'like_008', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'like_009', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'like_010', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_001'},
+      {id: 'like_011', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_002'},
+      {id: 'like_012', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_003'},
+      {id: 'like_013', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_004'},
+      {id: 'like_014', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, toyId: 'toy_005'},
     ],
     skipDuplicates: true,
   });
 
   await prisma.commentsComments.createMany({
     data: [
-      {id: 'comment_001', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
-      {id: 'comment_002', summary: 'I Like', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
-      {id: 'comment_003', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
-      {id: 'comment_004', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
-      {id: 'comment_005', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
-      {id: 'comment_006', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
-      {id: 'comment_007', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
-      {id: 'comment_008', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_002'},
-      {id: 'comment_009', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_002'},
-      {id: 'comment_010', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_002'},
-      {id: 'comment_011', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_003'},
-      {id: 'comment_012', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_004'},
-      {id: 'comment_013', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_004'},
-      {id: 'comment_014', summary: 'Beautiful Toy', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_004'},
+      {id: 'comment_001', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_001'},
+      {id: 'comment_002', summary: 'I Like', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_001'},
+      {id: 'comment_003', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_001'},
+      {id: 'comment_004', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_001'},
+      {id: 'comment_005', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_001'},
+      {id: 'comment_006', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_001'},
+      {id: 'comment_007', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_001'},
+      {id: 'comment_008', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_002'},
+      {id: 'comment_009', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_002'},
+      {id: 'comment_010', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_002'},
+      {id: 'comment_011', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_003'},
+      {id: 'comment_012', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_004'},
+      {id: 'comment_013', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_004'},
+      {id: 'comment_014', summary: 'Beautiful Toy', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_004'},
     ],
     skipDuplicates: true,
   });
   
   await prisma.commentsLikes.createMany({
     data: [
-      {id: 'like_001', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
-      {id: 'like_002', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
-      {id: 'like_003', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
-      {id: 'like_004', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
-      {id: 'like_005', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
-      {id: 'like_006', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
-      {id: 'like_007', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
-      {id: 'like_008', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
-      {id: 'like_009', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_001'},
-      {id: 'like_010', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_002'},
-      {id: 'like_011', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_002'},
-      {id: 'like_012', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_003'},
-      {id: 'like_013', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_003'},
-      {id: 'like_014', userId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', isActive: true, commentId: 'comment_003'},
+      {id: 'like_001', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_001'},
+      {id: 'like_002', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_001'},
+      {id: 'like_003', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_001'},
+      {id: 'like_004', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_001'},
+      {id: 'like_005', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_001'},
+      {id: 'like_006', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_001'},
+      {id: 'like_007', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_001'},
+      {id: 'like_008', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_001'},
+      {id: 'like_009', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_001'},
+      {id: 'like_010', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_002'},
+      {id: 'like_011', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_002'},
+      {id: 'like_012', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_003'},
+      {id: 'like_013', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_003'},
+      {id: 'like_014', userId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', isActive: true, commentId: 'comment_003'},
     ],
     skipDuplicates: true,
   });
