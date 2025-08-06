@@ -39,7 +39,6 @@ async function main() {
     // users
     await prisma.user.createMany({
       data: [
-        { id: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x', name: 'Miguel Anegel Lau Díaz', clerkId: 'user_2wY8ZRoOrheojD7zQXtwk9fg00x' },
         { id: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z', name: 'Miraidys Garcia Tornes', clerkId: 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z' },
       ],
       skipDuplicates: true,
