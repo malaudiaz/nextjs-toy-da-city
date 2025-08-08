@@ -33,7 +33,7 @@ export default function Sigin() {
         {/* Botón de Clerk */}
         <div className="mt-6">
           <SignInButton mode="modal">
-            <button className="w-full flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <button className="w-full flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#4c754b] hover:bg-[#558d54] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               Iniciar sesión
             </button>
           </SignInButton>

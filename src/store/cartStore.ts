@@ -11,6 +11,7 @@ export interface CartItem {
   title: string;
   price: number;
   media: Media[];
+  userId: string;
 }
 
 interface CartState {
@@ -35,6 +36,7 @@ export const useCartStore = create<CartState>()(
                   title: item.title,
                   price: item.price,
                   media: item.media,
+                  userId: item.userId,
                 },
               ],
         });

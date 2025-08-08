@@ -15,7 +15,9 @@ model User {
 
   clerkId         String  @unique
   role            String  @default("buyer")
-  stripeAccountId String?
+  stripeAccountId String? @unique
+
+  onboardingUrl   String?
 
   toysForSale     Toy[]         @relation("Seller")
   purchaseHistory Transaction[] @relation("Buyer")

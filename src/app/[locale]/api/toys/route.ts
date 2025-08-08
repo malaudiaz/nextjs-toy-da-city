@@ -7,7 +7,7 @@ import { PaginationSchema, ToyFilterSchema, ToySchema} from "@/lib/schemas/toy";
 import { getTranslations } from "next-intl/server";
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/auth";
-import { ToyResponseSuccess, ToyResponseError, ToyWhereInput } from "@/types/toy";
+import { ToyResponseSuccess, ToyResponseError } from "@/types/toy";
 
 const ALLOWED_TYPES = [
   'image/jpeg',
@@ -99,9 +99,9 @@ export async function GET(
     }
 
     // Filtro por condicion
-    if (conditionIds) {
+    if (conditionIds.length > 0) {
       where.conditionId = { in: conditionIds }
-      }
+    }
 
     // Filtro por categoría y condición
     if (filters.categoryId) where.categoryId = filters.categoryId;
@@ -227,6 +227,17 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       )    
   }
 
+  const user = await prisma.user.findUnique({ where: { clerkId: userId } });
+  if (!user) {
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: "User not found" 
+      },
+      { status: 404 }
+    )
+  }
+
   //const t = await getTranslations("Toy.errors");
   const clonedRequest = request.clone();
   let formData: FormData;
@@ -238,9 +249,9 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
 
     formData = await clonedRequest.formData();
 
-    const forSell = formData.get("forSell") === "true" ? true : false
-    const forGifts = formData.get("forGifts") === "true" ? true : false
-    const forChanges = formData.get("forChanges") === "true" ? true : false 
+    const forSale = formData.get("forSale") === "true" ? true : false
+    const forGift = formData.get("forGift") === "true" ? true : false
+    const forChange = formData.get("forChange") === "true" ? true : false 
     
     
     // Validar con Zod
@@ -251,9 +262,9 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       price: Number(formData.get('price')),
       categoryId: Number(formData.get('categoryId')),
       conditionId: Number(formData.get('conditionId')),
-      forSell: forSell,
-      forGifts: forGifts,
-      forChanges: forChanges,
+      forSell: forSale,
+      forGifts: forGift,
+      forChanges: forChange,
     })
 
     const files = formData.getAll('files') as Blob[]
@@ -299,7 +310,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
         description: toyData.description,
         price: toyData.price,
         location:toyData.location,
-        sellerId: userId!,
+        sellerId: user?.id,
         categoryId: toyData.categoryId,
         statusId: statusAvailable.id,
         conditionId: toyData.conditionId,

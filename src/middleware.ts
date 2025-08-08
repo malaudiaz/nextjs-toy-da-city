@@ -1,47 +1,56 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+// src/middleware.ts
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import createIntlMiddleware from 'next-intl/middleware';
 
-// 1. Configuración de next-intl
+// Configuración de next-intl
 const intlMiddleware = createIntlMiddleware({
   locales: ['en', 'es'],
   defaultLocale: 'en',
-  localePrefix: 'always', // o 'always' si prefieres /en/... siempre visible
+  localePrefix: 'always',
 });
 
-
-// 2. Configuración de Clerk
+// Rutas protegidas
 const isProtectedRoute = createRouteMatcher([
   '/(en|es)/protected(.*)',
 ]);
 
-export default clerkMiddleware(async (auth, req) => {
-  // Lista blanca de dominios permitidos (customiza con tus URLs)
-  const response = NextResponse.next();
+// Rutas públicas (no requieren autenticación)
+const isPublicRoute = createRouteMatcher([
+  '/(en|es)?',
+  '/(en|es)/sign-in(.*)',
+  '/(en|es)/sign-up(.*)',
+  '/(en|es)/seller-onboarding',
+  '/(en|es)/seller-dashboard', // Añadido para evitar el error en /es/seller-dashboard
+  '/api/clerk-webhook',
+  '/api/get-onboarding-url',
+  '/api/check-stripe-account',
+]);
 
+export default clerkMiddleware(async (auth, req) => {
+  const origin = req.headers.get('origin') || '';
   const allowedOrigins = [
-    'http://localhost:3000',       // Desarrollo
-    'http://127.0.0.1:3000',       // Desarrollo
-    'https://toydacity.com',       // Producción
-    'https://www.toydacity.com',   // Producción (alternativo)
-    'https://69f0c7248d04.ngrok-free.app'
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'https://toydacity.com',
+    'https://www.toydacity.com',
+    'https://69f0c7248d04.ngrok-free.app',
   ];
 
-  // 2. Obtener el origen de la solicitud
-  const origin = req.headers.get('origin') || '';
-  
-  // Verifica si el origen está en la lista blanca
+  // Configurar respuesta base
+  const response = NextResponse.next();
+
+  // Configurar CORS
   if (origin && allowedOrigins.includes(origin)) {
-    // Configura los headers CORS
     response.headers.set('Access-Control-Allow-Origin', origin);
     response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    response.headers.set('Access-Control-Allow-Credentials', 'true'); // Si usas cookies/tokens
+    response.headers.set('Access-Control-Allow-Credentials', 'true');
   }
 
-  // 5. Manejar solicitud OPTIONS (Preflight)
+  // Manejar solicitud OPTIONS (Preflight)
   if (req.method === 'OPTIONS') {
-    return new NextResponse(null, { 
+    return new NextResponse(null, {
       status: 200,
       headers: {
         ...Object.fromEntries(response.headers),
@@ -50,21 +59,35 @@ export default clerkMiddleware(async (auth, req) => {
     });
   }
 
-  // Luego maneja la autenticación con Clerk
-  if (isProtectedRoute(req)) await auth.protect();
+  // Evitar autenticación en rutas públicas
+  if (isPublicRoute(req)) {
+    console.log(`Ruta pública accedida: ${req.url}`);
+    return intlMiddleware(req); // Aplicar solo next-intl
+  }
 
-  // Ejecuta el middleware de internacionalización
+  // Proteger rutas autenticadas
+  if (isProtectedRoute(req)) {
+    try {
+      await auth.protect();
+      console.log(`Ruta protegida accedida: ${req.url}`);
+    } catch (error) {
+      console.error('Error de autenticación en Clerk:', error);
+      return NextResponse.redirect(new URL('/es/sign-in', req.url));
+    }
+  }
+
+  // Aplicar middleware de internacionalización
   const intlResponse = intlMiddleware(req);
-  if (intlResponse) return intlResponse; 
- 
-  return response;  
+  if (intlResponse) return intlResponse;
+
+  return response;
 });
 
 export const config = {
   matcher: [
-    '/((?!.+\\.[\\w]+$|_next|_vercel|.*\\..*).*)', // Clerk
-    '/', 
-    '/(en|es)/:path*',   // next-intl
-    '/(en|es)/api/:path*'
+    '/((?!.+\\.[\\w]+$|_next|_vercel|.*\\..*).*)',
+    '/',
+    '/(en|es)/:path*',
+    '/(en|es)/api/:path*',
   ],
 };

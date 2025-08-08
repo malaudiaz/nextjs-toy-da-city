@@ -298,7 +298,7 @@ async function main() {
 
   })
 
-  await prisma.$transaction(async (tx) => {
+  await prisma.$transaction(async () => {
 
     
     //Session de los Juguetes

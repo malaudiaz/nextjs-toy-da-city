@@ -1,14 +1,25 @@
+// app/post/page.jsx
+import { redirect } from "next/navigation"; // Importa redirect
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import CreatePostForm from "@/components/shared/post/CreatePostForm";
 import Sigin from "@/components/shared/Sigin";
 import { getCategories } from "@/lib/actions/categoriesAction";
 import { getConditions } from "@/lib/actions/conditionActions";
+import { getSellerData } from "@/lib/actions/sellertActions";
 import { auth } from "@clerk/nextjs/server";
 
 export default async function PostPage() {
+  const { userId } = await auth();
+  if (!userId) return <Sigin />;
+
+  const sellerData = await getSellerData(userId);
+
+  if (sellerData.role !== "seller") {
+    redirect("/seller-onboarding");
+  }
+
   const categories = await getCategories();
   const condition = await getConditions();
-  const { userId } = await auth();
 
   return (
     <div>

@@ -16,9 +16,9 @@ import ScrollToTop from "@/components/shared/ScrollToTop";
 import { clerkLocalizations } from "@/lib/clerkLocalization";
 import { Toaster } from "sonner";
 
- const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
- const poppins = Poppins({
+const poppins = Poppins({
   subsets: ["latin"],
   weight: "100",
   variable: "--font-poppins",
@@ -33,19 +33,19 @@ export const metadata: Metadata = {
     apple: "/apple-icon.png",
     other: [
       {
-        rel: 'icon',
-        url: '/favicon/icon1.png',
-        sizes: '16x16',
-        type: 'image/png',
+        rel: "icon",
+        url: "/favicon/icon1.png",
+        sizes: "16x16",
+        type: "image/png",
       },
       {
-        rel: 'icon',
-        url: '/favicon/icon2.png',
-        sizes: '32x32',
-        type: 'image/png',
-      }
-    ]
-  }
+        rel: "icon",
+        url: "/favicon/icon2.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+    ],
+  },
 };
 
 export default async function RootLayout({
@@ -62,11 +62,19 @@ export default async function RootLayout({
   }
 
   // Selecciona la localización de Clerk basada en el `locale`
-  const localization = clerkLocalizations[locale as keyof typeof clerkLocalizations];  
+  const localization =
+    clerkLocalizations[locale as keyof typeof clerkLocalizations];
 
   return (
-    <html lang={locale} className={`${inter.variable} ${poppins.variable}`} suppressHydrationWarning>
-      <ClerkProvider localization={localization} appearance={{ baseTheme: dark }}>
+    <html
+      lang={locale}
+      className={`${inter.variable} ${poppins.variable}`}
+      suppressHydrationWarning
+    >
+      <ClerkProvider
+        localization={localization}
+        appearance={{ baseTheme: dark }}
+      >
         <body className={`min-h-screen flex flex-col antialiased font-inter`}>
           <NextIntlClientProvider>
             <Navbar />
@@ -74,7 +82,7 @@ export default async function RootLayout({
             <ScrollToTop />
             <Footer />
           </NextIntlClientProvider>
-          <Toaster/>
+          <Toaster />
         </body>
       </ClerkProvider>
     </html>

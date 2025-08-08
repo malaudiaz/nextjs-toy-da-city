@@ -1,6 +1,8 @@
 // app/api/checkout/route.ts
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
+import { getAuthUserFromRequest } from "@/lib/auth";
+import prisma from "@/lib/prisma";
 
 // Versión más reciente de la API (julio 2024)
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -17,7 +19,7 @@ interface CartItem {
   price: number;
   quantity: number;
   image?: string;
-  // Agrega otros campos necesarios
+  userId: string;
 }
 
 interface StripeLineItem {
@@ -31,10 +33,53 @@ interface StripeLineItem {
     unit_amount: number;
   };
   quantity: number;
+  stripeAccountId: string;
+}
+
+const transformCart = async (cartItems: CartItem[]) => {
+  const lineItems: StripeLineItem[] = [];
+
+  for (const item of cartItems) {
+    const { price, quantity, userId } = item;
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { stripeAccountId: true },
+    }); 
+
+    if (user?.stripeAccountId) {
+      const priceInCents = Math.round(price * 100);
+      lineItems.push({
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: item.name,
+            ...(item.image && { images: [item.image] }),
+          },
+          unit_amount: priceInCents,
+        },
+        quantity: quantity,
+        stripeAccountId: user.stripeAccountId,
+      });
+    }
+  }
+  
+  return lineItems
 }
 
 export async function POST(request: Request) {
-  console.log("request.url", request.url);
+  const { success, userId, error, code } = await getAuthUserFromRequest(request);
+
+  if (!success && !userId) {
+    return NextResponse.json(
+        { 
+          success: success, 
+          error: error 
+        },
+        { status: code }
+      )    
+  }
+
   try {
     const { cartItems }: { cartItems: CartItem[] } = await request.json();
     const origin = request.headers.get('origin') || 'http://localhost:3000';
@@ -44,30 +89,36 @@ export async function POST(request: Request) {
     const cancelUrl = `${origin}/es/cart`;
 
     // Transformar items al formato de Stripe
-    const lineItems: StripeLineItem[] = cartItems.map((item) => ({
-      price_data: {
-        currency: "usd",
-        product_data: {
-          name: item.name,
-          ...(item.image && { images: [item.image] }),
-        },
-        unit_amount: Math.round(item.price * 100),
-      },
-      quantity: item.quantity,
-    }));
+    const lineItems = await transformCart(cartItems);
 
-    // Crear sesión de Checkout
-    const session = await stripe.checkout.sessions.create({
+    // Calculate platform fee (optional, in cents)
+    const totalAmount = cartItems.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+    const applicationFeeAmount = Math.round(totalAmount * 100 * 0.1); // 10% fee
+
+    // Create Checkout session with explicit typing
+    const sessionParams = {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
       success_url: successUrl,
       cancel_url: cancelUrl,
+      locale: "en",
       metadata: {
-        // Puedes añadir metadatos útiles para después
         cart_items: JSON.stringify(cartItems.map((item) => item.id)),
+        connected_account_id: "",
+        locale: "en",
       },
-    });
+      transfer_data: {
+        destination: "",
+      },
+      application_fee_amount: applicationFeeAmount,
+    } as Stripe.Checkout.SessionCreateParams; 
+
+    const session = await stripe.checkout.sessions.create(sessionParams);
+
 
     return NextResponse.json({ sessionId: session.id });
   } catch (error: unknown) {
