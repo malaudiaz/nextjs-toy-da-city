@@ -93,6 +93,13 @@ export async function GET(req: NextRequest) {
     // ✅ Eliminar al vendedor que acaba de ser pagado
     const sellerInternalId = session.metadata?.seller_internal_id;
     if (sellerInternalId) {
+      const paymentSellers = pendingSellers.filter(
+        (s) => s.internalSellerId === sellerInternalId
+      );
+
+      console.log("paymentSellers:", paymentSellers);
+
+      // ✅ Eliminar al vendedor que acaba de ser pagado
       pendingSellers = pendingSellers.filter(
         (s) => s.internalSellerId !== sellerInternalId
       );
