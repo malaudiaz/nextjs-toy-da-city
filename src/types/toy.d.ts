@@ -21,7 +21,7 @@ export interface Toy {
   forChanges: boolean
   createdAt?: Date
   updatedAt?: Date
-  userId: string
+  sellerId: string
   isActive: boolean
   likes: ToyLikes[]
   comments: ToyComments[]

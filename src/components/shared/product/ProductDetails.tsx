@@ -35,6 +35,7 @@ type ProductDetailsProps = {
 };
 
 const ProductDetails = ({ data }: ProductDetailsProps) => {
+
   const [isFavorite, setIsFavorite] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
   const nextImage = () => {
@@ -193,10 +194,15 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
             <div className="flex items-center">
               {data.forSell ? (
                 <button
-                  onClick={() =>
-                    addToCart({
-                      ...data,
-                    })
+                  onClick={() => {
+                      addToCart({
+                        id: data.id,
+                        title: data.title,
+                        price: data.price,
+                        media: data.media,
+                        sellerId: data.sellerId,
+                      })
+                    }
                   }
                   className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 px-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 w-full"
                 >

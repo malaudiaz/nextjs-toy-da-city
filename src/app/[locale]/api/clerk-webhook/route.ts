@@ -5,15 +5,12 @@ import prisma from "@/lib/prisma";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-06-30.basil", // Versión actualizada
   typescript: true,
-  timeout: 10000, // 10 segundos de timeout
-  maxNetworkRetries: 2, // Reintentos automáticos
+  timeout: 10000,
+  maxNetworkRetries: 2,
 });
 
 export async function POST(req: Request) {
-  console.log("Webhook recibido. URL:", req.url);
-  console.log("Headers:", Object.fromEntries(req.headers.entries()));
 
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 
@@ -35,8 +32,6 @@ export async function POST(req: Request) {
 
   // Verificar webhook
   const payload = await req.json();
-
-  console.log("Payload:", payload);
 
   const wh = new Webhook(WEBHOOK_SECRET);
 

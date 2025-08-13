@@ -5,18 +5,29 @@ import StripeCheckoutButton from "@/components/shared/StripeCheckoutButton";
 import { useCartStore } from "@/store/cartStore";
 import React from "react";
 
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+  userId: string;
+}
+
+
 const CartPage = () => {
   const items = useCartStore((state) => state.items);
 
-  const cartItems = items.map((item) => ({
+  const cartItems: CartItem[] = [];
+
+  items.map((item) => (cartItems.push({
     id: item.id,
     name: item.title,
     price: item.price,
     quantity: 1,
     image: item.media[0]?.fileUrl,
-  }));
-
-
+    userId: item.sellerId,
+  })));
 
   return (
     <div className="max-w-8xl px-4 py-6 md:mx-auto">
