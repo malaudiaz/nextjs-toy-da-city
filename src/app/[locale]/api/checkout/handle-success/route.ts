@@ -61,6 +61,35 @@ export async function GET(req: NextRequest) {
 
     let pendingSellers: PendingSellerData[] = JSON.parse(pendingDataStr);
 
+    // esto es un ejemplo de lo que viene en PendingSellers cuando se estan pagando a dos vendedores distintos
+    /* pendingSellers = 
+    {
+      internalSellerId: "6a114e75-3852-40bc-ab7b-cc87d0c83b35",
+      items: [
+        {
+          id: "toy_002",
+          name: "Loftus Surprise Hand Buzzer",
+          price: 7.99,
+          quantity: 1,
+          image: "/images/f2.jpg",
+          userId: "6a114e75-3852-40bc-ab7b-cc87d0c83b35",
+        },
+      ],
+    }
+    {
+      internalSellerId: "82f62110-5aac-4aae-a3e2-b631190c73fa",
+      items: [
+        {
+          id: "toy_007",
+          name: "Metal toy army military tanks",
+          price: 32.99,
+          quantity: 1,
+          image: "/images/f7.webp",
+          userId: "82f62110-5aac-4aae-a3e2-b631190c73fa",
+        },
+      ],
+    }    
+ */
     // ✅ Eliminar al vendedor que acaba de ser pagado
     const sellerInternalId = session.metadata?.seller_internal_id;
     if (sellerInternalId) {
