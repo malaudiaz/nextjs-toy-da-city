@@ -25,11 +25,6 @@ type PendingSellerData = {
   items: CartItem[];
 };
 
-type StripeConnectOptions = {
-  stripeAccount?: string;
-  application_fee_amount?: number;
-} & Stripe.RequestOptions;
-
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const sessionId = searchParams.get("session_id");
@@ -61,35 +56,6 @@ export async function GET(req: NextRequest) {
 
     let pendingSellers: PendingSellerData[] = JSON.parse(pendingDataStr);
 
-    // esto es un ejemplo de lo que viene en PendingSellers cuando se estan pagando a dos vendedores distintos
-    /* pendingSellers = 
-    {
-      internalSellerId: "6a114e75-3852-40bc-ab7b-cc87d0c83b35",
-      items: [
-        {
-          id: "toy_002",
-          name: "Loftus Surprise Hand Buzzer",
-          price: 7.99,
-          quantity: 1,
-          image: "/images/f2.jpg",
-          userId: "6a114e75-3852-40bc-ab7b-cc87d0c83b35",
-        },
-      ],
-    }
-    {
-      internalSellerId: "82f62110-5aac-4aae-a3e2-b631190c73fa",
-      items: [
-        {
-          id: "toy_007",
-          name: "Metal toy army military tanks",
-          price: 32.99,
-          quantity: 1,
-          image: "/images/f7.webp",
-          userId: "82f62110-5aac-4aae-a3e2-b631190c73fa",
-        },
-      ],
-    }    
- */
     // ✅ Eliminar al vendedor que acaba de ser pagado
     const sellerInternalId = session.metadata?.seller_internal_id;
     if (sellerInternalId) {
@@ -151,25 +117,29 @@ export async function GET(req: NextRequest) {
             product_data: {
               name: item.name,
             },
-            unit_amount: Math.round(item.price * 100), // convertir a centavos
+            unit_amount: Math.round(item.price * 100),
           },
           quantity: item.quantity,
         })),
         mode: "payment",
+
+        // ✅ Usa payment_intent_data para la comisión
+        payment_intent_data: {
+          application_fee_amount: applicationFeeAmount, // en centavos
+        },
+
         success_url: `${origin}/api/checkout/handle-success?session_id={CHECKOUT_SESSION_ID}&seller_id=${seller.stripeAccountId}`,
         cancel_url: `${origin}/cart`,
         metadata: {
           buyer_id: session.metadata?.buyer_id || "unknown",
           seller_internal_id: nextSeller.internalSellerId,
         },
-        // ✅ Guardar cartKey para continuar el flujo
         client_reference_id: cartKey,
       },
       {
         // ✅ Actuar en nombre del vendedor
         stripeAccount: seller.stripeAccountId,
-        application_fee_amount: applicationFeeAmount,
-      } as StripeConnectOptions
+      }
     );
 
     // ✅ Actualizar Redis con los vendedores restantes
