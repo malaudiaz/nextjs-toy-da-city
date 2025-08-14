@@ -18,6 +18,7 @@ interface CartState {
   items: CartItem[];
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: string) => void;
+  clearCart: () => void; 
 }
 
 export const useCartStore = create<CartState>()(
@@ -50,7 +51,11 @@ export const useCartStore = create<CartState>()(
         set({
             items: get().items.filter((item) => item.id !== id )
         })
-      }
+      },
+      clearCart: () => {
+        set({ items: [] }); // 👈 Vacía el carrito
+        toast.info("Cart cleared after purchase");
+      },
     }),
     {
       name: "cart-store",

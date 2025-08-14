@@ -1,5 +1,6 @@
 "use client";
 
+import { useCartStore } from "@/store/cartStore";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -10,7 +11,8 @@ export default function OrderConfirmedPage() {
     // Simulamos una carga inicial (opcional)
     const timer = setTimeout(() => {
       // Limpiar el carrito (ejemplo con localStorage)
-      localStorage.removeItem("cart");
+      useCartStore.getState().clearCart();
+
       // Opcional: Actualizar el estado si usas un manejador de estado como Redux o Zustand
       // Ejemplo: dispatch(clearCart());
       console.log("Carrito limpiado");
