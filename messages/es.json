@@ -505,5 +505,17 @@
   },
   "toys": {
     "free": "GRATIS"
+  },
+  "stripeCheckoutButton": {
+    "Checkout": "Pagar con Stripe",
+    "Process": "Procesando...",
+    "NoSession": "No se pudo crear la sesión de pago",
+    "Error": "Error al procesar el pago"
+  },
+  "cartStore": {
+    "addToCart": "Agregar al Carrito",
+    "itemExist": "Este artículo ya está en el carrito",
+    "itemAdded": "Artículo agregado al carrito",
+    "cartCleared": "Carrito vaciado después de la compra"
   }
 }

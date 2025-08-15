@@ -507,5 +507,17 @@
   },
   "toys": {
     "free": "FREE"
+  },
+  "stripeCheckoutButton": {
+    "Checkout": "Pay with Stripe",
+    "Process": "Processing...",
+    "NoSession": "Payment session could not be created",
+    "Error": "Error processing payment"
+  },
+  "cartStore": {
+    "addToCart": "Add to Cart",
+    "itemExist": "Item already in cart",
+    "itemAdded": "Item added to cart",
+    "cartCleared": "Cart cleared after purchase"
   }
 }

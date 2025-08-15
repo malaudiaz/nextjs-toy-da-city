@@ -16,9 +16,9 @@ export interface CartItem {
 
 interface CartState {
   items: CartItem[];
-  addToCart: (item: CartItem) => void;
+  addToCart: (item: CartItem) => boolean;
   removeFromCart: (id: string) => void;
-  clearCart: () => void; 
+  clearCart: () => void;
 }
 
 export const useCartStore = create<CartState>()(
@@ -27,7 +27,8 @@ export const useCartStore = create<CartState>()(
       items: [],
       addToCart: (item) => {
         const existingItem = get().items.find((i) => i.id === item.id);
-        set({
+
+        /*         set({
           items: existingItem
             ? get().items
             : [
@@ -41,16 +42,30 @@ export const useCartStore = create<CartState>()(
                 },
               ],
         });
+ */
+
         if (existingItem) {
-          toast.error("Item already in cart")
+          return false;
         } else {
-          toast.success("Item added to cart")
+          set({
+            items: [
+              ...get().items,
+              {
+                id: item.id,
+                title: item.title,
+                price: item.price,
+                media: item.media,
+                sellerId: item.sellerId,
+              }
+            ]
+          });
+          return true;
         }
       },
       removeFromCart: (id) => {
         set({
-            items: get().items.filter((item) => item.id !== id )
-        })
+          items: get().items.filter((item) => item.id !== id),
+        });
       },
       clearCart: () => {
         set({ items: [] }); // 👈 Vacía el carrito

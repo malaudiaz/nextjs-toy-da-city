@@ -29,8 +29,7 @@ export async function getAuthUserFromRequest(req: Request): Promise<AuthResponse
 
       try {
         const decoded = await verifyToken(token, {
-          secretKey: process.env.CLERK_SECRET_KEY,
-          issuer: issuer,
+          secretKey: process.env.CLERK_SECRET_KEY
         });
 
         return { success: true, userId: decoded.sub, error: "", code: 200 };

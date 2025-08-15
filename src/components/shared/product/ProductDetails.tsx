@@ -16,6 +16,8 @@ import Image from "next/image";
 import ExpandableText from "../ExpandableText";
 import dynamic from "next/dynamic";
 import { useCartStore } from "@/store/cartStore";
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 // Importación dinámica con exportación por defecto correcta
 const MapComponent = dynamic(
@@ -35,9 +37,11 @@ type ProductDetailsProps = {
 };
 
 const ProductDetails = ({ data }: ProductDetailsProps) => {
-
   const [isFavorite, setIsFavorite] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
+
+  const t = useTranslations("cartStore");
+
   const nextImage = () => {
     setSelectedImage((prev) => (prev + 1) % data.media.length);
   };
@@ -59,7 +63,6 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
           {NumberToCategory(data.categoryId)}
         </span>
       </div>
-
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
         <div className="space-y-4">
@@ -195,19 +198,23 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
               {data.forSell ? (
                 <button
                   onClick={() => {
-                      addToCart({
-                        id: data.id,
-                        title: data.title,
-                        price: data.price,
-                        media: data.media,
-                        sellerId: data.sellerId,
-                      })
+                    const added = addToCart({
+                      id: data.id,
+                      title: data.title,
+                      price: data.price,
+                      media: data.media,
+                      sellerId: data.sellerId,
+                    });
+                    if (added) {
+                      toast.success(t("itemAdded")); // ✅ Traducido: "Item added to cart"
+                    } else {
+                      toast.error(t("itemExist")); // ✅ Traducido: "Item already in cart"
                     }
-                  }
+                  }}
                   className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 px-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 w-full"
                 >
                   <ShoppingCart className="w-5 h-5" />
-                  <span>Add to Cart</span>
+                  <span>{t("addToCart")}</span>
                 </button>
               ) : (
                 ""

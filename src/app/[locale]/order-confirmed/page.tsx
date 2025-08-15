@@ -3,9 +3,12 @@
 import { useCartStore } from "@/store/cartStore";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export default function OrderConfirmedPage() {
   const [loading, setLoading] = useState(true);
+  const t = useTranslations("cartStore");
 
   useEffect(() => {
     // Simulamos una carga inicial (opcional)
@@ -13,15 +16,16 @@ export default function OrderConfirmedPage() {
       // Limpiar el carrito (ejemplo con localStorage)
       useCartStore.getState().clearCart();
 
+      
       // Opcional: Actualizar el estado si usas un manejador de estado como Redux o Zustand
       // Ejemplo: dispatch(clearCart());
-      console.log("Carrito limpiado");
+      toast.info(t("cartCleared")); // "Cart cleared after purchase"
 
       setLoading(false);
     }, 800);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [t]);
 
   if (loading) {
     return (

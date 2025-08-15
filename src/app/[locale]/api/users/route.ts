@@ -70,7 +70,12 @@ export async function POST(req: Request) {
       data: {
         name:validatedData.name,
         email: validatedData.email,
-        phone: validatedData.phone
+        phone: validatedData.phone,
+        clerkId: "",
+        role: "buyer",
+        stripeAccountId: "",
+        onboardingUrl: "",
+        isActive: true
       }      
     });
 

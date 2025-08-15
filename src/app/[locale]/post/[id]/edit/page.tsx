@@ -1,15 +1,36 @@
-import MapComponent from '@/components/shared/MapComponent';
+//import MapComponent from '@/components/shared/MapComponent';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@radix-ui/react-dropdown-menu';
-import { control } from 'leaflet';
-import { register } from 'module';
+//import { control } from 'leaflet';
+//import { register } from 'module';
 import { useTranslations } from 'next-intl';
 import React from 'react'
-import { useWatch } from 'react-hook-form';
+import { toyFormSchema, ToyFormValues } from "@/lib/schemas/toy";
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 
 const EditPostPage = () => {
     const t = useTranslations("createPostForm");
+
+  const {
+    register,
+    formState: { errors },
+    control,
+  } = useForm<ToyFormValues>({
+    resolver: zodResolver(toyFormSchema),
+    mode: "onChange", // ← Asegúrate de tener esto
+    defaultValues: {
+      forSale: false,
+      forGift: false,
+      forChange: false,
+      categoryId: undefined,
+      //statusId: undefined,
+      conditionId: undefined,
+    },
+  });
+
+
   return (
     <form
         className="flex flex-col gap-2 px-3 py-4 "
@@ -55,7 +76,7 @@ const EditPostPage = () => {
               type="checkbox"
               id="forSale"
               checked={useWatch({ control, name: "forSale" })}
-              onChange={() => handleCheckboxChange("forSale")}
+              //onChange={() => handleCheckboxChange("forSale")}
               className="w-5 h-5 accent-green-700"
             />
             <label htmlFor="forSale">{t("ForSale")}</label>
@@ -67,7 +88,7 @@ const EditPostPage = () => {
               type="checkbox"
               id="forGift"
               checked={useWatch({ control, name: "forGift" })}
-              onChange={() => handleCheckboxChange("forGift")}
+              //onChange={() => handleCheckboxChange("forGift")}
               className="w-5 h-5 accent-green-700"
             />
             <label htmlFor="forGift">{t("ForGift")}</label>
@@ -79,14 +100,15 @@ const EditPostPage = () => {
               type="checkbox"
               id="forChange"
               checked={useWatch({ control, name: "forChange" })}
-              onChange={() => handleCheckboxChange("forChange")}
+              //onChange={() => handleCheckboxChange("forChange")}
               className="w-5 h-5 accent-green-700"
             />
             <label htmlFor="forChange">{t("ForChange")}</label>
           </div>
         </div>
 
-        {forSaleValue && (
+        {/*forSaleValue && ( */}
+
           <div className="flex flex-col gap-1">
             <label>{t("Price")}</label>
             <input
@@ -103,7 +125,8 @@ const EditPostPage = () => {
               </p>
             )}
           </div>
-        )}
+        
+        {/* )} */}
 
         {/* Categoría */}
         <div>
@@ -116,11 +139,13 @@ const EditPostPage = () => {
             {...register("categoryId", { valueAsNumber: true })}
             required
           >
-            {categories.data.map((category) => (
+
+{/*             {categories.data.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.name}
               </option>
             ))}
+ */}
           </select>
           {errors.categoryId && (
             <p className="mt-1 text-sm text-red-600">
@@ -140,11 +165,13 @@ const EditPostPage = () => {
             {...register("conditionId", { valueAsNumber: true })}
             required
           >
-            {conditions.data.map((condition) => (
+
+{/*             {conditions.data.map((condition) => (
               <option key={condition.id} value={condition.id}>
                 {condition.name}
               </option>
             ))}
+ */}            
           </select>
           {errors.conditionId && (
             <p className="mt-1 text-sm text-red-600">
@@ -159,7 +186,9 @@ const EditPostPage = () => {
             {t("Image")}
           </Label>
           <div className="grid grid-cols-3 gap-2">
-            {files.map((file, index) => (
+
+
+{/*             {files.map((file, index) => (
               <div key={index} className="relative group">
                 {file.type.startsWith("image") && (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -178,15 +207,19 @@ const EditPostPage = () => {
                 </button>
               </div>
             ))}
-
+ */}
             {/* Botón para añadir más */}
-            <div
+
+
+{/*             <div
+
               className={`border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer h-32 ${
                 files.length >= MAX_FILES ? "hidden" : ""
               }`}
               onClick={() => fileInputRef.current?.click()}
             >
               <span className="text-gray-500">{t("Add More")}</span>
+            
             </div>
           </div>
 
@@ -199,17 +232,22 @@ const EditPostPage = () => {
             multiple
             max={MAX_FILES}
           />
+ */}
+        </div>
         </div>
 
         <div className="h-[200px] w-full border-dashed border-2 border-gray-300 rounded-md overflow-hidden">
-          <MapComponent
+
+{/*           <MapComponent
             onLocationChange={handleLocationChange}
             initialPosition={userLocation}
           />
+ */}          
         </div>
 
         {/* Botón de submit */}
-        <button
+        
+{/*         <button
           type="submit"
           disabled={isSubmitting}
           className="w-full bg-[#3D5D3C] text-white py-3 rounded-lg font-medium hover:bg-[#3e6e3c] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -241,7 +279,11 @@ const EditPostPage = () => {
           ) : (
             t("Submit")
           )}
+
+
         </button>
+ */}
+
       </form>
   )
 }

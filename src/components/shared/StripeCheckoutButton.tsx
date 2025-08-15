@@ -4,6 +4,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/nextjs";
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 interface StripeCheckoutButtonProps {
   cartItems: {
@@ -20,6 +22,7 @@ export default function StripeCheckoutButton({
 }: StripeCheckoutButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { isSignedIn } = useUser();
+  const t = useTranslations("stripeCheckoutButton");
 
   const handleCheckout = async () => {
     setIsLoading(true);
@@ -39,11 +42,11 @@ export default function StripeCheckoutButton({
         // ✅ Redirige directamente a Checkout
         window.location.href = data.firstUrl;
       } else {
-        alert("No se pudo crear la sesión de pago");
+        toast.info(t('NoSession'));
       }
     } catch (err) {
       console.error(err);
-      alert("Error al procesar el pago");
+      toast.info(t('Error'));
     }
   };
 
@@ -53,7 +56,7 @@ export default function StripeCheckoutButton({
       disabled={isLoading || !isSignedIn}
       className="mt-6 w-full bg-[#4c754b] hover:bg-[#558d54]"
     >
-      {isLoading ? "Procesando..." : "Pagar con Stripe"}
+      {isLoading ? t("Process") : t("Checkout")}
     </Button>
   );
 }
