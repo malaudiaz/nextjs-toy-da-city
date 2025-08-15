@@ -1,21 +1,26 @@
+version: '3.8'
+
 services:
   app:
     build:
-      context: .  # Usa la raíz del proyecto como contexto
+      context: .
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     volumes:
-      - ./:/app   # Mapea todo el proyecto
+      - ./:/app
       - /app/node_modules
       - /app/.next
     environment:
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
       - AUTH_TRUST_HOST=true
       - NEXTAUTH_URL=http://localhost:3000
+      - REDIS_URL=redis://redis:6379  # <-- Usa el nombre del servicio 'redis' como host
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started  # Redis no tiene healthcheck por defecto, pero puedes esperar a que inicie
 
   db:
     image: postgres:15
@@ -26,13 +31,28 @@ services:
       retries: 5
     env_file: .env
     environment:
-    - POSTGRES_USER=${DB_USER}
-    - POSTGRES_PASSWORD=${DB_PASSWORD}
-    - POSTGRES_DB=${DB_NAME}    
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data  # Persistencia opcional
+    restart: unless-stopped
+    # Opcional: agregar healthcheck
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
 volumes:
   postgres_data:
+  redis_data:

@@ -88,8 +88,6 @@ export async function POST(req: Request) {
           type: "account_onboarding",
         });
 
-        console.log("Enlace de onboarding generado:", accountLink.url);
-
         // Guardar usuario en la base de datos
         await prisma.user.create({
           data: {

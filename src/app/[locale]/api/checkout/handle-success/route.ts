@@ -1,7 +1,7 @@
 // app/api/checkout/handle-success/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import redis from "@/lib/redis"; // Ajusta la ruta según tu proyecto
+import {getRedisClient} from "@/lib/redis";
 import prisma from "@/lib/prisma";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -48,6 +48,7 @@ export async function GET(req: NextRequest) {
     }
 
     // ✅ Recuperar los datos pendientes desde Redis
+    const redis = await getRedisClient();
     const pendingDataStr = await redis.get(`cart_data:${cartKey}`);
     if (!pendingDataStr) {
       // No hay más pagos pendientes

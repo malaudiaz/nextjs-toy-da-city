@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import prisma from "@/lib/prisma";
-import redis from "@/lib/redis";
+import {getRedisClient} from "@/lib/redis";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
@@ -132,6 +132,7 @@ export async function POST(req: NextRequest) {
 
     // ✅ Guardar en Redis (con expiración de 1 hora)
 
+    const redis = await getRedisClient();
     await redis.setEx(
       `cart_data:${cartKey}`,
       3600,
