@@ -1,4 +1,4 @@
-import { NextResponse, NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import { getAuthUserFromRequest } from '@/lib/auth';
 import { getTranslations } from "next-intl/server";
@@ -6,10 +6,12 @@ import { getTranslations } from "next-intl/server";
 const prisma = new PrismaClient()
 
 export async function PATCH(
-  req: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+  const { success, userId, error, code } = await getAuthUserFromRequest(
+    request
+  );
 
   if (!success && !userId) {
     return NextResponse.json(
@@ -21,34 +23,35 @@ export async function PATCH(
     );
   }
 
-  const t = await getTranslations("Toy.errors");
+  const t = await getTranslations("Favorite.errors");
+
   const { id } = await params; // Safe to use
 
+
   try {
-    // 1. Verificar si el estado existe
-    const existingLikes = await prisma.commentsLikes.findUnique({
-      where: { id: id }
+    const existingFavoriteToy = await prisma.favoriteToy.findUnique({
+      where: { id: Number(id) }
     })
 
-    if (!existingLikes) {
+    if (!existingFavoriteToy) {
       return NextResponse.json(
-        { success: false, error: t("InvalidLikesID") },
+        { success: false, error: t("InvalidFavoriteToyID") },
         { status: 404 }
       )
     }
 
     // 2. Cambiar el estado isActive (toggle)
-    const updatedLikes = await prisma.commentsLikes.update({
-      where: { id: id },
+    const updatedFavoriteToy = await prisma.favoriteToy.update({
+      where: { id: Number(id) },
       data: {
-        isActive: !existingLikes.isActive
+        isActive: !existingFavoriteToy.isActive
       }
     })
 
     return NextResponse.json({
       success: true,
-      data: updatedLikes,
-      message: `Estado ${updatedLikes.isActive ? 'activado' : 'desactivado'} correctamente`
+      data: updatedFavoriteToy,
+      message: `Favorite Toy ${updatedFavoriteToy.isActive ? 'activado' : 'desactivado'} correctamente`
     })
 
   } catch (error) {
@@ -56,7 +59,7 @@ export async function PATCH(
     return NextResponse.json(
       { 
         success: false, 
-        error: 'Error al cambiar el estado del like' 
+        error: 'Error al cambiar el estado del juguete favorito' 
       },
       { status: 500 }
     )

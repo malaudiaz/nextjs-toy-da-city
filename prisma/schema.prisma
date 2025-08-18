@@ -20,9 +20,9 @@ model User {
   onboardingUrl   String?
 
   toysForSale     Toy[]         @relation("Seller")
+  favoriteToys    FavoriteToy[]
   purchaseHistory Transaction[] @relation("Buyer")
   salesHistory    Transaction[] @relation("Seller")
-  cart            Cart?
   reputation      Float?        @default(0)
   isActive        Boolean       @default(true)
   createdAt       DateTime      @default(now())
@@ -116,16 +116,15 @@ model Toy {
   sellerId String
 
   transactions Transaction[]
-  cartItems    CartItem[]
-
+  
   forSell    Boolean       @default(true)
   forGifts   Boolean       @default(true)
   forChanges Boolean       @default(true)
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
   isActive   Boolean       @default(true)
-  media      Media[] // Relación uno a muchos con Media
-  likes      ToyLikes[]
+  media      Media[]       // Relación uno a muchos con Media
+  favorites  FavoriteToy[]
   comments   ToyComments[]
 }
 
@@ -142,14 +141,16 @@ enum FileType {
   VIDEO
 }
 
-model ToyLikes {
+model FavoriteToy {
   id        String   @id @default(uuid())
-  toyId     String?
-  toy       Toy?     @relation(fields: [toyId], references: [id])
   userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  toyId     String
+  toy       Toy      @relation(fields: [toyId], references: [id])
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  @@unique([userId, toyId], name: "unique_favorite")
 }
 
 model ToyComments {
@@ -161,29 +162,6 @@ model ToyComments {
   isActive  Boolean            @default(true)
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt
-  likes     CommentsLikes[]
-  comments  CommentsComments[]
-}
-
-model CommentsLikes {
-  id        String       @id @default(uuid())
-  commentId String?
-  comment   ToyComments? @relation(fields: [commentId], references: [id])
-  userId    String
-  isActive  Boolean      @default(true)
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-}
-
-model CommentsComments {
-  id        String       @id @default(uuid())
-  commentId String?
-  comment   ToyComments? @relation(fields: [commentId], references: [id])
-  summary   String
-  userId    String
-  isActive  Boolean      @default(true)
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
 }
 
 model Transaction {
@@ -203,31 +181,4 @@ model Transaction {
   wasSold    Boolean @default(true)
   wasGifts   Boolean @default(true)
   wasChanged Boolean @default(true)
-}
-
-model Cart {
-  id        String     @id @default(uuid())
-  userId    String
-  user      User       @relation(fields: [userId], references: [id])
-  items     CartItem[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-
-  @@unique([userId]) // Un usuario tiene un solo carrito activo
-}
-
-model CartItem {
-  id       String   @id @default(uuid())
-  cartId   String
-  cart     Cart     @relation(fields: [cartId], references: [id])
-  toyId    String
-  toy      Toy      @relation(fields: [toyId], references: [id])
-  quantity Int      @default(1)
-  addedAt  DateTime @default(now())
-  selected Boolean  @default(true) // Para seleccionar qué items comprar
-
-  // Precio en el momento de agregar al carrito (para evitar cambios)
-  priceAtAddition Float
-
-  @@unique([cartId, toyId]) // Un juguete solo puede aparecer una vez en el carrito
 }

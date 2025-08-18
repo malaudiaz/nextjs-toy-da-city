@@ -1,32 +1,37 @@
 import { z } from "zod";
 import prisma from "@/lib/prisma";
-//import { LikesCommentsSchema} from "@/lib/schemas/likestoy";
 import { getTranslations } from "next-intl/server";
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/auth";
 
 
-// GET all likes con paginación y búsqueda
+// GET all favorites con paginación y búsqueda
 export async function GET(req: NextRequest) {
+  const { userId } = await getAuthUserFromRequest(req);
   
-  const t = await getTranslations("Likes.errors");
+  const t = await getTranslations("Favorite.errors");
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { searchParams } = new URL(req.url!)
     
-    const [commentsLikes, total] = await Promise.all([
-      prisma.commentsLikes.findMany({
+    const [favoriteToy, total] = await Promise.all([
+      prisma.favoriteToy.findMany({
         where: {
-          isActive: true
-        }        
+          userId: userId 
+        },
+        include: {
+          toy: true 
+        }     
       }),
-      prisma.commentsLikes.count(),
+      prisma.favoriteToy.count({
+        where: {
+          userId: userId // Filtra el conteo también por userId
+        }
+      })
     ]);
 
     return NextResponse.json({
       status: 200,
-      data: commentsLikes,
+      data: favoriteToy,
       meta: {
         total
         },
@@ -37,8 +42,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-
-// POST create a new likes
+// POST add a new favorite toy
 export async function POST(req: Request) {
   const { success, userId, error, code } = await getAuthUserFromRequest(req);
 
@@ -46,23 +50,32 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: error}, { status: code });
   }
 
-  const t = await getTranslations("Likes.errors");
+  const t = await getTranslations("Favorite.errors");
 
   try {
-    // 1. Obtener el cuerpo de la solicitud
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const body = await req.json();
 
-    // 2. Crear toys likes en Prisma
-    const comments_likes = await prisma.commentsLikes.create({
-      //data: validatedData,
+    const { toyId } = body;
+
+    if (!toyId) {
+      return NextResponse.json(
+        { error: t("ToyIdRequired") },
+        { status: 400 }
+      );
+    }
+
+    const favorite_toy = await prisma.favoriteToy.create({
       data: {
-        userId: userId!
-      }      
+        userId: userId!,
+        toyId
+      },
+      include: {
+        toy: true
+      }  
     });
 
     return NextResponse.json(
-      { data: comments_likes },
+      { data: favorite_toy },
       { status: 201 }
     );
 
@@ -80,7 +93,7 @@ export async function POST(req: Request) {
 
     // Otros errores (ej: fallo en Prisma)
     return NextResponse.json(
-      { error: t("Failed to create toy likes") },
+      { error: t("Failed to create toy favorites") },
       { status: 500 }
     );
   }

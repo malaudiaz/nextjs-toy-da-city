@@ -65,14 +65,14 @@
       "DeleteError": "Error eliminando comentario"
     }
   },
-  "Likes": {
+  "Favorite": {
     "errors": {
       "InvalidParams": "Parámetros inválidos",
       "ValidationsErrors": "Errores de validación",
       "ServerError": "Error interno del servidor",
-      "NotFound": "Me gusta no encontrado",
-      "UpdateError": "Error actualizando Me gusta",
-      "DeleteError": "Error eliminando Me gusta"
+      "NotFound": "Favorito no encontrado",
+      "UpdateError": "Error actualizando Favoritos",
+      "DeleteError": "Error eliminandoFavoritos"
     }
   },
   "Cart": {

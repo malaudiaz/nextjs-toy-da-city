@@ -2,12 +2,12 @@
 import { NextResponse, NextRequest } from "next/server";
 import { z } from "zod";
 import prisma from "@/lib/prisma";
-import { LikesCommentsSchema } from "@/lib/schemas/likestoy";
+import { FavoriteToySchema } from "@/lib/schemas/favoritetoy";
 import { getTranslations } from "next-intl/server";
 import { Prisma } from "@prisma/client";
 import { getAuthUserFromRequest } from "@/lib/auth";
 
-// Obtener un like por ID
+// Obtener un favorito por ID
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -21,19 +21,19 @@ export async function GET(
   const { id } = await params; // Safe to use
 
   try {
-    const comments_likes = await prisma.commentsLikes.findUnique({
-      where: { id: id},
+    const favorite_toy = await prisma.favoriteToy.findUnique({
+      where: { id: id },
     });
 
-    if (!comments_likes) {
-      return NextResponse.json({ error: "Likes not found" }, { status: 404 });
+    if (!favorite_toy) {
+      return NextResponse.json({ error: "Favorite not found" }, { status: 404 });
     }
 
-    return NextResponse.json(comments_likes);
+    return NextResponse.json(favorite_toy);
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { error: "Failed to fetch likes" },
+      { error: "Failed to fetch favorites" },
       { status: 500 }
     );
   }
@@ -49,27 +49,24 @@ export async function PUT(
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const t = await getTranslations("Likes.errors");
+  const t = await getTranslations("Favorites.errors");
 
   const { id } = await params; // Safe to use
 
   try {
-    // Validar ID
     if (!id) {
       return NextResponse.json({ error: t("InvalidId") }, { status: 400 });
     }
 
-    // Obtener y validar cuerpo
     const body = await req.json();
-    const validatedData = LikesCommentsSchema.parse(body);
+    const validatedData = FavoriteToySchema.parse(body);
 
-    // Actualizar likes
-    const updatedLikesComments = await prisma.commentsLikes.update({
+    const updatedFavoriteToy = await prisma.favoriteToy.update({
       where: { id: id },
       data: validatedData,
     });
 
-    return NextResponse.json({ data: updatedLikesComments }, { status: 200 });
+    return NextResponse.json({ data: updatedFavoriteToy }, { status: 200 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -103,7 +100,7 @@ export async function DELETE(
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const t = await getTranslations("Likes.errors");
+  const t = await getTranslations("Favorite.errors");
 
   const { id } = await params; // Safe to use
 
@@ -112,7 +109,7 @@ export async function DELETE(
       return NextResponse.json({ error: t("InvalidId") }, { status: 400 });
     }
 
-    await prisma.commentsLikes.delete({
+    await prisma.favoriteToy.delete({
       where: { id: id, isActive: false },
     });
 
@@ -121,9 +118,7 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
-    // Manejo de errores con PrismaClientKnownRequestError
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      // ¡Ahora funciona!
       if (error.code === "P2025") {
         return NextResponse.json({ error: t("NotFound") }, { status: 404 });
       }
@@ -144,7 +139,7 @@ export async function PATCH(
     return NextResponse.json({ error: error }, { status: code });
   }
 
-  const t = await getTranslations("Likes.errors");
+  const t = await getTranslations("Favorite.errors");
 
   const { id } = await params; // Safe to use
 
@@ -152,7 +147,7 @@ export async function PATCH(
     // 1. Obtener y validar ID
     if (!id ) {
       return NextResponse.json(
-        { error: t("Invalid Likes ID") },
+        { error: t("Invalid Favorite ID") },
         { status: 400 }
       );
     }
@@ -161,15 +156,15 @@ export async function PATCH(
     const body = await req.json();
 
     // 3. Validación parcial (schema diferente al POST)
-    const validatedData = LikesCommentsSchema.parse(body);
+    const validatedData = FavoriteSchema.parse(body);
 
     // 4. Actualizar solo campos proporcionados
-    const updatedcommentsLikes = await prisma.commentsLikes.update({
+    const updatedFavoriteToy = await prisma.favoriteToy.update({
       where: { id: id },
       data: validatedData, // Solo actualiza los campos enviados
     });
 
-    return NextResponse.json(updatedcommentsLikes, { status: 200 });
+    return NextResponse.json(updatedFavoriteToy, { status: 200 });
   } catch (error) {
     // Manejo de errores específicos
     if (error instanceof z.ZodError) {

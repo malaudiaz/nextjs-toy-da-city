@@ -3,6 +3,7 @@ import { PaginationSchema } from "@/lib/schemas/toy";
 import { getTranslations } from "next-intl/server";
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/auth";
+import { Prisma } from "@prisma/client";
 
 // GET all toys en venta, con paginación y búsqueda
 export async function GET(
@@ -135,3 +136,129 @@ export async function GET(
     }
   }
   
+export async function POST(req: Request) {
+  const { success, userId: buyerId, error, code } = await getAuthUserFromRequest(req);
+
+  if (!success && !buyerId ) {
+    return NextResponse.json(
+        { 
+          success: success, 
+          error: error 
+        },
+        { status: code }
+      )    
+  }
+
+  const user = await prisma.user.findUnique({ where: { clerkId: buyerId } });
+  if (!user) {
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: "User not found" 
+      },
+      { status: 404 }
+    )
+  }
+
+  const t = await getTranslations("Transaction.errors");
+
+  try {
+    const { toyIds } = await req.json(); // Ejemplo: { toyIds: ["uuid1", "uuid2"] }
+
+    const paymentMethod = "STRIPE" 
+
+    if (!toyIds || !Array.isArray(toyIds)) {
+      return NextResponse.json(
+        { error: t("ToyIdsRequired") },
+        { status: 400 }
+      );
+    }
+
+    // 1. Verificar que los juguetes existen y están disponibles para venta
+    const toys = await prisma.toy.findMany({
+      where: {
+        id: { in: toyIds },
+        forSell: true, // Solo juguetes marcados como "en venta"
+        isActive: true, // Solo juguetes activos
+        status: {
+          name: { in: ["Available", "Reserved"] } // Filtra por status permitidos
+        }
+      },
+      include: {
+        seller: true, // Necesario para obtener el sellerId
+        status: true, // Validar que el estado permita la venta
+      },
+    });
+
+    if (toys.length !== toyIds.length) {
+      const missingIds = toyIds.filter(id => !toys.some(toy => toy.id === id));
+      return NextResponse.json(
+        { error: t("SomeToysNotAvailable"), details: missingIds },
+        { status: 404 }
+      );
+    }
+
+    // 2. Crear transacciones y marcar juguetes como vendidos (en una transacción)
+    const result = await prisma.$transaction(async (tx) => {
+      const soldStatus = await tx.status.findUnique({
+        where: { name: "Sold" },
+        select: { id: true }
+      });
+    
+      if (!soldStatus) {
+        throw new Error("Estado SOLD no encontrado en la base de datos");
+      }
+
+      // Actualizar juguetes (marcar como no disponibles)
+      await tx.toy.updateMany({
+        where: { id: { in: toyIds } },
+        data: { 
+          forSell: false,
+          isActive: false, // Opcional: desactivar el juguete después de la venta
+          statusId: soldStatus.id // Cambiar estado a SOLD
+        },
+      });
+
+      // Crear transacciones (una por juguete)
+      const transactions = await Promise.all(
+        toys.map((toy) =>
+          tx.transaction.create({
+            data: {
+              toyId: toy.id,
+              buyerId: buyerId!,
+              sellerId: toy.sellerId, // Obtenido del juguete
+              price: toy.price,
+              statusId: toy.status.id, // Estado actual del juguete (o un ID fijo para "completado")
+              paymentMethod,
+              wasSold: true, // Marcamos como venta (no intercambio/regalo)
+            },
+          })
+        )
+      );
+
+      return transactions;
+    });
+
+    return NextResponse.json(
+      { data: result, message: t("SaleCompleted") },
+      { status: 201 }
+    );
+
+  } catch (error) {
+    console.error("Error en /api/toys/sales:", error);
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return NextResponse.json(
+          { error: t("DuplicateTransaction") },
+          { status: 409 }
+        );
+      }
+    }
+
+    return NextResponse.json(
+      { error: t("SaleFailed") },
+      { status: 500 }
+    );
+  }
+}
