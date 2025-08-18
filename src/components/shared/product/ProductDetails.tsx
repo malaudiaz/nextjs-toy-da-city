@@ -5,9 +5,6 @@ import React, { useState } from "react";
 import {
   Heart,
   ShoppingCart,
-  Truck,
-  Shield,
-  RotateCcw,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -145,43 +142,14 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
             <div>
               <h2>{NumberToCondition(data.conditionId)}</h2>
             </div>
-            <div className="bg-orange-50 rounded-xl p-6 border border-orange-200">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="flex items-center space-x-3">
-                  <div className="bg-orange-100 p-2 rounded-lg">
-                    <Truck className="w-5 h-5 text-orange-600" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">Free Shipping</p>
-                    <p className="text-sm text-gray-600">Orders over $25</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="bg-orange-100 p-2 rounded-lg">
-                    <RotateCcw className="w-5 h-5 text-orange-600" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">Easy Returns</p>
-                    <p className="text-sm text-gray-600">30-day policy</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="bg-orange-100 p-2 rounded-lg">
-                    <Shield className="w-5 h-5 text-orange-600" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">Safe & Secure</p>
-                    <p className="text-sm text-gray-600">Child-tested</p>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Features */}
-          <div className="bg-yellow-50 rounded-xl p-6 border border-yellow-200">
-            <ExpandableText text={data.description} maxLength={200} />
-          </div>
+          {data.description && (
+            <div className="bg-yellow-50 rounded-xl p-6 border border-yellow-200">
+              <ExpandableText text={data.description} maxLength={200} />
+            </div>
+          )}
 
           {coordinates.length === 2 && (
             <div className="h-[200px] w-full border-dashed border-2 border-gray-300 rounded-md overflow-hidden">
@@ -223,8 +191,6 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
           </div>
-
-          {/* Shipping Info */}
         </div>
       </div>
     </div>

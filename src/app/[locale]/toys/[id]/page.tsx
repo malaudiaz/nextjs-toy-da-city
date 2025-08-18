@@ -3,6 +3,7 @@ import React from "react";
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import { getToy } from "@/lib/actions/toysAction";
 import ProductDetails from "@/components/shared/product/ProductDetails";
+import FeaturesProduct from "@/components/shared/product/FeaturesProduct";
 
 type ProductDataProps = {
   params: Promise<{ id: string }>;
@@ -18,6 +19,8 @@ async function ProductDetailsPage({ params }: ProductDataProps) {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Breadcrumbs productName={toy.title}/>
         <ProductDetails data={toy} />
+
+        {/* <FeaturesProduct products={toy.likes} /> */}
       </main>
     </div>
   );

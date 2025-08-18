@@ -2,6 +2,7 @@
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import CartCard from "@/components/shared/cart/CartCard";
 import StripeCheckoutButton from "@/components/shared/StripeCheckoutButton";
+import { Card } from "@/components/ui/card";
 import { useCartStore } from "@/store/cartStore";
 import React from "react";
 
@@ -34,9 +35,9 @@ const CartPage = () => {
       {/* Breadcrumb */}
       <Breadcrumbs />
       {/* Título y cantidad */}
-      <div className="flex flex-col md:flex-row md:justify-between mb-6 gap-2">
+      <div className="flex flex-row justify-between mb-6 gap-2">
         <h1 className="text-2xl font-bold">Cart</h1>
-        <p className="self-end text-sm text-gray-500">Items: {items.length}</p>
+        <p className=" text-sm text-gray-500">Items: {items.length}</p>
       </div>
 
       {/* Lista de productos + resumen */}
@@ -51,12 +52,42 @@ const CartPage = () => {
         </div>
 
         {/* Resumen del carrito - solo en desktop */}
-        <div className="bg-white rounded-lg shadow-md p-6 sticky top-6 h-fit hidden lg:block">
+         <div className="lg:col-span-1">
+            <Card className="p-6 sticky top-4">
+              <h2 className="text-xl font-bold text-gray-800 mb-6">Resumen de compra</h2>
+
+              <div className="space-y-4 mb-6">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Subtotal</span>
+                  <span>{items.reduce((acc, item) => acc + item.price, 0).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Comision</span>
+                  <span className="font-semibold">{(items.reduce((acc, item) => acc + item.price, 0)*0.1).toFixed(2)}</span>
+                </div>
+                <hr />
+                <div className="flex justify-between text-lg font-bold">
+                  <span>Total</span>
+                  <span>{(items.reduce((acc, item) => acc + item.price, 0) + (items.reduce((acc, item) => acc + item.price, 0)*0.1)).toFixed(2)}</span>
+                </div>
+              </div>
+
+             <StripeCheckoutButton cartItems={cartItems} />
+            </Card>
+          </div>
+      </div>
+    </div>
+  );
+};
+
+export default CartPage;
+
+{/* <div className="bg-white rounded-lg shadow-md p-6 sticky top-6 h-fit hidden lg:block">
           <h2 className="text-xl font-semibold mb-4">Resumen de compra</h2>
           <div className="space-y-2">
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span>{items.reduce((acc, item) => acc + item.price, 0)}</span>
+              <span>{items.reduce((acc, item) => acc + item.price, 0).toFixed(2)}</span>
             </div>
             <div className="border-t border-b py-2 flex justify-between font-semibold">
               <span>Total</span>
@@ -64,15 +95,9 @@ const CartPage = () => {
             </div>
           </div>
           <StripeCheckoutButton cartItems={cartItems} />
-        </div>
-      </div>
+        </div> */}
 
-      {/* Botón de checkout para móvil */}
+              {/* Botón de checkout para móvil
       <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-white shadow-md border-t border-gray-200 z-10">
           <StripeCheckoutButton cartItems={cartItems} />
-      </div>
-    </div>
-  );
-};
-
-export default CartPage;
+      </div> */}
