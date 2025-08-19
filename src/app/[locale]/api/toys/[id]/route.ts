@@ -76,7 +76,7 @@ export async function GET(
         },
         // Subconsulta condicional: solo si hay un usuario logueado
         ...(userId ? {
-          likes: {
+          favorites: {
             where: { userId: userId },
             select: { id: true },
             take: 1,
@@ -90,7 +90,6 @@ export async function GET(
     }
 
     // Determina si el usuario dio like (solo si existe UserId)
-    //const isLikedByUser = userId ? toy.likes?.length > 0 : false;
 
     const {category, condition, status, ...toyData } = toy
     // Formateamos el resultado final
