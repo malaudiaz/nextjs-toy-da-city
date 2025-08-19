@@ -34,6 +34,7 @@ type ProductDetailsProps = {
 };
 
 const ProductDetails = ({ data }: ProductDetailsProps) => {
+
   const [isFavorite, setIsFavorite] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
 
@@ -50,7 +51,7 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
   };
 
   const addToCart = useCartStore((state) => state.addToCart);
-  const coordinates = data.location.split(",").map(Number);
+  const coordinates = data.location ? data.location.split(",").map(Number) : [];
 
   return (
     <div>

@@ -1,0 +1,26 @@
+{
+  "name": "Next.js App",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/app",
+  "forwardPorts": [3000],
+  "postAttachCommand": {
+    "server": "cd /app && npm install"
+  },
+  "remoteUser": "node",
+  "shutdownAction": "stopCompose",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.vscode-node-debug2",
+        "ms-vscode.vscode-typescript-next",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "bradlc.vscode-tailwindcss"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  }
+}
