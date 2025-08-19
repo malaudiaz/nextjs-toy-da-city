@@ -69,9 +69,6 @@ export async function GET(
         },
         _count: {
           select: {
-            likes: {
-              where: { isActive: true }, // Filtra solo comentarios activos
-            },
             comments: {
               where: { isActive: true }, // Filtra solo comentarios activos
             },

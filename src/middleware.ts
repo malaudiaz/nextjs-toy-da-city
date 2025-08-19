@@ -22,9 +22,9 @@ const isPublicRoute = createRouteMatcher([
   '/(en|es)/sign-up(.*)',
   '/(en|es)/seller-onboarding',
   '/(en|es)/seller-dashboard', // Añadido para evitar el error en /es/seller-dashboard
-  '/api/clerk-webhook',
-  '/api/get-onboarding-url',
-  '/api/check-stripe-account',
+  '/(en|es)/api/clerk-webhook',
+  '/(en|es)/api/get-onboarding-url',
+  '/(en|es)/api/check-stripe-account',
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
