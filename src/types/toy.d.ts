@@ -1,3 +1,5 @@
+import { FavoriteToy } from "@prisma/client"
+
 export interface Media {
   id: string
   fileUrl: string
@@ -23,7 +25,7 @@ export interface Toy {
   updatedAt?: Date
   sellerId: string
   isActive: boolean
-  likes: ToyLikes[]
+  favorites: FavoriteToy[]
   comments: ToyComments[]
   media: Media[]
   categoryDescription: string

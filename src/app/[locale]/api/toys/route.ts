@@ -391,7 +391,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
           type: media.type,
           toyId: media.toyId
         })),
-        likes: [],
+        favorites: [],
         comments: [],
       }
     }    

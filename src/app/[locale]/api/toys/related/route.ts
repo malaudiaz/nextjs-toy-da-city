@@ -141,6 +141,3 @@ async function GET(
   
     return relatedToys;
   }
-
-  //Si tengo la ruta /home/miry/Workspace/nextjs-toy-da-city/src/app/[locale]/api/toys/[id]/related.ts 
-  // porque al ser llamado desde el postma, no encuentra el camino?. La llamada es: GET /en/api/toys/related/toy_006 404 in 5464ms
