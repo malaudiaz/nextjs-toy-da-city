@@ -69,7 +69,7 @@ export async function GET(
         },
         _count: {
           select: {
-            likes: {
+            favorites: {
               where: { isActive: true }, // Filtra solo comentarios activos
             },
             comments: {
@@ -79,7 +79,7 @@ export async function GET(
         },
         // Subconsulta condicional: solo si hay un usuario logueado
         ...(userId ? {
-          likes: {
+          favorites: {
             where: { userId: userId },
             select: { id: true },
             take: 1,
@@ -93,7 +93,7 @@ export async function GET(
     }
 
     // Determina si el usuario dio like (solo si existe UserId)
-    const isLikedByUser = userId ? toy.likes?.length > 0 : false;
+    const isLikedByUser = userId ? toy.favorites?.length > 0 : false;
 
     const {category, condition, status, ...toyData } = toy
     // Formateamos el resultado final
@@ -106,7 +106,7 @@ export async function GET(
       statusName: status.name,
       statusDescription: status.translations[0]?.value || status.name,
       isLikedByUser, // false si no hay usuario logueado
-      likes: undefined, // Eliminamos el array de likes (no necesario en la respuesta)
+      favorites: undefined, // Eliminamos el array de likes (no necesario en la respuesta)
     };
 
     return NextResponse.json(toyWithLikeStatus);
