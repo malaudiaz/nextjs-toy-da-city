@@ -1,19 +1,19 @@
 // app/api/toy/[id]/ralated.ts
-import { NextResponse } from "next/server";
+//import { NextResponse } from "next/server";
 import { NextRequest } from 'next/server';
-import { z } from "zod";
+//import { z } from "zod";
 import prisma from "@/lib/prisma";
-import { ToySchema } from "@/lib/schemas/toy";
-import { getTranslations } from "next-intl/server";
-import { Prisma } from "@prisma/client";
-import { deleteUploadedFile, handleFileUpload } from "@/lib/fileUtils";
-import { getAuthUserFromRequest } from "@/lib/auth";
+//import { ToySchema } from "@/lib/schemas/toy";
+//import { getTranslations } from "next-intl/server";
+//import { Prisma } from "@prisma/client";
+//import { deleteUploadedFile, handleFileUpload } from "@/lib/fileUtils";
+//import { getAuthUserFromRequest } from "@/lib/auth";
 
-const MAX_MEDIA_FILES = 6;
+//const MAX_MEDIA_FILES = 6;
 
 // Obtener juguetes de categoria similar al juguete seleccionado
 
-async function GET(
+export async function GET(
     req: NextRequest,
     { params }: { params: Promise<{ id: string, locale: string }> }
     // { params }: { params: Promise<{ id: string, locale: string, limit: number }> }
@@ -25,9 +25,9 @@ async function GET(
     const userLanguageCode = locale
   
     // const { userId } = await getAuthUserFromRequest(req);
-    const userId = 'user_2wY8ZRoOrheojD7zQXtwk9fg00x'
+    //const userId = 'user_2wY8ZRoOrheojD7zQXtwk9fg00x'
     const limit = 4
-    const t = await getTranslations("Toy.errors");
+    //const t = await getTranslations("Toy.errors");
   
     // 1. Obtener la categoría del juguete actual
     const currentToy = await prisma.toy.findUnique({
