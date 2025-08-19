@@ -64,7 +64,13 @@ export async function GET(req: NextRequest) {
         (s) => s.internalSellerId === sellerInternalId
       );
 
-      console.log("paymentSellers:", paymentSellers);
+      fetch(`/api/sales`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(paymentSellers),
+      });
 
       // ✅ Eliminar al vendedor que acaba de ser pagado
       pendingSellers = pendingSellers.filter(

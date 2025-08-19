@@ -69,9 +69,6 @@ export async function GET(
         },
         _count: {
           select: {
-            favorites: {
-              where: { isActive: true }, // Filtra solo comentarios activos
-            },
             comments: {
               where: { isActive: true }, // Filtra solo comentarios activos
             },
@@ -93,7 +90,6 @@ export async function GET(
     }
 
     // Determina si el usuario dio like (solo si existe UserId)
-    const isLikedByUser = userId ? toy.favorites?.length > 0 : false;
 
     const {category, condition, status, ...toyData } = toy
     // Formateamos el resultado final
@@ -105,8 +101,7 @@ export async function GET(
       conditionDescription: condition.translations[0]?.value || condition.name,
       statusName: status.name,
       statusDescription: status.translations[0]?.value || status.name,
-      isLikedByUser, // false si no hay usuario logueado
-      favorites: undefined, // Eliminamos el array de likes (no necesario en la respuesta)
+      likes: undefined, // Eliminamos el array de likes (no necesario en la respuesta)
     };
 
     return NextResponse.json(toyWithLikeStatus);

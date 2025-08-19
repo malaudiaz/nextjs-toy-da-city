@@ -5,7 +5,7 @@
     "subtitle": "Little Toys Pack",
     "description": "250 colorful pieces, includes manual and 5 buildings models..."
   },
-  "user": {
+  "User": {
     "errors": {
       "InvalidParams": "Invalid Params",
       "ValidationsErrors": "Validations Errors",
