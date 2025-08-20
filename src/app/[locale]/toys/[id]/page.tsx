@@ -1,7 +1,7 @@
 import React from "react";
 
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
-import { getToy } from "@/lib/actions/toysAction";
+import { getRelatedToys, getToy } from "@/lib/actions/toysAction";
 import ProductDetails from "@/components/shared/product/ProductDetails";
 import FeaturesProduct from "@/components/shared/product/FeaturesProduct";
 
@@ -13,6 +13,8 @@ async function ProductDetailsPage({ params }: ProductDataProps) {
 
   const toyId = (await params).id;  
   const toy = await getToy(toyId);
+  const featuredToys = await getRelatedToys(toyId);
+  console.log(featuredToys);
 
   return (
     <div className="min-h-screen bg-[#FAF1DE]">
@@ -20,7 +22,7 @@ async function ProductDetailsPage({ params }: ProductDataProps) {
         <Breadcrumbs productName={toy.title}/>
         <ProductDetails data={toy} />
 
-        {/* <FeaturesProduct products={toy.likes} /> */}
+        <FeaturesProduct products={featuredToys.toys} />
       </main>
     </div>
   );

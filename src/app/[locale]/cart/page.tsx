@@ -57,18 +57,9 @@ const CartPage = () => {
               <h2 className="text-xl font-bold text-gray-800 mb-6">Resumen de compra</h2>
 
               <div className="space-y-4 mb-6">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Subtotal</span>
-                  <span>{items.reduce((acc, item) => acc + item.price, 0).toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Comision</span>
-                  <span className="font-semibold">{(items.reduce((acc, item) => acc + item.price, 0)*0.1).toFixed(2)}</span>
-                </div>
-                <hr />
                 <div className="flex justify-between text-lg font-bold">
                   <span>Total</span>
-                  <span>{(items.reduce((acc, item) => acc + item.price, 0) + (items.reduce((acc, item) => acc + item.price, 0)*0.1)).toFixed(2)}</span>
+                  <span>{items.reduce((acc, item) => acc + item.price, 0).toFixed(2)}</span>
                 </div>
               </div>
 

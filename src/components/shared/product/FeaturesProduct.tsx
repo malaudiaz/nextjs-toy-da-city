@@ -13,7 +13,7 @@ const FeaturesProduct = async ({products}: FeaturesProductProps) => {
       <h2 className="text-2xl font-bold text-gray-900 mb-6">You Might Also Like</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {products.map((product) => (
-          <Link key={product.id} href={`/product/${product.id}`}>
+          <Link key={product.id} href={`/toys/${product.id}`}>
             <div className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow bg-white">
               <Image
                 src={product.media[0]?.fileUrl || "/no-image.png"}
@@ -22,9 +22,13 @@ const FeaturesProduct = async ({products}: FeaturesProductProps) => {
                 height={200}
                 className="w-full h-48 object-cover"
               />
-              <div className="p-4">
+              <div className="p-4 flex flex-col gap-2">
                 <h3 className="font-semibold text-gray-900 truncate">{product.title}</h3>
-                <p className="text-green-600 font-bold">${product.price.toFixed(2)}</p>
+                {product.price ? (
+                  <p className="text-md text-green-700 font-bold">${product.price.toFixed(2)}</p>
+                ) : (
+                  <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm w-1/4">FREE</span>
+                )}
               </div>
             </div>
           </Link>
