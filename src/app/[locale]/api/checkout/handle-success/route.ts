@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getRedisClient } from "@/lib/redis";
 import prisma from "@/lib/prisma";
-import { POST } from "@/app/[locale]/api/sales/route";
+//import { POST } from "@/app/[locale]/api/sales/route";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
