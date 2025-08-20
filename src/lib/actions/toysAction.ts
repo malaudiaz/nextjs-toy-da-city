@@ -60,3 +60,13 @@ export async function getToy(id: string) {
 
   return toy;
 }
+
+export async function getRelatedToys(id:string){
+  const response = await fetch(`${BACKEND_URL}/api/toys/${id}/related`, {
+    method: "GET",
+  });
+
+  const toys = await response.json();
+
+  return {toys: toys.data as Toy[]};
+}
