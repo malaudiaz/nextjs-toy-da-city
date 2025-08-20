@@ -2,7 +2,7 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { getTranslations } from "next-intl/server";
-import { getAuthUserFromRequest } from "@/lib/auth";
+//import { getAuthUserFromRequest } from "@/lib/auth";
 import { PaginationSchema} from "@/lib/schemas/toy";
 
 // Obtener juguetes de categoria similar al juguete seleccionado
@@ -23,7 +23,7 @@ export async function GET(
       limit: parseInt(searchParams.get('limit') || "10")
     });
 
-    const { userId } = await getAuthUserFromRequest(req);
+    //const { userId } = await getAuthUserFromRequest(req);
     // const userId = 'user_2wY8ZRoOrheojD7zQXtwk9fg00x'
 
     try {
@@ -44,13 +44,13 @@ export async function GET(
           categoryId: currentToy.categoryId,
           id: { not: id }, // Excluir el juguete actual
           isActive: true,
-          forSell: true
+          //forSell: true
         }
       });
   
       // 3. Calcular el límite real (no más del total disponible)
-      const take = Math.min(pagination.limit, totalToys);
-      if (take === 0) return [];
+      //const take = Math.min(pagination.limit, totalToys);
+      //if (take === 0) return [];
     
       // 4. Obtener IDs aleatorios usando técnica de offset
       const randomSkip = Math.floor(Math.random() * totalToys);
@@ -61,7 +61,7 @@ export async function GET(
           categoryId: currentToy.categoryId,
           id: { not: id },
           isActive: true,
-          forSell: true
+          //forSell: true
         },
         include: {
           media: {
@@ -102,14 +102,14 @@ export async function GET(
           }
         },
         skip: randomSkip,
-        take: take,
+        //take: take,
         orderBy: {
           createdAt: 'desc'
         }
       });
   
       // 6. Si no hay suficientes resultados, obtener los más recientes como fallback
-      if (relatedToys.length < take) {
+      //if (relatedToys.length < take) {
         const additionalToys = await prisma.toy.findMany({
           where: {
             categoryId: currentToy.categoryId,
@@ -119,7 +119,7 @@ export async function GET(
               }
             },
             isActive: true,
-            forSell: true
+            //forSell: true
           },
           include: {
             media: {
@@ -159,14 +159,14 @@ export async function GET(
               }
             }
           },
-          take: take - relatedToys.length,
+          //take: take - relatedToys.length,
           orderBy: {
             createdAt: 'desc'
           }
         });
     
         relatedToys.push(...additionalToys);
-      }
+      //}
   
       const processedToys = relatedToys
           .map(toy => {

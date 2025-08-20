@@ -1,8 +1,9 @@
 // app/api/checkout/handle-success/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import {getRedisClient} from "@/lib/redis";
+import { getRedisClient } from "@/lib/redis";
 import prisma from "@/lib/prisma";
+import { POST } from "@/app/[locale]/api/sales/route";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
@@ -60,17 +61,13 @@ export async function GET(req: NextRequest) {
     // ✅ Eliminar al vendedor que acaba de ser pagado
     const sellerInternalId = session.metadata?.seller_internal_id;
     if (sellerInternalId) {
-      const paymentSellers = pendingSellers.filter(
+/*       const paymentSellers = pendingSellers.filter(
         (s) => s.internalSellerId === sellerInternalId
       );
+ */
+      //const toysIDs = paymentSellers.filter((seller) => seller.items.length > 0).map((seller) => seller.items[0].id);
 
-      fetch(`/api/sales`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(paymentSellers),
-      });
+      //const saleResult = await POST({ body: JSON.stringify(toysIDs) });
 
       // ✅ Eliminar al vendedor que acaba de ser pagado
       pendingSellers = pendingSellers.filter(
