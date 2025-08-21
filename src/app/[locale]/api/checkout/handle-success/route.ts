@@ -3,7 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getRedisClient } from "@/lib/redis";
 import prisma from "@/lib/prisma";
-//import { POST } from "@/app/[locale]/api/sales/route";
+import { createSale } from "@/lib/sales";
+import { getAuthUserFromRequest } from "@/lib/auth";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
@@ -30,6 +31,28 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const sessionId = searchParams.get("session_id");
   const sellerId = searchParams.get("seller_id"); // acct_... de Stripe
+
+  const {
+    success,
+    userId: buyerId,
+    error,
+    code,
+  } = await getAuthUserFromRequest(req);
+
+  if (!success && !buyerId) {
+    return NextResponse.json({ error: error }, { status: code });
+  }
+
+  const user = await prisma.user.findUnique({ where: { clerkId: buyerId } });
+  if (!user) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: "User not found",
+      },
+      { status: 404 }
+    );
+  }
 
   // ✅ Validar que los parámetros existan
   if (!sessionId || !sellerId) {
@@ -61,13 +84,15 @@ export async function GET(req: NextRequest) {
     // ✅ Eliminar al vendedor que acaba de ser pagado
     const sellerInternalId = session.metadata?.seller_internal_id;
     if (sellerInternalId) {
-/*       const paymentSellers = pendingSellers.filter(
+      const paymentSellers = pendingSellers.filter(
         (s) => s.internalSellerId === sellerInternalId
       );
- */
-      //const toysIDs = paymentSellers.filter((seller) => seller.items.length > 0).map((seller) => seller.items[0].id);
 
-      //const saleResult = await POST({ body: JSON.stringify(toysIDs) });
+      const toysIDs = paymentSellers
+        .filter((seller) => seller.items.length > 0)
+        .flatMap((seller) => seller.items.map((item) => item.id));
+
+      await createSale(toysIDs, user.id);
 
       // ✅ Eliminar al vendedor que acaba de ser pagado
       pendingSellers = pendingSellers.filter(

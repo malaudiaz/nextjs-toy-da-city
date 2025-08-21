@@ -3,7 +3,6 @@ import { PaginationSchema } from "@/lib/schemas/toy";
 import { getTranslations } from "next-intl/server";
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/auth";
-import { Prisma } from "@prisma/client";
 
 import { createSale } from "@/lib/sales";
 
@@ -140,7 +139,8 @@ export async function GET(
   
 export async function POST(req: Request) {
     const { success, userId: buyerId, error, code } = await getAuthUserFromRequest(req);
-    const { toyIds } = await req.json();
+    const body = await req.json();
+    const toyIds = body.toyIds;
 
     // const toyIds = ["toy_007", "toy_008"]
     // const buyerId = 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z'
@@ -167,7 +167,7 @@ export async function POST(req: Request) {
     }
   
     try {
-      const result = await createSale(toyIds, buyerId!);
+      const result = await createSale(toyIds, user.id);
       return NextResponse.json({ data: result, message: "Sale completed" }, { status: 201 });
 
     } catch (err) {
