@@ -47,15 +47,26 @@ export async function GET() {
 
 // POST add a new favorite toy
 export async function POST(req: Request) {
+  const t = await getTranslations("Favorite.errors");
   const { userId } = await auth();
 
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-
-  const t = await getTranslations("Favorite.errors");
-
+ 
   try {
+
+    const user = await prisma.user.findUnique({ where: { clerkId: userId } });
+    if (!user) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "User not found",
+        },
+        { status: 404 }
+      );
+    }
+
     const body = await req.json();
 
     const { toyId } = body;
@@ -69,7 +80,7 @@ export async function POST(req: Request) {
 
     const favorite_toy = await prisma.favoriteToy.create({
       data: {
-        userId: userId!,
+        userId: user.id,
         toyId
       },
       include: {
