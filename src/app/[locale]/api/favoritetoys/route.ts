@@ -4,7 +4,6 @@ import { getTranslations } from "next-intl/server";
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 
-
 // GET all favorites con paginación y búsqueda
 export async function GET() {
   const t = await getTranslations("Favorite.errors");
@@ -15,29 +14,28 @@ export async function GET() {
   }
 
   try {
-    
     const [favoriteToy, total] = await Promise.all([
       prisma.favoriteToy.findMany({
         where: {
-          userId: userId 
+          userId: userId,
         },
         include: {
-          toy: true 
-        }     
+          toy: true,
+        },
       }),
       prisma.favoriteToy.count({
         where: {
-          userId: userId // Filtra el conteo también por userId
-        }
-      })
+          userId: userId, // Filtra el conteo también por userId
+        },
+      }),
     ]);
 
     return NextResponse.json({
       status: 200,
       data: favoriteToy,
       meta: {
-        total
-        },
+        total,
+      },
     });
   } catch (error) {
     console.log(error);
@@ -53,9 +51,8 @@ export async function POST(req: Request) {
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
- 
-  try {
 
+  try {
     const user = await prisma.user.findUnique({ where: { clerkId: userId } });
     if (!user) {
       return NextResponse.json(
@@ -72,27 +69,47 @@ export async function POST(req: Request) {
     const { toyId } = body;
 
     if (!toyId) {
-      return NextResponse.json(
-        { error: t("ToyIdRequired") },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: t("ToyIdRequired") }, { status: 400 });
     }
 
-    const favorite_toy = await prisma.favoriteToy.create({
-      data: {
-        userId: user.id,
-        toyId
+    const favorite = await prisma.favoriteToy.findUnique({
+      where: {
+        unique_favorite: {
+          // 👈 Clave compuesta
+          userId,
+          toyId,
+        },
       },
-      include: {
-        toy: true
-      }  
     });
 
-    return NextResponse.json(
-      { data: favorite_toy },
-      { status: 201 }
-    );
+    if (!favorite) {
+      const favorite_toy = await prisma.favoriteToy.create({
+        data: {
+          userId: user.id,
+          toyId,
+        },
+        include: {
+          toy: true,
+        },
+      });
 
+      return NextResponse.json({ data: favorite_toy }, { status: 200 });
+    } else {
+      const favorite_toy = await prisma.favoriteToy.delete({
+        where: {
+          unique_favorite: {
+            // 👈 Clave compuesta
+            userId,
+            toyId,
+          },
+        },
+        include: {
+          toy: true,
+        },
+      });
+
+      return NextResponse.json({ data: favorite_toy }, { status: 200 });
+    }
   } catch (error) {
     // Manejo de errores específicos de Zod
     if (error instanceof z.ZodError) {
