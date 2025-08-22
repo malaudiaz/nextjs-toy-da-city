@@ -1,15 +1,18 @@
 import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { getTranslations } from "next-intl/server";
-import { NextRequest, NextResponse } from "next/server";
-import { getAuthUserFromRequest } from "@/lib/auth";
+import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 
 
 // GET all favorites con paginación y búsqueda
-export async function GET(req: NextRequest) {
-  const { userId } = await getAuthUserFromRequest(req);
-  
+export async function GET() {
   const t = await getTranslations("Favorite.errors");
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   try {
     
@@ -44,10 +47,10 @@ export async function GET(req: NextRequest) {
 
 // POST add a new favorite toy
 export async function POST(req: Request) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+  const { userId } = await auth();
 
-  if (!success && !userId) {
-    return NextResponse.json({ error: error}, { status: code });
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const t = await getTranslations("Favorite.errors");

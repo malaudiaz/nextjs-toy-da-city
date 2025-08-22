@@ -7,7 +7,7 @@ import { ToySchema } from "@/lib/schemas/toy";
 import { getTranslations } from "next-intl/server";
 import { Prisma } from "@prisma/client";
 import { deleteUploadedFile, handleFileUpload } from "@/lib/fileUtils";
-import { getAuthUserFromRequest } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
 
 const MAX_MEDIA_FILES = 6;
 
@@ -21,9 +21,13 @@ export async function GET(
 
   const userLanguageCode = locale
 
-  const { userId } = await getAuthUserFromRequest(req);
-
   const t = await getTranslations("Toy.errors");
+
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+  }
 
   // const userId = 'user_2wY8ZRoOrheojD7zQXtwk9fg00x'
   try {
@@ -118,21 +122,14 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const t = await getTranslations("Toy.errors");
   const { id } = await params;
 
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+  const { userId } = await auth();
 
-  if (!success && !userId) {
-    return NextResponse.json(
-      {
-        success: success,
-        error: error,
-      },
-      { status: code }
-    );
+  if (!userId) {
+    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
   }
-
-  const t = await getTranslations("Toy.errors");
 
   try {
     const formData = await req.formData();
@@ -253,19 +250,13 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+  const t = await getTranslations("Toy.errors");
+  const { userId } = await auth();
 
-  if (!success && !userId) {
-    return NextResponse.json(
-      {
-        success: success,
-        error: error,
-      },
-      { status: code }
-    );
+  if (!userId) {
+    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
   }
 
-  const t = await getTranslations("Toy.errors");
   const { id } = await params; // Safe to use
 
   try {

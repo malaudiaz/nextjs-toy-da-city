@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { ConditionSchema, PaginationSchema} from "@/lib/schemas/condition";
 import { getTranslations } from "next-intl/server";
 import { NextRequest, NextResponse } from "next/server";
-import { getAuthUserFromRequest } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
 
 // GET all conditions con paginación y búsqueda
 export async function GET(
@@ -81,13 +81,13 @@ export async function GET(
 
 // POST create a new condition
 export async function POST(req: Request) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
-
-  if (!success && !userId) {
-    return NextResponse.json({ error: error}, { status: code });
-  }
-
   const t = await getTranslations("Condition.errors");
+
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+  }
 
   try {
     // 1. Obtener el cuerpo de la solicitud

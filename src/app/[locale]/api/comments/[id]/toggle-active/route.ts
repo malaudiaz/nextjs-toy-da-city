@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
 import { NextRequest } from 'next/server';
 import { PrismaClient } from '@prisma/client'
-import { getAuthUserFromRequest } from '@/lib/auth';
 import { getTranslations } from "next-intl/server";
+import { auth } from "@clerk/nextjs/server";
 
 const prisma = new PrismaClient()
 
@@ -10,19 +10,13 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req );
-
-  if (!success && !userId) {
-    return NextResponse.json(
-      {
-        success: success,
-        error: error,
-      },
-      { status: code }
-    );
-  }
-
   const t = await getTranslations("Comments.errors");
+
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+  }
 
   const { id } = await params;
 

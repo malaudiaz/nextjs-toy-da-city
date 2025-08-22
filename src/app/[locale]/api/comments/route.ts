@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { CommentsSchema, PaginationSchema} from "@/lib/schemas/comments";
 import { getTranslations } from "next-intl/server";
 import { NextRequest, NextResponse } from "next/server";
-import { getAuthUserFromRequest } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
 
 
 // GET all comments con paginación y búsqueda
@@ -11,8 +11,13 @@ export async function GET(
   req: NextRequest, 
   { params }: { params: Promise<{ toyId: string }> }
 ) {
-  
   const t = await getTranslations("Comments.errors");
+
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+  }
 
   const { toyId } = await params;
 
@@ -54,13 +59,13 @@ export async function GET(
 
 // POST create a new comments
 export async function POST(req: Request) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+  const t = await getTranslations("Comments.errors");
 
-  if (!success && !userId) {
-    return NextResponse.json({ error: error}, { status: code });
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
   }
-
-  const t = await getTranslations("Status.errors");
 
   try {
     // 1. Obtener el cuerpo de la solicitud

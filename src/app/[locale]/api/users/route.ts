@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { UserSchema, PaginationSchema } from "@/lib/schemas/user";
 import { getTranslations } from "next-intl/server";
 import { NextRequest, NextResponse } from "next/server";
-import { getAuthUserFromRequest } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
 
 // GET - Obtener todas los usuarios con paginado
 export async function GET(req: NextRequest) {
@@ -48,13 +48,12 @@ export async function GET(req: NextRequest) {
 
 // POST - Insertar nuevo usuario
 export async function POST(req: Request) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
-
-  if (!success && !userId) {
-    return NextResponse.json({ error: error}, { status: code });
-  }
-
   const t = await getTranslations("User.errors");
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+  }
 
   try {
     // 1. Obtener el cuerpo de la solicitud

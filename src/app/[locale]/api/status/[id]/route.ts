@@ -6,17 +6,18 @@ import { StatusSchema } from "@/lib/schemas/status";
 import { getTranslations } from "next-intl/server";
 import { Prisma } from "@prisma/client";
 import { StatusUpdateSchema } from "@/lib/schemas/status";
-import { getAuthUserFromRequest } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
 
 // Obtener un estado por ID
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+  const t = await getTranslations("Status.errors");
+  const { userId } = await auth();
 
-  if (!success && !userId) {
-    return NextResponse.json({ error: error }, { status: code });
+  if (!userId) {
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
   }
 
   const { id } = await params; // Safe to use
@@ -44,13 +45,12 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
-
-  if (!success && !userId) {
-    return NextResponse.json({ error: error }, { status: code });
-  }
-
   const t = await getTranslations("Status.errors");
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+  }
 
   const { id } = await params; // Safe to use
 
@@ -98,13 +98,12 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
-
-  if (!success && !userId) {
-    return NextResponse.json({ error: error }, { status: code });
-  }
-
   const t = await getTranslations("Status.errors");
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+  }
 
   const { id } = await params; // Safe to use
 
@@ -139,13 +138,12 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
 
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
-
-  if (!success && !userId) {
-    return NextResponse.json({ error: error }, { status: code });
-  }
-
   const t = await getTranslations("Status.errors");
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+  }
 
   const { id } = await params; // Safe to use
 

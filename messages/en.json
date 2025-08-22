@@ -17,6 +17,7 @@
   },
   "Categories": {
     "errors": {
+      "Unauthorized": "Unauthorized",
       "InvalidParams": "Invalid Params",
       "ValidationsErrors": "Validations Errors",
       "ServerError": "Internal Server Error",

@@ -1,27 +1,19 @@
 import { NextResponse, NextRequest } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-import { getAuthUserFromRequest } from '@/lib/auth';
+import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
-
-const prisma = new PrismaClient()
+import prisma from "@/lib/prisma";
 
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+  const t = await getTranslations("Toy.errors");
+  const { userId } = await auth();
 
-  if (!success && !userId) {
-    return NextResponse.json(
-      {
-        success: success,
-        error: error,
-      },
-      { status: code }
-    );
+  if (!userId) {
+    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
   }
 
-  const t = await getTranslations("Toy.errors");
   const { id } = await params; // Safe to use
 
   try {

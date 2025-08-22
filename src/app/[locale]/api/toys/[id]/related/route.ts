@@ -2,15 +2,11 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { getTranslations } from "next-intl/server";
-//import { getAuthUserFromRequest } from "@/lib/auth";
-//import { PaginationSchema} from "@/lib/schemas/toy";
 
-// Obtener juguetes de categoria similar al juguete seleccionado
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string; limit: string; locale: string }> }
 ) {
-  //const { searchParams } = new URL(req.url!)
   const { id, limit: limitStr, locale } = await params;
   const limit = limitStr ? parseInt(limitStr, 10) : 6;
 
@@ -20,9 +16,6 @@ export async function GET(
   const t = await getTranslations("Toy.errors");
 
   const userLanguageCode = locale;
-
-  //const { userId } = await getAuthUserFromRequest(req);
-  // const userId = 'user_2wY8ZRoOrheojD7zQXtwk9fg00x'
 
   try {
     // 1. Obtener la categoría del juguete actual

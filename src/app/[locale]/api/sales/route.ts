@@ -11,19 +11,11 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ locale: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(
-    request
-  );
+  const { userId } = await auth();
 
-  if (!success && !userId) {
-    return NextResponse.json(
-      { success: success, error: error },
-      { status: code }
-    );
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-
-  // const { success, error, code } = await getAuthUserFromRequest(request);
-  // const userId = 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z'
 
   const { locale } = await params;
 
@@ -157,9 +149,6 @@ export async function POST(req: Request) {
 
   const body = await req.json();
   const toyIds = body.toyIds;
-
-  // const toyIds = ["toy_007", "toy_008"]
-  // const buyerId = 'user_2xMoqaxDWhsUmKjITZbWHRJMo8Z'
 
   const user = await prisma.user.findUnique({ where: { clerkId: buyerId } });
   if (!user) {

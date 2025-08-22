@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { StatusSchema, PaginationSchema} from "@/lib/schemas/status";
 import { getTranslations } from "next-intl/server";
 import { NextRequest, NextResponse } from "next/server";
-import { getAuthUserFromRequest } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
 
 
 // GET all statuses con paginación y búsqueda
@@ -50,13 +50,12 @@ export async function GET(req: NextRequest) {
 
 // POST create a new status
 export async function POST(req: Request) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
-
-  if (!success && !userId) {
-    return NextResponse.json({ error: error}, { status: code });
-  }
-
   const t = await getTranslations("Status.errors");
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+  }
 
   try {
     // 1. Obtener el cuerpo de la solicitud

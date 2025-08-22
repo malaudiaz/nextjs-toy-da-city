@@ -6,7 +6,7 @@ import { writeFile, mkdir } from 'fs/promises'
 import { PaginationSchema, ToyFilterSchema, ToySchema} from "@/lib/schemas/toy";
 import { getTranslations } from "next-intl/server";
 import { NextRequest, NextResponse } from "next/server";
-import { getAuthUserFromRequest } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
 import { ToyResponseSuccess, ToyResponseError } from "@/types/toy";
 
 const ALLOWED_TYPES = [
@@ -215,16 +215,11 @@ export async function GET(
 
 // POST create a new toy
 export async function POST(request: Request): Promise<NextResponse<ToyResponseSuccess | ToyResponseError>> {
-  const { success, userId, error, code } = await getAuthUserFromRequest(request);
+  //const t = await getTranslations("Toy.errors");
+  const { userId } = await auth();
 
-  if (!success && !userId) {
-    return NextResponse.json(
-        { 
-          success: success, 
-          error: error 
-        },
-        { status: code }
-      )    
+  if (!userId) {
+    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
   }
 
   const user = await prisma.user.findUnique({ where: { clerkId: userId } });
@@ -238,7 +233,6 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
     )
   }
 
-  //const t = await getTranslations("Toy.errors");
   const clonedRequest = request.clone();
   let formData: FormData;
   

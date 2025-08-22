@@ -7,7 +7,7 @@ import { CategorySchema } from "@/lib/schemas/category";
 import { getTranslations } from "next-intl/server";
 import { Prisma } from "@prisma/client";
 import { CategoryUpdateSchema } from "@/lib/schemas/category";
-import { getAuthUserFromRequest } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
 
 
 // Obtener una categotia  por ID
@@ -15,10 +15,11 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+  const t = await getTranslations("Categories.errors");
+  const { userId } = await auth();
 
-  if (!success && !userId) {
-    return NextResponse.json({ error: error }, { status: code });
+  if (!userId) {
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
   }
 
   const { id } = await params;
@@ -29,7 +30,7 @@ export async function GET(
     });
 
     if (!category) {
-      return NextResponse.json({ error: "Category not found" }, { status: 404 });
+      return NextResponse.json({ error: t("NotFound") }, { status: 404 });
     }
 
     return NextResponse.json(category);
@@ -46,13 +47,12 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
-
-  if (!success && !userId) {
-    return NextResponse.json({ error: error }, { status: code });
-  }
-
   const t = await getTranslations("Categories.errors");
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   const { id } = await params; // Safe to use
 
@@ -103,13 +103,12 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
-
-  if (!success && !userId) {
-    return NextResponse.json({ error: error }, { status: code });
-  }
-
   const t = await getTranslations("Categories.errors");
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   const { id } = await params; // Safe to use
 
@@ -146,13 +145,12 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
-
-  if (!success && !userId) {
-    return NextResponse.json({ error: error }, { status: code });
-  }
-
   const t = await getTranslations("Categories.errors");
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   const { id } = await params; // Safe to use
 

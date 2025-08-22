@@ -1,30 +1,20 @@
 import { NextResponse, NextRequest } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-import { getAuthUserFromRequest } from '@/lib/auth';
 import { getTranslations } from "next-intl/server";
-
-const prisma = new PrismaClient()
+import { auth } from "@clerk/nextjs/server";
+import prisma from "@/lib/prisma";
 
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+  const t = await getTranslations("Status.errors");
+  const { userId } = await auth();
 
-  if (!success && !userId) {
-    return NextResponse.json(
-      {
-        success: success,
-        error: error,
-      },
-      { status: code }
-    );
+  if (!userId) {
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
   }
 
-  const t = await getTranslations("Toy.errors");
-
   const { id } = await params; // Safe to use
-
 
   try {
     // 1. Verificar si el estado existe

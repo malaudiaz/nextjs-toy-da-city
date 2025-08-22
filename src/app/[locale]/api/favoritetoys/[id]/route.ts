@@ -5,17 +5,17 @@ import prisma from "@/lib/prisma";
 import { FavoriteToySchema } from "@/lib/schemas/favoritetoy";
 import { getTranslations } from "next-intl/server";
 import { Prisma } from "@prisma/client";
-import { getAuthUserFromRequest } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
 
 // Obtener un favorito por ID
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+  const { userId } = await auth();
 
-  if (!success && !userId) {
-    return NextResponse.json({ error: error }, { status: code });
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { id } = await params; // Safe to use
@@ -43,13 +43,12 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
-
-  if (!success && !userId) {
-    return NextResponse.json({ error: error }, { status: code });
-  }
-
   const t = await getTranslations("Favorites.errors");
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   const { id } = await params; // Safe to use
 
@@ -94,13 +93,12 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+  const t = await getTranslations("Favorites.errors");
+  const { userId } = await auth();
 
-  if (!success && !userId) {
-    return NextResponse.json({ error: error }, { status: code });
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-
-  const t = await getTranslations("Favorite.errors");
 
   const { id } = await params; // Safe to use
 
@@ -133,13 +131,12 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
 
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+  const t = await getTranslations("Favorites.errors");
+  const { userId } = await auth();
 
-  if (!success && !userId) {
-    return NextResponse.json({ error: error }, { status: code });
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-
-  const t = await getTranslations("Favorite.errors");
 
   const { id } = await params; // Safe to use
 
@@ -156,7 +153,7 @@ export async function PATCH(
     const body = await req.json();
 
     // 3. Validación parcial (schema diferente al POST)
-    const validatedData = FavoriteSchema.parse(body);
+    const validatedData = FavoriteToySchema.parse(body);
 
     // 4. Actualizar solo campos proporcionados
     const updatedFavoriteToy = await prisma.favoriteToy.update({

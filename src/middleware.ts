@@ -21,6 +21,10 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 //const isApiRoute = createRouteMatcher(['/api(.*)', '/(en|es)/api(.*)']);
+const isProtectedRoute = createRouteMatcher([
+  '/(en|es)/protected(.*)',
+  // añade más rutas que necesiten auth
+]);
 
 export default clerkMiddleware(async (auth, req) => {
   const origin = req.headers.get('origin') || '';
@@ -60,9 +64,9 @@ export default clerkMiddleware(async (auth, req) => {
 
   // ✅ Proteger rutas protegidas (como /protected)
   // Si necesitas proteger rutas como /dashboard, descomenta:
-  // if (createRouteMatcher(['/protected(.*)'])(req)) {
-  //   return auth.protect();
-  // }
+  if (isProtectedRoute(req)) {
+    auth.protect(); // ✅ Correcto: usa el `auth` del parámetro
+  }
 
   return response;
 });

@@ -7,17 +7,19 @@ import { CommentsSchema } from "@/lib/schemas/comments";
 import { getTranslations } from "next-intl/server";
 import { Prisma } from "@prisma/client";
 import { CommentsUpdateSchema } from "@/lib/schemas/comments";
-import { getAuthUserFromRequest } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
 
 // Obtener un commentario por ID
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+  const t = await getTranslations("Comments.errors");
 
-  if (!success && !userId) {
-    return NextResponse.json({ error: error }, { status: code });
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
   }
 
   const { id } = await params;
@@ -45,13 +47,12 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+  const t = await getTranslations("Comments.errors");
+  const { userId } = await auth();
 
-  if (!success && !userId) {
-    return NextResponse.json({ error: error }, { status: code });
+  if (!userId) {
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
   }
-
-  const t = await getTranslations("Status.errors");
 
   const { id } = await params;
 
@@ -99,13 +100,12 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
-
-  if (!success && !userId) {
-    return NextResponse.json({ error: error }, { status: code });
-  }
-
   const t = await getTranslations("Comments.errors");
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+  }
 
   const { id } = await params; // Safe to use
 
@@ -140,13 +140,12 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
 
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+  const t = await getTranslations("Comments.errors");
+  const { userId } = await auth();
 
-  if (!success && !userId) {
-    return NextResponse.json({ error: error }, { status: code });
+  if (!userId) {
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
   }
-
-  const t = await getTranslations("Status.errors");
 
   const { id } = await params; // Safe to use
 

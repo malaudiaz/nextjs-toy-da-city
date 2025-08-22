@@ -1,36 +1,24 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-import { getAuthUserFromRequest } from '@/lib/auth';
+import prisma from "@/lib/prisma";
 import { getTranslations } from "next-intl/server";
-
-const prisma = new PrismaClient()
+import { auth } from "@clerk/nextjs/server";
 
 export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(
-    request
-  );
-
-  if (!success && !userId) {
-    return NextResponse.json(
-      {
-        success: success,
-        error: error,
-      },
-      { status: code }
-    );
-  }
-
   const t = await getTranslations("Favorite.errors");
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   const { id } = await params; // Safe to use
 
-
   try {
     const existingFavoriteToy = await prisma.favoriteToy.findUnique({
-      where: { id: Number(id) }
+      where: { id: id}
     })
 
     if (!existingFavoriteToy) {
@@ -42,7 +30,7 @@ export async function PATCH(
 
     // 2. Cambiar el estado isActive (toggle)
     const updatedFavoriteToy = await prisma.favoriteToy.update({
-      where: { id: Number(id) },
+      where: { id: id },
       data: {
         isActive: !existingFavoriteToy.isActive
       }

@@ -80,13 +80,12 @@ export async function GET(
 
 // POST - Insertar nueva categoría.
 export async function POST(req: Request) {
+  const t = await getTranslations("Categories.errors");
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
   }
-
-  const t = await getTranslations("Categories.errors");
 
   try {
     // 1. Obtener el cuerpo de la solicitud
