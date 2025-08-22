@@ -4,7 +4,7 @@ import Stripe from "stripe";
 import { getRedisClient } from "@/lib/redis";
 import prisma from "@/lib/prisma";
 import { createSale } from "@/lib/sales";
-import { getAuthUserFromRequest } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
@@ -32,15 +32,10 @@ export async function GET(req: NextRequest) {
   const sessionId = searchParams.get("session_id");
   const sellerId = searchParams.get("seller_id"); // acct_... de Stripe
 
-  const {
-    success,
-    userId: buyerId,
-    error,
-    code,
-  } = await getAuthUserFromRequest(req);
+  const { userId: buyerId } = await auth();
 
-  if (!success && !buyerId) {
-    return NextResponse.json({ error: error }, { status: code });
+  if (!buyerId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const user = await prisma.user.findUnique({ where: { clerkId: buyerId } });

@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { CategorySchema, PaginationSchema } from "@/lib/schemas/category";
 import { getTranslations } from "next-intl/server";
 import { NextRequest, NextResponse } from "next/server";
-import { getAuthUserFromRequest } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
 
 // GET - Obtener todas las categorías con paginado
 export async function GET(
@@ -80,10 +80,10 @@ export async function GET(
 
 // POST - Insertar nueva categoría.
 export async function POST(req: Request) {
-  const { success, userId, error, code } = await getAuthUserFromRequest(req);
+  const { userId } = await auth();
 
-  if (!success && !userId) {
-    return NextResponse.json({ error: error}, { status: code });
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const t = await getTranslations("Categories.errors");

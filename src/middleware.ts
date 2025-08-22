@@ -1,31 +1,26 @@
 // src/middleware.ts
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
-import { NextResponse } from 'next/server';
 import createIntlMiddleware from 'next-intl/middleware';
+import { NextResponse } from 'next/server';
 
-// Configuración de next-intl
 const intlMiddleware = createIntlMiddleware({
   locales: ['en', 'es'],
   defaultLocale: 'en',
   localePrefix: 'always',
 });
 
-// Rutas protegidas
-const isProtectedRoute = createRouteMatcher([
-  '/(en|es)/protected(.*)',
-]);
-
-// Rutas públicas (no requieren autenticación)
 const isPublicRoute = createRouteMatcher([
   '/(en|es)?',
   '/(en|es)/sign-in(.*)',
   '/(en|es)/sign-up(.*)',
   '/(en|es)/seller-onboarding',
-  '/(en|es)/seller-dashboard', // Añadido para evitar el error en /es/seller-dashboard
+  '/(en|es)/seller-dashboard',
   '/(en|es)/api/clerk-webhook',
   '/(en|es)/api/get-onboarding-url',
   '/(en|es)/api/check-stripe-account',
 ]);
+
+//const isApiRoute = createRouteMatcher(['/api(.*)', '/(en|es)/api(.*)']);
 
 export default clerkMiddleware(async (auth, req) => {
   const origin = req.headers.get('origin') || '';
@@ -37,48 +32,37 @@ export default clerkMiddleware(async (auth, req) => {
     'https://69f0c7248d04.ngrok-free.app',
   ];
 
-  // Configurar respuesta base
+  // ✅ Aplica CORS solo a orígenes permitidos
   const response = NextResponse.next();
-
-  // Configurar CORS
-  if (origin && allowedOrigins.includes(origin)) {
+  if (origin && allowedOrigins.some(o => o.trim() === origin)) {
     response.headers.set('Access-Control-Allow-Origin', origin);
     response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     response.headers.set('Access-Control-Allow-Credentials', 'true');
   }
 
-  // Manejar solicitud OPTIONS (Preflight)
   if (req.method === 'OPTIONS') {
     return new NextResponse(null, {
       status: 200,
-      headers: {
-        ...Object.fromEntries(response.headers),
-        'Content-Length': '0',
-      },
+      headers: response.headers,
     });
   }
 
-  // Evitar autenticación en rutas públicas
-  if (isPublicRoute(req)) {
-    console.log(`Ruta pública accedida: ${req.url}`);
-    return intlMiddleware(req); // Aplicar solo next-intl
-  }
-
-  // Proteger rutas autenticadas
-  if (isProtectedRoute(req)) {
-    try {
-      await auth.protect();
-      console.log(`Ruta protegida accedida: ${req.url}`);
-    } catch (error) {
-      console.error('Error de autenticación en Clerk:', error);
-      return NextResponse.redirect(new URL('/es/sign-in', req.url));
-    }
-  }
-
-  // Aplicar middleware de internacionalización
+  // ✅ next-intl maneja i18n
   const intlResponse = intlMiddleware(req);
   if (intlResponse) return intlResponse;
+
+
+  // ✅ No proteger rutas públicas ni API routes (dejamos que las API manejen su propia lógica)
+  if (isPublicRoute(req)) {
+    return response;
+  }
+
+  // ✅ Proteger rutas protegidas (como /protected)
+  // Si necesitas proteger rutas como /dashboard, descomenta:
+  // if (createRouteMatcher(['/protected(.*)'])(req)) {
+  //   return auth.protect();
+  // }
 
   return response;
 });
@@ -88,6 +72,5 @@ export const config = {
     '/((?!.+\\.[\\w]+$|_next|_vercel|.*\\..*).*)',
     '/',
     '/(en|es)/:path*',
-    '/(en|es)/api/:path*',
   ],
 };
