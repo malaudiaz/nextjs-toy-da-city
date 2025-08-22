@@ -25,10 +25,6 @@ export async function GET(
 
   const { userId } = await auth();
 
-  if (!userId) {
-    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
-  }
-
   // const userId = 'user_2wY8ZRoOrheojD7zQXtwk9fg00x'
   try {
     const toy = await prisma.toy.findUnique({
