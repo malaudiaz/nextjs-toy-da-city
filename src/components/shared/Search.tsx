@@ -8,7 +8,6 @@ import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
-
 const Search = () => {
   const t = useTranslations("navbar");
   const router = useRouter();
@@ -24,10 +23,8 @@ const Search = () => {
   // Cargar valor inicial desde URL
   useEffect(() => {
     const currentQuery = searchParams.get("search") || "";
-    if (currentQuery !== inputValue) {
-      setInputValue(currentQuery);
-      setSearchQuery(currentQuery);
-    }
+    setInputValue(currentQuery);
+    setSearchQuery(currentQuery);
   }, [searchParams]);
 
   const applySearch = () => {
@@ -62,7 +59,13 @@ const Search = () => {
   };
 
   return (
-    <form onSubmit={(e) => { e.preventDefault(); applySearch(); }} className="w-full flex h-9">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        applySearch();
+      }}
+      className="w-full flex h-9"
+    >
       <div className="relative w-full">
         <Input
           className="flex-1 rounded-md bg-gray-100 text-black text-base h-full pl-4 pr-10"

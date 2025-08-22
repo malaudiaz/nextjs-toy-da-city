@@ -1,3 +1,5 @@
+"use client";
+
 //import MapComponent from '@/components/shared/MapComponent';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@radix-ui/react-dropdown-menu';

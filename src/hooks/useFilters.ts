@@ -83,7 +83,18 @@ export function useFilter() {
     }
 
     router.push(`?${current.toString()}`);
-  }, [priceRange, radius, latitude, longitude, router, searchParams]);
+  }, [
+    priceRange,
+    radius,
+    latitude,
+    longitude,
+    router,
+    searchParams,
+    typeSale,
+    typeFree,
+    typeSwap,
+    selections,
+  ]);
 
   // Limpiar filtros
   const clearFilters = useCallback(() => {
@@ -96,7 +107,7 @@ export function useFilter() {
     current.delete("forSale");
     current.delete("forFree");
     current.delete("forSwap");
-    current.delete("search")
+    current.delete("search");
 
     setSelections([]);
 
