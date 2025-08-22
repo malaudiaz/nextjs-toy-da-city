@@ -13,11 +13,22 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const user = await prisma.user.findUnique({ where: { clerkId: userId } });
+  if (!user) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: "User not found",
+      },
+      { status: 404 }
+    );
+  }
+
   try {
     const [favoriteToy, total] = await Promise.all([
       prisma.favoriteToy.findMany({
         where: {
-          userId: userId,
+          userId: user.id,
         },
         include: {
           toy: true,
@@ -76,7 +87,7 @@ export async function POST(req: Request) {
       where: {
         unique_favorite: {
           // 👈 Clave compuesta
-          userId,
+          userId: user.id,
           toyId,
         },
       },
@@ -99,7 +110,7 @@ export async function POST(req: Request) {
         where: {
           unique_favorite: {
             // 👈 Clave compuesta
-            userId,
+            userId: user.id,
             toyId,
           },
         },
