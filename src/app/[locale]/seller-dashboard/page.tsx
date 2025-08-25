@@ -4,42 +4,46 @@ import Sigin from "@/components/shared/Sigin";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import useSWR from "swr";
+
+const fetcher = (...args:Parameters<typeof fetch>) => fetch(...args).then((res) => res.json());
 
 export default function SellerDashboard() {
-  const { user, isLoaded } = useUser(); // Agrega isLoaded para verificar si Clerk ha terminado de cargar
-  const [stripeAccountStatus, setStripeAccountStatus] = useState<null | string>(
-    null
-  );
+  const { user, isLoaded } = useUser();
+  const {data} = useSWR(`/api/users/${user?.id}/validate-seller`, fetcher);
+  // const [stripeAccountStatus, setStripeAccountStatus] = useState<null | string>(
+  //   null
+  // );
+  
 
-  useEffect(() => {
-    console.log("useEffect ejecutado", { user });
+  // useEffect(() => {
+  //   console.log("useEffect ejecutado", { user });
 
-    if (!isLoaded || !user) {
-      console.log("useEffect detenido: isLoaded o user no están listos", {
-        isLoaded,
-        user,
-      });
-      return;
-    }
+  //   if (!isLoaded || !user) {
+  //     console.log("useEffect detenido: isLoaded o user no están listos", {
+  //       isLoaded,
+  //       user,
+  //     });
+  //     return;
+  //   }
 
-    const fetchStripeStatus = async () => {
-      try {
-        console.log("Haciendo fetch a /api/users/", user.id);
-        const response = await fetch(`/api/users/${user.id}/validate-seller`);
-        if (!response.ok) {
-          throw new Error(`Error en la API: ${response.status}`);
-        }
-        const data = await response.json();
-        console.log("Respuesta de la API:", data);
-        setStripeAccountStatus(data.stripeAccountId);
-      } catch (error) {
-        console.error("Error al obtener datos del usuario:", error);
-      }
-    };
+  //   const fetchStripeStatus = async () => {
+  //     try {
+  //       console.log("Haciendo fetch a /api/users/", user.id);
+  //       const response = await fetch(`/api/users/${user.id}/validate-seller`);
+  //       if (!response.ok) {
+  //         throw new Error(`Error en la API: ${response.status}`);
+  //       }
+  //       const data = await response.json();
+  //       console.log("Respuesta de la API:", data);
+  //       setStripeAccountStatus(data.stripeAccountId);
+  //     } catch (error) {
+  //       console.error("Error al obtener datos del usuario:", error);
+  //     }
+  //   };
 
-    fetchStripeStatus();
-  }, [user, isLoaded]);
+  //   fetchStripeStatus();
+  // }, [user, isLoaded]);
 
   return (
     <>
@@ -54,7 +58,7 @@ export default function SellerDashboard() {
             <CardContent className="flex flex-col gap-4 items-center justify-center text-center">
               {!isLoaded ? (
                 <p>Cargando...</p>
-              ) : stripeAccountStatus ? (
+              ) : data.stripeAccountId ? (
                 <p>Your Stripe account is set up. Start adding products!</p>
               ) : (
                 <p>Please complete the seller onboarding process.</p>
