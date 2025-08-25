@@ -45,6 +45,12 @@ async function main() {
           clerkId: "user_31TMApqRn4tXg64h29gB6jxN5Uf",
           role: "buyer"
         },
+        {
+          id: "0f1a4b4d-da45-493a-a218-da7cb511198f",
+          name:"Miguel David",
+          clerkId:"user_31ecE9APT1PDgbjVZuzCbtZLI6d",
+          role: "buyer"
+        }
       ],
       skipDuplicates: true,
     });

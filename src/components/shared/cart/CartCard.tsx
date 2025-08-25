@@ -15,8 +15,6 @@ type CartCardProps = {
 const CartCard = ({ item }: CartCardProps) => {
   const { data, error, isLoading } = useSWR("getUsers", getUsers);
 
-  console.log(data);
-
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   return (
     <div className="px-2 py-4 shadow-sm rounded-lg w-full border border-gray-100 hover:shadow-md transition-shadow">

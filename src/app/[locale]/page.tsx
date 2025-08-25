@@ -15,7 +15,6 @@ type Props = {
 export default async function Home({ searchParams, params }: Props) {
   const resolvedSearchParams = await searchParams;
   const { locale } = await params;
-
   const conditions = await getConditions();
   const currentPage = parseInt((resolvedSearchParams.page as string) || "1");
   const postsPerPage = parseInt(

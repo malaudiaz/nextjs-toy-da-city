@@ -2,19 +2,18 @@
 
 import { Toy } from "@/types/toy";
 import React, { useState } from "react";
-import {
-  Heart,
-  ShoppingCart,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
-import { NumberToCategory, NumberToCondition } from "@/lib/utils";
+import { Heart, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
+import { BACKEND_URL, NumberToCategory, NumberToCondition } from "@/lib/utils";
 import Image from "next/image";
 import ExpandableText from "../ExpandableText";
 import dynamic from "next/dynamic";
 import { useCartStore } from "@/store/cartStore";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { CommentDialog } from "./CommentDialog";
+import { useFavorite } from "@/hooks/useFavorite";
+import useSWR from "swr";
+import { getFavoriteById } from "@/lib/actions/favoriteActions";
 
 // Importación dinámica con exportación por defecto correcta
 const MapComponent = dynamic(
@@ -30,35 +29,49 @@ const MapComponent = dynamic(
 );
 
 type ProductDetailsProps = {
-  data: Toy;
+  toy: Toy;
+  user: string | undefined;
 };
 
-const ProductDetails = ({ data }: ProductDetailsProps) => {
+const fetcher = (...args:Parameters<typeof fetch>) => fetch(...args).then((res) => res.json());
 
-  const [isFavorite, setIsFavorite] = useState(false);
+const ProductDetails = ({ toy, user }: ProductDetailsProps) => {
   const [selectedImage, setSelectedImage] = useState(0);
+  const { data, error } = useSWR('getFavoriteById', getFavoriteById);
+  console.log(user)
 
   const t = useTranslations("cartStore");
-
   const nextImage = () => {
-    setSelectedImage((prev) => (prev + 1) % data.media.length);
+    setSelectedImage((prev) => (prev + 1) % toy.media.length);
   };
+  
 
   const prevImage = () => {
     setSelectedImage(
-      (prev) => (prev - 1 + data.media.length) % data.media.length
+      (prev) => (prev - 1 + toy.media.length) % toy.media.length
     );
   };
 
+   const { addToFavorites } = useFavorite();
+
+  const handleFavorite = async () => {
+    try {
+      await addToFavorites(toy.id);
+      toast.success("Added to favorites");
+    } catch (error) {
+      toast.error("Failed to add to favorites");
+    }
+  };
+
   const addToCart = useCartStore((state) => state.addToCart);
-  const coordinates = data.location ? data.location.split(",").map(Number) : [];
+  const coordinates = toy.location ? toy.location.split(",").map(Number) : [];
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-900 mb-3">{data.title}</h1>
+      <h1 className="text-3xl font-bold text-gray-900 mb-3">{toy.title}</h1>
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">
-          {NumberToCategory(data.categoryId)}
+          {NumberToCategory(toy.categoryId)}
         </span>
       </div>
 
@@ -69,8 +82,8 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
               {/* eslint-disable @next/next/no-img-element */}
 
               <Image
-                src={data.media[selectedImage].fileUrl}
-                alt={data.title}
+                src={toy.media[selectedImage].fileUrl}
+                alt={toy.title}
                 width={400}
                 height={400}
                 className="w-full h-full object-cover"
@@ -92,14 +105,14 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
 
               {/* Image Counter */}
               <div className="absolute bottom-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-                {selectedImage + 1} / {data.media.length}
+                {selectedImage + 1} / {toy.media.length}
               </div>
             </div>
           </div>
 
           {/* Thumbnail Gallery */}
           <div className="grid grid-cols-6 gap-3">
-            {data.media.map((image, index) => (
+            {toy.media.map((image, index) => (
               <button
                 key={index}
                 onClick={() => setSelectedImage(index)}
@@ -110,8 +123,8 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
                 }`}
               >
                 <img
-                  src={data.media[index].fileUrl}
-                  alt={`${data.title} view ${index + 1}`}
+                  src={toy.media[index].fileUrl}
+                  alt={`${toy.title} view ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
               </button>
@@ -125,30 +138,33 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
           <div>
             <div className="flex items-center justify-between mb-6">
               <span className="text-3xl font-bold text-green-700">
-                ${data.price.toFixed(2)}
+                ${toy.price.toFixed(2)}
               </span>
               <button
-                onClick={() => setIsFavorite(!isFavorite)}
-                className={`p-2 rounded-full transition-all duration-200 ${
-                  isFavorite
-                    ? "text-red-500 bg-red-50 hover:bg-red-100"
-                    : "text-gray-400 hover:text-red-500 hover:bg-red-50"
-                }`}
+                onClick={handleFavorite}
+                disabled={!user}
+                // className={`p-2 rounded-full transition-all duration-200 ${favorite
+                //     ? "text-red-500 bg-red-50 hover:bg-red-100"
+                //     : "text-gray-400 hover:text-red-500 hover:bg-red-50"
+                // }`}
               >
                 <Heart
-                  className={`w-6 h-6 ${isFavorite ? "fill-current" : ""}`}
+                  // className={`w-6 h-6 ${favorite ? "fill-current" : ""}`}
                 />
               </button>
             </div>
-            <div>
-              <h2>{NumberToCondition(data.conditionId)}</h2>
+            <div className="flex items-center space-x-2 justify-between">
+              <h2 className="inline-block text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-lg">
+                Condition: {NumberToCondition(toy.conditionId)}
+              </h2>
+              <CommentDialog />
             </div>
           </div>
 
           {/* Features */}
-          {data.description && (
+          {toy.description && (
             <div className="bg-yellow-50 rounded-xl p-6 border border-yellow-200">
-              <ExpandableText text={data.description} maxLength={200} />
+              <ExpandableText text={toy.description} maxLength={200} />
             </div>
           )}
 
@@ -164,15 +180,16 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
 
           <div className="">
             <div className="flex items-center">
-              {data.forSell ? (
+              {toy.forSell ? (
                 <button
+                  disabled={!user}
                   onClick={() => {
                     const added = addToCart({
-                      id: data.id,
-                      title: data.title,
-                      price: data.price,
-                      media: data.media,
-                      sellerId: data.sellerId,
+                      id: toy.id,
+                      title: toy.title,
+                      price: toy.price,
+                      media: toy.media,
+                      sellerId: toy.sellerId,
                     });
                     if (added) {
                       toast.success(t("itemAdded")); // ✅ Traducido: "Item added to cart"
@@ -186,7 +203,9 @@ const ProductDetails = ({ data }: ProductDetailsProps) => {
                   <span>{t("addToCart")}</span>
                 </button>
               ) : (
-                ""
+                <button className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 px-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 w-full">
+                  <span>Contact</span>
+                </button>
               )}
             </div>
 
