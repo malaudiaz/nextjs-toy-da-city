@@ -18,6 +18,7 @@ const ProductList = ({ toys }: ProductCardProps) => {
             price={toy.price}
             location={toy.location}
             conditionDescription={toy.conditionDescription}
+            favorites={toy.favorites}
             id={toy.id}
           />
         ))}

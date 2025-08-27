@@ -3,7 +3,7 @@
 import { Toy } from "@/types/toy";
 import React, { useState } from "react";
 import { Heart, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
-import { BACKEND_URL, NumberToCategory, NumberToCondition } from "@/lib/utils";
+import { NumberToCategory, NumberToCondition } from "@/lib/utils";
 import Image from "next/image";
 import ExpandableText from "../ExpandableText";
 import dynamic from "next/dynamic";
@@ -12,8 +12,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { CommentDialog } from "./CommentDialog";
 import { useFavorite } from "@/hooks/useFavorite";
-import useSWR from "swr";
-import { getFavoriteById } from "@/lib/actions/favoriteActions";
+import { useAuth } from '@clerk/nextjs';
 
 // Importación dinámica con exportación por defecto correcta
 const MapComponent = dynamic(
@@ -30,21 +29,20 @@ const MapComponent = dynamic(
 
 type ProductDetailsProps = {
   toy: Toy;
-  user: string | undefined;
 };
 
-const fetcher = (...args:Parameters<typeof fetch>) => fetch(...args).then((res) => res.json());
+//const fetcher = (...args: Parameters<typeof fetch>) => fetch(...args).then((res) => res.json());
 
-const ProductDetails = ({ toy, user }: ProductDetailsProps) => {
+const ProductDetails = ({ toy }: ProductDetailsProps) => {
   const [selectedImage, setSelectedImage] = useState(0);
-  const { data, error } = useSWR('getFavoriteById', getFavoriteById);
-  console.log(user)
+  const [favorite, setFavorite] = useState(toy.isFavorite);
+  const { isSignedIn } = useAuth();
 
+  //const { data, error } = useSWR("getFavoriteById", getFavoriteById);
   const t = useTranslations("cartStore");
   const nextImage = () => {
     setSelectedImage((prev) => (prev + 1) % toy.media.length);
   };
-  
 
   const prevImage = () => {
     setSelectedImage(
@@ -52,14 +50,21 @@ const ProductDetails = ({ toy, user }: ProductDetailsProps) => {
     );
   };
 
-   const { addToFavorites } = useFavorite();
+  const { addToFavorites } = useFavorite();
 
   const handleFavorite = async () => {
     try {
-      await addToFavorites(toy.id);
-      toast.success("Added to favorites");
+      const res = await addToFavorites(toy.id);
+      
+      if (res.data) {
+        toast.success(!favorite ? "Added to favorites" : "Removed from favorites");
+        setFavorite(!favorite);
+      }
+
     } catch (error) {
+      console.log(error);
       toast.error("Failed to add to favorites");
+      setFavorite(false);
     }
   };
 
@@ -140,18 +145,21 @@ const ProductDetails = ({ toy, user }: ProductDetailsProps) => {
               <span className="text-3xl font-bold text-green-700">
                 ${toy.price.toFixed(2)}
               </span>
-              <button
-                onClick={handleFavorite}
-                disabled={!user}
-                // className={`p-2 rounded-full transition-all duration-200 ${favorite
-                //     ? "text-red-500 bg-red-50 hover:bg-red-100"
-                //     : "text-gray-400 hover:text-red-500 hover:bg-red-50"
-                // }`}
-              >
-                <Heart
-                  // className={`w-6 h-6 ${favorite ? "fill-current" : ""}`}
-                />
-              </button>
+
+                <button
+                  disabled={!isSignedIn}
+                  onClick={handleFavorite}
+                    className={`p-2 rounded-full transition-all duration-200 ${favorite && isSignedIn
+                     ? "text-red-500 bg-red-50 hover:bg-red-100"
+                     : "text-gray-400 hover:text-red-500 hover:bg-red-50"
+                }`}
+ 
+                >
+                  <Heart
+                    className={`w-6 h-6 ${favorite ? "fill-current" : ""}`}
+                  />
+                </button>
+              
             </div>
             <div className="flex items-center space-x-2 justify-between">
               <h2 className="inline-block text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-lg">
@@ -182,7 +190,6 @@ const ProductDetails = ({ toy, user }: ProductDetailsProps) => {
             <div className="flex items-center">
               {toy.forSell ? (
                 <button
-                  disabled={!user}
                   onClick={() => {
                     const added = addToCart({
                       id: toy.id,

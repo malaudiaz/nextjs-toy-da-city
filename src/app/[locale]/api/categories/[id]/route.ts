@@ -16,10 +16,14 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const t = await getTranslations("Categories.errors");
-  const { userId } = await auth();
+  let { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+    userId = req.headers.get("X-User-ID");
+
+    if (!userId) {
+      return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+    }
   }
 
   const { id } = await params;

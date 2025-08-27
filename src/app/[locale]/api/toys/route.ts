@@ -49,7 +49,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ locale: string }> }
 ) {
-  
+ 
   const { locale } = await params;
 
   const t = await getTranslations("Toy.errors");
@@ -152,6 +152,7 @@ export async function GET(
             }
           }  
         }, 
+        favorites: true
       },
       skip: (pagination.page - 1) * pagination.limit,
       take: pagination.limit
@@ -371,7 +372,6 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
         sellerId: userId!,
         categoryId: updatedPost!.categoryId,
         categoryDescription: updatedPost!.category?.description ?? updatedPost!.category.name,
-        //statusId: updatedPost!.statusId,
         statusDescription: updatedPost!.status?.description ?? updatedPost!.status.name,
         conditionId: updatedPost!.conditionId,
         conditionDescription: updatedPost!.condition?.description ?? updatedPost!.condition.name,
@@ -379,13 +379,14 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
         forGifts: updatedPost!.forGifts,
         forChanges: updatedPost!.forChanges,
         isActive: updatedPost!.isActive,
+        isFavorite: false,
+        favorites: [],
         media: updatedPost!.media.map(media => ({
           id: media.id,
           fileUrl: media.fileUrl,
           type: media.type,
           toyId: media.toyId
         })),
-        favorites: [],
         comments: [],
       }
     }    

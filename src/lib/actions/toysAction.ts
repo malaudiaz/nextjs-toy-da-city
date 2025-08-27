@@ -2,6 +2,7 @@
 
 import { Toy } from "@/types/toy";
 import { BACKEND_URL } from "../utils";
+import { auth } from "@clerk/nextjs/server";
 
 export type Filters = {
   search?: string | null;
@@ -13,17 +14,25 @@ export type Filters = {
     radius: number;
   };
   locale?: string;
-}
+};
 
-export async function getToys(page: number, perPage: number, locale: string, filters: Filters) {
+export async function getToys(
+  page: number,
+  perPage: number,
+  locale: string,
+  filters: Filters
+) {
+
+  const { userId } = await auth();
+
   const start = page - 1 + 1 || 1;
 
   const url = new URL(`${BACKEND_URL}/${locale}/api/toys`);
   url.searchParams.set("page", String(start));
-  url.searchParams.set('limit', String(perPage));
+  url.searchParams.set("limit", String(perPage));
 
-  if (typeof filters.search === 'string' && filters.search.trim()) {
-    url.searchParams.set('search', encodeURIComponent(filters.search.trim()));
+  if (typeof filters.search === "string" && filters.search.trim()) {
+    url.searchParams.set("search", encodeURIComponent(filters.search.trim()));
   }
   if (filters.minPrice !== undefined && filters.minPrice !== null) {
     url.searchParams.set("minPrice", String(filters.minPrice));
@@ -37,23 +46,45 @@ export async function getToys(page: number, perPage: number, locale: string, fil
     url.searchParams.set("radius", String(filters.locationRadius.radius));
   }
 
-  const response = await fetch(
-    url.toString(),
-    {
-      method: "GET",
-    }
-  );
+  const headers = {
+    "Content-Type": "application/json",
+    "X-User-ID": "",
+  };
+
+  if (userId) {
+    headers["X-User-ID"] = userId;
+  }
+
+  const response = await fetch(url.toString(), {
+    method: "GET",
+    headers: headers
+  });
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   const toys = await response.json();
 
-  return { toys: toys.data as Toy[], totalPosts: toys.pagination.total as number | 0};
+  return {
+    toys: toys.data as Toy[],
+    totalPosts: toys.pagination.total as number | 0,
+  };
 }
 
 export async function getToy(id: string) {
+  const { userId } = await auth();
+
+  const headers = {
+    "Content-Type": "application/json",
+    "X-User-ID": "",
+  };
+
+  if (userId) {
+    headers["X-User-ID"] = userId;
+  }
+
   const response = await fetch(`${BACKEND_URL}/api/toys/${id}`, {
     method: "GET",
+    headers: headers
   });
 
   const toy = await response.json();
@@ -61,12 +92,24 @@ export async function getToy(id: string) {
   return toy;
 }
 
-export async function getRelatedToys(id:string){
+export async function getRelatedToys(id: string) {
+  const { userId } = await auth();
+
+  const headers = {
+    "Content-Type": "application/json",
+    "X-User-ID": "",
+  };
+
+  if (userId) {
+    headers["X-User-ID"] = userId;
+  }
+
   const response = await fetch(`${BACKEND_URL}/api/toys/${id}/related`, {
     method: "GET",
+    headers: headers
   });
 
   const toys = await response.json();
 
-  return {toys: toys.data as Toy[]};
+  return { toys: toys.data as Toy[] };
 }

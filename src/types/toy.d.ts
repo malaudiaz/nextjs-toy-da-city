@@ -25,6 +25,7 @@ export interface Toy {
   updatedAt?: Date
   sellerId: string
   isActive: boolean
+  isFavorite: boolean
   favorites: FavoriteToy[]
   comments: ToyComments[]
   media: Media[]

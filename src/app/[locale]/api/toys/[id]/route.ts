@@ -1,6 +1,6 @@
 // app/api/toy/[id]/route.ts
 import { NextResponse } from "next/server";
-import { NextRequest } from 'next/server';
+import { NextRequest } from "next/server";
 import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { ToySchema } from "@/lib/schemas/toy";
@@ -13,19 +13,36 @@ const MAX_MEDIA_FILES = 6;
 
 // Obtener un juguete por ID
 export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string, locale: string }> }
+  req: Request,
+  { params }: { params: Promise<{ id: string; locale: string }> }
 ) {
+  let { userId } = await auth();
+
+  if (!userId) {
+    userId = req.headers.get("X-User-ID");
+  }
+
+  if (userId) {
+    const user = await prisma.user.findUnique({ where: { clerkId: userId } });
+    if (!user) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "User not found",
+        },
+        { status: 404 }
+      );
+    } else {
+      userId = user.id;
+    }
+  }
 
   const { id, locale } = await params;
 
-  const userLanguageCode = locale
+  const userLanguageCode = locale;
 
   const t = await getTranslations("Toy.errors");
 
-  const { userId } = await auth();
-
-  // const userId = 'user_2wY8ZRoOrheojD7zQXtwk9fg00x'
   try {
     const toy = await prisma.toy.findUnique({
       where: { id: id, isActive: true },
@@ -34,27 +51,27 @@ export async function GET(
         category: {
           include: {
             translations: {
-              where: {languageId: userLanguageCode, key: 'name'},
-              select: {value: true}
-            }
-          }  
-        }, 
+              where: { languageId: userLanguageCode, key: "name" },
+              select: { value: true },
+            },
+          },
+        },
         condition: {
           include: {
             translations: {
-              where: {languageId: userLanguageCode, key: 'name' },
-              select: {value: true}
-            }
-          }  
-        }, 
+              where: { languageId: userLanguageCode, key: "name" },
+              select: { value: true },
+            },
+          },
+        },
         status: {
           include: {
             translations: {
-              where: {languageId: userLanguageCode, key: 'name'},
-              select: {value: true}
-            }
-          }  
-        }, 
+              where: { languageId: userLanguageCode, key: "name" },
+              select: { value: true },
+            },
+          },
+        },
         comments: {
           where: { isActive: true },
           select: {
@@ -74,24 +91,29 @@ export async function GET(
             },
           },
         },
-        // Subconsulta condicional: solo si hay un usuario logueado
-        ...(userId ? {
-          favorites: {
-            where: { userId: userId },
-            select: { id: true },
-            take: 1,
-          },
-        } : {}),
-      },
+      }
     });
 
     if (!toy) {
       return NextResponse.json({ error: t("ToyNotFound") }, { status: 404 });
     }
 
-    // Determina si el usuario dio like (solo si existe UserId)
+    // Verificar si el usuario actual tiene este toy como favorito
+    let favorite;
 
-    const {category, condition, status, ...toyData } = toy
+    if (userId) {
+
+      favorite = await prisma.favoriteToy.findFirst({
+        where: {
+          userId: userId,
+          toyId: id,
+          isActive: true,
+        },
+      });
+
+    }
+
+    const { category, condition, status, ...toyData } = toy;
     // Formateamos el resultado final
     const toyWithLikeStatus = {
       ...toyData,
@@ -101,6 +123,7 @@ export async function GET(
       conditionDescription: condition.translations[0]?.value || condition.name,
       statusName: status.name,
       statusDescription: status.translations[0]?.value || status.name,
+      isFavorite: !!favorite, // true si existe, false si no
       likes: undefined, // Eliminamos el array de likes (no necesario en la respuesta)
     };
 
@@ -124,7 +147,10 @@ export async function PUT(
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json(
+      { success: false, error: "Unauthorized" },
+      { status: 401 }
+    );
   }
 
   try {
@@ -133,7 +159,7 @@ export async function PUT(
     const stringforSell = formData.get("forSell") || "false";
     const stringforGifts = formData.get("forGifts") || "false";
     const stringforChanges = formData.get("forChanges") || "false";
-    
+
     // Validar con Zod
     const toyData = ToySchema.parse({
       title: formData.get("title"),
@@ -250,7 +276,10 @@ export async function DELETE(
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json(
+      { success: false, error: "Unauthorized" },
+      { status: 401 }
+    );
   }
 
   const { id } = await params; // Safe to use

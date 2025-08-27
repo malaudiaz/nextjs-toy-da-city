@@ -4,14 +4,16 @@ import { Heart } from "lucide-react";
 import Link from "next/link";
 import ConditionBadge from "./ConditionBadge";
 import { useTranslations } from "next-intl";
+import { FavoriteToy } from "@prisma/client";
 
 type ProductCardProps = {
-  id:string
+  id: string;
   description: string;
   image?: string;
   price: number;
   conditionDescription: string;
   location: string;
+  favorites: FavoriteToy[];
 };
 
 const ProductCard = ({
@@ -20,9 +22,10 @@ const ProductCard = ({
   image,
   price,
   conditionDescription,
+  favorites,
 }: ProductCardProps) => {
-
-const t = useTranslations("toys");
+  
+  const t = useTranslations("toys");
 
   return (
     <Link
@@ -45,18 +48,27 @@ const t = useTranslations("toys");
       <div className="flex flex-col flex-grow p-4">
         <div className="flex justify-between items-center mb-2">
           <span className="font-bold text-[calc(14px_+_0.5vw)] text-green-700">
-            {price === 0 ? <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm">{t("free")}</span> : `$${price.toFixed(2).split(".")[0]}`}
+            {price === 0 ? (
+              <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm">
+                {t("free")}
+              </span>
+            ) : (
+              `$${price.toFixed(2).split(".")[0]}`
+            )}
             <span className="text-[0.7em] align-super ml-px">
               {price === 0 ? "" : price.toFixed(2).split(".")[1] || "00"}
             </span>
           </span>
-          <button
-            type="button"
-            aria-label="Agregar a favoritos"
-            className="bg-white p-1.5 rounded-full hover:bg-gray-50 transition-colors"
-          >
-            <Heart className="h-6 w-6 text-black" />
-          </button>
+
+          <span className="bg-white p-1.5 rounded-full hover:bg-gray-50 transition-colors">
+            <Heart
+              className={
+                favorites.length > 0
+                  ? "text-red-500 fill-current"
+                  : "h-6 w-6 text-gray-400"
+              }
+            />
+          </span>
         </div>
 
         <ConditionBadge condition={conditionDescription} />

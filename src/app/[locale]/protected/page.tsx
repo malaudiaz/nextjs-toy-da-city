@@ -105,6 +105,7 @@ export default function ProtectedPage() {
             </div>
 
             <Button onClick={handlePayment}>Pagar con Stripe</Button>
+
           </div>
         </div>
       </main>

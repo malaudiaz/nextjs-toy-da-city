@@ -57,7 +57,9 @@ const TopNavbar = () => {
               />
             </Link>
           </div>
+
           <div className="flex items-center gap-2">
+            <SignedIn>
             <div className="relative inline-block group">
               <ShoppingCart className="size-6 transition-transform group-hover:scale-110" />
               {items.length > 0 && (
@@ -66,6 +68,8 @@ const TopNavbar = () => {
                 </div>
               )}
             </div>
+            </SignedIn>
+
             <SelectLanguage />
           </div>
         </div>
@@ -85,11 +89,13 @@ const TopNavbar = () => {
                 </Link>
               ))}
 
-              <Button className="w-full bg-[#4c754b] hover:bg-[#558d54] text-white px-4 py-2">
-                <Link href={"/en/post"} className="w-full">
-                  {t("Post")}
-                </Link>
-              </Button>
+              <SignedIn>
+                <Button className="w-full bg-[#4c754b] hover:bg-[#558d54] text-white px-4 py-2">
+                  <Link href={"/en/post"} className="w-full">
+                    {t("Post")}
+                  </Link>
+                </Button>
+              </SignedIn>
             </div>
           </div>
         )}
@@ -105,9 +111,11 @@ const TopNavbar = () => {
           </div>
 
           <div className="flex items-center gap-6">
-            <Button className="whitespace-nowrap bg-[#4c754b] hover:bg-[#558d54] text-white px-4">
-              <Link href={"/en/post"}>{t("Post")}</Link>
-            </Button>
+            <SignedIn>
+              <Button className="whitespace-nowrap bg-[#4c754b] hover:bg-[#558d54] text-white px-4">
+                <Link href={"/en/post"}>{t("Post")}</Link>
+              </Button>
+            </SignedIn>
 
             <div className="flex flex-col items-start gap-1">
               <SignedOut>
@@ -127,19 +135,26 @@ const TopNavbar = () => {
               </SignedIn>
             </div>
 
-            <Link href="/cart" className="text-black hover:text-gray-700">
-              <div className="relative inline-block group">
-                <ShoppingCart className="size-6 transition-transform group-hover:scale-110" />
-                {items.length > 0 && (
-                  <div className="absolute -top-1 -right-1 flex items-center justify-center min-w-4 h-4 px-1 bg-[#4c754b] text-white text-xs rounded-full transform transition-all group-hover:scale-125">
-                    {items.length}
-                  </div>
-                )}
-              </div>
-            </Link>
-            <Link href="/en/config" className="text-black hover:text-gray-700">
-              <Settings className="size-6" />
-            </Link>
+            <SignedIn>
+              <Link href="/cart" className="text-black hover:text-gray-700">
+                <div className="relative inline-block group">
+                  <ShoppingCart className="size-6 transition-transform group-hover:scale-110" />
+                  {items.length > 0 && (
+                    <div className="absolute -top-1 -right-1 flex items-center justify-center min-w-4 h-4 px-1 bg-[#4c754b] text-white text-xs rounded-full transform transition-all group-hover:scale-125">
+                      {items.length}
+                    </div>
+                  )}
+                </div>
+              </Link>
+
+              <Link
+                href="/en/config"
+                className="text-black hover:text-gray-700"
+              >
+                <Settings className="size-6" />
+              </Link>
+            </SignedIn>
+
             <SelectLanguage />
           </div>
         </div>
