@@ -18,6 +18,11 @@ const isPublicRoute = createRouteMatcher([
   '/(en|es)/api/clerk-webhook',
   '/(en|es)/api/get-onboarding-url',
   '/(en|es)/api/check-stripe-account',
+  '/(en|es)/api/stripe-webhook',
+  '/(en|es)/api/release-past-due',
+  '/(en|es)/api/create-payment-intent',
+  '/(en|es)/api/confirm-delivery',
+  '/(en|es)/api/release-payment',
 ]);
 
 //const isApiRoute = createRouteMatcher(['/api(.*)', '/(en|es)/api(.*)']);

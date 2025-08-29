@@ -8,124 +8,128 @@ datasource db {
 }
 
 model User {
-  id    String  @id @default(uuid())
-  name  String
-  email String? @unique
-  phone String?
+  id                String       @id @default(uuid())
+  name              String
+  email             String?      @unique
+  phone             String?
+  clerkId           String       @unique
+  role              String       @default("buyer")
+  stripeAccountId   String?      @unique
+  onboardingUrl     String?
+  reputation        Float?       @default(0)
+  isActive          Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
 
-  clerkId         String  @unique
-  role            String  @default("buyer")
-  stripeAccountId String? @unique
+  // Relaciones
+  toysForSale       Toy[]        @relation("Seller")
+  favoriteToys      FavoriteToy[]
+  purchaseHistory   Transaction[] @relation("Buyer")
+  salesHistory      Transaction[] @relation("Seller")
+  ordersAsBuyer     Order[]      @relation("Buyer")
+  ordersAsSeller    Order[]      @relation("Seller")
 
-  onboardingUrl   String?
-
-  toysForSale     Toy[]         @relation("Seller")
-  favoriteToys    FavoriteToy[]
-  purchaseHistory Transaction[] @relation("Buyer")
-  salesHistory    Transaction[] @relation("Seller")
-  reputation      Float?        @default(0)
-  isActive        Boolean       @default(true)
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  @@map("users")
 }
 
 model Language {
-  id           String        @id @default(uuid())
-  code         String        @unique // e.g.: "en", "es", "fr"
-  name         String
-  translations Translation[]
-  createdAt    DateTime      @default(now())
+  id            String        @id @default(uuid())
+  code          String        @unique // "en", "es"
+  name          String
+  translations  Translation[]
+  createdAt     DateTime      @default(now())
+
+  @@map("languages")
 }
 
 model Translation {
-  id    String @id @default(uuid())
-  key   String // Field to translate
-  value String // Translated text
-
-  language   Language @relation(fields: [languageId], references: [id])
-  languageId String
-
-  category   Category? @relation(fields: [categoryId], references: [id])
-  categoryId Int?
-
-  condition   Condition? @relation(fields: [conditionId], references: [id])
-  conditionId Int?
-
-  status   Status? @relation(fields: [statusId], references: [id])
-  statusId Int?
-
-  createdAt DateTime @default(now())
+  id            String     @id @default(uuid())
+  key           String
+  value         String
+  language      Language   @relation(fields: [languageId], references: [id])
+  languageId    String
+  category      Category?  @relation(fields: [categoryId], references: [id])
+  categoryId    Int?
+  condition     Condition? @relation(fields: [conditionId], references: [id])
+  conditionId   Int?
+  status        Status?    @relation(fields: [statusId], references: [id])
+  statusId      Int?
+  createdAt     DateTime   @default(now())
 
   @@unique([languageId, key, categoryId, conditionId, statusId])
+  @@map("translations")
 }
 
 model Category {
-  id           Int           @id @default(autoincrement())
-  name         String        @unique
-  description  String?
-  userId       String
-  isActive     Boolean       @default(true)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  translations Translation[]
-  toys         Toy[]
+  id             Int            @id @default(autoincrement())
+  name           String         @unique
+  description    String?
+  userId         String
+  isActive       Boolean        @default(true)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  translations   Translation[]
+  toys           Toy[]
+
+  @@map("categories")
 }
 
 model Status {
-  id           Int           @id @default(autoincrement())
-  name         String        @unique
-  description  String?
-  userId       String
-  isActive     Boolean       @default(true)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  translations Translation[]
-  toys         Toy[]
-  transactions Transaction[]
+  id             Int            @id @default(autoincrement())
+  name           String         @unique
+  description    String?
+  userId         String
+  isActive       Boolean        @default(true)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  translations   Translation[]
+  toys           Toy[]
+  transactions   Transaction[]
+
+  @@map("statuses")
 }
 
 model Condition {
-  id           Int           @id @default(autoincrement())
-  name         String        @unique
-  description  String?
-  userId       String
-  isActive     Boolean       @default(true)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  translations Translation[]
-  toys         Toy[]
+  id             Int            @id @default(autoincrement())
+  name           String         @unique
+  description    String?
+  userId         String
+  isActive       Boolean        @default(true)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  translations   Translation[]
+  toys           Toy[]
+
+  @@map("conditions")
 }
 
 model Toy {
-  id          String @id @default(uuid())
-  title       String
-  description String
-  price       Float
-  location    String
+  id             String         @id @default(uuid())
+  title          String
+  description    String
+  price          Float
+  location       String
+  categoryId     Int
+  category       Category       @relation(fields: [categoryId], references: [id])
+  statusId       Int
+  status         Status         @relation(fields: [statusId], references: [id])
+  conditionId    Int
+  condition      Condition      @relation(fields: [conditionId], references: [id])
+  sellerId       String
+  seller         User           @relation("Seller", fields: [sellerId], references: [id])
+  transactions   Transaction[]
+  forSell        Boolean        @default(true)
+  forGifts       Boolean        @default(true)
+  forChanges     Boolean        @default(true)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  isActive       Boolean        @default(true)
+  media          Media[]
+  favorites      FavoriteToy[]
+  comments       ToyComments[]
+  orderItems     OrderItem[]    // Relación inversa
 
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId Int
-
-  status   Status @relation(fields: [statusId], references: [id])
-  statusId Int
-
-  condition   Condition @relation(fields: [conditionId], references: [id])
-  conditionId Int
-
-  seller   User   @relation("Seller", fields: [sellerId], references: [id])
-  sellerId String
-
-  transactions Transaction[]
-  
-  forSell    Boolean       @default(true)
-  forGifts   Boolean       @default(true)
-  forChanges Boolean       @default(true)
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @updatedAt
-  isActive   Boolean       @default(true)
-  media      Media[]       // Relación uno a muchos con Media
-  favorites  FavoriteToy[]
-  comments   ToyComments[]
+  @@map("toys")
 }
 
 model Media {
@@ -134,6 +138,8 @@ model Media {
   type    FileType
   toyId   String
   toy     Toy      @relation(fields: [toyId], references: [id])
+
+  @@map("media")
 }
 
 enum FileType {
@@ -151,34 +157,114 @@ model FavoriteToy {
   createdAt DateTime @default(now())
 
   @@unique([userId, toyId], name: "unique_favorite")
+  @@map("favorite_toys")
 }
 
 model ToyComments {
-  id        String             @id @default(uuid())
+  id        String   @id @default(uuid())
   toyId     String?
-  toy       Toy?               @relation(fields: [toyId], references: [id])
+  toy       Toy?     @relation(fields: [toyId], references: [id])
   summary   String
   userId    String
-  isActive  Boolean            @default(true)
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @updatedAt
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("toy_comments")
 }
 
 model Transaction {
   id            String   @id @default(uuid())
-  toy           Toy      @relation(fields: [toyId], references: [id])
   toyId         String
-  buyer         User     @relation("Buyer", fields: [buyerId], references: [id])
+  toy           Toy      @relation(fields: [toyId], references: [id])
   buyerId       String
-  seller        User     @relation("Seller", fields: [sellerId], references: [id])
+  buyer         User     @relation("Buyer", fields: [buyerId], references: [id])
   sellerId      String
+  seller        User     @relation("Seller", fields: [sellerId], references: [id])
   price         Float
   date          DateTime @default(now())
-  status        Status   @relation(fields: [statusId], references: [id])
   statusId      Int
+  status        Status   @relation(fields: [statusId], references: [id])
   paymentMethod String
+  wasSold       Boolean  @default(true)
+  wasGifts      Boolean  @default(true)
+  wasChanged    Boolean  @default(true)
+  orderId       String?  @unique  // ✅ Aquí va @unique
+  order         Order?   @relation(fields: [orderId], references: [id])
 
-  wasSold    Boolean @default(true)
-  wasGifts   Boolean @default(true)
-  wasChanged Boolean @default(true)
+  @@map("transactions")
+}
+
+// ✅ MODELO DE ÓRDENES (clave para el flujo de pago)
+model Order {
+  id                  String         @id @default(uuid())
+  cartId              String?        @unique
+  paymentIntentId     String         @unique @map("payment_intent_id")
+  chargeId            String?        @map("charge_id")
+  buyerId             String
+  buyer               User           @relation("Buyer", fields: [buyerId], references: [id])
+  sellerId            String
+  seller              User           @relation("Seller", fields: [sellerId], references: [id])
+  totalAmount         Int            // en centavos
+  status              OrderStatus    @default(AWAITING_CONFIRMATION)
+  createdAt           DateTime       @default(now())
+  confirmedAt         DateTime?
+  canceledAt          DateTime?
+  transferredAt       DateTime?
+  reembursedAt        DateTime?
+  items               OrderItem[]
+
+  // Relaciones inversas
+  transfers           Transfer[]     // Transferencias
+  refunds             Refund[]       // ✅ Añade esta línea
+  transaction         Transaction?
+
+  @@index([paymentIntentId])
+  @@index([chargeId])
+  @@index([buyerId])
+  @@index([status])
+  @@map("orders")
+}
+
+model OrderItem {
+  id               String   @id @default(uuid())
+  orderId          String
+  order            Order    @relation(fields: [orderId], references: [id])
+  toyId            String
+  toy              Toy      @relation(fields: [toyId], references: [id])
+  priceAtPurchase  Int      // en centavos
+
+  @@map("order_items")
+}
+
+enum OrderStatus {
+  AWAITING_CONFIRMATION
+  CONFIRMED
+  CANCELED
+  TRANSFERRED
+  REEMBURSED
+}
+
+model Transfer {
+  id               String   @id @default(uuid())
+  orderId          String
+  orderIdRel       Order    @relation(fields: [orderId], references: [id])
+  sellerId         String
+  amount           Int      // en centavos
+  stripeTransferId String   @unique @map("stripe_transfer_id")
+  createdAt        DateTime @default(now())
+
+  @@map("transfers")
+}
+
+// ✅ NUEVO: Modelo de Reembolso
+model Refund {
+  id           String   @id @default(uuid())
+  orderId      String   @unique
+  order        Order    @relation(fields: [orderId], references: [id])
+  amount       Int      // en centavos
+  stripeRefundId String @unique @map("stripe_refund_id")
+  createdAt    DateTime @default(now())
+
+  @@map("refunds")
 }

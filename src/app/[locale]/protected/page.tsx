@@ -48,21 +48,6 @@ export default function ProtectedPage() {
     }
   };
 
-  const handlePayment = async () => {
-    console.log("productId", "mouse_001");
-    const response = await fetch("/api/checkout-session", {
-      method: "POST",
-      body: JSON.stringify({
-        productId: "mouse_001",
-        sellerId: "acct_1RtuiYBCOktK6Tpw", // clerk id
-        buyerId: "user_319WKI8ZLJ7isdb0bK9xQxcCPEy",
-      }),
-    });
-
-    const { url } = await response.json();
-    window.location.href = url; // Redirige a Checkout
-  };
-
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
@@ -103,8 +88,6 @@ export default function ProtectedPage() {
             <div className="break-words max-w-full overflow-hidden px-4 py-4">
               <p>{"Token obtenido: Bearer " + token}</p>
             </div>
-
-            <Button onClick={handlePayment}>Pagar con Stripe</Button>
 
           </div>
         </div>
