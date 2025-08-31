@@ -713,7 +713,7 @@ async function main() {
         cartId: "cart_user_31l2iT5aSDptUZiJxwB3UnVrek5_1756479343980",
         paymentIntentId: "pi_3S1TiPB2uRwXvuGM1lDlNQfY",
         chargeId: "ch_3S1TiPB2uRwXvuGM11YgG1QZ",
-        buyerId: "user_31l2iT5aSDptUZiJxwB3UnVrek5",
+        buyerId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
         sellerId: "0f1a4b4d-da45-493a-a218-da7cb511198f",
         totalAmount: 4298,
         status: OrderStatus.AWAITING_CONFIRMATION,
