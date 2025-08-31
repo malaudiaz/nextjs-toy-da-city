@@ -1,5 +1,5 @@
 // prisma/seed.ts
-import { PrismaClient, FileType } from "@prisma/client";
+import { PrismaClient, FileType, OrderStatus } from "@prisma/client";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -47,21 +47,38 @@ async function main() {
         {
           id: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
           name: "Miraidys Garcia Tornes",
+          email: "mgt@gmail.com",
+          phone: "52889836",
           clerkId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
           role: "buyer",
         },
         {
           id: "bb261faf-12ba-43c8-9e92-82927737fb2a",
-          name: "YAFEX S.R.L null",
+          name: "YAFEX S.R.L",
+          email: "yafex.srl@gmail.com",
+          phone: "54363604",
           clerkId: "user_31TMApqRn4tXg64h29gB6jxN5Uf",
-          role: "buyer",
+          role: "seller",
+          stripeAccountId: "acct_1RxYFeBhJGWUwOMh",
         },
         {
           id: "0f1a4b4d-da45-493a-a218-da7cb511198f",
           name: "Miguel David",
+          email: "miguedeveloper23@gmail.com",
+          phone: "54159643",
           clerkId: "user_31ecE9APT1PDgbjVZuzCbtZLI6d",
-          role: "buyer",
+          role: "seller",
+          stripeAccountId: "acct_1RyzqWAwG2BhBKNn",
         },
+        {
+          id: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+          name: "Miguel Angel lau Diaz",
+          email: "malaudiaz69@gmail.com",
+          phone: "52887847",
+          clerkId: "user_31l2iT5aSDptUZiJxwB3UnVrek5",
+          role: "seller",
+          stripeAccountId: "acct_1RzozPPkuhoSOLR4",
+        }
       ],
       skipDuplicates: true,
     });
@@ -320,7 +337,7 @@ async function main() {
         statusId: 1,
         conditionId: 1,
         location: "",
-        sellerId: "bb261faf-12ba-43c8-9e92-82927737fb2a",
+        sellerId: "0f1a4b4d-da45-493a-a218-da7cb511198f",
         forSell: true,
         forGifts: false,
         forChanges: false,
@@ -331,11 +348,11 @@ async function main() {
         title: "Loftus Surprise Hand Buzzer",
         description: "",
         price: 7.99,
-        categoryId: 7,
+        categoryId: 2,
         statusId: 1,
         conditionId: 1,
         location: "",
-        sellerId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        sellerId: "0f1a4b4d-da45-493a-a218-da7cb511198f",
         forSell: true,
         forGifts: false,
         forChanges: false,
@@ -394,11 +411,11 @@ async function main() {
           'Playmates Teenage Mutant Ninja Turtles Tmnt Ghostbusters 6.5" Four Used Figures',
         description: "",
         price: 67.32,
-        categoryId: 8,
+        categoryId: 1,
         statusId: 1,
         conditionId: 4,
         location: "",
-        sellerId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        sellerId: "bb261faf-12ba-43c8-9e92-82927737fb2a",
         forSell: true,
         forGifts: false,
         forChanges: false,
@@ -410,10 +427,10 @@ async function main() {
         description: "they all need a paint job",
         price: 32.99,
         location: "41.235433,-95.993834",
-        categoryId: 9,
+        categoryId: 2,
         statusId: 1,
         conditionId: 5,
-        sellerId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        sellerId: "bb261faf-12ba-43c8-9e92-82927737fb2a",
         forSell: true,
         forGifts: false,
         forChanges: false,
@@ -685,6 +702,80 @@ async function main() {
 
     await tx.media.createMany({
       data: mediaData,
+      skipDuplicates: true,
+    });
+
+    // === ORDENES ===
+    
+    const ordersData = [
+      {
+        id: "14bc658a-1ced-4064-982a-e7abc7a804c0",
+        cartId: "cart_user_31l2iT5aSDptUZiJxwB3UnVrek5_1756479343980",
+        paymentIntentId: "pi_3S1TiPB2uRwXvuGM1lDlNQfY",
+        chargeId: "ch_3S1TiPB2uRwXvuGM11YgG1QZ",
+        buyerId: "user_31l2iT5aSDptUZiJxwB3UnVrek5",
+        sellerId: "0f1a4b4d-da45-493a-a218-da7cb511198f",
+        totalAmount: 4298,
+        status: OrderStatus.AWAITING_CONFIRMATION,
+      },
+      {
+        id: "254d2ed9-caec-4718-b328-cdeb4d3cb4d2",
+        cartId: "cart_user_31l2iT5aSDptUZiJxwB3UnVrek5_1756483400317",
+        paymentIntentId: "pi_3S1UlpB2uRwXvuGM1XvFM219",
+        chargeId: "ch_3S1UlpB2uRwXvuGM19oUvhpp",
+        buyerId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        sellerId: "0f1a4b4d-da45-493a-a218-da7cb511198f",
+        totalAmount: 999,
+        status: OrderStatus.AWAITING_CONFIRMATION,
+      },
+      {
+        id: "98f692ee-f72f-4957-88a8-9751f9a43ac0",
+        cartId: "cart_user_31l2iT5aSDptUZiJxwB3UnVrek5_1756483394795",
+        paymentIntentId: "pi_3S1UlkB2uRwXvuGM0Ys3nBPq",
+        chargeId: "",
+        buyerId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        sellerId: "0f1a4b4d-da45-493a-a218-da7cb511198f",
+        totalAmount: 999,
+        status: OrderStatus.AWAITING_CONFIRMATION,
+      },
+    ];
+
+
+    await tx.order.createMany({
+      data: ordersData,
+      skipDuplicates: true,
+    });
+
+    // === OrderItem ===
+    const orderItemsData = [
+      {
+        id: "39f9e9b4-910f-4d70-bb6a-21b4be13f2f4",
+        orderId: "14bc658a-1ced-4064-982a-e7abc7a804c0",
+        toyId: "toy_007",
+        priceAtPurchase: 3299,
+      },
+      {
+        id: "4510f594-2406-4697-ab4e-fd45d7b29921",
+        orderId: "14bc658a-1ced-4064-982a-e7abc7a804c0",
+        toyId: "toy_001",
+        priceAtPurchase: 999,
+      },
+      {
+        id: "51491afc-b3e1-4fb4-aa83-aebd6fa75603",
+        orderId: "254d2ed9-caec-4718-b328-cdeb4d3cb4d2",
+        toyId: "toy_001",
+        priceAtPurchase: 999,
+      },
+      {
+        id: "a77e827f-c093-4805-8fb5-095be6b7f9c2",
+        orderId: "98f692ee-f72f-4957-88a8-9751f9a43ac0",
+        toyId: "toy_001",
+        priceAtPurchase: 999,
+      },
+    ];
+
+    await tx.orderItem.createMany({
+      data: orderItemsData,
       skipDuplicates: true,
     });
 
