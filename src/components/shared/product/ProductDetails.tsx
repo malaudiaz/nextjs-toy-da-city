@@ -12,7 +12,9 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { CommentDialog } from "./CommentDialog";
 import { useFavorite } from "@/hooks/useFavorite";
-import { useAuth } from '@clerk/nextjs';
+import { useAuth } from "@clerk/nextjs";
+import Profile from "../Profile";
+import { Button } from "@/components/ui/button";
 
 // Importación dinámica con exportación por defecto correcta
 const MapComponent = dynamic(
@@ -55,12 +57,13 @@ const ProductDetails = ({ toy }: ProductDetailsProps) => {
   const handleFavorite = async () => {
     try {
       const res = await addToFavorites(toy.id);
-      
+
       if (res.data) {
-        toast.success(!favorite ? "Added to favorites" : "Removed from favorites");
+        toast.success(
+          !favorite ? "Added to favorites" : "Removed from favorites"
+        );
         setFavorite(!favorite);
       }
-
     } catch (error) {
       console.log(error);
       toast.error("Failed to add to favorites");
@@ -146,20 +149,19 @@ const ProductDetails = ({ toy }: ProductDetailsProps) => {
                 ${toy.price.toFixed(2)}
               </span>
 
-                <button
-                  disabled={!isSignedIn}
-                  onClick={handleFavorite}
-                    className={`p-2 rounded-full transition-all duration-200 ${favorite && isSignedIn
-                     ? "text-red-500 bg-red-50 hover:bg-red-100"
-                     : "text-gray-400 hover:text-red-500 hover:bg-red-50"
+              <button
+                disabled={!isSignedIn}
+                onClick={handleFavorite}
+                className={`p-2 rounded-full transition-all duration-200 ${
+                  favorite && isSignedIn
+                    ? "text-red-500 bg-red-50 hover:bg-red-100"
+                    : "text-gray-400 hover:text-red-500 hover:bg-red-50"
                 }`}
- 
-                >
-                  <Heart
-                    className={`w-6 h-6 ${favorite ? "fill-current" : ""}`}
-                  />
-                </button>
-              
+              >
+                <Heart
+                  className={`w-6 h-6 ${favorite ? "fill-current" : ""}`}
+                />
+              </button>
             </div>
             <div className="flex items-center space-x-2 justify-between">
               <h2 className="inline-block text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-lg">
@@ -186,7 +188,7 @@ const ProductDetails = ({ toy }: ProductDetailsProps) => {
             </div>
           )}
 
-          <div className="">
+          <div className="flex flex-col gap-4">
             <div className="flex items-center">
               {toy.forSell ? (
                 <button
@@ -215,8 +217,19 @@ const ProductDetails = ({ toy }: ProductDetailsProps) => {
                 </button>
               )}
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+            <div className="flex flex-col gap-2">
+              <h2>Vendedor</h2>
+              <div className="flex items-center justify-between">
+                <Profile imageUrl={"/lego.png"} fullName="Miguel Angel" />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white"
+                >
+                  Chat
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

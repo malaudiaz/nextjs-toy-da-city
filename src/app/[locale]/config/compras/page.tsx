@@ -1,45 +1,28 @@
 import React from "react";
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import PurchasesInfo from "@/components/shared/profile/PurchasesInfo";
+import { getOrder } from "@/lib/actions/orderActions";
 
-const purchases = [
-  {
-    id: 1,
-    productName: "PlayStation 5 Console",
-    price: 499.99,
-    image: "/lego.png",
-    category: "Juguetes",
-    seller: "TechStore Madrid",
-    orderDate: "2024-01-10",
-  },
-  {
-    id: 2,
-    productName: "LEGO Millennium Falcon",
-    price: 159.99,
-    image: "/lego.png",
-    category: "Juguetes",
-    seller: "Juguetes Premium",
-    orderDate: "2024-01-12",
-  },
-  {
-    id: 3,
-    productName: "Nintendo Switch Games Bundle",
-    price: 89.99,
-    image: "/lego.png",
-    category: "Juguetes",
-    seller: "GameWorld",
-    orderDate: "2024-01-14",
-  },
-];
+export type OrderStatus =
+  | "AWAITING_CONFIRMATION"
+  | "CONFIRMED"
+  | "CANCELED"
+  | "TRANSFERRED"
+  | "REEMBURSED"
 
-const ComprasPage = async () => {
+type Props = {
+  searchParams: { status?: OrderStatus };
+};
 
+const ComprasPage = async ({ searchParams }: Props) => {
+  const filter = await searchParams;
+  const purchases = await getOrder(filter.status)
   return (
     <div>
       <div className="px-5 py-3 md:hidden ">
         <Breadcrumbs />
       </div>
-      <PurchasesInfo purchases={purchases} />
+      <PurchasesInfo order={purchases}  />
     </div>
   );
 };

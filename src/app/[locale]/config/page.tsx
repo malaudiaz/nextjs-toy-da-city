@@ -3,12 +3,12 @@ import { Coins, Gift, Heart, Repeat, ShoppingBag, Star } from "lucide-react";
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import { useUser } from "@clerk/nextjs";
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useTranslations } from "next-intl";
 import { redirect, usePathname } from "next/navigation";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import Profile from "@/components/shared/Profile";
 
 const ConfigurationsPage = () => {
   const t = useTranslations("config");
@@ -43,20 +43,7 @@ const ConfigurationsPage = () => {
 
       {/* Perfil */}
       <div className="px-4 md:px-6 py-4 md:py-6 flex flex-row gap-4 justify-between mx-auto max-w-6xl border-b border-[#f0f0f0]">
-        <div className="flex flex-row gap-4 items-center">
-          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center shadow-sm">
-            <Image
-              src={user?.imageUrl || "/no-image.png"}
-              alt="avatar"
-              width={80}
-              height={80}
-              className="object-cover w-full h-full"
-            />
-          </div>
-          <div className="flex flex-col">
-            <p className="text-xl md:text-2xl font-poppins">{user?.fullName}</p>
-          </div>
-        </div>
+        <Profile imageUrl={user?.imageUrl} fullName={user?.fullName} />
         <Link href={"#"} className="flex items-center p-2 rounded-full transition-colors">
           <ArrowRight className="h-5 w-5 md:h-6 md:w-6" />
         </Link>
