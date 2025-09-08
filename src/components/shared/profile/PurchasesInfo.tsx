@@ -5,7 +5,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Order } from "@/types/modelTypes";
 import { SelectFilter } from "./SelectFIlter";
-import { OrderStatus } from "@/app/[locale]/config/compras/page";
+import { cancelOrder } from "@/lib/actions/orderActions";
+import { CancelOrderButton } from "./CancelOrderButton";
+import { ConfirmOrderButton } from "./ConfirmOrderButtom";
 
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString("es-ES", {
@@ -13,6 +15,11 @@ const formatDate = (dateString: string) => {
     month: "long",
     day: "numeric",
   });
+};
+
+const handleCancelOrder = async (orderId: string) => {
+  const result = await cancelOrder(orderId);
+  console.log(result);
 };
 
 type PurchaseProps = {
@@ -30,7 +37,7 @@ const PurchasesInfo = ({ order }: PurchaseProps) => {
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
             Mis Compras
           </h1>
-          <SelectFilter/>
+          <SelectFilter />
         </div>
 
         {/* Stats Cards */}
@@ -99,23 +106,12 @@ const PurchasesInfo = ({ order }: PurchaseProps) => {
 
                         <Separator />
 
-                        {/* Actions */}
-                        <div className="flex flex-col sm:flex-row gap-3">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="bg-transparent"
-                          >
-                            Ver Detalles
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="bg-transparent"
-                          >
-                            Contactar Vendedor
-                          </Button>
-                        </div>
+                        {order.status === "AWAITING_CONFIRMATION" && (
+                          <div className="flex flex-col sm:flex-row gap-3">
+                            <CancelOrderButton orderId={order.id} />
+                            <ConfirmOrderButton orderId={order.id} />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </CardContent>
