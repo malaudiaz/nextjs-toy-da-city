@@ -1,7 +1,16 @@
 "use client";
 
 import type * as React from "react";
-import { Coins, Gift, Heart, Repeat, ShoppingBag, Star } from "lucide-react";
+import {
+  Coins,
+  Gift,
+  Heart,
+  MessageCircle,
+  Repeat,
+  ShoppingBag,
+  Star,
+  ToyBrick,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -20,52 +29,61 @@ import { useUser } from "@clerk/nextjs";
 import Breadcrumbs from "./BreadCrumbs";
 import { useTranslations } from "next-intl";
 
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const language = pathname.split("/")[1];
   const { user } = useUser();
-    const t = useTranslations("config");
+  const t = useTranslations("config");
   const navigationItems = [
-  {
-    title: t("Sales"),
-    url: `/config/ventas`,
-    icon: Coins,
-  },
-  {
-    title: t("Purchases"),
-    url: "/config/compras",
-    icon: ShoppingBag,
-  },
-  {
-    title: t("Swap"),
-    url: "/config/intercambios",
-    icon: Repeat,
-  },
-  {
-    title: t("Free"),
-    url: "/config/regalos",
-    icon: Gift,
-  },
-  {
-    title: t("Favorites"),
-    url: "/config/favoritos",
-    icon: Heart,
-  },
-  {
-    title: t("YourReputation"),
-    url: "#",
-    icon: Star,
-  },
-];
+    {
+      title: t("Toys"),
+      url: "/config/toys",
+      icon: ToyBrick,
+    },
+    {
+      title: t("Sales"),
+      url: `/config/ventas`,
+      icon: Coins,
+    },
+    {
+      title: t("Purchases"),
+      url: "/config/compras",
+      icon: ShoppingBag,
+    },
+    {
+      title: t("Swap"),
+      url: "/config/intercambios",
+      icon: Repeat,
+    },
+    {
+      title: t("Free"),
+      url: "/config/regalos",
+      icon: Gift,
+    },
+    {
+      title: "Chat",
+      url: "#",
+      icon: MessageCircle,
+    },
+    {
+      title: t("Favorites"),
+      url: "/config/favoritos",
+      icon: Heart,
+    },
+    {
+      title: t("YourReputation"),
+      url: "#",
+      icon: Star,
+    },
+  ];
 
   return (
     <Sidebar {...props}>
       <SidebarHeader>
         <div className="px-4 py-4 flex flex-col items-center justify-between border-b border-[#f0f0f0] bg-white">
-           <div className="w-full overflow-hidden">
-             <Breadcrumbs/>
-           </div>
+          <div className="w-full overflow-hidden">
+            <Breadcrumbs />
+          </div>
           <div className="flex items-center gap-4">
             {/* Contenedor de imagen redonda */}
             <div className="w-16 h-16 rounded-full overflow-hidden bg-white shadow-sm flex-shrink-0">
@@ -79,9 +97,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </div>
 
             {/* Texto del nombre */}
-            <p className="text-xl  font-poppins">
-              {user?.fullName}
-            </p>
+            <p className="text-xl  font-poppins">{user?.fullName}</p>
           </div>
         </div>
       </SidebarHeader>
@@ -98,10 +114,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     <SidebarMenuButton
                       asChild
                       className={`h-12 px-4 text-base hover:shadow-lg ${
-                        isActive ? "bg-[#4C754B] hover:bg-[#4C754B] text-white hover:text-white" : "hover:bg-[#4C754B] hover:text-white"
+                        isActive
+                          ? "bg-[#4C754B] hover:bg-[#4C754B] text-white hover:text-white"
+                          : "hover:bg-[#4C754B] hover:text-white"
                       }`}
                     >
-                      <Link href={itemUrl} className="flex items-center gap-3 w-full">
+                      <Link
+                        href={itemUrl}
+                        className="flex items-center gap-3 w-full"
+                      >
                         <item.icon className="h-5 w-5" />
                         <span>{item.title}</span>
                       </Link>

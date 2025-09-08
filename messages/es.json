@@ -413,7 +413,9 @@
     "Swap": "Intercambios",
     "Free": "Regalos",
     "Favorites": "Favoritos",
-    "YourReputation": "Tu Reputación"
+    "YourReputation": "Tu Reputación",
+    "Toys": "Juguetes",
+    "Chat": "Chat"
   },
   "sales": {
     "Title": "Tus Ventas",

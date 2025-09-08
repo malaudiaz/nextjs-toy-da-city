@@ -1,5 +1,14 @@
 "use client";
-import { Coins, Gift, Heart, Repeat, ShoppingBag, Star } from "lucide-react";
+import {
+  Coins,
+  Gift,
+  Heart,
+  MessageCircle,
+  Repeat,
+  ShoppingBag,
+  Star,
+  ToyBrick,
+} from "lucide-react";
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import { useUser } from "@clerk/nextjs";
 import { ArrowRight } from "lucide-react";
@@ -16,10 +25,12 @@ const ConfigurationsPage = () => {
 
   const links = [
     { name: "Sales", href: "/config/ventas", icon: <Coins /> },
+    { name: "Toys", href: "/config/toys", icon: <ToyBrick /> },
     { name: "Purchases", href: "/config/compras", icon: <ShoppingBag /> },
     { name: "Swap", href: "/config/intercambios", icon: <Repeat /> },
     { name: "Free", href: "/config/regalos", icon: <Gift /> },
     { name: "Favorites", href: "/config/favoritos", icon: <Heart /> },
+    { name: "Chat",href: "#",icon: <MessageCircle />,},
     { name: "YourReputation", href: "#", icon: <Star /> },
   ];
   const isMobile = !useMediaQuery("(min-width: 768px)");
@@ -44,7 +55,10 @@ const ConfigurationsPage = () => {
       {/* Perfil */}
       <div className="px-4 md:px-6 py-4 md:py-6 flex flex-row gap-4 justify-between mx-auto max-w-6xl border-b border-[#f0f0f0]">
         <Profile imageUrl={user?.imageUrl} fullName={user?.fullName} />
-        <Link href={"#"} className="flex items-center p-2 rounded-full transition-colors">
+        <Link
+          href={"#"}
+          className="flex items-center p-2 rounded-full transition-colors"
+        >
           <ArrowRight className="h-5 w-5 md:h-6 md:w-6" />
         </Link>
       </div>

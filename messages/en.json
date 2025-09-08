@@ -415,7 +415,9 @@
     "Swap": "Swap",
     "Free": "Free",
     "Favorites": "Favorites",
-    "YourReputation": "Your Reputation"
+    "YourReputation": "Your Reputation",
+    "Toys": "Toys",
+    "Chat": "Chat"
   },
   "sales": {
     "Title": "Your Sales",
