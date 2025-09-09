@@ -23,6 +23,8 @@ const isPublicRoute = createRouteMatcher([
   '/(en|es)/api/create-payment-intent',
   '/(en|es)/api/confirm-delivery',
   '/(en|es)/api/release-payment',
+  '/(en|es)/api/chat/test-push',
+  '/(en|es)',
 ]);
 
 //const isApiRoute = createRouteMatcher(['/api(.*)', '/(en|es)/api(.*)']);

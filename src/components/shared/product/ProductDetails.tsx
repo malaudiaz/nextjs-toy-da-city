@@ -10,11 +10,11 @@ import dynamic from "next/dynamic";
 import { useCartStore } from "@/store/cartStore";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { CommentDialog } from "./CommentDialog";
+//import { CommentDialog } from "./CommentDialog";
 import { useFavorite } from "@/hooks/useFavorite";
 import { useAuth } from "@clerk/nextjs";
 import Profile from "../Profile";
-import { Button } from "@/components/ui/button";
+import { ChatButton } from "../ChatButton";
 
 // Importación dinámica con exportación por defecto correcta
 const MapComponent = dynamic(
@@ -31,11 +31,18 @@ const MapComponent = dynamic(
 
 type ProductDetailsProps = {
   toy: Toy;
+  seller: {
+    id: string;
+    fullName: string;
+    imageUrl: string;
+    reputation?: number;
+    reviews?: number;
+  } | null;
 };
 
 //const fetcher = (...args: Parameters<typeof fetch>) => fetch(...args).then((res) => res.json());
 
-const ProductDetails = ({ toy }: ProductDetailsProps) => {
+const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [favorite, setFavorite] = useState(toy.isFavorite);
   const { isSignedIn } = useAuth();
@@ -167,7 +174,6 @@ const ProductDetails = ({ toy }: ProductDetailsProps) => {
               <h2 className="inline-block text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-lg">
                 Condition: {NumberToCondition(toy.conditionId)}
               </h2>
-              <CommentDialog />
             </div>
           </div>
 
@@ -218,16 +224,9 @@ const ProductDetails = ({ toy }: ProductDetailsProps) => {
               )}
             </div>
             <div className="flex flex-col gap-2">
-              <h2>Vendedor</h2>
               <div className="flex items-center justify-between">
-                <Profile imageUrl={"/lego.png"} fullName="Miguel Angel" />
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white"
-                >
-                  Chat
-                </Button>
+                <Profile user={seller} />
+                <ChatButton toy={toy} seller={seller} />
               </div>
             </div>
           </div>

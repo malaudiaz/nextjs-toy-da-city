@@ -42,37 +42,37 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     },
     {
       title: t("Sales"),
-      url: `/config/ventas`,
+      url: `/config/sales`,
       icon: Coins,
     },
     {
       title: t("Purchases"),
-      url: "/config/compras",
+      url: "/config/purchase",
       icon: ShoppingBag,
     },
     {
       title: t("Swap"),
-      url: "/config/intercambios",
+      url: "/config/swap",
       icon: Repeat,
     },
     {
       title: t("Free"),
-      url: "/config/regalos",
+      url: "/config/free",
       icon: Gift,
     },
     {
-      title: "Chat",
-      url: "#",
+      title: "Messages",
+      url: "/config/chat",
       icon: MessageCircle,
     },
     {
       title: t("Favorites"),
-      url: "/config/favoritos",
+      url: "/config/favorites",
       icon: Heart,
     },
     {
       title: t("YourReputation"),
-      url: "#",
+      url: "/config/reputation",
       icon: Star,
     },
   ];

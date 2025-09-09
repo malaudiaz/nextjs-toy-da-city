@@ -17,16 +17,17 @@ import React from "react";
 import { useTranslations } from "next-intl";
 import { redirect, usePathname } from "next/navigation";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import Profile from "@/components/shared/Profile";
 
 const ConfigurationsPage = () => {
   const t = useTranslations("config");
   const { user } = useUser();
 
+  console.log(user);
+
   const links = [
     { name: "Sales", href: "/config/ventas", icon: <Coins /> },
     { name: "Toys", href: "/config/toys", icon: <ToyBrick /> },
-    { name: "Purchases", href: "/config/compras", icon: <ShoppingBag /> },
+    { name: "Purchases", href: "/config/purchase", icon: <ShoppingBag /> },
     { name: "Swap", href: "/config/intercambios", icon: <Repeat /> },
     { name: "Free", href: "/config/regalos", icon: <Gift /> },
     { name: "Favorites", href: "/config/favoritos", icon: <Heart /> },
@@ -54,7 +55,6 @@ const ConfigurationsPage = () => {
 
       {/* Perfil */}
       <div className="px-4 md:px-6 py-4 md:py-6 flex flex-row gap-4 justify-between mx-auto max-w-6xl border-b border-[#f0f0f0]">
-        <Profile imageUrl={user?.imageUrl} fullName={user?.fullName} />
         <Link
           href={"#"}
           className="flex items-center p-2 rounded-full transition-colors"

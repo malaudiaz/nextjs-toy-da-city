@@ -17,7 +17,7 @@ export async function getOrder(status?: OrderStatus) {
     headers["X-User-ID"] = userId;
   }
 
-  const response = await fetch(`${BACKEND_URL}/api/get-order?status=${status}`, {
+  const response = await fetch(`${BACKEND_URL}/api/get-order/purchase?status=${status}`, {
     method: "GET",
     headers: headers
   });

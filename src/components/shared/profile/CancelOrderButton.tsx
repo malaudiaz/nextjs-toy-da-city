@@ -14,8 +14,12 @@ export function CancelOrderButton({ orderId }: Props) {
   const handleCancel = async () => {
     try {
       const result = await cancelOrder(orderId);
-      toast.success('Order canceled successfully');
-      console.log(result);
+
+      if (result.success) {
+        toast.success('Order canceled successfully');
+      } else {
+        toast.error(result.error || 'Failed to cancel order');
+      }
     } catch (error) {
       toast.error('Failed to cancel order');
       console.error(error);

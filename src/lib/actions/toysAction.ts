@@ -23,7 +23,8 @@ export async function getToys(
   filters: Filters
 ) {
 
-  const { userId } = await auth();
+  const { userId } = await 
+  auth();
 
   const start = page - 1 + 1 || 1;
 

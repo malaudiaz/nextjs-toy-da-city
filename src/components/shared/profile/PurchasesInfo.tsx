@@ -1,11 +1,9 @@
 import Image from "next/image";
 import { Calendar, Package, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Order } from "@/types/modelTypes";
 import { SelectFilter } from "./SelectFIlter";
-import { cancelOrder } from "@/lib/actions/orderActions";
 import { CancelOrderButton } from "./CancelOrderButton";
 import { ConfirmOrderButton } from "./ConfirmOrderButtom";
 
@@ -17,10 +15,6 @@ const formatDate = (dateString: string) => {
   });
 };
 
-const handleCancelOrder = async (orderId: string) => {
-  const result = await cancelOrder(orderId);
-  console.log(result);
-};
 
 type PurchaseProps = {
   order: Order[];

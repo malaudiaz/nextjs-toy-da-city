@@ -4,6 +4,7 @@ import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import { getRelatedToys, getToy } from "@/lib/actions/toysAction";
 import ProductDetails from "@/components/shared/product/ProductDetails";
 import FeaturesProduct from "@/components/shared/product/FeaturesProduct";
+import { getUserById } from "@/lib/actions/getUserActions";
 
 type ProductDataProps = {
   params: Promise<{ id: string }>;
@@ -14,11 +15,14 @@ async function ProductDetailsPage({ params }: ProductDataProps) {
   const toy = await getToy(toyId);
   const featuredToys = await getRelatedToys(toyId);
 
+  // Obtener datos del vendedor
+  const seller = await getUserById(toy.sellerId);  
+
   return (
     <div className="min-h-screen bg-[#FAF1DE]">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Breadcrumbs productName={toy.title} />
-        <ProductDetails toy={toy} />
+        <ProductDetails toy={toy} seller={seller}/>
         {featuredToys.toys.length > 0 && <FeaturesProduct products={featuredToys.toys} />}
       </main>
     </div>
