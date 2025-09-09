@@ -15,17 +15,22 @@ export function ConfirmOrderButton({ orderId }: Props) {
   const handleConfirm = async () => {
     try {
       const result = await confirmOrder(orderId);
-      toast.success('Order canceled successfully');
-      console.log(result);
+
+      if (result.success) {
+        toast.success('Order confirmed successfully');
+      } else {
+        toast.error(result.error || 'Failed to confirm order');
+      }
+
     } catch (error) {
-      toast.error('Failed to cancel order');
+      toast.error('Failed to confirm order');
       console.error(error);
     }
   };
 
   return (
     <Button onClick={handleConfirm} variant="default">
-      Cancel Order
+      Confirm
     </Button>
   );
 }

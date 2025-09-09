@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import Stripe from 'stripe';
+import { auth } from '@clerk/nextjs/server';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
@@ -9,12 +10,22 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export async function POST(req: NextRequest) {
-  const { orderId, userId } = await req.json();
+  let { userId } = await auth();
+
+  if (!userId) {
+    userId = req.headers.get("X-User-ID");
+
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+  }
+
+  const { orderId } = await req.json();
 
   const order = await prisma.order.findUnique({ where: { id: orderId } });
   if (!order) return NextResponse.json({ error: 'Orden no encontrada' }, { status: 404 });
-  if (order.buyerId !== userId) return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
-  if (order.status !== 'AWAITING_CONFIRMATION') return NextResponse.json({ error: 'Orden no válida' }, { status: 400 });
+  if (order.buyerId !== userId) return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 403 });
+  if (order.status !== 'AWAITING_CONFIRMATION') return NextResponse.json({ success: false, error: 'Orden no válida' }, { status: 400 });
 
   const intent = await stripe.paymentIntents.retrieve(order.paymentIntentId);
   const transfers = JSON.parse(intent.metadata.transfers || '[]');

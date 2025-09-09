@@ -28,7 +28,7 @@ export function CancelOrderButton({ orderId }: Props) {
 
   return (
     <Button onClick={handleCancel} variant="destructive">
-      Cancel Order
+      Cancel
     </Button>
   );
 }

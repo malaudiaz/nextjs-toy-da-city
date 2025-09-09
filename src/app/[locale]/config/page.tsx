@@ -25,14 +25,14 @@ const ConfigurationsPage = () => {
   console.log(user);
 
   const links = [
-    { name: "Sales", href: "/config/ventas", icon: <Coins /> },
+    { name: "Sales", href: "/config/sales", icon: <Coins /> },
     { name: "Toys", href: "/config/toys", icon: <ToyBrick /> },
     { name: "Purchases", href: "/config/purchase", icon: <ShoppingBag /> },
-    { name: "Swap", href: "/config/intercambios", icon: <Repeat /> },
-    { name: "Free", href: "/config/regalos", icon: <Gift /> },
-    { name: "Favorites", href: "/config/favoritos", icon: <Heart /> },
-    { name: "Chat",href: "#",icon: <MessageCircle />,},
-    { name: "YourReputation", href: "#", icon: <Star /> },
+    { name: "Swap", href: "/config/swap", icon: <Repeat /> },
+    { name: "Free", href: "/config/free", icon: <Gift /> },
+    { name: "Favorites", href: "/config/favorites", icon: <Heart /> },
+    { name: "Chat",href: "/config/chat",icon: <MessageCircle />,},
+    { name: "YourReputation", href: "/config/reputation", icon: <Star /> },
   ];
   const isMobile = !useMediaQuery("(min-width: 768px)");
 
@@ -40,7 +40,7 @@ const ConfigurationsPage = () => {
   const language = pathname.split("/")[1];
 
   if (!isMobile) {
-    redirect(`/${language}/config/ventas`);
+    redirect(`/${language}/config/purchase`);
   }
 
   return (
