@@ -213,7 +213,7 @@ export default function ChatModal({
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 pt-2">
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 pl-3">
             <Image
               src={toy.media[0].fileUrl || "/placeholder.svg"}
               alt={toy.title}
@@ -232,15 +232,15 @@ export default function ChatModal({
             </div>
 
             <div className="flex items-center gap-2 text-sm text-gray-600">
-              <p>{toy.description}</p>
+              <p>{toy.title}</p>
             </div>
           </div>
         </div>
 
-        <div className="px-4 py-3">
+        <div className="px-2 py-2 bg-gray-200">
           <div
             ref={scrollContainerRef}
-            className="h-[500px] overflow-y-auto bg-white"
+            className="h-[500px] overflow-y-auto bg-white rounded-2xl"
           >
             <MessageList messages={messages} currentUserId={currentUserId!} />
             <div ref={messagesEndRef} />

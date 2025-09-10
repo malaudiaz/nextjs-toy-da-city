@@ -78,7 +78,17 @@ async function main() {
           clerkId: "user_31l2iT5aSDptUZiJxwB3UnVrek5",
           role: "seller",
           stripeAccountId: "acct_1RzozPPkuhoSOLR4",
-        }
+        },
+        {
+          id: "9a7b3c2d-1e5f-4a8b-9c6d-2e4f6a8b0c1d",
+          name: "Miguel David Lau Medina",
+          email: "md10crazy@gmail.com",
+          phone: "54159643",
+          clerkId: "user_31VrKUV6X3ROgWtGQtRSsi8lZdf",
+          role: "seller",
+          stripeAccountId: "acct_1S5riMPfgoprXKh9",
+        },
+
       ],
       skipDuplicates: true,
     });
@@ -329,7 +339,7 @@ async function main() {
       {
         id: "toy_001",
         title:
-          "3 Pack Airplane Launcher Toys, 2 Flight Modes LED Foam Glider Catapult Plane, Outdoor Flying Toy for Kids, Birthday Gifts for Boy Girl 6+ Year Old, B-Day Party Supplies",
+          "3 Pack Airplane Launcher Toys,",
         description:
           "**2 in 1 Airplane Toys - Our glider boy toy is equipped with 3 different colors of green, orange, and blue gliding foam planes, and 1 plane launcher. By throwing planes by hand or flying them with the launcher, kids can cultivate their hand-eye coordination, observation, and sense of direction ***Safe & Fun for Play - This foam airplane is made of molded foam, lightweight, safe, bendable, and will not harm kids' hands or feet, and comes with colorful LED lights, so kids can enjoy the fun of flying toys even at night. It allows your child to leave the video game, relax with friends and family, and enjoy a good outdoor time ***3 Fun Ways To Play - Foam glider-led plans can not only use the airplane launcher to achieve flight, but also can be thrown airplane toys into the sky and ground manually, or slid by hand boys toys. This plane brings endless fun to children, and outdoor toys and more novel ways to play are waiting for you to discover! In addition, glider planes for kids have no restrictions on the launch site, you can play indoors and outdoors! ***Catapult Plane Toys Accessories - Foam airplanes for kids include 3-pack airplanes and 1 launcher. Come with colorful LED lights, so kids can enjoy the fun no matter day or night for outdoor activities, and will increase their interest in flying. Airplane size: 9.33 x 8.66 in, Launcher size: 10.03 x 4.52 in ***✈Ideal Kids Gifts: Best birthday Christmas gift for 4-8 years of boys girls. Also, this will be a cool glider plane for kids, it is a good choice for toy gifts for kids on Easter, Christmas, Halloween, Thanksgiving Day, New Year, etc., Or being party favors for aviation and airplane themes, birthdays",
         price: 9.99,

@@ -153,7 +153,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
           <div>
             <div className="flex items-center justify-between mb-6">
               <span className="text-3xl font-bold text-green-700">
-                ${toy.forSell ? toy.price.toFixed(2) : "Gratis"}  
+                ${toy.forSell ? toy.price.toFixed(2) : "Gratis"}
               </span>
 
               <button
@@ -185,7 +185,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
           )}
 
           {coordinates.length === 2 && (
-            <div className="h-[200px] w-full border-dashed border-2 border-gray-300 rounded-md overflow-hidden">
+            <div className="h-[200px] w-full border-dashed border-2 border-gray-300 rounded-md overflow-hidden relative z-0">
               <MapComponent
                 onLocationChange={() => {}}
                 initialPosition={[coordinates[0], coordinates[1]]}
@@ -196,7 +196,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
 
           <div className="flex flex-col gap-4">
             <div className="flex items-center">
-              {toy.forSell ? (
+              {toy.forSell && (
                 <button
                   onClick={() => {
                     const added = addToCart({
@@ -217,16 +217,12 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
                   <ShoppingCart className="w-5 h-5" />
                   <span>{t("addToCart")}</span>
                 </button>
-              ) : (
-                <button className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 px-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 w-full">
-                  <span>Contact</span>
-                </button>
               )}
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <Profile user={seller} />
-                <ChatButton toy={toy} seller={seller} />
+                <ChatButton toy={toy} seller={seller} /> 
               </div>
             </div>
           </div>

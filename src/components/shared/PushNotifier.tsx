@@ -28,7 +28,8 @@ const subscribeToPushNotifications = async (userId: string) => {
 
     // ✅ Verificar permiso antes de pedir
     if (Notification.permission === "denied") {
-      throw new Error("Notificaciones bloqueadas por el usuario");
+      console.log("❌ Notificaciones bloqueadas por el usuario");
+      return { success: false, permission: "denied" };
     }
 
     // ✅ Pedir permiso
@@ -36,7 +37,8 @@ const subscribeToPushNotifications = async (userId: string) => {
     console.log("🔐 Permiso solicitado:", permission);
 
     if (permission !== "granted") {
-      throw new Error(`Permiso no concedido: ${permission}`);
+      console.log(`Permiso no concedido: ${permission}`);
+      return { success: false, permission };
     }
 
     // ✅ Verificar si ya está suscrito
@@ -68,7 +70,7 @@ const subscribeToPushNotifications = async (userId: string) => {
 
     if (!res.ok) {
       const errorText = await res.text();
-      throw new Error(`Error al guardar suscripción: ${errorText}`);
+      return { success: false, error: errorText };
     }
 
     console.log("✅ Suscripción guardada en el servidor");
