@@ -22,7 +22,7 @@ type ChatButtonProps = {
 
 export function ChatButton({ toy, seller }: ChatButtonProps) {
   const { user } = useUser();
-  const [online, setOnline] = useState<boolean | null>(null);
+  const [, setOnline] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -58,7 +58,7 @@ export function ChatButton({ toy, seller }: ChatButtonProps) {
   }, [seller, isCurrentUser]);
 
   const handleClick = () => {
-    if (online && !isCurrentUser) {
+    if (!isCurrentUser) {
       setIsModalOpen(true);
     }
   };

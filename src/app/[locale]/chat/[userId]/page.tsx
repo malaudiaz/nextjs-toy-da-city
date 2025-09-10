@@ -18,6 +18,7 @@ interface Message {
     clerkId: string;
     name: string | null;
   };
+  toyId: string;
 }
 
 /* interface ChatUser {
@@ -144,9 +145,10 @@ export default function ChatPage({
       receiverId: otherUserId,
       createdAt: new Date(),
       sender: {
-        clerkId: currentUserId!,
+        clerkId: otherUserId,
         name: user?.firstName ?? user?.lastName ?? "Usuario",
-      }
+      },
+      toyId: "toy_002"
     };
 
     setMessages((prev) => [...prev, outgoingMessage]);
@@ -155,7 +157,7 @@ export default function ChatPage({
       const res = await fetch("/api/chat/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ receiverId: otherUserId, content }),
+        body: JSON.stringify({ receiverId: otherUserId, content, toyId: "toy_002" }),
       });
 
       if (!res.ok) throw new Error("Error en la red");

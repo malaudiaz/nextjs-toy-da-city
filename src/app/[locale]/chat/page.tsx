@@ -1,6 +1,7 @@
 // app/chat/page.tsx (o donde lo estés usando)
 
 import { getOnlineUsers } from "@/lib/actions/getUserActions";
+import Link from "next/link";
 
 async function ChatPage() {
   const { users } = await getOnlineUsers();
@@ -29,9 +30,9 @@ async function ChatPage() {
                   {getInitial(user.name)}
                 </div>
                 {/* Nombre */}
-                <p className="text-xs sm:text-xs md:text-sm mt-1 text-center truncate w-full px-1">
+                <Link href={`/chat/${user.clerkId}`} className="text-xs sm:text-xs md:text-sm mt-1 text-center truncate w-full px-1">
                   {user.name || "Anónimo"}
-                </p>
+                </Link>
               </div>
             ))
           )}

@@ -29,7 +29,7 @@ export function ConfirmOrderButton({ orderId }: Props) {
   };
 
   return (
-    <Button onClick={handleConfirm} variant="darkgreen">
+    <Button onClick={handleConfirm} variant="success">
       Confirm
     </Button>
   );

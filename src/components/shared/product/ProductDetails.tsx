@@ -153,7 +153,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
           <div>
             <div className="flex items-center justify-between mb-6">
               <span className="text-3xl font-bold text-green-700">
-                ${toy.price.toFixed(2)}
+                ${toy.forSell ? toy.price.toFixed(2) : "Gratis"}  
               </span>
 
               <button
