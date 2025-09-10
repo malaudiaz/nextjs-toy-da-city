@@ -114,3 +114,24 @@ export async function getRelatedToys(id: string) {
 
   return { toys: toys.data as Toy[] };
 }
+
+export async function getOwnToys(){
+  const { userId } = await auth();
+
+  const headers = {
+    "Content-Type": "application/json",
+    "X-User-ID": "",
+  };
+
+  if (userId) {
+    headers["X-User-ID"] = userId;
+  }
+
+  const response = await fetch(`${BACKEND_URL}/api/toys/own`, {
+    method: "GET",
+    headers: headers
+  });
+
+  const toys = await response.json();
+  return toys as Toy[];
+}
