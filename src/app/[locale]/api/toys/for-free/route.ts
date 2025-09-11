@@ -26,24 +26,22 @@ export async function GET(req: Request) {
 
   // --- 3. Obtener parámetro de estado (opcional) ---
   const { searchParams } = new URL(req.url);
-  const statusName = searchParams.get("status"); // Ej: ?status=sold
+  const statusName = searchParams.get("status"); // Ej: ?status=sold — puede ser null
 
-  if (!statusName) {
-    return NextResponse.json(
-      { error: "Status query parameter is required" },
-      { status: 400 }
-    );
-  }
+  let statusId: number | undefined;
 
-  const existingStatus = await prisma.status.findUnique({
-    where: { name: statusName },
-  });
+  if (statusName) {
+    const existingStatus = await prisma.status.findUnique({
+      where: { name: statusName },
+    });
 
-  if (!existingStatus) {
-    return NextResponse.json(
-      { error: `Status "${statusName}" not found` },
-      { status: 400 }
-    );
+    if (!existingStatus) {
+      return NextResponse.json(
+        { error: `Status "${statusName}" not found` },
+        { status: 400 }
+      );
+    }
+    statusId = existingStatus.id;
   }
 
   try {
@@ -51,8 +49,12 @@ export async function GET(req: Request) {
     const where: Prisma.ToyWhereInput = {
       sellerId: user.id,
       forGifts: true,
-      statusId: existingStatus.id,
     };
+
+    // Solo agregar statusId si se proporcionó un statusName válido
+    if (statusId !== undefined) {
+      where.statusId = statusId;
+    }
 
     // --- 5. Consultar juguetes ---
     const toys = await prisma.toy.findMany({
@@ -71,7 +73,7 @@ export async function GET(req: Request) {
     // --- 6. Respuesta ---
     return NextResponse.json(toys, { status: 200 });
   } catch (error) {
-    console.error("Error fetching toys for sale:", error);
+    console.error("Error fetching toys for gifts:", error); // ← Ajusté el mensaje de log para reflejar gifts
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

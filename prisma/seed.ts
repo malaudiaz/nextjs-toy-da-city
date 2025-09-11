@@ -378,7 +378,7 @@ async function main() {
         categoryId: 2,
         statusId: 1,
         conditionId: 3,
-        sellerId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        sellerId: "9a7b3c2d-1e5f-4a8b-9c6d-2e4f6a8b0c1d",
         forSell: false,
         forGifts: false,
         forChanges: true,
@@ -394,7 +394,7 @@ async function main() {
         statusId: 1,
         conditionId: 2,
         location: "",
-        sellerId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        sellerId: "9a7b3c2d-1e5f-4a8b-9c6d-2e4f6a8b0c1d",
         forSell: false,
         forGifts: true,
         forChanges: false,
@@ -409,7 +409,7 @@ async function main() {
         statusId: 1,
         conditionId: 1,
         location: "",
-        sellerId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        sellerId: "9a7b3c2d-1e5f-4a8b-9c6d-2e4f6a8b0c1d",
         forSell: false,
         forGifts: true,
         forChanges: false,
@@ -804,6 +804,26 @@ async function main() {
       data: commentsData,
       skipDuplicates: true,
     });
+
+    // === FAVORITES ===
+    const favoritesData = [
+      {
+        id: "favorite_001",
+        userId: "9a7b3c2d-1e5f-4a8b-9c6d-2e4f6a8b0c1d",
+        toyId: "toy_005",
+      },
+      {
+        id: "favorite_002",
+        userId: "9a7b3c2d-1e5f-4a8b-9c6d-2e4f6a8b0c1d",
+        toyId: "toy_006",
+      },
+    ];
+
+    await tx.favoriteToy.createMany({
+      data: favoritesData,
+      skipDuplicates: true,
+    });
+
   });
 }
 
