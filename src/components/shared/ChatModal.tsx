@@ -240,7 +240,7 @@ export default function ChatModal({
         <div className="px-2 py-2 bg-gray-200">
           <div
             ref={scrollContainerRef}
-            className="h-[500px] overflow-y-auto bg-white rounded-2xl"
+            className="h-[500px] overflow-y-auto"
           >
             <MessageList messages={messages} currentUserId={currentUserId!} />
             <div ref={messagesEndRef} />

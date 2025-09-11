@@ -26,7 +26,11 @@ export async function GET(req: Request) {
 
   // --- 3. Obtener parámetro de estado (opcional) ---
   const { searchParams } = new URL(req.url);
-  const statusName = searchParams.get("status"); // Ej: ?status=sold — puede ser null
+  let statusName = searchParams.get("status"); // Ej: ?status=sold — puede ser null
+
+  if (!statusName) {
+    statusName = 'sold';
+  }
 
   let statusId: number | undefined;
 
@@ -64,6 +68,15 @@ export async function GET(req: Request) {
         category: true,
         condition: true,
         status: true, // Incluye el objeto status en la respuesta
+        orderItems: {
+          include: {
+            order: {
+              include: {
+                buyer: true,
+              },
+            }
+          }
+        }
       },
       orderBy: {
         createdAt: "desc",
