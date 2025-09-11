@@ -1,46 +1,56 @@
-// app/config/toys/ToyCard.tsx
-
-
-import { Card, CardContent } from '../ui/card';
-import { Button } from '../ui/button';
-import { Edit } from 'lucide-react';
-import { Toy } from '@/types/modelTypes';
+import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
+import { Card, CardContent } from "../ui/card";
+import { Toy } from "@/types/modelTypes";
+import Link from "next/link";
+import { Button } from "../ui/button";
 
 type ToyCardProps = {
-    toy: Toy
-}
+  toy: Toy;
+};
+
+const fromCents = (cents: number) => cents / 100;
 
 export default function ToyCard({ toy }: ToyCardProps) {
   return (
-   <Card className="overflow-hidden bg-gradient-card shadow-card hover:shadow-card-hover transition-all duration-300">
-      <CardContent className="p-0">
-        <div className="flex">
-          <div className="w-32 h-32 flex-shrink-0">
-            <img
-              src={toy.media[0].fileUrl || ""}
+    <Card
+      key={toy.id}
+      className="bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-shadow"
+    >
+      <CardContent>
+        <div className="flex flex-col lg:flex-row gap-6">
+          <div className="flex-shrink-0">
+            <Image
+              src={toy.media[0].fileUrl || "/placeholder.svg"}
               alt={toy.title}
-              className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+              width={150}
+              height={150}
+              className="rounded-lg object-cover w-full lg:w-[150px] h-[150px]"
             />
           </div>
-          <div className="flex-1 p-4 flex items-center justify-between">
-            <div className="space-y-2 flex-1 mr-4">
-              <h3 className="font-bold text-lg text-card-foreground">
-                {toy.title}
-              </h3>
-              <p className="text-muted-foreground text-sm line-clamp-1">
-                {toy.description}
-              </p>
-              <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                ${toy.price}
-              </span>
+
+          <div className="flex-1 space-y-4">
+            <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  {toy.title}
+                </h3>
+              </div>
+              <div className="flex flex-col items-end gap-2">
+                <div className="text-2xl font-bold text-blue-600">
+                  ${toy.price.toFixed(2)}
+                </div>
+              </div>
             </div>
-            <Button
-              size="sm"
-              className="bg-gradient-accent hover:shadow-lg transition-all duration-300"
-            >
-              <Edit className="w-4 h-4 mr-2" />
-              Editar
-            </Button>
+
+            <Separator />
+            <div>
+              <Link href={`/config/toys/${toy.id}`}>
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                  Editar
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </CardContent>

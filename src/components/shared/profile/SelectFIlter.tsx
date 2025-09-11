@@ -11,7 +11,12 @@ import {
 } from "@/components/ui/select";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export function SelectFilter() {
+type Props = {
+  options: string[];
+  route: string
+}
+
+export function SelectFilter({ options, route }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams(); 
 
@@ -26,7 +31,7 @@ export function SelectFilter() {
       params.set("status", value);
     }
 
-    router.push(`/config/compras?${params.toString()}`);
+    router.push(`/config/${route}?${params.toString()}`);
   };
 
   return (
@@ -36,13 +41,14 @@ export function SelectFilter() {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectItem value="ALL">Todas</SelectItem>
-          <SelectItem value="AWAITING_CONFIRMATION">Pendiente de confirmación</SelectItem>
-          <SelectItem value="CONFIRMED">Confirmada</SelectItem>
-          <SelectItem value="CANCELED">Cancelada</SelectItem>
-          <SelectItem value="TRANSFERRED">Transferida</SelectItem>
-          <SelectItem value="REEMBURSED">Reembolsada</SelectItem>
-        </SelectGroup>
+          {
+            options.map((option) => (
+              <SelectItem key={option} value={option}>
+                {option}
+              </SelectItem>
+            ))
+          }
+          </SelectGroup>
       </SelectContent>
     </Select>
   );

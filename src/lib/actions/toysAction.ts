@@ -135,3 +135,98 @@ export async function getOwnToys(){
   const toys = await response.json();
   return toys as Toy[];
 }
+
+export type SalesStatus = "available" | "reserved" | "sold" | "canceled";
+
+export async function getSales(status?: SalesStatus) {
+  const { userId } = await auth();
+
+  const headers = {
+    "Content-Type": "application/json",
+    "X-User-ID": "",
+  };
+
+  if (userId) {
+    headers["X-User-ID"] = userId;
+  }
+
+  if (status) {
+    const response = await fetch(`${BACKEND_URL}/api/toys/for-sale?status=${status}`, {
+      method: "GET",
+      headers: headers
+    });
+    const sales = await response.json();
+    return  sales;
+  }
+
+  const response = await fetch(`${BACKEND_URL}/api/toys/for-sale`, {
+    method: "GET",
+    headers: headers
+  });
+
+  const sales = await response.json();
+  return  sales;
+}
+
+export async function getFree() {
+  const { userId } = await auth();
+
+  const headers = {
+    "Content-Type": "application/json",
+    "X-User-ID": "",
+  };
+
+  if (userId) {
+    headers["X-User-ID"] = userId;
+  }
+
+  const response = await fetch(`${BACKEND_URL}/api/toys/for-free`, {
+    method: "GET",
+    headers: headers
+  });
+
+  const free = await response.json();
+  return  free;
+}
+
+export async function getFavorites() {
+  const { userId } = await auth();
+
+  const headers = {
+    "Content-Type": "application/json",
+    "X-User-ID": "",
+  };
+
+  if (userId) {
+    headers["X-User-ID"] = userId;
+  }
+
+  const response = await fetch(`${BACKEND_URL}/api/toys/favorites`, {
+    method: "GET",
+    headers: headers
+  });
+
+  const favorites = await response.json();
+  return  favorites;
+}
+
+export async function getSwaps() {
+  const { userId } = await auth();
+
+  const headers = {
+    "Content-Type": "application/json",
+    "X-User-ID": "",
+  };
+
+  if (userId) {
+    headers["X-User-ID"] = userId;
+  }
+
+  const response = await fetch(`${BACKEND_URL}/api/toys/for-swap`, {
+    method: "GET",
+    headers: headers
+  });
+
+  const swaps = await response.json();
+  return  swaps;
+}

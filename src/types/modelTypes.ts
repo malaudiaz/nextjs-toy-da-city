@@ -81,3 +81,37 @@ export type Negotiator = {
   name: string;
   email: string;
 }
+
+export type Sale = {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  location: string;
+  categoryId: number;
+  conditionId: number;
+  sellerId: string;
+  forSell: boolean;
+  forGifts: boolean;
+  forChanges: boolean;
+  media: Media[];
+  category: Category;
+  condition: Condition;
+  status : Status;
+}
+export type Status = {
+  id: number;
+  name: string;
+  description: string;
+  userId: string;
+  isActive: boolean;
+}
+
+export type Category ={
+  id: number;
+  name: string;
+  description: string;
+  userId: string;
+  isActive: boolean;
+}
+

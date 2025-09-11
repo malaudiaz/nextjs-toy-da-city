@@ -20,6 +20,8 @@ type PurchaseProps = {
   order: Order[];
 };
 
+const options = ["ALL","AWAITING_CONFIRMATION", "CONFIRMED", "CANCELED", "TRANSFERRED", "REEMBURSED"];
+
 const fromCents = (cents: number) => cents / 100;
 
 const PurchasesInfo = ({ order }: PurchaseProps) => {
@@ -27,11 +29,11 @@ const PurchasesInfo = ({ order }: PurchaseProps) => {
     <div className="min-h-screen p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 flex items-center justify-between">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
             Mis Compras
           </h1>
-          <SelectFilter />
+          <SelectFilter options={options} route="purchase" />
         </div>
 
         {/* Stats Cards */}
