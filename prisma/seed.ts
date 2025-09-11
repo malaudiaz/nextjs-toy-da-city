@@ -457,7 +457,7 @@ async function main() {
         statusId: 1,
         conditionId: 6,
         location: "",
-        sellerId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        sellerId: "0f1a4b4d-da45-493a-a218-da7cb511198f",
         forSell: false,
         forGifts: false,
         forChanges: true,
