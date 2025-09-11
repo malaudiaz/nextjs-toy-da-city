@@ -394,7 +394,7 @@ async function main() {
         statusId: 1,
         conditionId: 2,
         location: "",
-        sellerId: "9a7b3c2d-1e5f-4a8b-9c6d-2e4f6a8b0c1d",
+        sellerId: "0f1a4b4d-da45-493a-a218-da7cb511198f",
         forSell: false,
         forGifts: true,
         forChanges: false,
@@ -409,7 +409,7 @@ async function main() {
         statusId: 1,
         conditionId: 1,
         location: "",
-        sellerId: "9a7b3c2d-1e5f-4a8b-9c6d-2e4f6a8b0c1d",
+        sellerId: "0f1a4b4d-da45-493a-a218-da7cb511198f",
         forSell: false,
         forGifts: true,
         forChanges: false,
@@ -809,12 +809,12 @@ async function main() {
     const favoritesData = [
       {
         id: "favorite_001",
-        userId: "9a7b3c2d-1e5f-4a8b-9c6d-2e4f6a8b0c1d",
+        userId: "0f1a4b4d-da45-493a-a218-da7cb511198f",
         toyId: "toy_005",
       },
       {
         id: "favorite_002",
-        userId: "9a7b3c2d-1e5f-4a8b-9c6d-2e4f6a8b0c1d",
+        userId: "0f1a4b4d-da45-493a-a218-da7cb511198f",
         toyId: "toy_006",
       },
     ];
