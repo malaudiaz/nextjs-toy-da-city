@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
@@ -5,6 +6,9 @@ import { Eye, Heart, Package, ShoppingCart, Trash2, User } from "lucide-react";
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button";
 import { Sale } from "@/types/modelTypes";
+import { useFavorite } from "@/hooks/useFavorite";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 
 type FavoritesProps = {
@@ -12,6 +16,26 @@ type FavoritesProps = {
 }
 
 const FavoritesInfo = ({ favorites }: FavoritesProps) => {
+
+const router = useRouter(); 
+const { addToFavorites } = useFavorite();
+
+  const handleFavorite = async (id: string) => {
+    try {
+      const res = await addToFavorites(id);
+
+      if (res.data) {
+        toast.success(
+          !favorites.find((favorite) => favorite.id === id) ? "Added to favorites" : "Removed from favorites"
+        );
+        router.refresh();
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to add to favorites");
+    }
+  };
+
   return (
      <div className="min-h-screen p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
@@ -67,6 +91,9 @@ const FavoritesInfo = ({ favorites }: FavoritesProps) => {
                       </div>
 
                       <Separator />
+                      <Button onClick={() => handleFavorite(favorite.id)} variant="outline" size="sm" className="mt-10 py-5 bg-transparent">
+                        Remove
+                      </Button>
                     </div>
                   </div>
                 </CardContent>
