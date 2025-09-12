@@ -1,10 +1,5 @@
 import Image from "next/image";
-import {
-  Calendar,
-  RefreshCw,
-  CheckCircle,
-  Package,
-} from "lucide-react";
+import { Calendar, RefreshCw, CheckCircle, Package } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,12 +7,13 @@ import { Separator } from "@/components/ui/separator";
 import { Sale } from "@/types/modelTypes";
 
 type SwapProps = {
-  swaps: Sale[]
-}
+  swaps: Sale[];
+};
 
-const SwapInfo = ({ swaps }: SwapProps) => { 
+const SwapInfo = ({ swaps }: SwapProps) => {
+  console.log(swaps);
   return (
-  <div className="min-h-screen p-4 md:p-6">
+    <div className="min-h-screen p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -33,9 +29,7 @@ const SwapInfo = ({ swaps }: SwapProps) => {
             <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
               <CardContent className="p-8 text-center">
                 <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">
-                  No se encontraron intercambios
-                </p>
+                <p className="text-gray-600">No se encontraron intercambios</p>
               </CardContent>
             </Card>
           ) : (
@@ -63,14 +57,33 @@ const SwapInfo = ({ swaps }: SwapProps) => {
                             {swap.title}
                           </h3>
                         </div>
-                        <div className="flex flex-col items-end gap-2">
-                            <div className="text-2xl font-bold text-blue-600">
-                              ${swap.price.toFixed(2)}
-                            </div>
+                        <div className="flex flex-col md:items-end gap-2">
+                          <div className="text-2xl font-bold text-blue-600">
+                            {swap.price === 0 ? (
+                              <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm">
+                                Free
+                              </span>
+                            ) : (
+                              `$${swap.price.toFixed(2)}`
+                            )}
+                          </div>
                         </div>
                       </div>
 
                       <Separator />
+                      <div className="flex flex-col gap-2">
+                        <p className="text-lg text-gray-600">
+                          {swap.description}
+                        </p>
+                        <div className="flex flex-row gap-2">
+                          <p className="text-gray-600 text-md">
+                            Categoria {swap.category.name}
+                          </p>
+                          <p className="text-gray-600 text-md">
+                            Condicion {swap.condition.name}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -80,7 +93,7 @@ const SwapInfo = ({ swaps }: SwapProps) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SwapInfo
+export default SwapInfo;
