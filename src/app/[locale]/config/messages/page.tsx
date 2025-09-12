@@ -3,16 +3,14 @@ import MessageInfo from "@/components/shared/profile/Messagesinfo";
 import { getMessages } from "@/lib/actions/toysAction";
 
 const MessagesPage = async () => {
-  const messages = await getMessages();
-  
-  console.log(messages);
+  const messages = await getMessages(); 
 
   return (
     <div>
       <div className="px-5 py-3 md:hidden ">
         <Breadcrumbs />
       </div>
-      <MessageInfo />
+      <MessageInfo messages={messages} />
     </div>
   );
 
