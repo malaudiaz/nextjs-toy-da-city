@@ -9,7 +9,6 @@ type ToyCardProps = {
   toy: Toy;
 };
 
-const fromCents = (cents: number) => cents / 100;
 
 export default function ToyCard({ toy }: ToyCardProps) {
   return (
@@ -37,8 +36,16 @@ export default function ToyCard({ toy }: ToyCardProps) {
                 </h3>
               </div>
               <div className="flex flex-col items-end gap-2">
-                <div className="text-2xl font-bold text-blue-600">
-                  ${toy.price.toFixed(2)}
+                <div className="text-2xl font-bold text-green-700">
+                  {
+                    toy.price === 0 ? (
+                      <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm">
+                        Free
+                      </span>
+                    ) : (
+                      `$${toy.price.toFixed(2)}`
+                    )
+                  }
                 </div>
               </div>
             </div>
@@ -46,7 +53,7 @@ export default function ToyCard({ toy }: ToyCardProps) {
             <Separator />
             <div>
               <Link href={`/config/toys/${toy.id}`}>
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Button className="bg-green-700 hover:bg-green-800 text-white">
                   Editar
                 </Button>
               </Link>
