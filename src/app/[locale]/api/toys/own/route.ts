@@ -64,25 +64,6 @@ export async function GET(
             },
           },
         },
-        comments: {
-          where: { isActive: true },
-          select: {
-            // Selecciona solo los campos necesarios
-            id: true,
-            summary: true,
-            userId: true,
-          },
-          take: 4, // Límite de 4 comentarios
-          skip: 0, // Opcional: Saltar los primeros X (útil para paginación)
-          orderBy: { createdAt: "desc" },
-        },
-        _count: {
-          select: {
-            comments: {
-              where: { isActive: true }, // Filtra solo comentarios activos
-            },
-          },
-        },
       }
     });
 

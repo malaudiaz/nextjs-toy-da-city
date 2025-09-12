@@ -1,8 +1,7 @@
 import Image from "next/image";
-import { Calendar, RefreshCw, CheckCircle, Package } from "lucide-react";
+import { Package } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Sale } from "@/types/modelTypes";
 
@@ -18,7 +17,7 @@ const SwapInfo = ({ swaps }: SwapProps) => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            Juguetes para Intercambiar
+            Juguetes Intercambiados
           </h1>
         </div>
 
@@ -29,7 +28,7 @@ const SwapInfo = ({ swaps }: SwapProps) => {
             <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
               <CardContent className="p-8 text-center">
                 <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">No se encontraron intercambios</p>
+                <p className="text-gray-600">No se encontraron juguetes Intercambiados</p>
               </CardContent>
             </Card>
           ) : (

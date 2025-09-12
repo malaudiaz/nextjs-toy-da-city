@@ -15,7 +15,7 @@ const FreeInfo = ({ free }: FreeProps) => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            Juguetes para Regalar
+            Juguetes Regalados
           </h1>
         </div>
 
@@ -60,6 +60,19 @@ const FreeInfo = ({ free }: FreeProps) => {
                       </div>
 
                       <Separator />
+                      <div className="flex flex-col gap-2">
+                        <p className="text-lg text-gray-600">
+                          {gift.description}
+                        </p>
+                        <div className="flex flex-row gap-2">
+                          <p className="text-gray-600 text-md">
+                            Categoria {gift.category.name}
+                          </p>
+                          <p className="text-gray-600 text-md">
+                            Condicion {gift.condition.name}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </CardContent>

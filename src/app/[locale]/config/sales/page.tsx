@@ -4,7 +4,7 @@ import { getSales } from "@/lib/actions/toysAction";
 import React from "react";
 
 
-const VentasPage = async () => {
+const SalesPage = async () => {
   const sales = await getSales();
   console.log(sales);
   return (
@@ -17,4 +17,4 @@ const VentasPage = async () => {
   );
 };
 
-export default VentasPage;
+export default SalesPage;

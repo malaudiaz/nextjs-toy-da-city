@@ -41,14 +41,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       icon: ToyBrick,
     },
     {
-      title: t("Sales"),
-      url: `/config/sales`,
-      icon: Coins,
-    },
-    {
       title: t("Purchases"),
       url: "/config/purchase",
       icon: ShoppingBag,
+    },
+    {
+      title: t("Sales"),
+      url: `/config/sales`,
+      icon: Coins,
     },
     {
       title: t("Swap"),
@@ -61,14 +61,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       icon: Gift,
     },
     {
-      title: "Messages",
-      url: "/config/chat",
-      icon: MessageCircle,
-    },
-    {
       title: t("Favorites"),
       url: "/config/favorites",
       icon: Heart,
+    },
+    {
+      title: "Messages",
+      url: "/config/messages",
+      icon: MessageCircle,
     },
     {
       title: t("YourReputation"),

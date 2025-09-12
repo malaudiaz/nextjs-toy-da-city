@@ -17,7 +17,7 @@ const SaleInfo = async ({ sales }: SalesProps) => {
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            Mis Ventas
+            Juguetes Vendidos
           </h1>
           <SelectFilter options={options} route="sales" />
         </div>
@@ -67,6 +67,21 @@ const SaleInfo = async ({ sales }: SalesProps) => {
                       </div>
 
                       <Separator />
+                      <div className="flex flex-col gap-2">
+                        <p className="text-lg text-gray-600">
+                          {sale.description}
+                        </p>
+                        <div className="flex flex-row gap-2">
+                          <p className="text-gray-600 text-md">
+                            Categoria {sale.category.name}
+                          </p>
+                          <p className="text-gray-600 text-md">
+                            Condicion {sale.condition.name}
+                          </p>
+                        </div>
+                      </div>
+
+                      
                     </div>
                   </div>
                 </CardContent>
