@@ -6,7 +6,6 @@ import React from "react";
 
 const SalesPage = async () => {
   const sales = await getSales();
-  console.log(sales);
   return (
     <div>
       <div className="px-5 py-3 md:hidden ">

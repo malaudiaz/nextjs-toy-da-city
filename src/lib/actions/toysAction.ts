@@ -230,3 +230,24 @@ export async function getSwaps() {
   const swaps = await response.json();
   return  swaps;
 }
+
+export async function getMessages() {
+  const { userId } = await auth();
+
+  const headers = {
+    "Content-Type": "application/json",
+    "X-User-ID": "",
+  };
+
+  if (userId) {
+    headers["X-User-ID"] = userId;
+  }
+
+  const response = await fetch(`${BACKEND_URL}/api/toys/with-messages`, {
+    method: "GET",
+    headers: headers
+  });
+
+  const messages = await response.json();
+  return  messages;
+}

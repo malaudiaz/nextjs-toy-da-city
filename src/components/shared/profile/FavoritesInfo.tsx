@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-import { Eye, Heart, Package, ShoppingCart, Trash2, User } from "lucide-react";
+import { Package } from "lucide-react";
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button";
 import { Sale } from "@/types/modelTypes";
