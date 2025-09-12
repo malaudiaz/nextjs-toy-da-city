@@ -26,8 +26,8 @@ model User {
   // Relaciones
   toysForSale     Toy[]         @relation("Seller")
   favoriteToys    FavoriteToy[]
-  purchaseHistory Transaction[] @relation("Buyer")
-  salesHistory    Transaction[] @relation("Seller")
+  //purchaseHistory Transaction[] @relation("Buyer")
+  //salesHistory    Transaction[] @relation("Seller")
   ordersAsBuyer   Order[]       @relation("Buyer")
   ordersAsSeller  Order[]       @relation("Seller")
 
@@ -90,7 +90,7 @@ model Status {
   updatedAt    DateTime      @updatedAt
   translations Translation[]
   toys         Toy[]
-  transactions Transaction[]
+  //transactions Transaction[]
 
   @@map("statuses")
 }
@@ -123,7 +123,7 @@ model Toy {
   condition    Condition     @relation(fields: [conditionId], references: [id])
   sellerId     String
   seller       User          @relation("Seller", fields: [sellerId], references: [id])
-  transactions Transaction[]
+  //transactions Transaction[]
   forSell      Boolean       @default(true)
   forGifts     Boolean       @default(true)
   forChanges   Boolean       @default(true)
@@ -132,7 +132,6 @@ model Toy {
   isActive     Boolean       @default(true)
   media        Media[]
   favorites    FavoriteToy[]
-  comments     ToyComments[]
   orderItems   OrderItem[]   // Relación inversa
   Message      Message[]     @relation("MessageToy")
 
@@ -167,20 +166,7 @@ model FavoriteToy {
   @@map("favorite_toys")
 }
 
-model ToyComments {
-  id        String   @id @default(uuid())
-  toyId     String?
-  toy       Toy?     @relation(fields: [toyId], references: [id])
-  summary   String
-  userId    String
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("toy_comments")
-}
-
-model Transaction {
+/* model Transaction {
   id            String   @id @default(uuid())
   toyId         String
   toy           Toy      @relation(fields: [toyId], references: [id])
@@ -200,7 +186,7 @@ model Transaction {
   order         Order?   @relation(fields: [orderId], references: [id])
 
   @@map("transactions")
-}
+} */
 
 // ✅ MODELO DE ÓRDENES (clave para el flujo de pago)
 model Order {
@@ -224,7 +210,7 @@ model Order {
   // Relaciones inversas
   transfers   Transfer[] // Transferencias
   refunds     Refund[] // ✅ Añade esta línea
-  transaction Transaction?
+  //transaction Transaction?
 
   @@index([paymentIntentId])
   @@index([chargeId])
