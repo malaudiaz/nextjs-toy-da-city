@@ -75,3 +75,17 @@ export async function getOnlineUsers() {
 
   return { users: users.onlineUsers as Users[], count: users.count as number };
 }
+
+export async function getUserImageUrl(userId: string) {
+  if (!userId) return null;
+
+  try {
+    const { users } = await clerkClient();
+    const seller = await users.getUser(userId);
+
+    return seller.imageUrl;
+  } catch (error) {
+    console.error("Error al obtener usuario de Clerk:", error);
+    return null;
+  }
+}

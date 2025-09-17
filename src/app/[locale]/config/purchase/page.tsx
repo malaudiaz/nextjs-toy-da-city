@@ -22,7 +22,7 @@ const ComprasPage = async ({ searchParams }: Props) => {
       <div className="px-5 py-3 md:hidden ">
         <Breadcrumbs />
       </div>
-      <PurchasesInfo order={purchases}  />
+      <PurchasesInfo orders={purchases}  />
     </div>
   );
 };

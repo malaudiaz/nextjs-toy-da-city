@@ -6,6 +6,7 @@ import { Order } from "@/types/modelTypes";
 import { SelectFilter } from "./SelectFIlter";
 import { CancelOrderButton } from "./CancelOrderButton";
 import { ConfirmOrderButton } from "./ConfirmOrderButtom";
+import Link from "next/link";
 
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString("es-ES", {
@@ -17,14 +18,14 @@ const formatDate = (dateString: string) => {
 
 
 type PurchaseProps = {
-  order: Order[];
+  orders: Order[];
 };
 
 const options = ["ALL","AWAITING_CONFIRMATION", "CONFIRMED", "CANCELED", "TRANSFERRED", "REEMBURSED"];
 
 const fromCents = (cents: number) => cents / 100;
 
-const PurchasesInfo = ({ order }: PurchaseProps) => {
+const PurchasesInfo = ({ orders }: PurchaseProps) => {
   return (
     <div className="min-h-screen p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
@@ -39,7 +40,7 @@ const PurchasesInfo = ({ order }: PurchaseProps) => {
         {/* Stats Cards */}
         {/* Purchases List */}
         <div className="space-y-6">
-          {order.length === 0 ? (
+          {orders.length === 0 ? (
             <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
               <CardContent className="p-8 text-center">
                 <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
@@ -49,7 +50,7 @@ const PurchasesInfo = ({ order }: PurchaseProps) => {
               </CardContent>
             </Card>
           ) : (
-            order.map((order) =>
+            orders.map((order) =>
               order.items.map((item) => (
                 <Card
                   key={item.id}
@@ -91,7 +92,7 @@ const PurchasesInfo = ({ order }: PurchaseProps) => {
                           <div className="space-y-2">
                             <div className="flex items-center gap-2 text-sm text-gray-600">
                               <User className="h-4 w-4" />
-                              <span>Vendedor: {order.seller.name}</span>
+                              <span>Vendedor: <Link href={`/seller/${order.seller.id}`}>{order.seller.name}</Link></span>
                             </div>
                             <div className="flex items-center gap-2 text-sm text-gray-600">
                               <Calendar className="h-4 w-4" />
@@ -108,6 +109,16 @@ const PurchasesInfo = ({ order }: PurchaseProps) => {
                             <ConfirmOrderButton orderId={order.id} />
                           </div>
                         )}
+
+                        {order.status === "CONFIRMED" && (
+                          <div className="flex flex-col sm:flex-row gap-3">
+                            <Link href="/reviews/[sellerId]" as={`/reviews/${order.seller.id}`}>
+                              ¡Deja una reseña a este vendedor!
+                            </Link>
+                          </div>
+                        )}
+
+
                       </div>
                     </div>
                   </CardContent>

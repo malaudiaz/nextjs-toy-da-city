@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from "@clerk/nextjs/server";
 import prisma from '@/lib/prisma'; // Asegúrate de tener esto definido
+import { getUserImageUrl } from '@/lib/actions/getUserActions';
 
 export async function GET(req: NextRequest) {
   // --- 1. Autenticación ---
@@ -59,6 +60,8 @@ export async function GET(req: NextRequest) {
             msg.sender.id, // clave única por ID de usuario
             {
               id: msg.sender.id,
+              clerkId: msg.senderId,
+              imageUrl: getUserImageUrl(msg.senderId), // Función para obtener la URL de la imagen
               name: msg.sender.name,
               email: msg.sender.email,
             },

@@ -2,6 +2,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { Package } from "lucide-react";
+import { UserAvatar } from "../UserAvatar";
+
+//import { ChatButton } from "../ChatButton";
+//               <ChatButton toy={msg} seller={seller} /> 
 
 type Media = {
   id: string;
@@ -14,6 +18,8 @@ type Media = {
 
 type MessageSender = {
   id: string;
+  clerkId: string;
+  imageUrl: string;
   name: string;
   email: string;
 };
@@ -88,7 +94,7 @@ const MessagesInfo = async ({ messages }: MessagesProps) => {
                       </div>
                       <div className="flex flex-col items-end gap-2">
                         <div className="text-2xl font-bold text-blue-600">
-                          ${msg.price.toFixed(2)}
+                          ${msg.price > 0 ? msg.price : "Gratis"} 
                         </div>
                       </div>
                     </div>
@@ -102,15 +108,15 @@ const MessagesInfo = async ({ messages }: MessagesProps) => {
                     <div className="flex flex-col gap-2">
                       <div className="flex flex-col gap-2">
                         {msg.messageSenders.map((sender) => (
-                          <div
-                            key={sender.id}
-                            className="p-4 bg-gray-100 rounded-lg"
-                          >
-                            <h4 className="text-md font-semibold text-gray-800">
-                              {sender.name}
-                            </h4>
-                          </div>
+
+          <div key={sender.id} className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <UserAvatar userId={sender.clerkId} src={sender.imageUrl} alt={sender.name} />
+              </div>
+          </div>
+
                         ))}
+
                       </div>
                     </div>
                   </div>

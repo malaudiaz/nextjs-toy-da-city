@@ -24,12 +24,15 @@ model User {
   lastSeen DateTime @default(now()) // Última vez que estuvo activo
 
   // Relaciones
-  toysForSale     Toy[]         @relation("Seller")
-  favoriteToys    FavoriteToy[]
+  toysForSale    Toy[]         @relation("Seller")
+  favoriteToys   FavoriteToy[]
   //purchaseHistory Transaction[] @relation("Buyer")
   //salesHistory    Transaction[] @relation("Seller")
-  ordersAsBuyer   Order[]       @relation("Buyer")
-  ordersAsSeller  Order[]       @relation("Seller")
+  ordersAsBuyer  Order[]       @relation("Buyer")
+  ordersAsSeller Order[]       @relation("Seller")
+
+  reviewsGiven    Review[] @relation("ReviewAuthor")
+  reviewsReceived Review[] @relation("ReviewTarget")
 
   sentMessages      Message[]          @relation("MessageSender")
   receivedMessages  Message[]          @relation("MessageReceiver")
@@ -110,30 +113,30 @@ model Condition {
 }
 
 model Toy {
-  id           String        @id @default(uuid())
-  title        String
-  description  String
-  price        Float
-  location     String
-  categoryId   Int
-  category     Category      @relation(fields: [categoryId], references: [id])
-  statusId     Int
-  status       Status        @relation(fields: [statusId], references: [id])
-  conditionId  Int
-  condition    Condition     @relation(fields: [conditionId], references: [id])
-  sellerId     String
-  seller       User          @relation("Seller", fields: [sellerId], references: [id])
+  id          String        @id @default(uuid())
+  title       String
+  description String
+  price       Float
+  location    String
+  categoryId  Int
+  category    Category      @relation(fields: [categoryId], references: [id])
+  statusId    Int
+  status      Status        @relation(fields: [statusId], references: [id])
+  conditionId Int
+  condition   Condition     @relation(fields: [conditionId], references: [id])
+  sellerId    String
+  seller      User          @relation("Seller", fields: [sellerId], references: [id])
   //transactions Transaction[]
-  forSell      Boolean       @default(true)
-  forGifts     Boolean       @default(true)
-  forChanges   Boolean       @default(true)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  isActive     Boolean       @default(true)
-  media        Media[]
-  favorites    FavoriteToy[]
-  orderItems   OrderItem[]   // Relación inversa
-  Message      Message[]     @relation("MessageToy")
+  forSell     Boolean       @default(true)
+  forGifts    Boolean       @default(true)
+  forChanges  Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  isActive    Boolean       @default(true)
+  media       Media[]
+  favorites   FavoriteToy[]
+  orderItems  OrderItem[] // Relación inversa
+  Message     Message[]     @relation("MessageToy")
 
   @@map("toys")
 }
@@ -166,28 +169,6 @@ model FavoriteToy {
   @@map("favorite_toys")
 }
 
-/* model Transaction {
-  id            String   @id @default(uuid())
-  toyId         String
-  toy           Toy      @relation(fields: [toyId], references: [id])
-  buyerId       String
-  buyer         User     @relation("Buyer", fields: [buyerId], references: [id])
-  sellerId      String
-  seller        User     @relation("Seller", fields: [sellerId], references: [id])
-  price         Float
-  date          DateTime @default(now())
-  statusId      Int
-  status        Status   @relation(fields: [statusId], references: [id])
-  paymentMethod String
-  wasSold       Boolean  @default(true)
-  wasGifts      Boolean  @default(true)
-  wasChanged    Boolean  @default(true)
-  orderId       String?  @unique // ✅ Aquí va @unique
-  order         Order?   @relation(fields: [orderId], references: [id])
-
-  @@map("transactions")
-} */
-
 // ✅ MODELO DE ÓRDENES (clave para el flujo de pago)
 model Order {
   id              String      @id @default(uuid())
@@ -198,7 +179,7 @@ model Order {
   buyer           User        @relation("Buyer", fields: [buyerId], references: [id])
   sellerId        String
   seller          User        @relation("Seller", fields: [sellerId], references: [id])
-  totalAmount     Int // en centavos
+  totalAmount     Int
   status          OrderStatus @default(AWAITING_CONFIRMATION)
   createdAt       DateTime    @default(now())
   confirmedAt     DateTime?
@@ -207,10 +188,10 @@ model Order {
   reembursedAt    DateTime?
   items           OrderItem[]
 
-  // Relaciones inversas
-  transfers   Transfer[] // Transferencias
-  refunds     Refund[] // ✅ Añade esta línea
-  //transaction Transaction?
+  transfers Transfer[]
+  refunds   Refund[]
+  // ✅ CORREGIDO: sin @relation, sin fields
+  review    Review?
 
   @@index([paymentIntentId])
   @@index([chargeId])
@@ -273,7 +254,7 @@ model Message {
   // Relaciones
   sender   User @relation("MessageSender", fields: [senderId], references: [clerkId])
   receiver User @relation("MessageReceiver", fields: [receiverId], references: [clerkId])
-  toy      Toy?  @relation("MessageToy", fields: [toyId], references: [id])
+  toy      Toy? @relation("MessageToy", fields: [toyId], references: [id])
 
   @@map("messages")
 }
@@ -287,4 +268,22 @@ model PushSubscription {
   createdAt DateTime @default(now())
 
   @@map("push_subscriptions")
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  reviewerId String
+  reviewer   User     @relation("ReviewAuthor", fields: [reviewerId], references: [id])
+  targetId   String
+  target     User     @relation("ReviewTarget", fields: [targetId], references: [id])
+  rating     Int
+  comment    String?
+  orderId    String?  @unique // ← clave foránea → este modelo "posee" la relación
+  // ✅ Aquí SÍ va fields + references
+  order      Order?   @relation(fields: [orderId], references: [id])
+  createdAt  DateTime @default(now())
+
+  @@unique([reviewerId, targetId, orderId])
+  @@index([targetId])
+  @@map("reviews")
 }

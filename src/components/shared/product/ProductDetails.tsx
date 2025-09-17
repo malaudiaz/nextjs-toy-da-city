@@ -15,6 +15,7 @@ import { useFavorite } from "@/hooks/useFavorite";
 import { useAuth } from "@clerk/nextjs";
 import Profile from "../Profile";
 import { ChatButton } from "../ChatButton";
+import Link from "next/link";
 
 // Importación dinámica con exportación por defecto correcta
 const MapComponent = dynamic(
@@ -221,7 +222,9 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <Profile user={seller} />
+                <Link href={`/seller/${toy.sellerId}`}>
+                  <Profile user={seller} />
+                </Link>
                 <ChatButton toy={toy} seller={seller} /> 
               </div>
             </div>
