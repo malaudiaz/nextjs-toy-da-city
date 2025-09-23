@@ -323,6 +323,7 @@ const CreatePostForm = ({
             <input
               id="price"
               type="number"
+              step="any"
               min="0"
               className="border border-gray-300 rounded p-2"
               {...register("price", { valueAsNumber: true })}

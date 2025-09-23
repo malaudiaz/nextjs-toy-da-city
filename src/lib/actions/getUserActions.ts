@@ -7,6 +7,7 @@ type UserData = {
   id: string;
   fullName: string;
   imageUrl: string;
+  clerkId: string;
   reputation?: number;
   reviews?: number;
 };
@@ -23,13 +24,14 @@ export async function getUserById(userId: string): Promise<UserData | null> {
     const { users } = await clerkClient();
     const seller = await users.getUser(user!.clerkId);
 
-    const { firstName, lastName, imageUrl } = seller;
+    const { firstName, lastName, imageUrl, id: clerkId } = seller;
     const fullName = `${firstName} ${lastName}`.trim() || "Usuario anónimo";
 
     return {
       id: seller.id,
       fullName,
       imageUrl,
+      clerkId,
       reputation: user?.reputation || 0,
       reviews: Math.floor(Math.random() * 100) + 50, // Simulación de número de reseñas
     };

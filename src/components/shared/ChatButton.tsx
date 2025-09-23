@@ -14,6 +14,8 @@ type ChatButtonProps = {
     id: string;
     fullName: string;
     imageUrl: string;
+    clerkId: string;
+    email?: string | null;
     reputation?: number;
     reviews?: number;
   } | null;

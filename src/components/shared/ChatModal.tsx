@@ -14,6 +14,8 @@ type Seller = {
   id: string;
   fullName: string;
   imageUrl: string;
+  clerkId: string;
+  email?: string | null;
   reputation?: number;
   reviews?: number;
 };
@@ -73,7 +75,7 @@ export default function ChatModal({
 
     const loadChat = async () => {
       try {
-        const res = await fetch(`/api/chat/messages?with=${seller.id}`);
+        const res = await fetch(`/api/chat/messages?with=${seller.clerkId}&toyId=${toy.id}`);
         const { messages } = await res.json();
         setMessages(messages);
       } catch (error) {
@@ -84,8 +86,8 @@ export default function ChatModal({
     };
 
     loadChat();
-  }, [isOpen, currentUserId, seller.id]); // ← Añadimos isOpen como dependencia
-
+  }, [isOpen, currentUserId, seller.clerkId, seller.id, toy.id]); // ← Añadidos seller.id y toy.id
+  
   // Suscribirse a Pusher
   useEffect(() => {
     if (!isOpen || !currentUserId || !seller.id) return;
@@ -146,10 +148,10 @@ export default function ChatModal({
       id: `temp-${Date.now()}`,
       content,
       senderId: currentUserId!,
-      receiverId: seller.id,
+      receiverId: seller.clerkId,
       createdAt: new Date(),
       sender: {
-        clerkId: seller.id!,
+        clerkId: seller.clerkId!,
         name: user?.firstName ?? user?.lastName ?? "Usuario",
       },
       toyId: toy.id,
@@ -162,7 +164,7 @@ export default function ChatModal({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          receiverId: seller.id,
+          receiverId: seller.clerkId,
           content,
           toyId: toy.id,
         }),
