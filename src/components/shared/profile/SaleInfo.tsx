@@ -71,7 +71,7 @@ const SaleInfo = async ({ sales }: SalesProps) => {
                         <p className="text-lg text-gray-600">
                           {sale.description}
                         </p>
-                        <div className="flex flex-row gap-2">
+                        <div className="flex flex-col gap-2">
                           <p className="text-gray-600 text-md">
                             Categoria {sale.category.name}
                           </p>

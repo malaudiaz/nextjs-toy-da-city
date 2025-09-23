@@ -117,7 +117,7 @@ model Toy {
   title       String
   description String
   price       Float
-  location    String
+  location    String?
   categoryId  Int
   category    Category      @relation(fields: [categoryId], references: [id])
   statusId    Int

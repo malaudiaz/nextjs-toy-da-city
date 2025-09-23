@@ -466,9 +466,9 @@
     "Description": "Description",
     "DescriptionPlaceholder": "Describe your product",
     "Price": "Price",
-    "ForSale": "Sale",
-    "ForGift": "Free",
-    "ForChange": "Swap",
+    "forSale": "Sale",
+    "forGift": "Free",
+    "forChange": "Swap",
     "Category": "Category",
     "Status": "Status",
     "Condition": "Condition",
@@ -476,7 +476,11 @@
     "Add More": "+ Add More",
     "Submit": "Create Post",
     "Uploading": "Uploading",
-    "Success Message": "Toy created successfully!"
+    "Updating": "Updating",
+    "UpdateToy": "Update Toy",
+    "CreateSuccessMessage": "Toy created successfully!",
+    "UpdateSuccessMessage": "Toy updated successfully!",
+    "SubmitError": "Error submitting toy"
   },
   "breadcrumbs":{
     "Home": "Home",

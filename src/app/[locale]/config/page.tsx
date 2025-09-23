@@ -40,7 +40,7 @@ const ConfigurationsPage = () => {
   const language = pathname.split("/")[1];
 
   if (!isMobile) {
-    redirect(`/${language}/config/purchase`);
+    redirect(`/${language}/config/toys`);
   }
 
   return (

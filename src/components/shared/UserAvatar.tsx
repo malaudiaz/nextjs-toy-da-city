@@ -12,6 +12,9 @@ export function UserAvatar({
   src: string;
   alt: string;
 }) {
+
+  console.log(userId, src, alt);
+
   const [online, setOnline] = useState<boolean | null>(null); // null = loading
 
   useEffect(() => {

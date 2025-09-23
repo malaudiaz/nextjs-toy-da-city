@@ -1,14 +1,43 @@
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { Card, CardContent } from "../ui/card";
-import { Toy } from "@/types/modelTypes";
 import Link from "next/link";
 import { Button } from "../ui/button";
+
+type Media = {
+  id: string;
+  fileUrl: string;
+  type: "IMAGE" | "VIDEO";
+  toyId: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+type Toy = {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  location: string;
+  conditionId: number;
+  categoryId: number;
+  forSell: boolean;
+  forGifts: boolean;
+  forChanges: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+  sellerId: string;
+  isActive: boolean;
+  isFavorite: boolean;
+  media: Media[];
+  categoryDescription: string;
+  conditionDescription: string;
+  statusDescription: string;
+};
 
 type ToyCardProps = {
   toy: Toy;
 };
-
 
 export default function ToyCard({ toy }: ToyCardProps) {
   return (
@@ -37,22 +66,27 @@ export default function ToyCard({ toy }: ToyCardProps) {
               </div>
               <div className="flex flex-col items-end gap-2">
                 <div className="text-2xl font-bold text-green-700">
-                  {
-                    toy.price === 0 ? (
-                      <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm">
-                        Free
-                      </span>
-                    ) : (
-                      `$${toy.price.toFixed(2)}`
-                    )
-                  }
+                  {toy.price === 0 ? (
+                    <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm">
+                      Free
+                    </span>
+                  ) : (
+                    `$${toy.price.toFixed(2)}`
+                  )}
                 </div>
               </div>
             </div>
 
             <Separator />
+
+            <div className="flex flex-col gap-2">
+              <p className="text-lg text-gray-600">{toy.description}</p>
+            </div>
+
+            <Separator />
+
             <div>
-              <Link href={`/config/toys/${toy.id}`}>
+              <Link href={`/config/toys/edit/${toy.id}`}>
                 <Button className="bg-green-700 hover:bg-green-800 text-white">
                   Editar
                 </Button>

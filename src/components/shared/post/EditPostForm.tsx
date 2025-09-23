@@ -1,3 +1,4 @@
+// components/shared/post/EditPostForm.jsx
 "use client";
 
 import { Textarea } from "@/components/ui/textarea";
@@ -9,6 +10,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@clerk/nextjs";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 
 const MAX_FILES = 6;
 
@@ -26,7 +28,22 @@ type Condition = {
   isActive: boolean;
 };
 
-type CreatePostFormProps = {
+type Toy = {
+  id: string;
+  title: string;
+  description: string;
+  forSell: boolean; // ← ¡Así se llama en Prisma!
+  forGifts: boolean; // ← ¡Así se llama en Prisma!
+  forChanges: boolean; // ← ¡Así se llama en Prisma!
+  price?: number;
+  categoryId: number;
+  conditionId: number;
+  location: string; // "lat,lng"
+  media: { id: string; fileUrl: string }[]; // ← Asumiendo que guardas imágenes en la DB con ID y URL
+};
+
+type EditPostFormProps = {
+  toy: Toy;
   categories: {
     data: Category[];
   };
@@ -35,7 +52,6 @@ type CreatePostFormProps = {
   };
 };
 
-// Importación dinámica con exportación por defecto correcta
 const MapComponent = dynamic(
   () => import("../MapComponent").then((mod) => mod.default),
   {
@@ -48,22 +64,24 @@ const MapComponent = dynamic(
   }
 );
 
-const CreatePostForm = ({
-  categories,
-  conditions,
-}: CreatePostFormProps) => {
+const EditPostForm = ({ toy, categories, conditions }: EditPostFormProps) => {
   const t = useTranslations("createPostForm");
   const [files, setFiles] = useState<File[]>([]);
+  const [existingImages, setExistingImages] = useState<
+    { id: string; fileUrl: string }[]
+  >(toy.media || []);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-
   const [, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const initialLocation = toy.location
+    ? (toy.location.split(",").map(Number) as [number, number])
+    : null;
+
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
-    null
+    initialLocation
   );
 
   const { getToken } = useAuth();
@@ -71,33 +89,33 @@ const CreatePostForm = ({
   const {
     register,
     handleSubmit,
-    reset,
+    //reset,
     formState: { errors },
     control,
-    getValues,
-    setValue
+    //getValues,
+    setValue,
+    watch,
   } = useForm<ToyFormValues>({
     resolver: zodResolver(toyFormSchema),
-    mode: "onChange", // ← Asegúrate de tener esto
+    mode: "onChange",
     defaultValues: {
-      forSale: false,
-      forGift: false,
-      forChange: false,
-      categoryId: undefined,
-      //statusId: undefined,
-      conditionId: undefined,
+      title: toy.title,
+      description: toy.description,
+      forSale: toy.forSell,
+      forGift: toy.forGifts,
+      forChange: toy.forChanges,
+      price: toy.price || undefined,
+      categoryId: toy.categoryId,
+      conditionId: toy.conditionId,
     },
   });
 
-  // Observamos el valor de forSale para mostrar/ocultar el precio
   const forSaleValue = useWatch({
     control,
     name: "forSale",
   });
 
   const getUserLocation = () => {
-    setError(null);
-
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -109,11 +127,7 @@ const CreatePostForm = ({
         (err) => {
           setError(err.message);
         },
-        {
-          enableHighAccuracy: true,
-          timeout: 5000,
-          maximumAge: 0,
-        }
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
       );
     } else {
       setError("Geolocation is not supported by your browser");
@@ -121,25 +135,31 @@ const CreatePostForm = ({
   };
 
   useEffect(() => {
-    getUserLocation();
+    if (!userLocation) getUserLocation();
   }, []);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = Array.from(e.target.files);
+      const totalFiles = files.length + existingImages.length + newFiles.length;
 
-      if (files.length + newFiles.length > MAX_FILES) {
-        setError(`Solo puedes subir un máximo de ${MAX_FILES} archivos`);
+      if (totalFiles > MAX_FILES) {
+        setError(`Solo puedes tener un máximo de ${MAX_FILES} imágenes`);
         return;
       }
 
       setFiles([...files, ...newFiles]);
     }
   };
-  const removeFile = (index: number) => {
-    const newFiles = [...files];
-    newFiles.splice(index, 1);
-    setFiles(newFiles);
+
+  const removeFile = (index: number, isExisting = false) => {
+    if (isExisting) {
+      setExistingImages(existingImages.filter((_, i) => i !== index));
+    } else {
+      const newFiles = [...files];
+      newFiles.splice(index - existingImages.length, 1);
+      setFiles(newFiles);
+    }
   };
 
   const handleLocationChange = (lat: number, lng: number) => {
@@ -148,7 +168,6 @@ const CreatePostForm = ({
 
   const onSubmit = async (data: ToyFormValues) => {
     const token = await getToken({ template: "Toydacity" });
-
     setIsSubmitting(true);
     setSubmitError(null);
     setSubmitSuccess(false);
@@ -156,38 +175,38 @@ const CreatePostForm = ({
     try {
       const formData = new FormData();
 
-      // Agregar campos del formulario
+      // Campos del formulario
       Object.entries(data).forEach(([key, value]) => {
-        // No agregar el precio si no está en venta
-        if (key === "price" && !data.forSale) {
-          return;
-        }
+        if (key === "price" && !data.forSale) return;
         formData.append(key, value?.toString() ?? "");
       });
 
-      //Agregar la localizacion
-      const location = userLocation ? `${userLocation[0]},${userLocation[1]}` : "";
-
-      //console.log("Location:", location);
-
+      // Ubicación
+      const location = userLocation
+        ? `${userLocation[0]},${userLocation[1]}`
+        : "";
       formData.append("location", location);
 
-      // Agregar archivos
-      if (files.length > 0) {
-        files.forEach((file) => {
-          formData.append("files", file);
-        });
-      } else {
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });        
-        setSubmitError("Debe subir al menos un archivo");
-        return;
-      }
+      files.forEach((file) => {
+        formData.append("newFiles", file); // ← ¡CAMBIADO DE "newFiles" a "file"!
+      });
 
-      const response = await fetch('/api/toys', {
-        method: "POST",
+      // IDs de imágenes existentes que se mantienen
+      existingImages.forEach((img) => {
+        formData.append("existingImageIds", img.id);
+      });
+
+      // IDs de imágenes que se ELIMINARON → ¡ESTO FALTABA!
+      const deletedImageIds = toy.media
+        .filter((img) => !existingImages.some((e) => e.id === img.id))
+        .map((img) => img.id);
+
+      deletedImageIds.forEach((id) => {
+        formData.append("deleteMedia", id);
+      });
+
+      const response = await fetch(`/api/toys/${toy.id}`, {
+        method: "PUT",
         body: formData,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -195,14 +214,12 @@ const CreatePostForm = ({
       });
 
       if (!response.ok) {
-        throw new Error("Error al enviar el formulario");
+        const errorData = await response.json();
+        setSubmitError(errorData.error || "Error al actualizar el juguete");
+        return;
       }
 
-      const result = await response.json();
-      console.log("Success:", result);
       setSubmitSuccess(true);
-      reset();
-      setFiles([]);
     } catch (error) {
       console.error("Error:", error);
       setSubmitError(
@@ -214,24 +231,17 @@ const CreatePostForm = ({
   };
 
   const handleCheckboxChange = (name: "forSale" | "forGift" | "forChange") => {
-    const currentValue = getValues(name);
-    // Si ya está activo, lo dejamos como está (opcional)
-    if (currentValue) return;
-
-    // Desactivamos todos
     setValue("forSale", false);
     setValue("forGift", false);
     setValue("forChange", false);
-
-    // Activamos solo el seleccionado
     setValue(name, true);
-  };  
+  };
 
   return (
     <>
       {submitSuccess && (
         <div className="mb-4 p-4 bg-green-100 text-green-700 rounded">
-          {t("CreateSuccessMessage")}
+          {t("UpdateSuccessMessage")}
         </div>
       )}
 
@@ -243,9 +253,9 @@ const CreatePostForm = ({
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-2 px-3 py-4 "
+        className="flex flex-col gap-2 px-3 py-4"
       >
-        {/* Campo de título */}
+        {/* Título */}
         <div className="flex flex-col gap-1">
           <Label>{t("Title")}</Label>
           <input
@@ -278,43 +288,20 @@ const CreatePostForm = ({
           )}
         </div>
 
-        {/* Opciones adicionales */}
+        {/* Opciones */}
         <div className="flex flex-wrap gap-4">
-          {/* For Sell */}
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="forSale"
-              checked={useWatch({ control, name: "forSale" })}
-              onChange={() => handleCheckboxChange("forSale")}
-              className="w-5 h-5 accent-green-700"
-            />
-            <label htmlFor="forSale">{t("forSale")}</label>
-          </div>
-
-          {/* For Gift */}
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="forGift"
-              checked={useWatch({ control, name: "forGift" })}
-              onChange={() => handleCheckboxChange("forGift")}
-              className="w-5 h-5 accent-green-700"
-            />
-            <label htmlFor="forGift">{t("forGift")}</label>
-          </div>
-
-          {/* For Exchange */}
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="forChange"
-              checked={useWatch({ control, name: "forChange" })}
-              onChange={() => handleCheckboxChange("forChange")}
-              className="w-5 h-5 accent-green-700"
-            />
-            <label htmlFor="forChange">{t("forChange")}</label>
-          </div>
+          {(["forSale", "forGift", "forChange"] as const).map((option) => (
+            <div key={option} className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id={option}
+                checked={watch(option)}
+                onChange={() => handleCheckboxChange(option)}
+                className="w-5 h-5 accent-green-700"
+              />
+              <label htmlFor={option}>{t(option)}</label>
+            </div>
+          ))}
         </div>
 
         {forSaleValue && (
@@ -323,6 +310,7 @@ const CreatePostForm = ({
             <input
               id="price"
               type="number"
+              step="any"
               min="0"
               className="border border-gray-300 rounded p-2"
               {...register("price", { valueAsNumber: true })}
@@ -360,7 +348,7 @@ const CreatePostForm = ({
           )}
         </div>
 
-        {/* Conditions */}
+        {/* Condición */}
         <div>
           <label htmlFor="conditionId" className="block mb-1">
             {t("Condition")}
@@ -384,25 +372,23 @@ const CreatePostForm = ({
           )}
         </div>
 
-        {/* Imágenes */}
+        {/* Imágenes (existentes + nuevas) */}
         <div className="flex flex-col gap-2 px-3 py-3 border-dashed border-2 border-gray-300 rounded-md">
-          <Label>
-            {t("Image")}
-          </Label>
+          <Label>{t("Image")}</Label>
           <div className="grid grid-cols-3 gap-2">
-            {files.map((file, index) => (
-              <div key={index} className="relative group">
-                {file.type.startsWith("image") && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={`Preview ${index}`}
-                    className="w-full h-32 object-cover rounded border"
-                  />
-                )}
+            {/* Imágenes existentes */}
+            {existingImages.map((img, index) => (
+              <div key={img.id} className="relative group">
+                <Image
+                  src={img.fileUrl}
+                  alt={`Existing ${index}`}
+                  className="w-full h-32 object-cover rounded border"
+                  width={150}
+                  height={150}
+                />
                 <button
                   type="button"
-                  onClick={() => removeFile(index)}
+                  onClick={() => removeFile(index, true)}
                   className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   &times;
@@ -410,28 +396,53 @@ const CreatePostForm = ({
               </div>
             ))}
 
-            {/* Botón para añadir más */}
-            <div
-              className={`border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer h-32 ${
-                files.length >= MAX_FILES ? "hidden" : ""
-              }`}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <span className="text-gray-500">{t("Add More")}</span>
-            </div>
+            {/* Imágenes nuevas (previsualización) */}
+            {files.map((file, index) => (
+              <div
+                key={index + existingImages.length}
+                className="relative group"
+              >
+                {file.type.startsWith("image") && (
+                  <Image
+                    src={URL.createObjectURL(file)}
+                    alt={`Preview ${index}`}
+                    className="w-full h-32 object-cover rounded border"
+                    width={150}
+                    height={150}
+                  />
+                )}
+                <button
+                  type="button"
+                  onClick={() => removeFile(index + existingImages.length)}
+                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  &times;
+                </button>
+              </div>
+            ))}
+
+            {/* Botón para añadir más (si no se ha alcanzado el límite) */}
+            {existingImages.length + files.length < MAX_FILES && (
+              <div
+                className="border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer h-32"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <span className="text-gray-500">{t("Add More")}</span>
+              </div>
+            )}
           </div>
 
           <input
             type="file"
             ref={fileInputRef}
-            accept="image/*,video/*"
+            accept="image/*"
             onChange={handleFileChange}
             className="hidden"
             multiple
-            max={MAX_FILES}
           />
         </div>
 
+        {/* Mapa */}
         <div className="h-[200px] w-full border-dashed border-2 border-gray-300 rounded-md overflow-hidden">
           <MapComponent
             onLocationChange={handleLocationChange}
@@ -439,7 +450,7 @@ const CreatePostForm = ({
           />
         </div>
 
-        {/* Botón de submit */}
+        {/* Submit */}
         <button
           type="submit"
           disabled={isSubmitting}
@@ -451,7 +462,6 @@ const CreatePostForm = ({
                 className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                 fill="none"
                 viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
               >
                 <circle
                   className="opacity-25"
@@ -467,10 +477,10 @@ const CreatePostForm = ({
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 ></path>
               </svg>
-              {t("Uploading")}
+              {t("Updating")}
             </span>
           ) : (
-            t("Submit")
+            t("UpdateToy")
           )}
         </button>
       </form>
@@ -478,4 +488,4 @@ const CreatePostForm = ({
   );
 };
 
-export default CreatePostForm;
+export default EditPostForm;

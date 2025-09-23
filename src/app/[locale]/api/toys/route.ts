@@ -168,7 +168,7 @@ export async function GET(
     let filteredToys = toys
     if (filters.locationRadius) {
       filteredToys = toys.filter(toy => {
-        const [lat, lng] = toy.location.split(',').map(Number)
+        const [lat, lng] = toy.location ? toy.location.split(',').map(Number) : [0,0]
         const distance = haversineDistance(
           filters.locationRadius!.lat,
           filters.locationRadius!.lng,
@@ -366,7 +366,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
         title: updatedPost!.title,
         description: updatedPost!.description,
         price: updatedPost!.price,
-        location: updatedPost!.location,
+        location: updatedPost!.location ?? "",
         createdAt: updatedPost!.createdAt,
         updatedAt: updatedPost!.updatedAt,
         sellerId: userId!,
@@ -386,8 +386,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
           fileUrl: media.fileUrl,
           type: media.type,
           toyId: media.toyId
-        })),
-        comments: [],
+        }))
       }
     }    
 

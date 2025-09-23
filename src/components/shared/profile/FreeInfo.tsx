@@ -64,7 +64,7 @@ const FreeInfo = ({ free }: FreeProps) => {
                         <p className="text-lg text-gray-600">
                           {gift.description}
                         </p>
-                        <div className="flex flex-row gap-2">
+                        <div className="flex flex-col gap-2">
                           <p className="text-gray-600 text-md">
                             Categoria {gift.category.name}
                           </p>

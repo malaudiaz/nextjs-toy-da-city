@@ -91,6 +91,14 @@ const { addToFavorites } = useFavorite();
                       </div>
 
                       <Separator />
+
+                      <div className="flex flex-col gap-2">
+                        <p className="text-lg text-gray-600">
+                          {favorite.description}
+                        </p>
+                      </div>
+
+
                       <Button onClick={() => handleFavorite(favorite.id)} variant="outline" size="sm" className="mt-10 py-5 bg-transparent">
                         Remove
                       </Button>

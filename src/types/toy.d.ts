@@ -17,7 +17,6 @@ export interface Toy {
   location: string
   conditionId: number
   categoryId: number
-  //statusId: number
   forSell: boolean
   forGifts: boolean
   forChanges: boolean
@@ -27,7 +26,6 @@ export interface Toy {
   isActive: boolean
   isFavorite: boolean
   favorites: FavoriteToy[]
-  comments: ToyComments[]
   media: Media[]
   categoryDescription: string
   conditionDescription: string

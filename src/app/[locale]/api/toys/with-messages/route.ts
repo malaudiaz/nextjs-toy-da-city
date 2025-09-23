@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import prisma from '@/lib/prisma'; // Asegúrate de tener esto definido
-import { getUserImageUrl } from '@/lib/actions/getUserActions';
+import prisma from "@/lib/prisma"; // Asegúrate de tener esto definido
+import { getUserImageUrl } from "@/lib/actions/getUserActions";
 
 export async function GET(req: NextRequest) {
   // --- 1. Autenticación ---
@@ -25,15 +25,17 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-
-    // 1. Obtener todos los juguetes del usuario (vendedor)
+    // 1. Obtener solo los juguetes del vendedor que tienen al menos un mensaje
     const toysWithMessages = await prisma.toy.findMany({
       where: {
         sellerId: user.id,
         isActive: true,
+        Message: {
+          some: {}, // ← ¡ESTO ES CLAVE! Solo juguetes con al menos 1 mensaje
+        },
       },
       include: {
-        media: true, // Incluye las imágenes del juguete
+        media: true,
         Message: {
           include: {
             sender: {
@@ -44,10 +46,13 @@ export async function GET(req: NextRequest) {
               },
             },
           },
+          orderBy: {
+            createdAt: "desc", // Opcional: ordenar mensajes más recientes primero
+          },
         },
       },
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
     });
 
@@ -62,7 +67,7 @@ export async function GET(req: NextRequest) {
               id: msg.sender.id,
               clerkId: msg.senderId,
               imageUrl: getUserImageUrl(msg.senderId), // Función para obtener la URL de la imagen
-              name: msg.sender.name,
+              fullName: msg.sender.name,
               email: msg.sender.email,
             },
           ])
@@ -81,9 +86,9 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(toysWithoutMessageField);
   } catch (error) {
-    console.error('Error al obtener juguetes con remitentes únicos:', error);
+    console.error("Error al obtener juguetes con remitentes únicos:", error);
     return NextResponse.json(
-      { error: 'Error interno del servidor' },
+      { error: "Error interno del servidor" },
       { status: 500 }
     );
   }

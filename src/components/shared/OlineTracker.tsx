@@ -33,9 +33,9 @@ export function OnlineTracker() {
       revalidateOnReconnect: true,
       shouldRetryOnError: true,
       errorRetryCount: 3,
-      onError: (err) => {
+/*       onError: (err) => {
         console.error('❌ Error al marcar presencia:', err.message);
-      },
+      }, */
     }
   );
 

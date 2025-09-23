@@ -72,7 +72,7 @@ export async function GET(
             },
           },
         },
-      }
+      },
     });
 
     if (!toy) {
@@ -83,7 +83,6 @@ export async function GET(
     let favorite;
 
     if (userId) {
-
       favorite = await prisma.favoriteToy.findFirst({
         where: {
           userId: userId,
@@ -91,7 +90,6 @@ export async function GET(
           isActive: true,
         },
       });
-
     }
 
     const { category, condition, status, ...toyData } = toy;
@@ -137,9 +135,9 @@ export async function PUT(
   try {
     const formData = await req.formData();
 
-    const stringforSell = formData.get("forSell") || "false";
-    const stringforGifts = formData.get("forGifts") || "false";
-    const stringforChanges = formData.get("forChanges") || "false";
+    const stringforSell = formData.get("forSale") || "false";
+    const stringforGifts = formData.get("forGift") || "false";
+    const stringforChanges = formData.get("forChange") || "false";
 
     // Validar con Zod
     const toyData = ToySchema.parse({
@@ -155,7 +153,7 @@ export async function PUT(
     });
 
     // 2. Procesar archivos nuevos
-    const newFiles = formData.getAll("newMedia") as File[];
+    const newFiles = formData.getAll("newFiles") as File[];
     const mediaToDelete = formData.getAll("deleteMedia") as string[]; // IDs de medios a eliminar
 
     // 3. Obtener juguete actual para validación
@@ -182,15 +180,24 @@ export async function PUT(
 
     // 5. Transacción para actualización atómica
     const updatedToy = await prisma.$transaction(async (tx) => {
-      // Eliminar medios solicitados
-      if (mediaToDelete.length > 0) {
-        // Obtener URLs antes de eliminar para borrar físicamente
+      // Procesar eliminación de medios
+      const mediaToDelete = formData.getAll("deleteMedia") as string[];
+
+      // Filtrar solo IDs válidos
+      const validMediaToDelete = mediaToDelete.filter(
+        (id): id is string => typeof id === "string" && id.trim() !== ""
+      );
+
+      if (validMediaToDelete.length > 0) {
+        // Obtener registros para borrar físicamente los archivos
         const mediaToRemove = await tx.media.findMany({
-          where: { id: { in: mediaToDelete } },
+          where: { id: { in: validMediaToDelete } },
+          select: { fileUrl: true, id: true }, // Solo lo necesario
         });
 
+        // Eliminar de la base de datos
         await tx.media.deleteMany({
-          where: { id: { in: mediaToDelete } },
+          where: { id: { in: validMediaToDelete } },
         });
 
         // Eliminar archivos físicos
@@ -200,6 +207,7 @@ export async function PUT(
       }
 
       // Subir nuevos archivos
+      const newFiles = formData.getAll("newFiles") as File[];
       const newMedia: Prisma.MediaCreateWithoutToyInput[] = await Promise.all(
         newFiles.map(async (file) => ({
           fileUrl: await handleFileUpload(file),
@@ -207,18 +215,30 @@ export async function PUT(
         }))
       );
 
-      // Actualizar juguete
-      // const userId = 'user_2wY8ZRoOrheojD7zQXtwk9fg00x'
-      return await tx.toy.update({
-        where: { id: id },
-        data: {
-          ...toyData,
-          media: {
-            create: newMedia,
+      // IDs de imágenes existentes que se mantienen
+      const existingImageIds = (
+        formData.getAll("existingImageIds") as string[]
+      ).filter(
+        (id): id is string => typeof id === "string" && id.trim() !== ""
+      );
+
+      try {
+        // Actualizar juguete
+        await tx.toy.update({
+          where: { id: id },
+          data: {
+            ...toyData,
+            media: {
+              connect: existingImageIds.map((id) => ({ id })),
+              create: newMedia,
+            },
           },
-        },
-        include: { media: true },
-      });
+          include: { media: true },
+        });
+      } catch (error) {
+        console.log("Error:", error);
+      }
+
     });
 
     return NextResponse.json({

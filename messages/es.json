@@ -464,9 +464,9 @@
     "Description": "Descripción",
     "DescriptionPlaceholder": "Describe tu producto",
     "Price": "Precio",
-    "ForSale": "Venta",
-    "ForGift": "Gratis",
-    "ForChange": "Intercambio",
+    "forSale": "Venta",
+    "forGift": "Gratis",
+    "forChange": "Intercambio",
     "Category": "Categoría",
     "Status": "Estado",
     "Condition": "Condición",
@@ -474,7 +474,11 @@
     "Add More": "+ Añadir más",
     "Submit": "Crear publicación",
     "Uploading": "Subiendo",
-    "Success Message": "¡Juguete creado correctamente!"
+    "Updating": "Actualizando",
+    "UpdateToy": "Actualizar",
+    "CreateSuccessMessage": "¡Juguete creado correctamente!",
+    "UpdateSuccessMessage": "¡Juguete actualizado correctamente!",
+    "SubmitError": "Error al guardar juguete"
   },
   "breadcrumbs": {
     "Home": "Inicio",
