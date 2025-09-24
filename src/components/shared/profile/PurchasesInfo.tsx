@@ -79,7 +79,7 @@ const PurchasesInfo = ({ orders }: PurchaseProps) => {
                             </div>
                           </div>
                           <div className="flex flex-col items-end gap-2">
-                            <div className="text-2xl font-bold text-blue-600">
+                            <div className="text-2xl font-bold text-green-700">
                               ${fromCents(item.priceAtPurchase).toFixed(2)}
                             </div>
                           </div>

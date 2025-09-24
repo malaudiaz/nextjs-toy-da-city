@@ -84,7 +84,7 @@ const { addToFavorites } = useFavorite();
                           </h3>
                         </div>
                         <div className="flex flex-col items-end gap-2">
-                            <div className="text-2xl font-bold text-blue-600">
+                            <div className="ext-2xl font-bold text-green-700">
                               ${favorite.price.toFixed(2)}
                             </div>
                         </div>

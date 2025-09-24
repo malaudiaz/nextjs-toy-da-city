@@ -1,22 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import prisma from "@/lib/prisma"; // Asegúrate de tener esto definido
+import prisma from "@/lib/prisma";
 import { getUserImageUrl } from "@/lib/actions/getUserActions";
 
 export async function GET(req: NextRequest) {
   // --- 1. Autenticación ---
-  let { userId } = await auth();
+  let { userId: clerkUserId } = await auth();
 
-  if (!userId) {
-    userId = req.headers.get("X-User-ID");
-    if (!userId) {
+  if (!clerkUserId) {
+    clerkUserId = req.headers.get("X-User-ID");
+    if (!clerkUserId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
   }
 
   // --- 2. Verificar que el usuario existe en tu base ---
   const user = await prisma.user.findUnique({
-    where: { clerkId: userId },
+    where: { clerkId: clerkUserId },
     select: { id: true },
   });
 
@@ -25,18 +25,27 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // 1. Obtener solo los juguetes del vendedor que tienen al menos un mensaje
+    // 1. Obtener juguetes del vendedor con mensajes de otros usuarios (no él mismo)
     const toysWithMessages = await prisma.toy.findMany({
       where: {
         sellerId: user.id,
         isActive: true,
         Message: {
-          some: {}, // ← ¡ESTO ES CLAVE! Solo juguetes con al menos 1 mensaje
+          some: {
+            senderId: {
+              not: clerkUserId, // ← EXCLUYE mensajes enviados por el propio vendedor (usuario logueado)
+            },
+          },
         },
       },
       include: {
         media: true,
         Message: {
+          where: {
+            senderId: {
+              not: clerkUserId, // ← También filtramos aquí para optimizar
+            },
+          },
           include: {
             sender: {
               select: {
@@ -47,8 +56,9 @@ export async function GET(req: NextRequest) {
             },
           },
           orderBy: {
-            createdAt: "desc", // Opcional: ordenar mensajes más recientes primero
+            createdAt: "desc",
           },
+          take: 1, // Opcional: si solo quieres un mensaje por toy (el más reciente), útil para rendimiento
         },
       },
       orderBy: {
@@ -56,17 +66,17 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    // 2. Transformar: eliminar "Message" y generar "messageSenders" únicos
+    // 2. Transformar: crear lista de remitentes únicos (solo quienes NO son el vendedor)
     const toysWithoutMessageField = toysWithMessages.map((toy) => {
-      // Crear lista única de remitentes usando Map para evitar duplicados
+      // Extraemos remitentes únicos (por ID), excluyendo al vendedor
       const uniqueSenders = Array.from(
         new Map(
           toy.Message.map((msg) => [
-            msg.sender.id, // clave única por ID de usuario
+            msg.sender.id,
             {
               id: msg.sender.id,
               clerkId: msg.senderId,
-              imageUrl: getUserImageUrl(msg.senderId), // Función para obtener la URL de la imagen
+              imageUrl: getUserImageUrl(msg.senderId),
               fullName: msg.sender.name,
               email: msg.sender.email,
             },
@@ -74,7 +84,7 @@ export async function GET(req: NextRequest) {
         ).values()
       );
 
-      // 👇 ¡Eliminamos explícitamente el campo "Message"!
+      // Eliminamos el campo Message
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { Message, ...toyWithoutMessage } = toy;
 

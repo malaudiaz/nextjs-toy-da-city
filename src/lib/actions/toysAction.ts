@@ -272,7 +272,7 @@ export type ToyWithMedia = {
   title: string;
   description: string;
   price: number;
-  location: string;
+  location: string | null; // ← Cambiado: permite null
   forSell: boolean;     // ← ¡Así se llama en Prisma!
   forGifts: boolean;    // ← ¡Así se llama en Prisma!
   forChanges: boolean;  // ← ¡Así se llama en Prisma!

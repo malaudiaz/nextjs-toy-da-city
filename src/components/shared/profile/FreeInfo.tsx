@@ -56,7 +56,17 @@ const FreeInfo = ({ free }: FreeProps) => {
                             {gift.title}
                           </h3>
                         </div>
-                        <div className="flex flex-col items-end gap-2"></div>
+                        <div className="flex flex-col items-end gap-2">
+                          <div className="text-2xl font-bold text-blue-600">
+                            {gift.price === 0 ? (
+                              <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm">
+                                Free
+                              </span>
+                            ) : (
+                              `$${gift.price.toFixed(2)}`
+                            )}
+                          </div>                          
+                        </div>
                       </div>
 
                       <Separator />
