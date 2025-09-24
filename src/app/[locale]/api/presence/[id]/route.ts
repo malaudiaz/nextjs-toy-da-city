@@ -1,22 +1,25 @@
+// src/app/[locale]/api/presence/[id]/route.ts
+
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { auth } from '@clerk/nextjs/server';
 
 const ONLINE_THRESHOLD = 60 * 1000; // 60 segundos
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-
+export async function GET(request: NextRequest) {
   const { userId } = await auth();
-
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const awaitedParams = await params;
-  const { id } = awaitedParams;    
+  // Extraemos `id` del pathname
+  const url = new URL(request.url);
+  const pathSegments = url.pathname.split('/').filter(Boolean);
+  const id = pathSegments.pop(); // Último segmento → [id]
+
+  if (!id) {
+    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+  }
 
   try {
     const user = await prisma.user.findUnique({
@@ -25,16 +28,16 @@ export async function GET(
     });
 
     if (!user) {
-      return Response.json({ online: false });
+      return NextResponse.json({ online: false });
     }
 
     const now = new Date();
     const timeDiff = now.getTime() - user.lastSeen.getTime();
     const online = timeDiff < ONLINE_THRESHOLD;
 
-    return Response.json({ online });
+    return NextResponse.json({ online });
   } catch (error) {
-    console.log(error);
-    return Response.json({ online: false }, { status: 500 });
+    console.error("Error checking presence:", error);
+    return NextResponse.json({ online: false }, { status: 500 });
   }
 }

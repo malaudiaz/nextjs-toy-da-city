@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
     if (order) {
       const toysIDs = order.items.map(item => item.toyId);
 
-      await createSale(toysIDs, order.buyerId);
+      await createSale(toysIDs);
     }
 
   }

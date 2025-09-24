@@ -51,13 +51,7 @@ export async function GET(
             name: {
               in: ["available", "reserved"], // Filtra por estos estados
             },
-          },
-          transactions: {
-            // Juguetes que NO tienen transacciones completadas
-            none: {
-              statusId: statusAvailable.id,
-            },
-          },
+          }
         },
         select: {
           id: true,

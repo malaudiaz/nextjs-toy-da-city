@@ -3,11 +3,19 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: Request
 ) {
+  // Extraemos `id` del pathname
+  const url = new URL(request.url);
+  const pathSegments = url.pathname.split('/').filter(Boolean);
+  const id = pathSegments.pop(); // Último segmento → [id]
+
+  if (!id) {
+    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+  }
+
+
   try {
-    const { id } = await params;
 
     const user = await prisma.user.findUnique({
       where: { id },

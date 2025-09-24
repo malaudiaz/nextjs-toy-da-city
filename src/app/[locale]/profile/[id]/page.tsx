@@ -2,9 +2,8 @@
 import { notFound } from 'next/navigation';
 import { StarIcon } from '@heroicons/react/24/solid';
 import { format } from 'date-fns';
-import Image from "next/image";
+import Image from 'next/image';
 
-// Tipado para el perfil (opcional pero recomendado)
 interface UserProfile {
   id: string;
   name: string;
@@ -37,13 +36,12 @@ interface UserProfile {
 export default async function UserProfilePage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>; // ✅ Tipo correcto: Promise<{ id: string }>
 }) {
-  const { id } = await params;
+  const { id } = await params; // ✅ Ahora es correcto
 
-  // Fetch al perfil desde la API Route
   const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/en/api/profiles/${id}`, {
-    next: { revalidate: 60 }, // ISR: revalida cada 60 segundos
+    next: { revalidate: 60 }, // ISR cada 60 segundos
   });
 
   if (!res.ok) {
@@ -72,7 +70,7 @@ export default async function UserProfilePage({
                       <StarIcon
                         key={star}
                         className={`h-5 w-5 ${
-                            star <= (user.averageRating ?? 0) // ✅ ¡Ahora es seguro!
+                          star <= (user.averageRating ?? 0)
                             ? 'text-yellow-400'
                             : 'text-gray-300'
                         }`}

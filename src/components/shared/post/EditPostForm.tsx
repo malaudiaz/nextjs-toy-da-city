@@ -38,7 +38,7 @@ type Toy = {
   price?: number;
   categoryId: number;
   conditionId: number;
-  location: string; // "lat,lng"
+  location: string | null; // "lat,lng"
   media: { id: string; fileUrl: string }[]; // ← Asumiendo que guardas imágenes en la DB con ID y URL
 };
 
@@ -136,7 +136,7 @@ const EditPostForm = ({ toy, categories, conditions }: EditPostFormProps) => {
 
   useEffect(() => {
     if (!userLocation) getUserLocation();
-  }, []);
+  }, [userLocation]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {

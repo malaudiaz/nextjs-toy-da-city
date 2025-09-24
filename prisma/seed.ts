@@ -15,8 +15,6 @@ async function main() {
     await prisma.transfer.deleteMany();
     await prisma.orderItem.deleteMany();
     await prisma.order.deleteMany();
-    await prisma.transaction.deleteMany();
-    await prisma.toyComments.deleteMany();
 
     await prisma.media.deleteMany();
     await prisma.toy.deleteMany();
@@ -45,7 +43,7 @@ async function main() {
     await tx.user.createMany({
       data: [
         {
-          id: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+          id: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
           name: "Miraidys Garcia Tornes",
           email: "mgt@gmail.com",
           phone: "52889836",
@@ -99,7 +97,7 @@ async function main() {
         id: 1,
         name: "new_sealed",
         description: "New sealed",
-        userId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        userId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         translations: {
           create: [
             { key: "name", value: "New sealed", languageId: "en" },
@@ -115,7 +113,7 @@ async function main() {
         id: 2,
         name: "new_open_box",
         description: "New open box",
-        userId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        userId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         translations: {
           create: [
             { key: "name", value: "New open box", languageId: "en" },
@@ -131,7 +129,7 @@ async function main() {
         id: 3,
         name: "like_new",
         description: "Like new",
-        userId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        userId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         translations: {
           create: [
             { key: "name", value: "like_new", languageId: "en" },
@@ -147,7 +145,7 @@ async function main() {
         id: 4,
         name: "acceptable",
         description: "Acceptable",
-        userId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        userId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         translations: {
           create: [
             { key: "name", value: "acceptable", languageId: "en" },
@@ -163,7 +161,7 @@ async function main() {
         id: 5,
         name: "good",
         description: "Good",
-        userId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        userId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         translations: {
           create: [
             { key: "name", value: "Good", languageId: "en" },
@@ -179,7 +177,7 @@ async function main() {
         id: 6,
         name: "to_repair",
         description: "To repair",
-        userId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        userId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         translations: {
           create: [
             { key: "name", value: "To repair", languageId: "en" },
@@ -196,7 +194,7 @@ async function main() {
         id: 1,
         name: "available",
         description: "available",
-        userId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        userId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         translations: {
           create: [
             { key: "name", value: "Available", languageId: "en" },
@@ -212,7 +210,7 @@ async function main() {
         id: 2,
         name: "reserved",
         description: "Reserved",
-        userId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        userId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         translations: {
           create: [
             { key: "name", value: "Reserved", languageId: "en" },
@@ -228,7 +226,7 @@ async function main() {
         id: 3,
         name: "sold",
         description: "Sold",
-        userId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        userId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         translations: {
           create: [
             { key: "name", value: "Sold", languageId: "en" },
@@ -244,7 +242,7 @@ async function main() {
         id: 4,
         name: "canceled",
         description: "Canceled",
-        userId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        userId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         translations: {
           create: [
             { key: "name", value: "Canceled", languageId: "en" },
@@ -473,7 +471,7 @@ async function main() {
         statusId: 1,
         conditionId: 5,
         location: "",
-        sellerId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        sellerId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         forSell: true,
         forGifts: false,
         forChanges: false,
@@ -489,7 +487,7 @@ async function main() {
         statusId: 1,
         conditionId: 3,
         location: "",
-        sellerId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+        sellerId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         forSell: true,
         forGifts: false,
         forChanges: false,
@@ -786,22 +784,6 @@ async function main() {
 
     await tx.orderItem.createMany({
       data: orderItemsData,
-      skipDuplicates: true,
-    });
-
-    // === COMENTARIOS ===
-    const commentsData = Array.from({ length: 14 }, (_, i) => ({
-      id: `comment_00${i + 1}`,
-      summary: "Beautiful Toy",
-      userId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
-      isActive: true,
-      toyId: ["toy_001", "toy_002", "toy_003", "toy_004", "toy_005"][
-        Math.min(i, 4)
-      ],
-    }));
-
-    await tx.toyComments.createMany({
-      data: commentsData,
       skipDuplicates: true,
     });
 

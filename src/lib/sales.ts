@@ -4,8 +4,7 @@ import { Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function createSale(toyIds: string[], buyerId: string) {
-  const paymentMethod = "STRIPE";
+export async function createSale(toyIds: string[]) {
 
   if (!toyIds || !Array.isArray(toyIds) || toyIds.length === 0) {
     throw new Error("ToyIdsRequired");
@@ -47,25 +46,6 @@ export async function createSale(toyIds: string[], buyerId: string) {
   try {
     // 2. Crear transacciones y marcar juguetes como vendidos (en una transacción)
     await prisma.$transaction(async (tx) => {
-      // Crear transacciones (una por juguete)
-      await Promise.all(
-        toys.map((toy) =>
-          tx.transaction.create({
-            data: {
-              toyId: toy.id,
-              buyerId: buyerId!,
-              sellerId: toy.sellerId, // Obtenido del juguete
-              price: toy.price,
-              statusId: toy.status.id, // Estado actual del juguete (o un ID fijo para "completado")
-              paymentMethod,
-              wasSold: true, // Marcamos como venta (no intercambio/regalo)
-              wasGifts: false,
-              wasChanged: false,
-            },
-          })
-        )
-      );
-
       // Actualizar juguetes (marcar como no disponibles)
       await tx.toy.updateMany({
         where: { id: { in: toyIds } },

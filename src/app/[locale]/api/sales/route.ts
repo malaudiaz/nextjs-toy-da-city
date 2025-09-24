@@ -54,13 +54,7 @@ export async function GET(
             name: {
               in: ["available", "reserved"], // Filtra por estos estados
             },
-          },
-          transactions: {
-            // Juguetes que NO tienen transacciones completadas
-            none: {
-              statusId: statusAvailable.id,
-            },
-          },
+          }
         },
         select: {
           id: true,
@@ -162,7 +156,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const result = await createSale(toyIds, user.id);
+    const result = await createSale(toyIds);
     return NextResponse.json(
       { data: result, message: "Sale completed" },
       { status: 201 }

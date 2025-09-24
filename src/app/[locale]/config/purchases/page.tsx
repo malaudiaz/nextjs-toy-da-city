@@ -11,7 +11,7 @@ export type OrderStatus =
   | "REEMBURSED"
 
 type Props = {
-  searchParams: { status?: OrderStatus };
+  searchParams: Promise<{ status?: OrderStatus }>;
 };
 
 const ComprasPage = async ({ searchParams }: Props) => {
