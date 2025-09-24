@@ -31,7 +31,7 @@ const PurchasesInfo = ({ orders }: PurchaseProps) => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
             Mis Compras
           </h1>
           <SelectFilter options={options} route="purchase" />

@@ -27,7 +27,7 @@ const ConfigurationsPage = () => {
   const links = [
     { name: "Sales", href: "/config/sales", icon: <Coins /> },
     { name: "Toys", href: "/config/toys", icon: <ToyBrick /> },
-    { name: "Purchases", href: "/config/purchase", icon: <ShoppingBag /> },
+    { name: "Purchases", href: "/config/purchases", icon: <ShoppingBag /> },
     { name: "Swap", href: "/config/swap", icon: <Repeat /> },
     { name: "Free", href: "/config/free", icon: <Gift /> },
     { name: "Favorites", href: "/config/favorites", icon: <Heart /> },

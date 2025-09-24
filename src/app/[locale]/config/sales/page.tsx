@@ -7,9 +7,9 @@ import React from "react";
 const SalesPage = async () => {
   const sales = await getSales();
   return (
-    <div>
-      <div className="px-5 py-3 md:hidden ">
-        <Breadcrumbs />
+    <div className="max-w-7xl mx-auto min-h-screen bg-background">
+      <div className="px-5 py-3">
+        <Breadcrumbs  />
       </div>
       <SaleInfo sales={sales} />
     </div>

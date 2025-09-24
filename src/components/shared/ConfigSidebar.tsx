@@ -26,7 +26,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useUser } from "@clerk/nextjs";
-import Breadcrumbs from "./BreadCrumbs";
 import { useTranslations } from "next-intl";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -42,7 +41,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     },
     {
       title: t("Purchases"),
-      url: "/config/purchase",
+      url: "/config/purchases",
       icon: ShoppingBag,
     },
     {
@@ -81,9 +80,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar {...props}>
       <SidebarHeader>
         <div className="px-4 py-4 flex flex-col items-center justify-between border-b border-[#f0f0f0] bg-white">
-          <div className="w-full overflow-hidden">
-            <Breadcrumbs />
-          </div>
           <div className="flex items-center gap-4">
             {/* Contenedor de imagen redonda */}
             <div className="w-16 h-16 rounded-full overflow-hidden bg-white shadow-sm flex-shrink-0">

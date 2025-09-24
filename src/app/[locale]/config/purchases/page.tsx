@@ -18,9 +18,9 @@ const ComprasPage = async ({ searchParams }: Props) => {
   const filter = await searchParams;
   const purchases = await getOrder(filter.status)
   return (
-    <div>
-      <div className="px-5 py-3 md:hidden ">
-        <Breadcrumbs />
+    <div className="max-w-7xl mx-auto min-h-screen bg-background">
+      <div className="px-5 py-3">
+        <Breadcrumbs  />
       </div>
       <PurchasesInfo orders={purchases}  />
     </div>

@@ -3,16 +3,15 @@ import { getMessages } from "@/lib/actions/toysAction";
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 
 const MessagesPage = async () => {
-  const messages = await getMessages(); 
+  const messages = await getMessages();
 
   return (
-    <div>
-      <div className="px-5 py-3 md:hidden ">
+    <div className="max-w-7xl mx-auto min-h-screen bg-background">
+      <div className="px-5 py-3">
         <Breadcrumbs />
       </div>
       <MessageInfo messages={messages} />
     </div>
   );
-
-}
-export default MessagesPage
+};
+export default MessagesPage;

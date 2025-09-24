@@ -14,7 +14,7 @@ const FreeInfo = ({ free }: FreeProps) => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
             Juguetes Regalados
           </h1>
         </div>

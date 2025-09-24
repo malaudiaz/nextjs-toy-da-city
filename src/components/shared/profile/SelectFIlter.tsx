@@ -36,7 +36,7 @@ export function SelectFilter({ options, route }: Props) {
 
   return (
     <Select onValueChange={handleValueChange} value={currentStatus}>
-      <SelectTrigger className="w-[280px]">
+      <SelectTrigger className="w-[200px]">
         <SelectValue placeholder="Filtrar por estado" />
       </SelectTrigger>
       <SelectContent>
