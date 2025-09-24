@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
           title: `Nuevo mensaje de ${message.sender.name}`,
           body: content,
           icon: '/logo.png',
-          data: { url: `/chat/${userId}` },
+          data: { url: `/config/messages` },
         })
       )
     } catch (error) {
