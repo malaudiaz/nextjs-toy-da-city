@@ -53,9 +53,9 @@ export function CancelOrderDialog({ orderId, btnText, msgsuccess, msgerror }: Pr
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="destructive">Cancel</Button>
             </DialogClose>
-            <Button type="submit" onClick={handleCancel}>Save changes</Button>
+            <Button type="submit" variant={"success"} onClick={handleCancel}>Save changes</Button>
           </DialogFooter>
         </DialogContent>
       </form>
