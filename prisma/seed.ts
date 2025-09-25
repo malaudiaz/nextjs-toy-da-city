@@ -438,7 +438,7 @@ async function main() {
         categoryId: 2,
         statusId: 1,
         conditionId: 5,
-        sellerId: "bb261faf-12ba-43c8-9e92-82927737fb2a",
+        sellerId: "0f1a4b4d-da45-493a-a218-da7cb511198f",
         forSell: true,
         forGifts: false,
         forChanges: false,
