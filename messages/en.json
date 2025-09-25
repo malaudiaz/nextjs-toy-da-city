@@ -419,17 +419,6 @@
     "Toys": "Toys",
     "Chat": "Chat"
   },
-  "sales": {
-    "Title": "Your Sales",
-    "Text": "In progress",
-    "Subtitle": "Made",
-    "ViewDetails": "View Details",
-    "EditProduct": "Edit Product",
-    "NoSales": "No sales yet",
-    "NoSalesCompleted": "No completed sales yet",
-    "Buyer": "Buyer",
-    "SaleDate": "Sale Date"
-  },
   "filter":{
     "Title": "Filter",
     "Filter1": "Max Distance",
@@ -545,6 +534,66 @@
     "confirmSuccess": "Order confirmed successfully",
     "cancelSuccess": "Order canceled successfully",
     "confirmError": "Failed to confirm order",
-    "cancelError": "Failed to cancel order"
+    "cancelError": "Failed to cancel order",
+    "ALL": "All",
+    "AWAITING_CONFIRMATION": "Awaiting Confirmation",
+    "CONFIRMED": "Confirmed",
+    "CANCELED": "Canceled",
+    "TRANSFERRED": "Transferred",
+    "REEMBURSED": "Reembursed"
+  },
+  "sales": {
+    "title": "My Sales",
+    "emptyMsg": "No sales were found with the selected filters.",
+    "all": "All",
+    "available": "Available",
+    "reserved": "Reserved",
+    "sold": "Sold",
+    "canceled": "Canceled",
+    "categoty": "Category",
+    "condition": "Condition"
+  },
+  "gifts": {
+    "title": "Free Toys",
+    "emptyMsg": "No toys were found with the selected filters.",
+    "free": "Free",
+    "category": "Category",
+    "condition": "Condition"
+  },
+  "swap": {
+    "title": "Swap Toys",
+    "emptyMsg": "No toys were found with the selected filters.",
+    "free": "Free",
+    "category": "Category",
+    "condition": "Condition"
+  },
+  "favorites": {
+    "title": "My Favorites",
+    "emptyMsg": "No toys found in favorites",
+    "btnText": "Remove",
+    "addToFavorites": "Added to favorites",
+    "removeFromFavorites": "Removed from favorites",
+    "failedAddToFavorites": "Failed to add to favorites"
+  },
+  "messages": {
+    "title": "My Messages",
+    "emptyMsg": "No messages found",
+    "free": "Free",
+    "buyer": "Sender"
+  },
+  "reputation": {
+    "title": "My reputation as a seller",
+    "verify": "Verified seller",
+    "reviewBased": "Based on",
+    "reviewtotal": "review",
+    "reviewTitle": "Buyer reviews ",
+    "emptyMsg": "🌱 You don't have any reviews yet. Keep selling and providing good service.!",
+    "reviewOrder": "By order",
+    "reloadReview": "Reload reviews",
+    "reviewError": "Error loading",
+    "reviewMsg": "Try reloading the page.",
+    "loggedError": "You must be logged in",
+    "loginMsg": "Sign in to see your reviews."
   }
 }
+

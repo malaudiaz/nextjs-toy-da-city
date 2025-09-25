@@ -4,20 +4,22 @@ import { Package } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Sale } from "@/types/modelTypes";
+import { getTranslations } from "next-intl/server";
 
 type SwapProps = {
   swaps: Sale[];
 };
 
-const SwapInfo = ({ swaps }: SwapProps) => {
-  console.log(swaps);
+const SwapInfo = async ({ swaps }: SwapProps) => {
+  const t = await getTranslations("configurations"); // o el namespace que uses
+
   return (
     <div className="min-h-screen p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
-            Juguetes Intercambiados
+            {t("title")}
           </h1>
         </div>
 
@@ -60,7 +62,7 @@ const SwapInfo = ({ swaps }: SwapProps) => {
                           <div className="text-2xl font-bold text-blue-600">
                             {swap.price === 0 ? (
                               <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm">
-                                Free
+                                {t("free")}
                               </span>
                             ) : (
                               `$${swap.price.toFixed(2)}`
@@ -76,10 +78,10 @@ const SwapInfo = ({ swaps }: SwapProps) => {
                         </p>
                         <div className="flex flex-row gap-2">
                           <p className="text-gray-600 text-md">
-                            Categoria {swap.category.name}
+                            {t("category")}: {swap.category.name}
                           </p>
                           <p className="text-gray-600 text-md">
-                            Condicion {swap.condition.name}
+                            {t("condition")}: {swap.condition.name}
                           </p>
                         </div>
                       </div>

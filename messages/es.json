@@ -417,17 +417,6 @@
     "Toys": "Juguetes",
     "Chat": "Chat"
   },
-  "sales": {
-    "Title": "Tus Ventas",
-    "Text": "En progreso",
-    "Subtitle": "Hechas",
-    "ViewDetails": "Ver Detalles",
-    "EditProduct": "Editar Producto",
-    "NoSales": "No hay ventas todavía",
-    "NoSalesCompleted": "No hay ventas completadas todavía",
-    "Buyer": "Comprador",
-    "SaleDate": "Fecha de Venta"
-  },
   "filter": {
     "Title": "Filtros",
     "Filter1": "Maxima Distancia",
@@ -543,7 +532,65 @@
     "confirmSuccess": "Order confirmed successfully",
     "cancelSuccess": "Order canceled successfully",
     "confirmError": "Failed to confirm order",
-    "cancelError": "Failed to cancel order"
+    "cancelError": "Failed to cancel order",
+    "ALL": "Todos",
+    "AWAITING_CONFIRMATION": "Pendiente de Confirmación",
+    "CONFIRMED": "Confirmado",
+    "CANCELED": "Cancelado",
+    "TRANSFERRED": "Transferido",
+    "REEMBURSED": "Reembolsado"
+  },
+  "sales": {
+    "title": "Mis Ventas",
+    "emptyMsg": "No se encontraron ventas con los filtros seleccionados",
+    "all": "Todos",
+    "available": "Disponible",
+    "reserved": "Reservado",
+    "sold": "Vendido",
+    "canceled": "Cancelado",
+    "category": "Categoria",
+    "condition": "Condición"
+  },
+  "gifts": {
+    "title": "Juguete Gratis",
+    "emptyMsg": "No se encontraron juguetes con los filtros seleccionados",
+    "free": "Gratis",
+    "category": "Categoria",
+    "condition": "Condición"
+  },
+  "swap": {
+    "title": "Juguetes para Intercambios",
+    "emptyMsg": "No toys were found with the selected filters.",
+    "free": "Free",
+    "category": "Category",
+    "condition": "Condition"
+  },
+  "favorites": {
+    "title": "Mis Favoritos",
+    "emptyMsg": "No se encontraron juguetes en favoritos",
+    "btnText": "Eliminar",
+    "addToFavorites": "Adicionado a favoritos",
+    "removeFromFavorites": "Eliminado de favoritos",
+    "failedAddToFavorites": "Error al añadir a favoritos"
+  },
+  "messages": {
+    "title": "Mis Mensajes",
+    "emptyMsg": "No se encontraron mensajes",
+    "free": "Gratis",
+    "buyer": "Remitente"
+  },
+  "reputation": {
+    "title": "Mi reputación como vendedor",
+    "verify": "Vendedor verificado",
+    "reviewBased": "Basado en",
+    "reviewtotal": "reseña",
+    "reviewTitle": "Reseñas de compradores ",
+    "emptyMsg": "🌱 Aún no tienes reseñas. ¡Sigue vendiendo y brindando buen servicio!",
+    "reviewOrder": "Por la orden",
+    "reloadReview": "Recargar reseñas",
+    "reviewError": "Error al cargar",
+    "reviewMsg": "Intenta recargar la página.",
+    "loggedError": "Debes estar conectado",
+    "loginMsg": "Inicia sesión para ver tus reseñas."
   }
-
 }

@@ -1,24 +1,26 @@
-"use client"
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Package } from "lucide-react";
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Sale } from "@/types/modelTypes";
 import { useFavorite } from "@/hooks/useFavorite";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-
+import { useTranslations } from 'next-intl'; // ✅ Importa el hook
 
 type FavoritesProps = {
-  favorites: Sale[]
-}
+  favorites: Sale[];
+};
 
 const FavoritesInfo = ({ favorites }: FavoritesProps) => {
+  const t = useTranslations('favorites'); // ✅ Usa el hook
 
-const router = useRouter(); 
-const { addToFavorites } = useFavorite();
+  const router = useRouter();
+  const { addToFavorites } = useFavorite();
 
   const handleFavorite = async (id: string) => {
     try {
@@ -26,23 +28,25 @@ const { addToFavorites } = useFavorite();
 
       if (res.data) {
         toast.success(
-          !favorites.find((favorite) => favorite.id === id) ? "Added to favorites" : "Removed from favorites"
+          !favorites.find((favorite) => favorite.id === id)
+            ? t('addToFavorites')
+            : t('removeFromFavorites')
         );
         router.refresh();
       }
     } catch (error) {
       console.log(error);
-      toast.error("Failed to add to favorites");
+      toast.error(t('failedAddToFavorites'));
     }
   };
 
   return (
-     <div className="min-h-screen p-4 md:p-6">
+    <div className="min-h-screen p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
-            Mis Favoritos
+            {t('title')}
           </h1>
         </div>
 
@@ -53,9 +57,7 @@ const { addToFavorites } = useFavorite();
             <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
               <CardContent className="p-8 text-center">
                 <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">
-                  No se encontraron favoritos
-                </p>
+                <p className="text-gray-600">{t('emptyMsg')}</p>
               </CardContent>
             </Card>
           ) : (
@@ -84,9 +86,9 @@ const { addToFavorites } = useFavorite();
                           </h3>
                         </div>
                         <div className="flex flex-col items-end gap-2">
-                            <div className="ext-2xl font-bold text-green-700">
-                              ${favorite.price.toFixed(2)}
-                            </div>
+                          <div className="ext-2xl font-bold text-green-700">
+                            ${favorite.price.toFixed(2)}
+                          </div>
                         </div>
                       </div>
 
@@ -98,9 +100,13 @@ const { addToFavorites } = useFavorite();
                         </p>
                       </div>
 
-
-                      <Button onClick={() => handleFavorite(favorite.id)} variant="outline" size="sm" className="mt-10 py-5 bg-transparent">
-                        Remove
+                      <Button
+                        onClick={() => handleFavorite(favorite.id)}
+                        variant="outline"
+                        size="sm"
+                        className="mt-10 py-5 bg-transparent"
+                      >
+                        {t('btnText')}
                       </Button>
                     </div>
                   </div>

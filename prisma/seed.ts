@@ -15,7 +15,11 @@ async function main() {
     await prisma.transfer.deleteMany();
     await prisma.orderItem.deleteMany();
     await prisma.order.deleteMany();
-
+    await prisma.review.deleteMany();
+    await prisma.message.deleteMany();
+    await prisma.pushSubscription.deleteMany();
+    await prisma.favoriteToy.deleteMany();
+    
     await prisma.media.deleteMany();
     await prisma.toy.deleteMany();
     await prisma.translation.deleteMany();

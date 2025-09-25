@@ -5,6 +5,7 @@ import { Package, User } from "lucide-react";
 import Link from "next/link";
 import { ChatButton } from "../ChatButton";
 import { FavoriteToy } from "@prisma/client";
+import { getTranslations } from "next-intl/server";
 
 type Media = {
   id: string;
@@ -53,13 +54,15 @@ type MessagesProps = {
 };
 
 const MessagesInfo = async ({ messages }: MessagesProps) => {
+  const t = await getTranslations("messages"); 
+
   return (
     <div className="min-h-screen p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            Mensajes Recibidos
+            {t('title')}
           </h1>
         </div>
 
@@ -69,7 +72,7 @@ const MessagesInfo = async ({ messages }: MessagesProps) => {
               <CardContent className="p-8 text-center">
                 <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                 <p className="text-gray-600">
-                  No se encontraron ventas con los filtros seleccionados
+                  {t('emptyMsg')}
                 </p>
               </CardContent>
             </Card>
@@ -102,7 +105,7 @@ const MessagesInfo = async ({ messages }: MessagesProps) => {
                           <div className="text-2xl font-bold text-green-700">
                             {msg.price === 0 ? (
                               <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm">
-                                Free
+                                {t('free')}
                               </span>
                             ) : (
                               `$${msg.price.toFixed(2)}`
@@ -130,7 +133,7 @@ const MessagesInfo = async ({ messages }: MessagesProps) => {
                                 <div className="flex items-center gap-2 text-sm text-gray-600">
                                   <User className="h-4 w-4" />
                                   <span>
-                                    Usuario:{" "}
+                                    {t('buyer')}:{" "}
                                     <Link href={`/seller/${sender.id}`}>
                                       {sender.fullName}
                                     </Link>

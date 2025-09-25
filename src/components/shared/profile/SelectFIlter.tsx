@@ -36,8 +36,6 @@ export function SelectFilter({ options, route }: Props) {
       params.set("status", value);
     }
 
-    console.log(`/config/${route}?${params.toString()}`);
-
     router.push(`/config/${route}?${params.toString()}`);
   };
 

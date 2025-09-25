@@ -22,19 +22,19 @@ type PurchaseProps = {
   orders: Order[];
 };
 
-const options = [
-  {"id": "ALL", "name": "ALL"},
-  {"id": "AWAITING_CONFIRMATION", "name": "AWAITING CONFIRMATION"}, 
-  {"id": "CONFIRMED", "name": "CONFIRMED"}, 
-  {"id": "CANCELED", "name": "CANCELED"}, 
-  {"id": "TRANSFERRED", "name": "TRANSFERRED"}, 
-  {"id": "REEMBURSED", "name": "REEMBURSED"}, 
-];
-
 const fromCents = (cents: number) => cents / 100;
 
 const PurchasesInfo = async ({ orders }: PurchaseProps) => {
   const t = await getTranslations("purchases");
+
+  const options = [
+    { id: "ALL", name: t("ALL") },
+    { id: "AWAITING_CONFIRMATION", name: t("AWAITING_CONFIRMATION") },
+    { id: "CONFIRMED", name: t("CONFIRMED") },
+    { id: "CANCELED", name: t("CANCELED") },
+    { id: "TRANSFERRED", name: t("TRANSFERRED") },
+    { id: "REEMBURSED", name: t("REEMBURSED") },
+  ];
 
   return (
     <div className="min-h-screen p-4 md:p-6">
@@ -85,7 +85,7 @@ const PurchasesInfo = async ({ orders }: PurchaseProps) => {
                               {item.toy.title}
                             </h3>
                             <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
-                              {order.status}
+                              {t(order.status)}
                             </div>
                           </div>
                           <div className="flex flex-col items-end gap-2">

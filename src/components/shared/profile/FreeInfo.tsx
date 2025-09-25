@@ -3,19 +3,22 @@ import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { Package } from "lucide-react";
 import { Sale } from "@/types/modelTypes";
+import { getTranslations } from "next-intl/server";
 
 type FreeProps = {
   free: Sale[];
 };
 
-const FreeInfo = ({ free }: FreeProps) => {
+const FreeInfo = async ({ free }: FreeProps) => {
+  const t = await getTranslations("gifts"); 
+
   return (
     <div className="min-h-screen p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
-            Juguetes Regalados
+            {t("title")}
           </h1>
         </div>
 
@@ -27,7 +30,7 @@ const FreeInfo = ({ free }: FreeProps) => {
               <CardContent className="p-8 text-center">
                 <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                 <p className="text-gray-600">
-                  No se encontraron ventas con los filtros seleccionados
+                  {t("emptyMsg")}
                 </p>
               </CardContent>
             </Card>
@@ -60,7 +63,7 @@ const FreeInfo = ({ free }: FreeProps) => {
                           <div className="text-2xl font-bold text-blue-600">
                             {gift.price === 0 ? (
                               <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm">
-                                Free
+                                {t("free")}
                               </span>
                             ) : (
                               `$${gift.price.toFixed(2)}`
@@ -76,10 +79,10 @@ const FreeInfo = ({ free }: FreeProps) => {
                         </p>
                         <div className="flex flex-col gap-2">
                           <p className="text-gray-600 text-md">
-                            Categoria {gift.category.name}
+                            {t("category")}: {gift.category.name}
                           </p>
                           <p className="text-gray-600 text-md">
-                            Condicion {gift.condition.name}
+                            {t("condition")}: {gift.condition.name}
                           </p>
                         </div>
                       </div>
