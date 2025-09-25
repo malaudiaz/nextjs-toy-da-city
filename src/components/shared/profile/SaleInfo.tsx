@@ -9,7 +9,13 @@ type SalesProps = {
   sales: Sale[];
 };
 
-const options = ["ALL", "available", "reserved", "sold", "canceled"];
+const options = [
+  {"id": "ALL", "name": "ALL"},
+  {"id": "available", "name": "Available"},
+  {"id": "reserved", "name": "Reserved"},
+  {"id": "sold", "name": "Sold"},
+  {"id": "canceled", "name": "Canceled"},
+];
 const SaleInfo = async ({ sales }: SalesProps) => {
   return (
     <div className="min-h-screen p-4 md:p-6">
