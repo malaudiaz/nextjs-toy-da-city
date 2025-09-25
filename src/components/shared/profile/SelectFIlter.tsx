@@ -11,8 +11,13 @@ import {
 } from "@/components/ui/select";
 import { useRouter, useSearchParams } from "next/navigation";
 
+type Options = {
+  id: string,
+  name: string
+}
+
 type Props = {
-  options: string[];
+  options: Options[];
   route: string
 }
 
@@ -31,6 +36,8 @@ export function SelectFilter({ options, route }: Props) {
       params.set("status", value);
     }
 
+    console.log(`/config/${route}?${params.toString()}`);
+
     router.push(`/config/${route}?${params.toString()}`);
   };
 
@@ -43,8 +50,8 @@ export function SelectFilter({ options, route }: Props) {
         <SelectGroup>
           {
             options.map((option) => (
-              <SelectItem key={option} value={option}>
-                {option}
+              <SelectItem key={option.id} value={option.id}>
+                {option.name}
               </SelectItem>
             ))
           }

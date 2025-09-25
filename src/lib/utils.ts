@@ -18,7 +18,7 @@ export const getBreadcrumbs = (
 }[] => {
   const paths = pathname.split('/').filter(Boolean);
   const breadcrumbs = [{ label: t("Home"), href: '/' }];
-  const ignoreSegments = ['en', 'es', 'toys'];
+  const ignoreSegments = ['en', 'es', 'toys', 'edit'];
 
 
   let currentPath = '';

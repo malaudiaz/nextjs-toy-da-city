@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Card, CardContent } from "../ui/card";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { getTranslations } from "next-intl/server";
 
 type Media = {
   id: string;
@@ -39,7 +40,9 @@ type ToyCardProps = {
   toy: Toy;
 };
 
-export default function ToyCard({ toy }: ToyCardProps) {
+export default async function ToyCard({ toy }: ToyCardProps) {
+  const t = await getTranslations("configurations");
+
   return (
     <Card
       key={toy.id}
@@ -68,7 +71,7 @@ export default function ToyCard({ toy }: ToyCardProps) {
                 <div className="text-2xl font-bold text-green-700">
                   {toy.price === 0 ? (
                     <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm">
-                      Free
+                      {t("toys.free")}
                     </span>
                   ) : (
                     `$${toy.price.toFixed(2)}`
@@ -88,7 +91,7 @@ export default function ToyCard({ toy }: ToyCardProps) {
             <div>
               <Link href={`/config/toys/edit/${toy.id}`}>
                 <Button className="bg-green-700 hover:bg-green-800 text-white">
-                  Editar
+                  {t("toys.edit")}
                 </Button>
               </Link>
             </div>

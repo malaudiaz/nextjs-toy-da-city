@@ -428,9 +428,6 @@
     "Buyer": "Comprador",
     "SaleDate": "Fecha de Venta"
   },
-  "purchases": {
-    "Title": "Tus Compras"
-  },
   "filter": {
     "Title": "Filtros",
     "Filter1": "Maxima Distancia",
@@ -525,5 +522,28 @@
     "itemExist": "Este artículo ya está en el carrito",
     "itemAdded": "Artículo agregado al carrito",
     "cartCleared": "Carrito vaciado después de la compra"
+  },
+  "configurations": {
+    "title": "Configuraciones",
+    "toys": {
+      "title": "Mis Juguetes",
+      "emptyMsg": "No existen juguetes posteados aún",
+      "free": "Gratis",
+      "edit": "Editar"
+    }
+  },
+  "purchases": {
+    "title": "Mis Compras",
+    "emptyMsg": "No se encontraron compras con los filtros seleccionados",
+    "seller": "Vendedor",
+    "order": "Pedido",
+    "review": "¡Deja una reseña a este vendedor!",
+    "confirmBtn": "Confirmar",
+    "cancelBtn": "Cancelar",
+    "confirmSuccess": "Order confirmed successfully",
+    "cancelSuccess": "Order canceled successfully",
+    "confirmError": "Failed to confirm order",
+    "cancelError": "Failed to cancel order"
   }
+
 }

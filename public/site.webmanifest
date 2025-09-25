@@ -1,0 +1,9 @@
+{
+  "name": "Toydacity",
+  "short_name": "Toydacity",
+  "description": "Sustainable Toy Marketplace",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0070f3"
+}

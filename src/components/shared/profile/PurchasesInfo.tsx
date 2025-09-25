@@ -7,6 +7,7 @@ import { SelectFilter } from "./SelectFIlter";
 import { CancelOrderButton } from "./CancelOrderButton";
 import { ConfirmOrderButton } from "./ConfirmOrderButtom";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString("es-ES", {
@@ -21,20 +22,29 @@ type PurchaseProps = {
   orders: Order[];
 };
 
-const options = ["ALL","AWAITING_CONFIRMATION", "CONFIRMED", "CANCELED", "TRANSFERRED", "REEMBURSED"];
+const options = [
+  {"id": "ALL", "name": "ALL"},
+  {"id": "AWAITING_CONFIRMATION", "name": "AWAITING CONFIRMATION"}, 
+  {"id": "CONFIRMED", "name": "CONFIRMED"}, 
+  {"id": "CANCELED", "name": "CANCELED"}, 
+  {"id": "TRANSFERRED", "name": "TRANSFERRED"}, 
+  {"id": "REEMBURSED", "name": "REEMBURSED"}, 
+];
 
 const fromCents = (cents: number) => cents / 100;
 
-const PurchasesInfo = ({ orders }: PurchaseProps) => {
+const PurchasesInfo = async ({ orders }: PurchaseProps) => {
+  const t = await getTranslations("purchases");
+
   return (
     <div className="min-h-screen p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <h1 className="text-xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
-            Mis Compras
+            {t("title")}
           </h1>
-          <SelectFilter options={options} route="purchase" />
+          <SelectFilter options={options} route="purchases" />
         </div>
 
         {/* Stats Cards */}
@@ -45,7 +55,7 @@ const PurchasesInfo = ({ orders }: PurchaseProps) => {
               <CardContent className="p-8 text-center">
                 <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                 <p className="text-gray-600">
-                  No se encontraron compras con los filtros seleccionados
+                  {t("emptyMsg")}
                 </p>
               </CardContent>
             </Card>
@@ -92,11 +102,11 @@ const PurchasesInfo = ({ orders }: PurchaseProps) => {
                           <div className="space-y-2">
                             <div className="flex items-center gap-2 text-sm text-gray-600">
                               <User className="h-4 w-4" />
-                              <span>Vendedor: <Link href={`/seller/${order.seller.id}`}>{order.seller.name}</Link></span>
+                              <span>{t("seller")}: <Link href={`/seller/${order.seller.id}`}>{order.seller.name}</Link></span>
                             </div>
                             <div className="flex items-center gap-2 text-sm text-gray-600">
                               <Calendar className="h-4 w-4" />
-                              <span>Pedido: {formatDate(order.createdAt)}</span>
+                              <span>{t("order")}: {formatDate(order.createdAt)}</span>
                             </div>
                           </div>
                         </div>
@@ -105,15 +115,15 @@ const PurchasesInfo = ({ orders }: PurchaseProps) => {
 
                         {order.status === "AWAITING_CONFIRMATION" && (
                           <div className="flex flex-col sm:flex-row gap-3">
-                            <CancelOrderButton orderId={order.id} />
-                            <ConfirmOrderButton orderId={order.id} />
+                            <CancelOrderButton orderId={order.id} btnText={t("cancelBtn")} msgsuccess={t("cancelSuccess")} msgerror={t("cancelError")} />
+                            <ConfirmOrderButton orderId={order.id} btnText={t("confirmBtn")} msgsuccess={t("confirmSuccess")} msgerror={t("confirmError")} />
                           </div>
                         )}
 
                         {order.status === "CONFIRMED" && (
                           <div className="flex flex-col sm:flex-row gap-3">
-                            <Link href="/reviews/[sellerId]" as={`/reviews/${order.seller.id}`}>
-                              ¡Deja una reseña a este vendedor!
+                            <Link href="/reviews/[sellerId]" as={`/reviews/${order.seller.id}`} className="text-emerald-600 font-medium">
+                              {t("review")}
                             </Link>
                           </div>
                         )}

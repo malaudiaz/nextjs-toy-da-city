@@ -2,8 +2,6 @@ import ToyGrid from '@/components/config/ToyGrid';
 import Breadcrumbs from '@/components/shared/BreadCrumbs';
 import React from 'react'
 
-
-
 const ToysPage = async () => {
   return (
   <div className="min-h-screen bg-background">
