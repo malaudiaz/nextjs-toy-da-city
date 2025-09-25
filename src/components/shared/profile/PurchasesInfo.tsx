@@ -4,10 +4,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Order } from "@/types/modelTypes";
 import { SelectFilter } from "./SelectFIlter";
-import { CancelOrderButton } from "./CancelOrderButton";
-import { ConfirmOrderButton } from "./ConfirmOrderButtom";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { CancelOrderDialog } from "./CancelOrderDialog";
+import { ConfirmOrderDialog } from "./ConfirmOrderDialog";
 
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString("es-ES", {
@@ -115,8 +115,8 @@ const PurchasesInfo = async ({ orders }: PurchaseProps) => {
 
                         {order.status === "AWAITING_CONFIRMATION" && (
                           <div className="flex flex-col sm:flex-row gap-3">
-                            <CancelOrderButton orderId={order.id} btnText={t("cancelBtn")} msgsuccess={t("cancelSuccess")} msgerror={t("cancelError")} />
-                            <ConfirmOrderButton orderId={order.id} btnText={t("confirmBtn")} msgsuccess={t("confirmSuccess")} msgerror={t("confirmError")} />
+                            <CancelOrderDialog orderId={order.id} btnText={t("cancelBtn")} msgsuccess={t("cancelSuccess")} msgerror={t("cancelError")} />
+                            <ConfirmOrderDialog orderId={order.id} btnText={t("confirmBtn")} msgsuccess={t("confirmSuccess")} msgerror={t("confirmError")} />
                           </div>
                         )}
 
