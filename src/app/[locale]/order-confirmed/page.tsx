@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 
 export default function OrderConfirmedPage() {
   const [loading, setLoading] = useState(true);
-  const t = useTranslations("cartStore");
+  const t = useTranslations("ordersConfirmed");
 
   useEffect(() => {
     // Simulamos una carga inicial (opcional)
@@ -30,7 +30,7 @@ export default function OrderConfirmedPage() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-6">
-        <p className="text-lg text-gray-600">Confirmando tu pedido...</p>
+        <p className="text-lg text-gray-600">{t("loading")}</p>
       </div>
     );
   }
@@ -56,14 +56,14 @@ export default function OrderConfirmedPage() {
       </div>
 
       <h1 className="text-3xl font-bold text-gray-800 mb-4">
-        ¡Gracias por tu compra!
+        {t("title")}
       </h1>
 
       <p className="text-lg text-gray-600 mb-2">
-        Tu pedido se ha procesado correctamente.
+        {t("subtitle")}
       </p>
       <p className="text-sm text-gray-500">
-        Puedes revisar tu historial de compras en tu perfil.
+        {t("queryTitle")}
       </p>
 
       <div className="flex gap-4 mt-8">
@@ -71,23 +71,23 @@ export default function OrderConfirmedPage() {
           href="/"
           className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
         >
-          Volver al inicio
+          {t("backHome")}
         </Link>
         <Link
           href="/orders"
           className="px-6 py-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
         >
-          Ver mis pedidos
+          {t("viewOrders")}
         </Link>
       </div>
 
       <p className="mt-12 text-sm text-gray-400">
-        ¿Tienes alguna pregunta?{" "}
+        {t("questions")}{" "}
         <a
           href="mailto:soporte@tumarketplace.com"
           className="text-blue-600 hover:underline"
         >
-          Contáctanos
+          {t("contact")}
         </a>
       </p>
     </div>

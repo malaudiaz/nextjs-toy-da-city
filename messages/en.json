@@ -622,6 +622,60 @@
       "subtitle": "The Fun",
       "tagline": "New Arrivals Every Month"
     }
+  },
+  "cart": {
+    "Checkout": "Checkout"
+  },
+  "chat": {
+    "sendError": "The message could not be sent",
+    "loading": "Loading chat...",
+    "title": "Chat with"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We're here to help! Whether you have questions about the platform, need support with your account, or want to report an issue, feel free to reach out.",
+    "addressLabel": "Address",
+    "addressText": "2617 NW 55th Street, Fort Lauderdale, FL 33309",
+    "country": "United States",
+    "email": "Email",
+    "phone": "Phone",
+    "website": "Website",
+    "policy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "deleteData": {
+    "title": "How to Delete Your Account/Data",
+    "subtitle": "We understand that you may want to delete your account or data. Here are the steps to follow:",
+    "selfService": "Self Service:",
+    "goToSettings": "Go to Settings",
+    "privacy": "Privacy",
+    "deleteAccount": "Delete Account",
+    "confirmEmail": "Confirm via email.",
+    "manualRequest": "Manual Request:",
+    "floridaSpecific": "Florida-Specific Notes:",
+    "fullDocumentLink": "Full Document Link", 
+    "email": "Email privacy@toydacity.com with:",
+    "subject": "Data Deletion Request.",
+    "body": "Specify if deleting all data or specific listings.",
+    "deleteData": "Deletion completed within 30 days (per CCPA/SB 262).",
+    "transactions": "Transaction records may be retained for tax purposes (Florida Statute 212.03)."
+  },
+  "mission": {
+    "title": "Our Mission",
+    "subtitle": "At Toydacity, our mission is to create a sustainable and supportive ecosystem where families can give a second life to children’s items—while also building meaningful connections with one another.",
+    "content": "We believe that every toy, book, piece of clothing, or gear deserves the chance to bring joy to more than one child. By enabling parents to buy, sell, trade, or donate gently used children’s products, we not only help reduce waste and unnecessary spending, but also promote a culture of sharing, empathy, and environmental responsibility.",
+    "more": "More than just a marketplace, Toydacity is a community of parents helping parents—a place to find resources, ask questions, organize local events, and support one another in the journey of raising children.",
+    "commitment": "Our commitment is to empower families with tools to consume consciously, give generously, and raise the next generation in a world that values sustainability, connection, and care."
+  },
+  "ordersConfirmed": {
+    "loading": "Confirming your order...",
+    "title": "Thank you for your purchase!",
+    "subtitle": "Your order has been processed successfully.",
+    "queryTitle": "You can review your purchase history in your profile.",
+    "backHome": "Return to the beginning",
+    "viewOrders": "View my orders",
+    "questions": "Do you have any questions?",
+    "contact": "Contact us"
   }
 }
 

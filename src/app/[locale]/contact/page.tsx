@@ -1,7 +1,9 @@
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const t = await getTranslations("contact"); 
   return (
     <div className="w-full bg-[#FAF1DE] min-h-screen py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -12,35 +14,35 @@ export default function ContactPage() {
 
             {/* Título */}
             <h1 className="text-3xl sm:text-4xl font-bold text-[#2C3E50] border-b-2 border-[#3498DB] pb-3">
-              Contact Us
+              {t("title")}
             </h1>
 
             {/* Información de contacto */}
             <section className="mt-6">
               <p className="mb-6 text-gray-700">
-                We&rsquo;re here to help! Whether you have questions about the platform, need support with your account, or want to report an issue, feel free to reach out.
+                {t("subtitle")}
               </p>
 
               <div className="bg-gray-100 rounded-lg p-6 space-y-4">
                 <p>
-                  <strong className="text-[#2980B9]">📍 Address:</strong> <br />
-                  2617 NW 55th Street, Fort Lauderdale, FL 33309 <br />
-                  United States
+                  <strong className="text-[#2980B9]">📍 {t("addressLabel")}:</strong> <br />
+                  {t("addressText")} <br />
+                  {t("country")}
                 </p>
                 <p>
-                  <strong className="text-[#2980B9]">📧 Email:</strong>{" "}
+                  <strong className="text-[#2980B9]">📧 {t("email")}:</strong>{" "}
                   <a href="mailto:support@toydacity.com" className="text-[#3498DB] hover:underline">
                     support@toydacity.com
                   </a>
                 </p>
                 <p>
-                  <strong className="text-[#2980B9]">📞 Phone:</strong> <br />
+                  <strong className="text-[#2980B9]">📞 {t("phone")}:</strong> <br />
                   +1 (786) 479–8620
                 </p>
                 <p>
-                  <strong className="text-[#2980B9]">🌐 Website:</strong>{" "}
+                  <strong className="text-[#2980B9]">🌐 {t("website")}:</strong>{" "}
                   <a
-                    href="https://www.toydacity.com "
+                    href="https://toydacity.com "
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#3498DB] hover:underline"
@@ -57,13 +59,13 @@ export default function ContactPage() {
                 href="/policies"
                 className="inline-block bg-[#3498DB] text-white px-4 py-2 rounded hover:bg-[#2980B9] transition-colors text-center"
               >
-                Privacy Policy
+                {t("policy")}
               </Link>
               <Link
                 href="/terms"
                 className="inline-block bg-[#27AE60] text-white px-4 py-2 rounded hover:bg-[#239A55] transition-colors text-center"
               >
-                Terms of Service
+                {t("terms")}
               </Link>
             </div>
           </div>

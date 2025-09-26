@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { MessageInput } from "@/components/shared/MessageInput";
 import { MessageList } from "@/components/shared/MessageList";
 import Pusher from "pusher-js";
+import { useTranslations } from 'next-intl'; // ✅ Importa el hook
 
 // Tipos
 interface Message {
@@ -45,6 +46,8 @@ export default function ChatPage({
 }: {
   params: Promise<{ userId: string }>;
 }) {
+  const t = useTranslations('reputation'); // ✅ Usa el hook
+
   // ✅ Desempaqueta params
   const { userId: otherUserId } = React.use(params);
 
@@ -67,12 +70,6 @@ export default function ChatPage({
         const { messages } = await res.json();
         setMessages(messages);
 
-        // 2. Cargar datos del otro usuario
-
-/*         const userRes = await fetch(`/api/users/${otherUserId}`);
-        const user = await userRes.json();
-        setOtherUser(user);
- */
       } catch (error) {
         console.error("Error loading chat:", error);
       } finally {
@@ -87,7 +84,7 @@ export default function ChatPage({
   useEffect(() => {
     if (!currentUserId || !otherUserId) return;
 
-    console.log("👤 currentUserId:", currentUserId); // ✅ ¿Es el ID correcto, es el id de clerk?
+    //console.log("👤 currentUserId:", currentUserId); // ✅ ¿Es el ID correcto, es el id de clerk?
 
     const pusherKey = process.env.NEXT_PUBLIC_PUSHER_KEY;
     const pusherCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
@@ -106,7 +103,7 @@ export default function ChatPage({
     const channelName = `private-chat-${currentUserId}`;
     const channel = pusher.subscribe(channelName);
 
-    console.log("🎧 Intentando suscribirse a:", channelName);
+    //console.log("🎧 Intentando suscribirse a:", channelName);
 
     channel.bind("pusher:subscription_succeeded", () => {
       console.log("✅ Suscripción exitosa al canal:", channelName);
@@ -166,19 +163,19 @@ export default function ChatPage({
     } catch (error) {
       console.error("Error al enviar:", error);
       setMessages((prev) => prev.filter((m) => m.id !== outgoingMessage.id));
-      alert("No se pudo enviar el mensaje");
+      alert(t('sendError'));
     }
   };
 
   // ✅ Evita renderizar antes de tener datos
   if (!isLoaded) {
-    return <div>Cargando chat...</div>;
+    return <div>{t('loading')}</div>;
   }
 
   return (
     <div className="flex flex-col h-screen max-w-2xl mx-auto border rounded-lg overflow-hidden">
       <header className="bg-blue-600 text-white p-4">
-        Chat con 
+        {t('title')}
       </header>
       <MessageList messages={messages} currentUserId={currentUserId!} />
       <MessageInput onSend={sendMessage} />

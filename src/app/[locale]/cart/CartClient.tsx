@@ -3,6 +3,7 @@
 
 import { useState } from 'react';
 import CheckoutModal from '@/components/shared/CheckoutModal';
+import { useTranslations } from 'next-intl'; // ✅ Importa el hook
 
 export interface CartItem {
   id: string;
@@ -15,6 +16,7 @@ export interface CartItem {
 }
 
 export default function CartClient({ items }: { items: CartItem[] }) {
+  const t = useTranslations('cart'); // ✅ Usa el hook
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const onClose = () => setIsModalOpen(false);
@@ -26,7 +28,7 @@ export default function CartClient({ items }: { items: CartItem[] }) {
         disabled={items.length === 0}
         className="w-full bg-[#4c754b] hover:bg-[#558d54] text-white py-3 rounded disabled:opacity-50"
       >
-        Comprar
+        {t('Checkout')}
       </button>
 
       <CheckoutModal
