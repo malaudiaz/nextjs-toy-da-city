@@ -500,6 +500,7 @@
     "MorePage": "More pages"
   },
   "toys": {
+    "emptyMsg": "There are no toys published yet.",
     "free": "FREE"
   },
   "stripeCheckoutButton": {

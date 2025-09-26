@@ -498,7 +498,8 @@
     "MorePage": "Más Páginas"
   },
   "toys": {
-    "free": "GRATIS"
+    "emptyMsg": "No existen juguetes publicados aún",
+    "free": "Gratis"
   },
   "stripeCheckoutButton": {
     "Checkout": "Pagar con Stripe",

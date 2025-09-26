@@ -201,6 +201,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
             <div className="flex items-center">
               {toy.forSell && (
                 <button
+                  disabled={!isSignedIn}
                   onClick={() => {
                     const added = addToCart({
                       id: toy.id,

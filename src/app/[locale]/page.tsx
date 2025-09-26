@@ -6,6 +6,7 @@ import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import { getConditions } from "@/lib/actions/conditionActions";
 import { Filters, getToys } from "@/lib/actions/toysAction";
 import { Suspense } from "react";
+import { getTranslations } from "next-intl/server";
 
 type Props = {
   searchParams: Promise<{ [key: string]: string | undefined }>;
@@ -13,12 +14,13 @@ type Props = {
 };
 
 export default async function Home({ searchParams, params }: Props) {
+  const t = await getTranslations("configurations"); // o el namespace que uses
   const resolvedSearchParams = await searchParams;
   const { locale } = await params;
   const conditions = await getConditions();
   const currentPage = parseInt((resolvedSearchParams.page as string) || "1");
   const postsPerPage = parseInt(
-    (resolvedSearchParams.pageSize as string) || "8"
+    (resolvedSearchParams.pageSize as string) || process.env.NEXT_TOYS_PER_PAGE || "8"
   );
 
   const filters: Filters = {
@@ -47,6 +49,7 @@ export default async function Home({ searchParams, params }: Props) {
     locale,
     filters
   );
+
   const toysPromise = getToys(currentPage, postsPerPage, locale, filters).then(
     (data) => ({
       data: data.toys,
@@ -56,22 +59,37 @@ export default async function Home({ searchParams, params }: Props) {
   return (
     <>
       <BannerCarousel />
-      <div className="w-full px-3">
-        <FilterBar conditions={conditions} />
-      </div>
-      <Suspense
-        key={filters.search}
-        fallback={<SkeletonProductCard count={8} />}
-      >
-        <Products toysPromise={toysPromise} />
-      </Suspense>
-      <div className="mt-8 mb-4">
-        <PaginationWithLinks
-          page={currentPage}
-          pageSize={postsPerPage}
-          totalCount={totalPosts}
-        />
-      </div>
+
+      {totalPosts > 0 && (
+        <div className="w-full px-3">
+          <FilterBar conditions={conditions} />
+        </div>
+      )}
+
+      {totalPosts === 0 ? (
+        <div className="flex justify-center items-center h-64">
+          <p className="text-lg text-muted-foreground text-center">
+            {t("toys.emptyMsg")}
+          </p>
+        </div>
+      ) : (
+        <Suspense
+          key={filters.search}
+          fallback={<SkeletonProductCard count={postsPerPage} />}
+        >
+          <Products toysPromise={toysPromise} />
+        </Suspense>
+      )}
+
+      {totalPosts > 0 && (
+        <div className="mt-8 mb-4">
+          <PaginationWithLinks
+            page={currentPage}
+            pageSize={postsPerPage}
+            totalCount={totalPosts}
+          />
+        </div>
+      )}
     </>
   );
 }
