@@ -10,12 +10,15 @@ import {
 } from "@/components/ui/carousel";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import { slides } from "@/lib/data/data";
+import { slides, slideKeys } from "@/lib/data/data";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from 'next-intl'; // ✅ Importa el hook
 
 export function CarouselToy() {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
+  const t = useTranslations('onboarding'); // ✅ Usa el hook
+  
 
   // Configurar el evento de cambio para actualizar el índice actual
   React.useEffect(() => {
@@ -35,7 +38,7 @@ export function CarouselToy() {
     api?.scrollNext();
   };
 
-  const currentSlide = slides[current];
+  const currentSlide = slideKeys[current];
 
   return (
     <div className="w-full h-full relative">
@@ -53,13 +56,13 @@ export function CarouselToy() {
         <div className="text-left w-1/3 md:w-auto mr-4 flex flex-col justify-center h-full">
           <div className="space-y-1 md:space-y-3">
             <h2 className="text-xl md:text-2xl font-bold text-gray-800">
-              {currentSlide.title}
+              {t(`${currentSlide.key}.title`)}
             </h2>
             <h1 className="text-3xl md:text-6xl font-black leading-tight text-gray-900">
-              {currentSlide.subtitle}
+              {t(`${currentSlide.key}.subtitle`)}
             </h1>
             <p className="text-xl md:text-3xl font-black text-[#3D5D3C] mt-2 md:mt-4">
-              {currentSlide.tagline}
+              {t(`${currentSlide.key}.tagline`)}
             </p>
           </div>
         </div>
@@ -71,12 +74,12 @@ export function CarouselToy() {
           opts={{ loop: true }}
         >
           <CarouselContent>
-            {slides.map((slide) => (
+            {slideKeys.map((slide) => (
               <CarouselItem key={slide.id}>
                 <div className="">
                   <Image
                     src={slide.image || "/placeholder.svg"}
-                    alt={`${slide.subtitle}`}
+                    alt={`${t(`${slide.key}.subtitle`)}`}
                     width={600} // Aumentado para móvil
                     height={400} // Aumentado para móvil
                     className=" w-full h-[202px] md:h-full"

@@ -594,6 +594,33 @@
     "reviewMsg": "Try reloading the page.",
     "loggedError": "You must be logged in",
     "loginMsg": "Sign in to see your reviews."
+  },
+  "onboarding": {
+    "slide1": {
+      "title": "welcome to",
+      "subtitle": "Toydacity",
+      "tagline": "Sustainable Toy Marketplace"
+    },
+    "slide2": {
+      "title": "Discover",
+      "subtitle": "Fun Toys",
+      "tagline": "For Every Child's Imagination"
+    },
+    "slide3": {
+      "title": "Explore",
+      "subtitle": "Creativity",
+      "tagline": "With Educational Toys"
+    },
+    "slide4": {
+      "title": "Quality",
+      "subtitle": "Playtime",
+      "tagline": "Safe and Durable Toys"
+    },
+    "slide5": {
+      "title": "Join",
+      "subtitle": "The Fun",
+      "tagline": "New Arrivals Every Month"
+    }
   }
 }
 

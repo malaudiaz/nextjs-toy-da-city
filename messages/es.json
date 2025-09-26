@@ -592,5 +592,32 @@
     "reviewMsg": "Intenta recargar la página.",
     "loggedError": "Debes estar conectado",
     "loginMsg": "Inicia sesión para ver tus reseñas."
+  },
+  "onboarding": {
+    "slide1": {
+      "title": "bienvenido a",
+      "subtitle": "Toydacity",
+      "tagline": "Mercado Sostenible de Juguetes"
+    },
+    "slide2": {
+      "title": "Descubre",
+      "subtitle": "Juguetes Divertidos",
+      "tagline": "Para la imaginación de cada niño"
+    },
+    "slide3": {
+      "title": "Explora",
+      "subtitle": "Creatividad",
+      "tagline": "Con juguetes educativos"
+    },
+    "slide4": {
+      "title": "Calidad",
+      "subtitle": "en el juego",
+      "tagline": "Juguetes seguros y duraderos"
+    },
+    "slide5": {
+      "title": "Únete",
+      "subtitle": "a la diversión",
+      "tagline": "Nuevos productos cada mes"
+    }
   }
 }
