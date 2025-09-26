@@ -37,7 +37,7 @@ const TopNavbar = () => {
         {/* Versión móvil */}
         <div className="flex md:hidden items-center justify-between">
           <div className="flex items-center ">
-            <Button
+            {/* <Button
               className="bg-[#FAF1DE] hover:bg-[#cbc9b9] shadow-none p-2"
               onClick={toggleMenu}
             >
@@ -46,7 +46,7 @@ const TopNavbar = () => {
               ) : (
                 <LucideMenu className="text-black size-5" />
               )}
-            </Button>
+            </Button> */}
             <Link href={"/"}>
               <Image
                 src="/Logo.png"
