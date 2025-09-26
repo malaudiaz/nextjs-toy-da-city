@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/carousel";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import { slides, slideKeys } from "@/lib/data/data";
+import { slideKeys } from "@/lib/data/data";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from 'next-intl'; // ✅ Importa el hook
 
@@ -101,7 +101,7 @@ export function CarouselToy() {
 
       {/* Indicadores de paginación */}
       <div className="md:hidden absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
-        {Array.from({ length: slides.length }).map((_, index) => (
+        {Array.from({ length: slideKeys.length }).map((_, index) => (
           <Button
             key={index}
             className={`w-3 h-3 rounded-full p-0 min-w-0 ${

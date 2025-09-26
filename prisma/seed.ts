@@ -1,5 +1,6 @@
 // prisma/seed.ts
-import { PrismaClient, FileType, OrderStatus } from "@prisma/client";
+import { PrismaClient, FileType } from "@prisma/client";
+//import { OrderStatus } from "@prisma/client";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -54,43 +55,6 @@ async function main() {
           clerkId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
           role: "buyer",
         },
-        {
-          id: "bb261faf-12ba-43c8-9e92-82927737fb2a",
-          name: "YAFEX S.R.L",
-          email: "yafex.srl@gmail.com",
-          phone: "54363604",
-          clerkId: "user_31TMApqRn4tXg64h29gB6jxN5Uf",
-          role: "seller",
-          stripeAccountId: "acct_1RxYFeBhJGWUwOMh",
-        },
-        {
-          id: "0f1a4b4d-da45-493a-a218-da7cb511198f",
-          name: "Miguel David",
-          email: "miguedeveloper23@gmail.com",
-          phone: "54159643",
-          clerkId: "user_31ecE9APT1PDgbjVZuzCbtZLI6d",
-          role: "seller",
-          stripeAccountId: "acct_1RyzqWAwG2BhBKNn",
-        },
-        {
-          id: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-          name: "Miguel Angel lau Diaz",
-          email: "malaudiaz69@gmail.com",
-          phone: "52887847",
-          clerkId: "user_31l2iT5aSDptUZiJxwB3UnVrek5",
-          role: "seller",
-          stripeAccountId: "acct_1RzozPPkuhoSOLR4",
-        },
-        {
-          id: "9a7b3c2d-1e5f-4a8b-9c6d-2e4f6a8b0c1d",
-          name: "Miguel David Lau Medina",
-          email: "md10crazy@gmail.com",
-          phone: "54159643",
-          clerkId: "user_31VrKUV6X3ROgWtGQtRSsi8lZdf",
-          role: "seller",
-          stripeAccountId: "acct_1S5riMPfgoprXKh9",
-        },
-
       ],
       skipDuplicates: true,
     });
@@ -349,7 +313,7 @@ async function main() {
         statusId: 1,
         conditionId: 1,
         location: "",
-        sellerId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        sellerId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         forSell: true,
         forGifts: false,
         forChanges: false,
@@ -364,7 +328,7 @@ async function main() {
         statusId: 1,
         conditionId: 1,
         location: "",
-        sellerId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        sellerId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         forSell: true,
         forGifts: false,
         forChanges: false,
@@ -380,7 +344,7 @@ async function main() {
         categoryId: 2,
         statusId: 1,
         conditionId: 3,
-        sellerId: "9a7b3c2d-1e5f-4a8b-9c6d-2e4f6a8b0c1d",
+        sellerId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         forSell: false,
         forGifts: false,
         forChanges: true,
@@ -396,7 +360,7 @@ async function main() {
         statusId: 1,
         conditionId: 2,
         location: "",
-        sellerId: "0f1a4b4d-da45-493a-a218-da7cb511198f",
+        sellerId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         forSell: false,
         forGifts: true,
         forChanges: false,
@@ -411,7 +375,7 @@ async function main() {
         statusId: 1,
         conditionId: 1,
         location: "",
-        sellerId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        sellerId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         forSell: false,
         forGifts: true,
         forChanges: false,
@@ -427,7 +391,7 @@ async function main() {
         statusId: 1,
         conditionId: 4,
         location: "",
-        sellerId: "bb261faf-12ba-43c8-9e92-82927737fb2a",
+        sellerId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         forSell: true,
         forGifts: false,
         forChanges: false,
@@ -442,7 +406,7 @@ async function main() {
         categoryId: 2,
         statusId: 1,
         conditionId: 5,
-        sellerId: "bb261faf-12ba-43c8-9e92-82927737fb2a",
+        sellerId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         forSell: true,
         forGifts: false,
         forChanges: false,
@@ -459,7 +423,7 @@ async function main() {
         statusId: 1,
         conditionId: 6,
         location: "",
-        sellerId: "0f1a4b4d-da45-493a-a218-da7cb511198f",
+        sellerId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         forSell: false,
         forGifts: false,
         forChanges: true,
@@ -719,7 +683,7 @@ async function main() {
 
     // === ORDENES ===
     
-    const ordersData = [
+/*     const ordersData = [
       {
         id: "14bc658a-1ced-4064-982a-e7abc7a804c0",
         cartId: "cart_user_31l2iT5aSDptUZiJxwB3UnVrek5_1756479343980",
@@ -757,9 +721,9 @@ async function main() {
       data: ordersData,
       skipDuplicates: true,
     });
-
+ */
     // === OrderItem ===
-    const orderItemsData = [
+/*     const orderItemsData = [
       {
         id: "39f9e9b4-910f-4d70-bb6a-21b4be13f2f4",
         orderId: "14bc658a-1ced-4064-982a-e7abc7a804c0",
@@ -790,9 +754,9 @@ async function main() {
       data: orderItemsData,
       skipDuplicates: true,
     });
-
+ */
     // === FAVORITES ===
-    const favoritesData = [
+/*     const favoritesData = [
       {
         id: "favorite_001",
         userId: "0f1a4b4d-da45-493a-a218-da7cb511198f",
@@ -809,7 +773,7 @@ async function main() {
       data: favoritesData,
       skipDuplicates: true,
     });
-
+ */
   });
 }
 
