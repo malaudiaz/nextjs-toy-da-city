@@ -1,5 +1,5 @@
 "use client";
-import { LucideMenu, Settings, ShoppingCart, X } from "lucide-react";
+import { Settings, ShoppingCart,  } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 import SelectLanguage from "./SelectLanguage";
@@ -27,9 +27,9 @@ const TopNavbar = () => {
   const t = useTranslations("navbar");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const items = useCartStore((state) => state.items);
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  // const toggleMenu = () => {
+  //   setIsMenuOpen(!isMenuOpen);
+  // };
 
   return (
     <header className="bg-[#FAF1DE] w-full p-4 relative">
