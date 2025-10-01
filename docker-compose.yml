@@ -9,6 +9,7 @@ services:
       - ./:/app
       - /app/node_modules
       - /app/.next
+      - ./uploads:/app/public/uploads  # monta uploads fuera del contenedor
     environment:
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
       - AUTH_TRUST_HOST=true

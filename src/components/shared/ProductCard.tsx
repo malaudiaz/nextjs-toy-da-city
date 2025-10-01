@@ -39,6 +39,7 @@ const ProductCard = ({
           src={image || "/image 4.png"}
           alt={description}
           fill
+          unoptimized={true} // ← ¡ESTO ES CLAVE!
           className="object-cover transition-transform duration-300 hover:scale-105"
           sizes="(max-width: 640px) 90vw, (max-width: 768px) 45vw, (max-width: 1024px) 22vw, 15vw"
         />

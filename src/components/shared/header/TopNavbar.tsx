@@ -23,10 +23,17 @@ const SearchLinks = [
   { name: "Configurations", href: "/en/config" },
 ];
 
-const TopNavbar = () => {
+interface PageProps {
+  params: {
+    locale: string;
+  };
+}
+
+const TopNavbar = ({params}: PageProps) => {
   const t = useTranslations("navbar");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const items = useCartStore((state) => state.items);
+  const { locale } = params;
   // const toggleMenu = () => {
   //   setIsMenuOpen(!isMenuOpen);
   // };
@@ -91,7 +98,7 @@ const TopNavbar = () => {
 
               <SignedIn>
                 <Button className="w-full bg-[#4c754b] hover:bg-[#558d54] text-white px-4 py-2">
-                  <Link href={"/en/post"} className="w-full">
+                  <Link href={`/${locale}/post`} className="w-full">
                     {t("Post")}
                   </Link>
                 </Button>

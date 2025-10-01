@@ -17,6 +17,7 @@ import { PushNotifier } from '@/components/shared/PushNotifier';
 import { clerkLocalizations } from "@/lib/clerkLocalization";
 import { Toaster } from "sonner";
 import { OnlineTracker } from "@/components/shared/OlineTracker";
+import { getMessages } from "next-intl/server"; // 👈 Importa getMessages
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -80,6 +81,9 @@ export default async function RootLayout({
     notFound();
   }
 
+  // 👇 Carga los mensajes para el locale actual
+  const messages = await getMessages({ locale });
+
   // Selecciona la localización de Clerk basada en el `locale`
   const localization =
     clerkLocalizations[locale as keyof typeof clerkLocalizations];
@@ -95,8 +99,8 @@ export default async function RootLayout({
         appearance={{ baseTheme: dark }}
       >
         <body className={`min-h-screen flex flex-col antialiased font-inter`}>
-          <NextIntlClientProvider>
-            <Navbar />
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <Navbar params={{locale}} />
             {children}
             <ScrollToTop />
             <Footer />

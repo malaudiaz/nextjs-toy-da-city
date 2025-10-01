@@ -4,10 +4,16 @@ import React from "react";
 import TopNavbar from "./TopNavbar";
 import MiddleNavbar from "./MiddleNavbar";
 
-const Navbar = () => {
+interface PageProps {
+  params: {
+    locale: string;
+  };
+}
+
+const Navbar = ({params}: PageProps) => {
   return (
     <>
-      <TopNavbar />
+      <TopNavbar params={params} />
       <MiddleNavbar />
     </>
   );

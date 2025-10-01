@@ -12,32 +12,46 @@ export function UserAvatar({
   src: string;
   alt: string;
 }) {
-
-  console.log(userId, src, alt);
-
   const [online, setOnline] = useState<boolean | null>(null); // null = loading
 
   useEffect(() => {
+    // ✅ Validación: aseguramos que userId sea una cadena no vacía
+    if (!userId || typeof userId !== "string" || userId.trim() === "") {
+      console.warn("UserAvatar: userId is invalid or missing");
+      setOnline(false);
+      return;
+    }
+
     const checkPresence = async () => {
       try {
-        const res = await fetch(`/api/presence/${userId}`, {
+        const res = await fetch(`/api/presence/${encodeURIComponent(userId)}`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           cache: "no-store",
         });
 
-        if (!res.ok) throw new Error("Failed");
+        if (!res.ok) {
+          console.warn(
+            `Presence API failed for user ${userId}: ${res.status} ${res.statusText}`
+          );
+          throw new Error("Failed to fetch user presence");
+        }
 
         const data = await res.json();
-        setOnline(data.online);
+        setOnline(data.online ?? false); // fallback por si falta la propiedad
       } catch (error) {
         console.error("Presence check failed:", error);
-        setOnline(false); // Default to offline
+        setOnline(false); // default: offline
       }
     };
 
+    // Ejecutar inmediatamente
     checkPresence();
+
+    // Repetir cada 10 segundos
     const interval = setInterval(checkPresence, 10_000);
+
+    // Limpiar intervalo al desmontar
     return () => clearInterval(interval);
   }, [userId]);
 
@@ -71,7 +85,6 @@ export function UserAvatar({
           transition-all
         "
         style={{
-          //fontSize: "0.75rem", // Fuerza tamaño pequeño
           lineHeight: "1rem",
           display: "inline-block",
           minWidth: "40px",

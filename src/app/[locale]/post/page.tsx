@@ -8,14 +8,16 @@ import { getConditions } from "@/lib/actions/conditionActions";
 import { getSellerData } from "@/lib/actions/sellertActions";
 import { auth } from "@clerk/nextjs/server";
 
-export default async function PostPage() {
+export default async function PostPage({ params }: { params: Promise<{ locale: string }> }) {
   const { userId } = await auth();
   if (!userId) return <Sigin />;
 
   const sellerData = await getSellerData(userId);
 
+  const { locale } = await params; // ✅ Así obtienes el locale en un Server Component
+  
   if (sellerData.role !== "seller") {
-    redirect("/seller-onboarding");
+    redirect(`/${locale}/seller-onboarding`);
   }
 
   const categories = await getCategories();

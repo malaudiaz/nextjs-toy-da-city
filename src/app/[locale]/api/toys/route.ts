@@ -343,7 +343,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       // Crear media asociada al toy
       const media = await prisma.media.create({
         data: {
-          fileUrl: `/uploads/${filename}`,
+          fileUrl: `/en/api/uploads/${filename}`,
           type: file.type.startsWith('image') ? 'IMAGE' : 'VIDEO',
           toyId: toy.id
         }
