@@ -15,6 +15,7 @@ import {
 } from "@clerk/nextjs";
 import { useTranslations } from "next-intl";
 import { useCartStore } from "@/store/cartStore";
+import { useLocale } from 'next-intl'; // ✅
 
 const SearchLinks = [
   { name: "Toys", href: "#" },
@@ -23,17 +24,15 @@ const SearchLinks = [
   { name: "Configurations", href: "/en/config" },
 ];
 
-interface PageProps {
-  params: {
-    locale: string;
-  };
-}
 
-const TopNavbar = ({params}: PageProps) => {
+const TopNavbar = () => {
+  const locale = useLocale(); // ✅ Siempre actualizado
   const t = useTranslations("navbar");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const items = useCartStore((state) => state.items);
-  const { locale } = params;
+
+
+
   // const toggleMenu = () => {
   //   setIsMenuOpen(!isMenuOpen);
   // };
@@ -54,7 +53,7 @@ const TopNavbar = ({params}: PageProps) => {
                 <LucideMenu className="text-black size-5" />
               )}
             </Button> */}
-            <Link href={"/"}>
+            <Link href={`/${locale}`}>
               <Image
                 src="/Logo.png"
                 alt="logo"
@@ -109,7 +108,7 @@ const TopNavbar = ({params}: PageProps) => {
 
         {/* Versión desktop */}
         <div className="hidden md:flex items-center justify-between gap-8">
-          <Link href={"/"}>
+          <Link href={`/${locale}`}>
             <Image src="/Logo.png" alt="logo" width={160} height={32} />
           </Link>
 
@@ -120,7 +119,9 @@ const TopNavbar = ({params}: PageProps) => {
           <div className="flex items-center gap-6">
             <SignedIn>
               <Button className="whitespace-nowrap bg-[#4c754b] hover:bg-[#558d54] text-white px-4">
-                <Link href={"/en/post"}>{t("Post")}</Link>
+                  <Link href={`/${locale}/post`} className="w-full">
+                    {t("Post")}
+                  </Link>
               </Button>
             </SignedIn>
 
@@ -143,7 +144,7 @@ const TopNavbar = ({params}: PageProps) => {
             </div>
 
             <SignedIn>
-              <Link href="/cart" className="text-black hover:text-gray-700">
+              <Link href={`/${locale}/cart`} className="text-black hover:text-gray-700">
                 <div className="relative inline-block group">
                   <ShoppingCart className="size-6 transition-transform group-hover:scale-110" />
                   {items.length > 0 && (
@@ -155,7 +156,7 @@ const TopNavbar = ({params}: PageProps) => {
               </Link>
 
               <Link
-                href="/en/config"
+                href={`/${locale}/config`}
                 className="text-black hover:text-gray-700"
               >
                 <Settings className="size-6" />

@@ -100,7 +100,7 @@ export default async function RootLayout({
       >
         <body className={`min-h-screen flex flex-col antialiased font-inter`}>
           <NextIntlClientProvider locale={locale} messages={messages}>
-            <Navbar params={{locale}} />
+            <Navbar />
             {children}
             <ScrollToTop />
             <Footer />

@@ -1,32 +1,32 @@
+// hooks/useLocaleSwitcher.ts
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
+import { routing, type Locale } from '@/i18n/routing';
 
 export function useLocaleSwitcher() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const switchLocale = useCallback((newLocale: string) => {
-    const segments = pathname.split('/').filter(Boolean);
+  const switchLocale = useCallback(
+    (newLocale: Locale) => { // ✅ Tipado fuerte
+      console.log('Switching to locale:', newLocale);
+      
+      const segments = pathname.split('/').filter(Boolean);
 
-    let newPath;
+      const currentLocale = segments[0] && routing.locales.includes(segments[0] as Locale)
+        ? segments[0]
+        : null;
 
-    // Si ya hay un locale en la URL (ej. /en/products)
-    if (segments[0] === 'en' || segments[0] === 'es') {
-      segments[0] = newLocale;
-      newPath = '/' + segments.join('/');
-    } else {
-      // Si no hay locale, lo insertamos al principio
-      newPath = `/${newLocale}${pathname}`;
-    }
+      const newPath = currentLocale
+        ? `/${newLocale}/${segments.slice(1).join('/')}`
+        : `/${newLocale}${pathname === '/' ? '' : pathname}`;
 
-    // Mantener los searchParams actuales
-    const query = searchParams.toString();
-    const fullPath = query ? `${newPath}?${query}` : newPath;
-
-    // Redirigir
-    router.push(fullPath);
-  }, [router, pathname, searchParams]);
+      const query = searchParams.toString();
+      router.push(query ? `${newPath}?${query}` : newPath);
+    },
+    [router, pathname, searchParams]
+  );
 
   return switchLocale;
 }

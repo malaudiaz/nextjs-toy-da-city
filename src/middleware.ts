@@ -1,45 +1,39 @@
 // src/middleware.ts
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import createIntlMiddleware from 'next-intl/middleware';
+import { routing } from './i18n/routing';
 
-const intlMiddleware = createIntlMiddleware({
-  locales: ['en', 'es'],
-  defaultLocale: 'en',
-  localePrefix: 'always',
-});
+const intlMiddleware = createIntlMiddleware(routing);
 
-// Rutas que NO requieren autenticación
 const isPublicRoute = createRouteMatcher([
   '/',
   '/sign-in(.*)',
   '/sign-up(.*)',
   '/seller-onboarding',
-  '/api/(.*)', // todas las rutas API
+  '/api/(.*)',
 ]);
 
-// Rutas que SÍ requieren autenticación (opcional, si usas auth.protect())
 const isProtectedRoute = createRouteMatcher([
   '/protected(.*)',
   // Agrega más si usas auth.protect()
 ]);
 
-export default clerkMiddleware((auth, req) => {
-  // Si la ruta NO es pública y es protegida → proteger
+// ✅ Exporta el middleware de Clerk, pero aplica intlMiddleware primero
+export default clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req) && isProtectedRoute(req)) {
     auth.protect();
   }
 
-  // ✅ IMPORTANTE: NO devuelvas una respuesta manual.
-  // Deja que next-intl procese la solicitud normalmente.
-  return intlMiddleware(req);
+  // ✅ Espera la respuesta de next-intl
+  const response = await intlMiddleware(req);
+  return response;
 });
 
 export const config = {
-  // Este matcher debe incluir TODAS las rutas donde se use `auth()`
   matcher: [
-    // Ignorar assets estáticos (evita errores en imágenes/JS/CSS faltantes)
-    '/((?!_next|_vercel|.*\\..+).*)',
-    // Incluir rutas con y sin prefijo de idioma
+    // Skip static files
+    '/((?!_next|_vercel|.*\\..*).*)',
+    // Include internationalized routes
     '/',
     '/(en|es)(.*)',
   ],
