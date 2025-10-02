@@ -83,8 +83,8 @@ export async function POST(req: Request) {
         // Opcional: Crear un enlace de onboarding para que el vendedor complete su cuenta
         const accountLink = await stripe.accountLinks.create({
           account: account.id,
-          refresh_url: `${process.env.NEXT_PUBLIC_SITE_URL}/seller-onboarding`,
-          return_url: `${process.env.NEXT_PUBLIC_SITE_URL}/seller-dashboard`,
+          refresh_url: `${process.env.NEXT_PUBLIC_SITE_URL}/en/seller-onboarding`,
+          return_url: `${process.env.NEXT_PUBLIC_SITE_URL}/en/seller-dashboard`,
           type: "account_onboarding",
         });
 

@@ -15,13 +15,6 @@ export function UserAvatar({
   const [online, setOnline] = useState<boolean | null>(null); // null = loading
 
   useEffect(() => {
-    // ✅ Validación: aseguramos que userId sea una cadena no vacía
-    if (!userId || typeof userId !== "string" || userId.trim() === "") {
-      console.warn("UserAvatar: userId is invalid or missing");
-      setOnline(false);
-      return;
-    }
-
     const checkPresence = async () => {
       try {
         const res = await fetch(`/api/presence/${encodeURIComponent(userId)}`, {
@@ -34,7 +27,7 @@ export function UserAvatar({
           console.warn(
             `Presence API failed for user ${userId}: ${res.status} ${res.statusText}`
           );
-          throw new Error("Failed to fetch user presence");
+          //throw new Error("Failed to fetch user presence");
         }
 
         const data = await res.json();
