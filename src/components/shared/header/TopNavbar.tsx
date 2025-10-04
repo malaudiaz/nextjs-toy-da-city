@@ -1,5 +1,5 @@
 "use client";
-import { Settings, ShoppingCart,  } from "lucide-react";
+import { Settings, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 import SelectLanguage from "./SelectLanguage";
@@ -15,15 +15,7 @@ import {
 } from "@clerk/nextjs";
 import { useTranslations } from "next-intl";
 import { useCartStore } from "@/store/cartStore";
-import { useLocale } from 'next-intl'; // ✅
-
-const SearchLinks = [
-  { name: "Toys", href: "#" },
-  { name: "Categories", href: "#" },
-  { name: "Brands", href: "#" },
-  { name: "Configurations", href: "/en/config" },
-];
-
+import { useLocale } from "next-intl"; // ✅
 
 const TopNavbar = () => {
   const locale = useLocale(); // ✅ Siempre actualizado
@@ -31,7 +23,12 @@ const TopNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const items = useCartStore((state) => state.items);
 
-
+  const SearchLinks = [
+    { name: "Toys", href: "#" },
+    { name: "Categories", href: "#" },
+    { name: "Brands", href: "#" },
+    { name: "Configurations", href: `/${locale}/config` },
+  ];
 
   // const toggleMenu = () => {
   //   setIsMenuOpen(!isMenuOpen);
@@ -66,14 +63,14 @@ const TopNavbar = () => {
 
           <div className="flex items-center gap-2">
             <SignedIn>
-            <div className="relative inline-block group">
-              <ShoppingCart className="size-6 transition-transform group-hover:scale-110" />
-              {items.length > 0 && (
-                <div className="absolute -top-1 -right-1 flex items-center justify-center min-w-4 h-4 px-1 bg-[#4c754b] text-white text-xs rounded-full transform transition-all group-hover:scale-125">
-                  {items.length}
-                </div>
-              )}
-            </div>
+              <div className="relative inline-block group">
+                <ShoppingCart className="size-6 transition-transform group-hover:scale-110" />
+                {items.length > 0 && (
+                  <div className="absolute -top-1 -right-1 flex items-center justify-center min-w-4 h-4 px-1 bg-[#4c754b] text-white text-xs rounded-full transform transition-all group-hover:scale-125">
+                    {items.length}
+                  </div>
+                )}
+              </div>
             </SignedIn>
 
             <SelectLanguage />
@@ -119,9 +116,9 @@ const TopNavbar = () => {
           <div className="flex items-center gap-6">
             <SignedIn>
               <Button className="whitespace-nowrap bg-[#4c754b] hover:bg-[#558d54] text-white px-4">
-                  <Link href={`/${locale}/post`} className="w-full">
-                    {t("Post")}
-                  </Link>
+                <Link href={`/${locale}/post`} className="w-full">
+                  {t("Post")}
+                </Link>
               </Button>
             </SignedIn>
 
@@ -144,7 +141,10 @@ const TopNavbar = () => {
             </div>
 
             <SignedIn>
-              <Link href={`/${locale}/cart`} className="text-black hover:text-gray-700">
+              <Link
+                href={`/${locale}/cart`}
+                className="text-black hover:text-gray-700"
+              >
                 <div className="relative inline-block group">
                   <ShoppingCart className="size-6 transition-transform group-hover:scale-110" />
                   {items.length > 0 && (

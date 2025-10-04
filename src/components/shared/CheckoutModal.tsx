@@ -1,19 +1,47 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 import CheckoutForm from "./CheckoutForm";
 import { Elements } from "@stripe/react-stripe-js";
 import { stripePromise } from "@/lib/stripe";
 
-export interface CartItem {
+// --- Tipos ---
+interface CartItem {
   id: string;
   title: string;
   price: number;
   media: { fileUrl: string }[];
   sellerId: string;
 }
+
+interface PaymentIntentRequest {
+  cartItems: {
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    userId: string;
+  }[];
+  buyerId: string;
+}
+
+interface PaymentIntentResponse {
+  clientSecret?: string;
+  error?: string;
+}
+
+// --- Fetcher tipado ---
+const fetcher = ([url, body]: [string, PaymentIntentRequest]): Promise<PaymentIntentResponse> => {
+  return fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  }).then((res) => res.json() as Promise<PaymentIntentResponse>);
+};
+
+// --- Componente ---
 
 export default function CheckoutModal({
   isOpen,
@@ -25,50 +53,50 @@ export default function CheckoutModal({
   cartItems: CartItem[];
 }) {
   const { isSignedIn, user } = useUser();
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (isOpen && isSignedIn && user && cartItems.length > 0) {
-      const createPaymentIntent = async () => {
-        try {
-          const res = await fetch("/api/create-payment-intent", {
-            method: "POST",
-            body: JSON.stringify({
-              cartItems: cartItems.map((item) => ({
-                id: item.id,
-                name: item.title,
-                price: item.price,
-                quantity: 1,
-                userId: item.sellerId,
-              })),
-              buyerId: user.id,
-            }),
-            headers: { "Content-Type": "application/json" },
-          });
-          const data = await res.json();
-          if (data.clientSecret) {
-            setClientSecret(data.clientSecret);
-          } else {
-            toast.error(data.error || "Error al iniciar pago");
-            onClose();
-          }
-        } catch (err) {
-          console.log("Error al crear PaymentIntent:", err);
-          toast.error("Error de conexión");
-          onClose();
-        } finally {
-          setLoading(false);
-        }
-      };
+  const shouldFetch =
+    isOpen && isSignedIn && user && cartItems.length > 0;
 
-      setClientSecret(null);
-      setLoading(true);
-      createPaymentIntent();
+  const {
+    data,
+    error,
+    isLoading,
+  } = useSWR(
+    shouldFetch
+      ? [
+          "/api/create-payment-intent",
+          {
+            cartItems: cartItems.map((item) => ({
+              id: item.id,
+              name: item.title,
+              price: item.price,
+              quantity: 1,
+              userId: item.sellerId,
+            })),
+            buyerId: user.id,
+          } satisfies PaymentIntentRequest,
+        ]
+      : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      onError: () => {
+        toast.error("Error al iniciar el pago");
+        onClose();
+      },
     }
-  }, [isOpen, isSignedIn, user, cartItems, onClose]);
+  );
 
   if (!isOpen) return null;
+
+  if (error || (data && data.error)) {
+    // Cierra el modal si hay error (evita bucle con setTimeout si es necesario)
+    setTimeout(onClose, 0);
+    return null;
+  }
+
+  const clientSecret = data?.clientSecret;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -97,7 +125,7 @@ export default function CheckoutModal({
           Finalizar compra
         </h3>
 
-        {loading ? (
+        {isLoading ? (
           <p>Cargando...</p>
         ) : !isSignedIn ? (
           <p>Debes iniciar sesión.</p>

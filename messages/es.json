@@ -519,7 +519,8 @@
       "title": "Mis Juguetes",
       "emptyMsg": "No existen juguetes posteados aún",
       "free": "Gratis",
-      "edit": "Editar"
+      "edit": "Editar",
+      "sold": "Vendido"
     }
   },
   "purchases": {
@@ -550,7 +551,8 @@
     "sold": "Vendido",
     "canceled": "Cancelado",
     "category": "Categoria",
-    "condition": "Condición"
+    "condition": "Condición",
+    "status": "Estado"
   },
   "gifts": {
     "title": "Juguete Gratis",

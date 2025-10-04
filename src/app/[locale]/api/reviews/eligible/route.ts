@@ -28,7 +28,7 @@ export async function GET(request: Request) {
       where: {
         buyerId: user?.id,
         sellerId: sellerId,
-        status: 'CONFIRMED',
+        status: 'TRANSFERRED',
         review: null,
       },
       select: {

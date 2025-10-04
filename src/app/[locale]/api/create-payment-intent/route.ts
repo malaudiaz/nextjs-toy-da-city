@@ -137,6 +137,15 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    // ✅ ACTUALIZAR LOS JUGUETES: forSell = false, active = false
+    await prisma.toy.updateMany({
+      where: { id: { in: toyIds } },
+      data: {
+        statusId: 3, // sold
+        isActive: false
+      },
+    });    
+
     return NextResponse.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
     console.error("Error creando PaymentIntent:", error);

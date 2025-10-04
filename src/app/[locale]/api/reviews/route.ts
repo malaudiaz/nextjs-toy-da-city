@@ -51,7 +51,7 @@ export async function POST(request: Request) {
       where: {
         buyerId: user?.id,
         sellerId: targetUserId,
-        status: "CONFIRMED",
+        status: "TRANSFERRED",
         ...(orderId ? { id: orderId } : {}),
       },
     });

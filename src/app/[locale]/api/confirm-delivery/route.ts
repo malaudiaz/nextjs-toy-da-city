@@ -20,11 +20,14 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  const user = await prisma.user.findUnique({ where: { clerkId: userId } });
+  if (!user) return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });
+
   const { orderId } = await req.json();
 
   const order = await prisma.order.findUnique({ where: { id: orderId } });
   if (!order) return NextResponse.json({ error: 'Orden no encontrada' }, { status: 404 });
-  if (order.buyerId !== userId) return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 403 });
+  if (order.buyerId !== user.id) return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 403 });
   if (order.status !== 'AWAITING_CONFIRMATION') return NextResponse.json({ success: false, error: 'Orden no válida' }, { status: 400 });
 
   const intent = await stripe.paymentIntents.retrieve(order.paymentIntentId);
@@ -35,7 +38,7 @@ export async function POST(req: NextRequest) {
       amount: t.amount,
       currency: 'usd',
       destination: t.stripeAccountId,
-      source_transaction: order.chargeId!,
+      //source_transaction: order.chargeId!,
       description: `Transferencia por confirmación de entrega`,
     });
 

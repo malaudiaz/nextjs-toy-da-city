@@ -29,8 +29,8 @@ export default function CartPage() {
         <div className="lg:col-span-1">
           <Card className="p-6 sticky top-4">
             <h2 className="text-xl font-bold mb-6">Resumen</h2>
-            <div className="flex justify-between text-lg font-bold mb-6">
-              <span>Total</span>
+            <div className="flex flex-row gap-2 justify-between text-lg font-bold mb-6">
+              <span>Total </span>
               <span>${items.reduce((acc, item) => acc + item.price, 0).toFixed(2)}</span>
             </div>
 

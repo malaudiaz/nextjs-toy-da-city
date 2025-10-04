@@ -521,7 +521,8 @@
       "title": "My Toys",
       "emptyMsg": "No toys posted yet",
       "free": "Free",
-      "edit": "Edit"
+      "edit": "Edit",
+      "sold": "Sold"
     }
   },
   "purchases": {
@@ -552,7 +553,8 @@
     "sold": "Sold",
     "canceled": "Canceled",
     "categoty": "Category",
-    "condition": "Condition"
+    "condition": "Condition",
+    "status": "Status"
   },
   "gifts": {
     "title": "Free Toys",

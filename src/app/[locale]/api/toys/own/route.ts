@@ -37,7 +37,7 @@ export async function GET(
 
   try {
     const toy = await prisma.toy.findMany({
-      where: { sellerId: userId!, isActive: true },
+      where: { sellerId: userId! },
       include: {
         media: true,
         category: {

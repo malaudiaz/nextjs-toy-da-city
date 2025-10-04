@@ -120,7 +120,7 @@ const PurchasesInfo = async ({ orders }: PurchaseProps) => {
                           </div>
                         )}
 
-                        {order.status === "CONFIRMED" && (
+                        {order.status === "TRANSFERRED" && (
                           <div className="flex flex-col sm:flex-row gap-3">
                             <Link href="/reviews/[sellerId]" as={`/reviews/${order.seller.id}`} className="text-emerald-600 font-medium">
                               {t("review")}

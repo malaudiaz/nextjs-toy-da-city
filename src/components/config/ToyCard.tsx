@@ -88,13 +88,19 @@ export default async function ToyCard({ toy }: ToyCardProps) {
 
             <Separator />
 
-            <div>
-              <Link href={`/config/toys/edit/${toy.id}`}>
-                <Button className="bg-green-700 hover:bg-green-800 text-white">
-                  {t("toys.edit")}
-                </Button>
-              </Link>
-            </div>
+            {toy.isActive ? (
+              <div>
+                <Link href={`/config/toys/edit/${toy.id}`}>
+                  <Button className="bg-green-700 hover:bg-green-800 text-white">
+                    {t("toys.edit")}
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="text-red-600 font-semibold">  
+                {t("toys.sold")}
+              </div>
+            )}
           </div>
         </div>
       </CardContent>
