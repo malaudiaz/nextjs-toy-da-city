@@ -39,7 +39,6 @@ async function main() {
       data: [
         { id: "en", code: "en", name: "English" },
         { id: "es", code: "es", name: "Español" },
-        { id: "fr", code: "fr", name: "Francés" },
       ],
       skipDuplicates: true,
     });
@@ -54,6 +53,22 @@ async function main() {
           phone: "52889836",
           clerkId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
           role: "buyer",
+        },
+        {
+          id: "ab86eee1-5cad-43fe-ab3e-a3f5ac9ea381",
+          name: "Miguel Angel Lau Diaz",
+          email: "malaudiaz69@gmail.com",
+          phone: "52887847",
+          clerkId: "user_33VqeElQZr339Nr68trXNPjjVLi",
+          role: "seller",
+        },
+        {
+          id: "67d5ee50-8aa2-410f-82cc-aef5dbba007b",
+          name: "Javier Maroto",
+          email: "jmaroto1503@gmail.com",
+          phone: "",
+          clerkId: "user_33Wt5KjruazvhCDCQP7b9IoVoik",
+          role: "seller",
         },
       ],
       skipDuplicates: true,
@@ -70,7 +85,6 @@ async function main() {
           create: [
             { key: "name", value: "New sealed", languageId: "en" },
             { key: "name", value: "Nuevo - sellado", languageId: "es" },
-            { key: "name", value: "Neuf - scellé", languageId: "fr" },
           ],
         },
       },
@@ -86,7 +100,6 @@ async function main() {
           create: [
             { key: "name", value: "New open box", languageId: "en" },
             { key: "name", value: "Nuevo - Caja abierta", languageId: "es" },
-            { key: "name", value: "Nouvelle boîte ouverte", languageId: "fr" },
           ],
         },
       },
@@ -100,9 +113,8 @@ async function main() {
         userId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         translations: {
           create: [
-            { key: "name", value: "like_new", languageId: "en" },
+            { key: "name", value: "Like New", languageId: "en" },
             { key: "name", value: "Como nuevo", languageId: "es" },
-            { key: "name", value: "comme_nouvea", languageId: "fr" },
           ],
         },
       },
@@ -116,9 +128,8 @@ async function main() {
         userId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
         translations: {
           create: [
-            { key: "name", value: "acceptable", languageId: "en" },
+            { key: "name", value: "Acceptable", languageId: "en" },
             { key: "name", value: "Aceptable", languageId: "es" },
-            { key: "name", value: "Acceptable", languageId: "fr" },
           ],
         },
       },
@@ -134,7 +145,6 @@ async function main() {
           create: [
             { key: "name", value: "Good", languageId: "en" },
             { key: "name", value: "Bueno", languageId: "es" },
-            { key: "name", value: "Bien", languageId: "fr" },
           ],
         },
       },
@@ -150,7 +160,6 @@ async function main() {
           create: [
             { key: "name", value: "To repair", languageId: "en" },
             { key: "name", value: "Para reparar", languageId: "es" },
-            { key: "name", value: "à_réparer", languageId: "fr" },
           ],
         },
       },
@@ -167,7 +176,6 @@ async function main() {
           create: [
             { key: "name", value: "Available", languageId: "en" },
             { key: "name", value: "Disponible", languageId: "es" },
-            { key: "name", value: "Disponible", languageId: "fr" },
           ],
         },
       },
@@ -183,7 +191,6 @@ async function main() {
           create: [
             { key: "name", value: "Reserved", languageId: "en" },
             { key: "name", value: "Reservado", languageId: "es" },
-            { key: "name", value: "Réservée", languageId: "fr" },
           ],
         },
       },
@@ -199,7 +206,6 @@ async function main() {
           create: [
             { key: "name", value: "Sold", languageId: "en" },
             { key: "name", value: "Vendido", languageId: "es" },
-            { key: "name", value: "Vendue", languageId: "fr" },
           ],
         },
       },
@@ -215,7 +221,6 @@ async function main() {
           create: [
             { key: "name", value: "Canceled", languageId: "en" },
             { key: "name", value: "Cancelado", languageId: "es" },
-            { key: "name", value: "Annulé", languageId: "fr" },
           ],
         },
       },

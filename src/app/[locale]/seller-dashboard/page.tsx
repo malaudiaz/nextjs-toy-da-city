@@ -5,45 +5,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import useSWR from "swr";
+import { useLocale } from "next-intl"; // ✅ Importa useLocale
 
 const fetcher = (...args:Parameters<typeof fetch>) => fetch(...args).then((res) => res.json());
 
 export default function SellerDashboard() {
   const { user, isLoaded } = useUser();
+  const locale = useLocale(); // ✅ Obtiene el locale actual (ej. 'es', 'en')
   const {data} = useSWR(`/api/users/${user?.id}/validate-seller`, fetcher);
-  // const [stripeAccountStatus, setStripeAccountStatus] = useState<null | string>(
-  //   null
-  // );
-  
-
-  // useEffect(() => {
-  //   console.log("useEffect ejecutado", { user });
-
-  //   if (!isLoaded || !user) {
-  //     console.log("useEffect detenido: isLoaded o user no están listos", {
-  //       isLoaded,
-  //       user,
-  //     });
-  //     return;
-  //   }
-
-  //   const fetchStripeStatus = async () => {
-  //     try {
-  //       console.log("Haciendo fetch a /api/users/", user.id);
-  //       const response = await fetch(`/api/users/${user.id}/validate-seller`);
-  //       if (!response.ok) {
-  //         throw new Error(`Error en la API: ${response.status}`);
-  //       }
-  //       const data = await response.json();
-  //       console.log("Respuesta de la API:", data);
-  //       setStripeAccountStatus(data.stripeAccountId);
-  //     } catch (error) {
-  //       console.error("Error al obtener datos del usuario:", error);
-  //     }
-  //   };
-
-  //   fetchStripeStatus();
-  // }, [user, isLoaded]);
 
   return (
     <>
@@ -64,7 +33,7 @@ export default function SellerDashboard() {
                 <p>Please complete the seller onboarding process.</p>
               )}
 
-              <Link href={"/"}
+              <Link href={`/${locale}`}
                 className="inline-flex items-center justify-center rounded-md bg-[#4c754b] px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-[#558d54] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 w-full"
               >
                 <p>Back to home</p>

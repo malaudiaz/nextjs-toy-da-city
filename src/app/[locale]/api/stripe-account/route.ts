@@ -10,7 +10,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export async function POST(req: Request) {
-  const { userId, locale } = await req.json();
+  const url = new URL(req.url);
+  const pathname = url.pathname; // ej. "/es/api/stripe-account"
+  const locale = pathname.split("/")[1]; // obtiene "es", "en", etc.
+
+  const { userId } = await req.json();
 
   if (!userId || !locale) {
     return NextResponse.json(
@@ -63,7 +67,7 @@ export async function POST(req: Request) {
         // Guardar en DB
         await prisma.user.update({
           where: { clerkId: userId },
-          data: { stripeAccountId: account.id },
+          data: { stripeAccountId: account.id, role: "seller" },
         });
 
         stripeAccountId = account.id;
@@ -111,14 +115,8 @@ export async function POST(req: Request) {
     if (account.charges_enabled && account.payouts_enabled) {
       // Ya completó el onboarding → redirigir directamente al dashboard
 
-      // Guardar en DB
-      await prisma.user.update({
-        where: { clerkId: userId },
-        data: { role: "seller" },
-      });
-
       return NextResponse.json({
-        onboardingUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/seller-dashboard`,
+        onboardingUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}`,
         status: "complete",
       });
     }
@@ -127,7 +125,7 @@ export async function POST(req: Request) {
     const accountLink = await stripe.accountLinks.create({
       account: stripeAccountId,
       refresh_url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/seller-onboarding?refresh=true`,
-      return_url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/seller-dashboard`,
+      return_url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}`,
       type: "account_onboarding",
     });
 

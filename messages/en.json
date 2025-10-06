@@ -678,6 +678,13 @@
     "viewOrders": "View my orders",
     "questions": "Do you have any questions?",
     "contact": "Contact us"
+  },
+  "sellerOnboarding": {
+    "BecomeSeller": "Become a Seller",
+    "BecomeSellerDescription": "Set up your seller account to start selling products.",
+    "StartSelling": "Start Selling",
+    "processing": "Processing...",
+    "error": "Error starting onboarding"
   }
 }
 

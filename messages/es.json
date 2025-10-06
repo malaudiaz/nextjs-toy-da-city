@@ -676,5 +676,12 @@
     "viewOrders": "Ver mis pedidos",
     "questions": "¿Tienes alguna pregunta?",
     "contact": "Contáctanos"
+  },
+  "sellerOnboarding": {
+    "BecomeSeller": "Conviértete en vendedor",
+    "BecomeSellerDescription": "Configura tu cuenta de vendedor para comenzar a vender productos.",
+    "StartSelling": "Empieza a vender",
+    "processing": "Procesando...",
+    "error": "Error al iniciar onboarding"
   }
 }
