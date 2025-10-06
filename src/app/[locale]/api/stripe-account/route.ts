@@ -114,6 +114,11 @@ export async function POST(req: Request) {
 
     if (account.charges_enabled && account.payouts_enabled) {
       // Ya completó el onboarding → redirigir directamente al dashboard
+      // Guardar en DB
+      await prisma.user.update({
+        where: { clerkId: userId },
+        data: { stripeAccountId: account.id, role: "seller" },
+      });
 
       return NextResponse.json({
         onboardingUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}`,
