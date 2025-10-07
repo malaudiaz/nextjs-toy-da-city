@@ -16,6 +16,7 @@ import { useAuth } from "@clerk/nextjs";
 import Profile from "../Profile";
 import { ChatButton } from "../ChatButton";
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
 
 // Importación dinámica con exportación por defecto correcta
 const MapComponent = dynamic(
@@ -46,6 +47,9 @@ type ProductDetailsProps = {
 //const fetcher = (...args: Parameters<typeof fetch>) => fetch(...args).then((res) => res.json());
 
 const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
+  const { user } = useUser();
+  const isCurrentUser = user?.id === seller?.id;
+
   const [selectedImage, setSelectedImage] = useState(0);
   const [favorite, setFavorite] = useState(toy.isFavorite);
   const { isSignedIn } = useAuth();
@@ -89,7 +93,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
       <h1 className="text-3xl font-bold text-gray-900 mb-3">{toy.title}</h1>
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">
-          {NumberToCategory(toy.categoryId)}
+          {NumberToCategory(toy.categoryId, t)}
         </span>
       </div>
 
@@ -156,7 +160,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
           <div>
             <div className="flex items-center justify-between mb-6">
               <span className="text-3xl font-bold text-green-700">
-                ${toy.forSell ? toy.price.toFixed(2) : "Gratis"}
+                ${toy.forSell ? toy.price.toFixed(2) : t("free")}
               </span>
 
               <button
@@ -175,7 +179,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
             </div>
             <div className="flex items-center space-x-2 justify-between">
               <h2 className="inline-block text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-lg">
-                Condition: {NumberToCondition(toy.conditionId)}
+                {t("condition")}: {NumberToCondition(toy.conditionId, t)}
               </h2>
             </div>
           </div>
@@ -201,7 +205,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
             <div className="flex items-center">
               {toy.forSell && (
                 <button
-                  disabled={!isSignedIn}
+                  disabled={!isSignedIn || isCurrentUser}
                   onClick={() => {
                     const added = addToCart({
                       id: toy.id,

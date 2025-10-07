@@ -66,33 +66,43 @@ export const getBreadcrumbs = (
   return breadcrumbs;
 };
 
-export const NumberToCategory = (categoryId: number) => {
+export const NumberToCategory = (categoryId: number, t: (key: string) => string ) => {
   switch (categoryId) {
     case 1:
-      return "Educational";
+      return t("Educational");
     case 2:
-      return "Electronic";
+      return t("Electronic");
     case 3:
-      return "Board Games";
+      return t("BoardGames");
     case 4:
-      return "Camping";
+      return t("Mobility");
     case 5:
-      return "Dolls";
+      return t("Forbabies");
     case 6:
-      return "Stuffed Animals";
+      return t("StuffedAnimals");
+    case 7:
+      return t("RareToys");
+    case 8:
+      return t("ActionFigures");
+    case 9:
+      return t("Vintage");
   }
 };
 
-export const NumberToCondition = (conditionId: number) => {
+export const NumberToCondition = (conditionId: number, t: (key: string) => string) => {
   switch (conditionId) {
     case 1:
-      return "New";
+      return t("new");
     case 2:
-      return "Like New";
+      return t("openBox");
     case 3:
-      return "Acceptable";
+      return t("likeNew");
     case 4:
-      return "To Repair";
+      return t("acceptable");
+    case 5:
+      return t("good");
+    case 6:
+      return t("toRepair");
   }
 };
 
