@@ -10,24 +10,25 @@ import { getSellerData } from "@/lib/actions/sellertActions";
 import { auth } from "@clerk/nextjs/server";
 
 type PageProps = {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string, locale: string }>;
 };
 
 export default async function EditPostPage({ params }: PageProps) {
   const { userId } = await auth();
   if (!userId) return <Sigin />;
 
+  const { id, locale } = await params;
+
   const sellerData = await getSellerData(userId);
   if (sellerData.role !== "seller") {
-    redirect("/seller-onboarding");
+    redirect(`/${locale}/seller-onboarding`);
   }
 
-  const { id } = await params;
   const toyId = id;
   const toy = await getToyById(toyId, userId); // ← Verifica que el juguete pertenezca al vendedor
 
   if (!toy) {
-    redirect("/post");
+    redirect(`/${locale}/post`);
   }
 
   const categories = await getCategories();

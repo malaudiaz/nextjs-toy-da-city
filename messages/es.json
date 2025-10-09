@@ -700,5 +700,15 @@
     "StartSelling": "Empieza a vender",
     "processing": "Procesando...",
     "error": "Error al iniciar onboarding"
+  },
+  "successPage": {
+    "confirmOrder": "Confirmando tu pedido...",
+    "title": "¡Gracias por tu compra!",
+    "subtitle": "Tu pedido se ha procesado correctamente. Su pago se ha enviado a Stripe, y se ha registrado en nuestra base de datos. Debe cerrar o anular el pedido en tu historial de compras, dentro de tu perfil, en caso de no hacerlo pasadas las 72 horas entenderemos que todo es correcto y procederemos a hacerlo de forma automática transfiriendo el pago al vendedor.",
+    "queryTitle": "Puedes revisar tu historial de compras en tu perfil.",
+    "backHome": "Volver al inicio",
+    "viewOrders": "Ver mis pedidos",
+    "reviewSeller": "¿Quieres reseñar al vendedor?",
+    "review": "Deja una Reseña al vendedor"
   }
 }

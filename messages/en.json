@@ -702,6 +702,16 @@
     "StartSelling": "Start Selling",
     "processing": "Processing...",
     "error": "Error starting onboarding"
+  },
+  "successPage": {
+    "confirmOrder": "Confirming your order...",
+    "title": "Thank you for your purchase!",
+    "subtitle": "Your order has been processed successfully. Your payment has been sent to Stripe and recorded in our database. You must close or cancel the order in your purchase history, within your profile. If you do not do so within 72 hours, we will assume everything is correct and will automatically transfer the payment to the seller.",
+    "queryTitle": "You can review your order history in your profile.",
+    "backHome": "Back to home",
+    "viewOrders": "View my orders",
+    "reviewSeller": "Do you want to review the seller?",
+    "review": "Leave a Review for the Seller !"
   }
 }
 
