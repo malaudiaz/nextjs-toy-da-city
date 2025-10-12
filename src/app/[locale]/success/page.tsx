@@ -78,7 +78,7 @@ export default function SuccessPage() {
             {t("backHome")}
           </Link>
           <Link
-            href={`/${locale}/profile/orders`}
+            href={`/${locale}/config/purchases`}
             className="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition text-sm font-medium"
           >
             {t("viewOrders")}

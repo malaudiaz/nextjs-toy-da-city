@@ -77,6 +77,8 @@
     }
   },
   "Cart": {
+    "title": "Cart",
+    "subtitle": "Summary",
     "errors": {
       "InvalidParams": "Invalid Params",
       "ValidationsErrors": "Validations Errors",
