@@ -712,5 +712,17 @@
     "viewOrders": "Ver mis pedidos",
     "reviewSeller": "¿Quieres reseñar al vendedor?",
     "review": "Deja una Reseña al vendedor"
+  },
+  "confirmOrderDialog": { 
+    "title": "Confirmar Orden",
+    "subtitle": "¿Está seguro de que desea confirmar este pedido? Esta acción no se puede deshacer.",
+    "btnConfirm": "Confirmar",
+    "btnCancel": "Cancelar"
+  },
+  "cancelOrderDialog": {
+    "title": "Cancelar Pedido",
+    "subtitle": "¿Seguro que desea cancelar este pedido? Esta acción no se puede deshacer.",
+    "btnConfirm": "Confirmar",
+    "btnCancel": "Cancelar" 
   }
 }

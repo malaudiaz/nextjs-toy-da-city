@@ -714,6 +714,18 @@
     "viewOrders": "View my orders",
     "reviewSeller": "Do you want to review the seller?",
     "review": "Leave a Review for the Seller !"
+  },
+  "confirmOrderDialog": { 
+    "title": "Confirm Order",
+    "subtitle": "Are you sure you want to confirm this order? This action cannot be undone.",
+    "btnConfirm": "Confirm",
+    "btnCancel": "Cancel"
+  },
+  "cancelOrderDialog": {
+    "title": "Cancel Order",
+    "subtitle": "Are you sure you want to cancel this order? This action cannot be undone.",
+    "btnConfirm": "Confirm",
+    "btnCancel": "Cancel" 
   }
 }
 

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog"
 import { confirmOrder } from "@/lib/actions/orderActions";
 import { toast } from "sonner";
+import { useTranslations } from 'next-intl'; // ✅ Importa el hook
 
 type Props = {
   orderId: string;
@@ -21,6 +22,7 @@ type Props = {
 };
 
 export function ConfirmOrderDialog({ orderId, btnText, msgsuccess, msgerror }: Props) {
+  const t = useTranslations('confirmOrderDialog'); // ✅ Usa el hook
 
   const handleConfirm = async () => {
     try {

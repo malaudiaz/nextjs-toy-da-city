@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog"
 import { cancelOrder } from "@/lib/actions/orderActions";
 import { toast } from "sonner";
+import { useTranslations } from 'next-intl'; // ✅ Importa el hook
 
 type Props = {
   orderId: string;
@@ -21,6 +22,7 @@ type Props = {
 };
 
 export function CancelOrderDialog({ orderId, btnText, msgsuccess, msgerror }: Props) {
+  const t = useTranslations('cancelOrderDialog'); // ✅ Usa el hook
 
   const handleCancel = async () => {
     try {
@@ -46,16 +48,16 @@ export function CancelOrderDialog({ orderId, btnText, msgsuccess, msgerror }: Pr
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Cancel Order</DialogTitle>
+            <DialogTitle>{t("title")}</DialogTitle>
             <DialogDescription>
-                Are you sure you want to cancel this order? This action cannot be undone.
+                {t("subtitle")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="destructive">Cancel</Button>
+              <Button variant="destructive">{t("btnCancel")}</Button>
             </DialogClose>
-            <Button type="submit" variant={"success"} onClick={handleCancel}>Save changes</Button>
+            <Button type="submit" variant={"success"} onClick={handleCancel}>{t("btnConfirm")}</Button>
           </DialogFooter>
         </DialogContent>
       </form>
