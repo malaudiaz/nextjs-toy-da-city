@@ -48,16 +48,16 @@ export function ConfirmOrderDialog({ orderId, btnText, msgsuccess, msgerror }: P
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Confirm Order</DialogTitle>
+            <DialogTitle>{t('title')}</DialogTitle>
             <DialogDescription>
-                Are you sure you want to confirm this order? This action cannot be undone.
+                {t("subtitle")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="destructive">Cancel</Button>
+              <Button variant="destructive">{t("btnCancel")}</Button>
             </DialogClose>
-            <Button type="submit" variant={"success"} onClick={handleConfirm}>Confirm</Button>
+            <Button type="submit" variant={"success"} onClick={handleConfirm}>{t("btnConfirm")}</Button>
           </DialogFooter>
         </DialogContent>
       </form>

@@ -8,6 +8,7 @@ import { FavoriteToy } from "@prisma/client";
 
 type ProductCardProps = {
   id: string;
+  title: string;
   description: string;
   image?: string;
   price: number;
@@ -18,6 +19,7 @@ type ProductCardProps = {
 
 const ProductCard = ({
   id,
+  title,
   description,
   image,
   price,
@@ -47,6 +49,9 @@ const ProductCard = ({
 
       {/* Contenido inferior */}
       <div className="flex flex-col flex-grow p-4">
+
+        <h1 className="text-2xl font-bold text-gray-900 mb-3">{title}</h1>
+
         <div className="flex justify-between items-center mb-2">
           <span className="font-bold text-[calc(14px_+_0.5vw)] text-green-700">
             {price === 0 ? (

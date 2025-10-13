@@ -163,19 +163,21 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
                 ${toy.forSell ? toy.price.toFixed(2) : t("free")}
               </span>
 
-              <button
-                disabled={!isSignedIn}
-                onClick={handleFavorite}
-                className={`p-2 rounded-full transition-all duration-200 ${
-                  favorite && isSignedIn
-                    ? "text-red-500 bg-red-50 hover:bg-red-100"
-                    : "text-gray-400 hover:text-red-500 hover:bg-red-50"
-                }`}
-              >
-                <Heart
-                  className={`w-6 h-6 ${favorite ? "fill-current" : ""}`}
-                />
-              </button>
+              {isSignedIn && !isCurrentUser && (
+                <button
+                  disabled={!isSignedIn}
+                  onClick={handleFavorite}
+                  className={`p-2 rounded-full transition-all duration-200 ${
+                    favorite && isSignedIn
+                      ? "text-red-500 bg-red-50 hover:bg-red-100"
+                      : "text-gray-400 hover:text-red-500 hover:bg-red-50"
+                  }`}
+                >
+                  <Heart
+                    className={`w-6 h-6 ${favorite ? "fill-current" : ""}`}
+                  />
+                </button>
+              )}
             </div>
             <div className="flex items-center space-x-2 justify-between">
               <h2 className="inline-block text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-lg">
@@ -203,9 +205,8 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
 
           <div className="flex flex-col gap-4">
             <div className="flex items-center">
-              {toy.forSell && (
+              {toy.forSell && isSignedIn && !isCurrentUser && (
                 <button
-                  disabled={!isSignedIn || isCurrentUser}
                   onClick={() => {
                     const added = addToCart({
                       id: toy.id,
@@ -232,7 +233,9 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
                 <Link href={`/seller/${toy.sellerId}`}>
                   <Profile user={seller} />
                 </Link>
-                <ChatButton toy={toy} seller={seller} /> 
+                {isSignedIn && !isCurrentUser && (
+                  <ChatButton toy={toy} seller={seller} />
+                )}
               </div>
             </div>
           </div>
