@@ -33,7 +33,7 @@ export async function getUserById(userId: string): Promise<UserData | null> {
       imageUrl,
       clerkId,
       reputation: user?.reputation || 0,
-      reviews: Math.floor(Math.random() * 100) + 50, // Simulación de número de reseñas
+      reviews: user?.reputation || 0
     };
   } catch (error) {
     console.error("Error al obtener usuario de Clerk:", error);

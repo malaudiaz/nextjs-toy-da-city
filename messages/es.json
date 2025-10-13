@@ -724,5 +724,17 @@
     "subtitle": "¿Seguro que desea cancelar este pedido? Esta acción no se puede deshacer.",
     "btnConfirm": "Confirmar",
     "btnCancel": "Cancelar" 
+  },
+  "reviewPage": {
+    "cantReview": "No puedes reseñar a este vendedor.",
+    "thank": "Gracias por tu reseña!",
+    "notFound": "Vendedor no encontrado",
+    "review": "Reseñar a  ",
+    "loginMsg": "Debes estar logueado para dejar una reseña",
+    "eligible": "Solo los compradores que han realizado una compra confirmada pueden dejar reseñas."
+  },
+  "profile": {
+    "unavailable": "Vendedor no disponible"
   }
+
 }

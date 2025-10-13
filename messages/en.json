@@ -726,6 +726,17 @@
     "subtitle": "Are you sure you want to cancel this order? This action cannot be undone.",
     "btnConfirm": "Confirm",
     "btnCancel": "Cancel" 
+  },
+  "reviewPage": {
+    "cantReview": "You can't review this seller",
+    "thank": "Thanks for your review!",
+    "notFound": "Seller not found",
+    "review": "Reseñar a  ",
+    "loginMsg": "You must be logged in to leave a review.",
+    "eligible": "Only buyers who have completed a confirmed purchase can leave reviews."
+  },
+  "profile": {
+    "unavailable": "Seller unavailable"
   }
 }
 

@@ -9,6 +9,7 @@ import fetcher from '@/lib/fetcher';
 import ReviewForm from '@/components/shared/reviews/ReviewForm';
 import SellerInfo from '@/components/shared/reviews/SellerInfo';
 import { toast } from "sonner";
+import { useTranslations } from 'next-intl'; // ✅ Importa el hook
 
 // Tipos
 interface UserProfile {
@@ -27,6 +28,7 @@ interface ReviewEligibility {
 }
 
 export default function ReviewPage() {
+  const t = useTranslations('reviewPage'); // ✅ Usa el hook
   const params = useParams<{ sellerId: string }>();
   const { sellerId } = params;
   const { user: clerkUser } = useUser();
@@ -52,7 +54,7 @@ const {  data: seller, mutate, error: sellerError, isLoading: sellerLoading } = 
           setIsEligible(true);
           setEligibleOrderId(data.orderId);
         } else {
-          toast.error(data.message || 'No puedes reseñar a este vendedor.');
+          toast.error(data.message || t('cantReview'));
         }
       } catch (error) {
         console.error('Error checking eligibility:', error);
@@ -61,12 +63,12 @@ const {  data: seller, mutate, error: sellerError, isLoading: sellerLoading } = 
     };
 
     checkEligibility();
-  }, [clerkUser, sellerId]);
+  }, [clerkUser, sellerId, t]);
 
   const handleReviewSubmitted = () => {
     // Recargar perfil del vendedor
     mutate();
-    toast.success('¡Gracias por tu reseña!');
+    toast.success(t('thank'));
     // Opcional: redirigir
     // router.push(`/profile/${sellerId}`);
   };
@@ -85,14 +87,14 @@ const {  data: seller, mutate, error: sellerError, isLoading: sellerLoading } = 
   if (sellerError || !seller) {
     return (
       <div className="max-w-2xl mx-auto p-6 text-center">
-        <h2 className="text-2xl font-bold text-red-600">Vendedor no encontrado</h2>
+        <h2 className="text-2xl font-bold text-red-600">{t('notFound')}</h2>
       </div>
     );
   }
 
   return (
     <div className="max-w-2xl mx-auto p-4 md:p-6">
-      <h1 className="text-2xl font-bold mb-6">Reseñar a {seller.name}</h1>
+      <h1 className="text-2xl font-bold mb-6">{t('review')} {seller.name}</h1>
 
       {/* Info del vendedor */}
       <SellerInfo
@@ -106,12 +108,12 @@ const {  data: seller, mutate, error: sellerError, isLoading: sellerLoading } = 
       {/* Formulario o mensaje */}
       {!clerkUser ? (
         <div className="bg-yellow-50 border border-yellow-200 p-4 rounded">
-          <p>Debes estar logueado para dejar una reseña.</p>
+          <p>{t('loginMsg')}</p>
         </div>
       ) : !isEligible ? (
         <div className="bg-red-50 border border-red-200 p-4 rounded">
           <p>
-            Solo los compradores que han realizado una compra confirmada pueden dejar reseñas.
+            {t('eligible')}
           </p>
         </div>
       ) : (

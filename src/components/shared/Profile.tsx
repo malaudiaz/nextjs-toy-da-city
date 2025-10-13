@@ -4,6 +4,7 @@
 import React from 'react';
 import { RatingStars } from './Raiting';
 import { UserAvatar } from './UserAvatar';
+import { useTranslations } from 'next-intl'; // ✅ Importa el hook
 
 type Props = {
   user: {
@@ -16,11 +17,12 @@ type Props = {
 };
 
 export default function Profile({ user }: Props) {
+  const t = useTranslations('profile'); // ✅ Usa el hook
   if (!user) {
     return (
       <div className="flex flex-row gap-4 items-center">
         <div className="w-10 h-10 rounded-full bg-gray-200"></div>
-        <p className="text-sm text-gray-500">Vendedor no disponible</p>
+        <p className="text-sm text-gray-500">{t('unavailable')}</p>
       </div>
     );
   }
