@@ -20,12 +20,16 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  const user = await prisma.user.findUnique({ where: { clerkId: userId } });
+  if (!user) return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });
+
+
   const { orderId } = await req.json();
 
   const order = await prisma.order.findUnique({ where: { id: orderId } });
   if (!order)
     return NextResponse.json({ success: false, error: "Orden no encontrada" }, { status: 404 });
-  if (order.buyerId !== userId)
+  if (order.buyerId !== user.id)
     return NextResponse.json({ success: false, error: "No autorizado" }, { status: 403 });
   if (order.status !== "AWAITING_CONFIRMATION")
     return NextResponse.json({ success: false, error: "Orden no válida" }, { status: 400 });
