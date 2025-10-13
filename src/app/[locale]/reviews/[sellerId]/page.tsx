@@ -1,20 +1,21 @@
 // app/reviews/[sellerId]/page.tsx
-'use client';
+"use client";
 
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import useSWR from 'swr';
-import { useUser } from '@clerk/nextjs';
-import fetcher from '@/lib/fetcher';
-import ReviewForm from '@/components/shared/reviews/ReviewForm';
-import SellerInfo from '@/components/shared/reviews/SellerInfo';
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
+import { useUser } from "@clerk/nextjs";
+import fetcher from "@/lib/fetcher";
+import ReviewForm from "@/components/shared/reviews/ReviewForm";
+import SellerInfo from "@/components/shared/reviews/SellerInfo";
 import { toast } from "sonner";
-import { useTranslations } from 'next-intl'; // ✅ Importa el hook
+import { useTranslations } from "next-intl"; // ✅ Importa el hook
 
 // Tipos
 interface UserProfile {
   id: string;
   name: string;
+  imageUrl?: string;
   clerkId: string;
   createdAt: string;
   averageRating: number | null;
@@ -28,7 +29,7 @@ interface ReviewEligibility {
 }
 
 export default function ReviewPage() {
-  const t = useTranslations('reviewPage'); // ✅ Usa el hook
+  const t = useTranslations("reviewPage"); // ✅ Usa el hook
   const params = useParams<{ sellerId: string }>();
   const { sellerId } = params;
   const { user: clerkUser } = useUser();
@@ -36,10 +37,17 @@ export default function ReviewPage() {
   const [eligibleOrderId, setEligibleOrderId] = useState<string | null>(null);
 
   // Obtener info del vendedor
-const {  data: seller, mutate, error: sellerError, isLoading: sellerLoading } = useSWR<UserProfile>(
-  sellerId ? `/api/profiles/${sellerId}` : null,
-  fetcher
-);
+  const {
+    data: seller,
+    mutate,
+    error: sellerError,
+    isLoading: sellerLoading,
+  } = useSWR<UserProfile>(
+    sellerId ? `/api/profiles/${sellerId}` : null,
+    fetcher
+  );
+
+  console.log("Seller data:", seller);
 
   // Verificar elegibilidad
   useEffect(() => {
@@ -54,11 +62,11 @@ const {  data: seller, mutate, error: sellerError, isLoading: sellerLoading } = 
           setIsEligible(true);
           setEligibleOrderId(data.orderId);
         } else {
-          toast.error(data.message || t('cantReview'));
+          toast.error(data.message || t("cantReview"));
         }
       } catch (error) {
-        console.error('Error checking eligibility:', error);
-        toast.error('Error al verificar elegibilidad.');
+        console.error("Error checking eligibility:", error);
+        toast.error("Error al verificar elegibilidad.");
       }
     };
 
@@ -68,7 +76,7 @@ const {  data: seller, mutate, error: sellerError, isLoading: sellerLoading } = 
   const handleReviewSubmitted = () => {
     // Recargar perfil del vendedor
     mutate();
-    toast.success(t('thank'));
+    toast.success(t("thank"));
     // Opcional: redirigir
     // router.push(`/profile/${sellerId}`);
   };
@@ -87,18 +95,22 @@ const {  data: seller, mutate, error: sellerError, isLoading: sellerLoading } = 
   if (sellerError || !seller) {
     return (
       <div className="max-w-2xl mx-auto p-6 text-center">
-        <h2 className="text-2xl font-bold text-red-600">{t('notFound')}</h2>
+        <h2 className="text-2xl font-bold text-red-600">{t("notFound")}</h2>
       </div>
     );
   }
 
   return (
     <div className="max-w-2xl mx-auto p-4 md:p-6">
-      <h1 className="text-2xl font-bold mb-6">{t('review')} {seller.name}</h1>
+      <h1 className="text-2xl font-bold mb-6">
+        {t("review")} {seller.name}
+      </h1>
 
       {/* Info del vendedor */}
       <SellerInfo
+        id={seller.id}
         name={seller.name}
+        imageUrl={seller.imageUrl}
         createdAt={seller.createdAt}
         averageRating={seller.averageRating}
         totalReviews={seller.totalReviews}
@@ -108,13 +120,11 @@ const {  data: seller, mutate, error: sellerError, isLoading: sellerLoading } = 
       {/* Formulario o mensaje */}
       {!clerkUser ? (
         <div className="bg-yellow-50 border border-yellow-200 p-4 rounded">
-          <p>{t('loginMsg')}</p>
+          <p>{t("loginMsg")}</p>
         </div>
       ) : !isEligible ? (
         <div className="bg-red-50 border border-red-200 p-4 rounded">
-          <p>
-            {t('eligible')}
-          </p>
+          <p>{t("eligible")}</p>
         </div>
       ) : (
         <div className="bg-white rounded-lg shadow p-6">

@@ -645,6 +645,8 @@
     }
   },
   "cart": {
+    "title": "Cart",
+    "subtitle": "Summary",
     "Checkout": "Checkout"
   },
   "chat": {
@@ -713,7 +715,8 @@
     "backHome": "Back to home",
     "viewOrders": "View my orders",
     "reviewSeller": "Do you want to review the seller?",
-    "review": "Leave a Review for the Seller !"
+    "review": "Leave a Review for the Seller !",
+    "cartCleared": "Cart cleared after purchase"
   },
   "confirmOrderDialog": { 
     "title": "Confirm Order",

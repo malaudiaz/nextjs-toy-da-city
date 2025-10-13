@@ -84,16 +84,6 @@ export default function SuccessPage() {
             {t("viewOrders")}
           </Link>
         </div>
-
-        <p className="mt-8 text-xs text-gray-400">
-          {t("reviewSeller")}{" "}
-          <Link
-            href={`/${locale}/profile/reviews`}
-            className="text-blue-600 hover:underline"
-          >
-            {t("review")}
-          </Link>
-        </p>
       </div>
     </div>
   );

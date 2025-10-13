@@ -1,6 +1,6 @@
 // prisma/seed.ts
 import { PrismaClient, FileType } from "@prisma/client";
-import { OrderStatus } from "@prisma/client";
+//import { OrderStatus } from "@prisma/client";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -55,21 +55,55 @@ async function main() {
           role: "buyer",
         },
         {
-          id: "ab86eee1-5cad-43fe-ab3e-a3f5ac9ea381",
+          id: "ed0c51cf-390f-44dc-8628-b198bc80ddec",
           name: "Miguel Angel Lau Diaz",
           email: "malaudiaz69@gmail.com",
           phone: "52887847",
-          clerkId: "user_33VqeElQZr339Nr68trXNPjjVLi",
+          clerkId: "user_33jpYVy0NGUWjqknzaw2JL3rIk4",
+          stripeAccountId: "acct_1SFa4iBEBaXfbRdN",
+          reputation: 5,
           role: "seller",
         },
         {
-          id: "67d5ee50-8aa2-410f-82cc-aef5dbba007b",
+          id: "71e68cdd-6c9b-4e06-8ca0-09af0dc5a77a",
           name: "Javier Maroto",
           email: "jmaroto1503@gmail.com",
           phone: "",
-          clerkId: "user_33Wt5KjruazvhCDCQP7b9IoVoik",
+          clerkId: "user_33jtC2hbAdI40X9uiU12mODeCut",
+          stripeAccountId: "acct_1SFaXeBpismCQBsb",
+          reputation: 5,
           role: "seller",
         },
+        {
+          id: "a9ec0216-b521-4070-ae9b-de8ee95edd25",
+          name: "Felipe Leonel Rueda Leyva",
+          email: "felipe.rueda90@gmail.com",
+          phone: "",
+          clerkId: "user_33z3JftzrkkqftDDQz5yRI2nK3R",
+          stripeAccountId: "acct_1SHXChBPqnQEspxk",
+          reputation: 5,
+          role: "seller",
+        },
+        {
+          id: "a1429294-5f21-46fa-8f01-5398813be80c",
+          name: "Magaly Leyva",
+          email: "magalyleyva66@gmail.com",
+          phone: "",
+          clerkId: "user_33zGOhoYJS6jdSPSYILwPGSozYX",
+          stripeAccountId: "acct_1SHYsmBtGHAS8VdI",
+          reputation: 0,
+          role: "buyer",
+        },
+        {
+          id: "f4fbe642-34c8-4a9f-86c0-a0bc85205dee",
+          name: "Yanela Rodríguez",
+          email: "yanelarr@gmail.com",
+          phone: "",
+          clerkId: "user_33w99edUCO2rE7YZPb0DtNQNXQK",
+          stripeAccountId: "acct_1SHA54Pc0SSkRUns",
+          reputation: 0,
+          role: "seller",
+        }
       ],
       skipDuplicates: true,
     });
@@ -273,30 +307,6 @@ async function main() {
                     : name,
                 languageId: "es",
               },
-              {
-                key: "name",
-                value:
-                  name === "educational"
-                    ? "Pédagogique"
-                    : name === "electronic"
-                    ? "Électronique"
-                    : name === "board_games"
-                    ? "Jeux de société"
-                    : name === "mobility"
-                    ? "Mobilité"
-                    : name === "for_babies"
-                    ? "Pour les bébés"
-                    : name === "stuffed_animals"
-                    ? "Peluches"
-                    : name === "rare_toys"
-                    ? "Jouets rares"
-                    : name === "action_figures"
-                    ? "Figurines d'action"
-                    : name === "vintage"
-                    ? "Ancienne"
-                    : name,
-                languageId: "fr",
-              },
             ],
           },
         },
@@ -318,7 +328,7 @@ async function main() {
           statusId: 1,
           conditionId: 1,
           location: "",
-          sellerId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
+          sellerId: "a9ec0216-b521-4070-ae9b-de8ee95edd25",
           forSell: true,
           forGifts: false,
           forChanges: false,
@@ -333,7 +343,7 @@ async function main() {
           statusId: 1,
           conditionId: 1,
           location: "",
-          sellerId: "f1c5d8b2-e4b3-a9f1-c5d8-b2e4b3a9f1c5",
+          sellerId: "a9ec0216-b521-4070-ae9b-de8ee95edd25",
           forSell: true,
           forGifts: false,
           forChanges: false,
@@ -688,7 +698,7 @@ async function main() {
 
       // === ORDENES ===
 
-      const ordersData = [
+/*       const ordersData = [
         {
           id: "14bc658a-1ced-4064-982a-e7abc7a804c0",
           cartId: "cart_user_31l2iT5aSDptUZiJxwB3UnVrek5_1756479343980",
@@ -725,9 +735,9 @@ async function main() {
         data: ordersData,
         skipDuplicates: true,
       });
-
+ */
       // === OrderItem ===
-      const orderItemsData = [
+/*       const orderItemsData = [
         {
           id: "39f9e9b4-910f-4d70-bb6a-21b4be13f2f4",
           orderId: "14bc658a-1ced-4064-982a-e7abc7a804c0",
@@ -758,9 +768,9 @@ async function main() {
         data: orderItemsData,
         skipDuplicates: true,
       });
-
+ */
       // === FAVORITES ===
-      const favoritesData = [
+/*       const favoritesData = [
         {
           id: "favorite_001",
           userId: "0f1a4b4d-da45-493a-a218-da7cb511198f",
@@ -772,11 +782,12 @@ async function main() {
           toyId: "toy_006",
         },
       ];
-
-      await tx.favoriteToy.createMany({
+ */
+/*       await tx.favoriteToy.createMany({
         data: favoritesData,
         skipDuplicates: true,
       });
+ */
     });
   }
 }

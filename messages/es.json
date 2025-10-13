@@ -643,6 +643,8 @@
     }
   },
   "cart": {
+    "title": "Carrito",
+    "subtitle": "Resumen",
     "Checkout": "Comprar"
   },
   "chat": {
@@ -711,7 +713,8 @@
     "backHome": "Volver al inicio",
     "viewOrders": "Ver mis pedidos",
     "reviewSeller": "¿Quieres reseñar al vendedor?",
-    "review": "Deja una Reseña al vendedor"
+    "review": "Deja una Reseña al vendedor",
+    "cartCleared": "Carrito vaciado después de la compra"
   },
   "confirmOrderDialog": { 
     "title": "Confirmar Orden",
