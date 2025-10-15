@@ -7,6 +7,7 @@ import { Trash2 } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import useSWR from "swr";
+import { useTranslations } from "next-intl";
 
 type CartCardProps = {
   item: CartItem;
@@ -14,6 +15,7 @@ type CartCardProps = {
 
 const CartCard = ({ item }: CartCardProps) => {
   const { data, error, isLoading } = useSWR("getUsers", getUsers);
+  const t = useTranslations("cartCard");
 
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   return (
@@ -41,11 +43,11 @@ const CartCard = ({ item }: CartCardProps) => {
             <div className="flex flex-row gap-2 items-center justify-between">
               <div className="flex justify-between items-center gap-2">
                 <div className="flex flex-col gap-0.5">
-                <span className="text-sm font-medium">Vendedor</span>
+                <span className="text-sm font-medium">{t("seller")}</span>
                 {isLoading ? (
                   <Skeleton className="h-4 w-24" />
                 ) : error ? (
-                  <span className="text-xs text-red-500">Error al cargar</span>
+                  <span className="text-xs text-red-500">{t("error")}</span>
                 ) : (
                   data?.users.map(
                     (user) =>
@@ -64,7 +66,7 @@ const CartCard = ({ item }: CartCardProps) => {
                   size="icon"
                   className="h-8 w-8 p-0 text-red-500 hover:bg-red-50"
                   onClick={() => removeFromCart(item.id)}
-                  aria-label="Eliminar del carrito"
+                  aria-label={t("delete")}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

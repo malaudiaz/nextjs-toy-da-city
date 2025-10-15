@@ -14,47 +14,115 @@ export async function POST(req: NextRequest) {
 
   if (!userId) {
     userId = req.headers.get("X-User-ID");
-
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
   }
 
   const user = await prisma.user.findUnique({ where: { clerkId: userId } });
-  if (!user) return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });
-
+  if (!user) {
+    return NextResponse.json({ error: "Usuario no encontrado" }, { status: 404 });
+  }
 
   const { orderId } = await req.json();
 
-  const order = await prisma.order.findUnique({ where: { id: orderId } });
-  if (!order)
-    return NextResponse.json({ success: false, error: "Orden no encontrada" }, { status: 404 });
-  if (order.buyerId !== user.id)
-    return NextResponse.json({ success: false, error: "No autorizado" }, { status: 403 });
-  if (order.status !== "AWAITING_CONFIRMATION")
-    return NextResponse.json({ success: false, error: "Orden no válida" }, { status: 400 });
-
-  const refund = await stripe.refunds.create({
-    payment_intent: order.paymentIntentId,
-    reason: "requested_by_customer"
+  const order = await prisma.order.findUnique({
+    where: { id: orderId },
+    include: { items: true },
   });
 
-  await prisma.refund.create({
-    data: {
-      orderId: order.id,
-      amount: order.totalAmount,
-      stripeRefundId: refund.id,
-    },
-  });
+  if (!order) {
+    return NextResponse.json(
+      { success: false, error: "Orden no encontrada" },
+      { status: 404 }
+    );
+  }
 
+  if (order.buyerId !== user.id) {
+    return NextResponse.json(
+      { success: false, error: "No autorizado" },
+      { status: 403 }
+    );
+  }
+
+  if (order.status !== "AWAITING_CONFIRMATION") {
+    return NextResponse.json(
+      { success: false, error: "Orden no válida para cancelar" },
+      { status: 400 }
+    );
+  }
+
+  // ✅ 1. LIBERAR LOS JUGUETES PRIMERO (¡clave!)
+  const toyIds = order.items.map((item) => item.toyId);
+  try {
+    await prisma.toy.updateMany({
+      where: { id: { in: toyIds } },
+      data: {
+        statusId: 1, // disponible
+        isActive: true,
+      },
+    });
+  } catch (dbError) {
+    console.error("Error al liberar juguetes:", dbError);
+    // Aunque falle, seguimos: lo importante es intentar liberar
+  }
+
+  // ✅ 2. Intentar verificar y reembolsar (si es posible)
+  let refundCreated = false;
+  let refundError: string | null = null;
+
+  try {
+    const paymentIntentRaw = await stripe.paymentIntents.retrieve(
+      order.paymentIntentId,
+      { expand: ["charges"] }
+    );
+
+    const paymentIntent = paymentIntentRaw as unknown as Stripe.PaymentIntent & {
+      charges: Stripe.ApiList<Stripe.Charge>;
+    };
+
+    if (paymentIntent.status === "succeeded") {
+      const charge = paymentIntent.charges.data[0];
+      if (charge && charge.amount_refunded === 0) {
+        const refund = await stripe.refunds.create({
+          payment_intent: order.paymentIntentId,
+          reason: "requested_by_customer",
+        });
+        refundCreated = true;
+
+        // Guardar el reembolso
+        await prisma.refund.create({
+          data: {
+            orderId: order.id,
+            amount: order.totalAmount,
+            stripeRefundId: refund.id,
+          },
+        });
+      } else {
+        refundError = "El pago ya fue reembolsado.";
+      }
+    } else {
+      refundError = "El pago no fue completado, por lo tanto no se reembolsa.";
+    }
+  } catch (error) {
+    console.error("Error en flujo de reembolso:", error);
+    refundError = "No se pudo procesar el reembolso, pero los juguetes ya fueron liberados.";
+    // ¡No retornamos aquí! Ya liberamos los juguetes.
+  }
+
+  // ✅ 3. Actualizar estado de la orden (siempre)
   await prisma.order.update({
     where: { id: order.id },
     data: {
-      status: "REEMBURSED",
+      status: refundCreated ? "REEMBURSED" : "CANCELED",
       canceledAt: new Date(),
-      reembursedAt: new Date(),
+      reembursedAt: refundCreated ? new Date() : null,
     },
   });
 
-  return NextResponse.json({ success: true });
+  // ✅ Responder con éxito (los juguetes ya están libres)
+  return NextResponse.json({
+    success: true,
+    message: refundError || "Reembolso procesado y juguetes liberados.",
+  });
 }

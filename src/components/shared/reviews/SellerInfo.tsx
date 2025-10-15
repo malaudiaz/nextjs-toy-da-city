@@ -4,6 +4,7 @@
 import { StarIcon } from "@heroicons/react/24/solid";
 import { format } from "date-fns";
 import { UserAvatar } from "../UserAvatar";
+import { useTranslations } from "next-intl";
 
 interface SellerInfoProps {
   id: string;
@@ -23,18 +24,19 @@ export default function SellerInfo({
   averageRating,
   totalReviews,
 }: SellerInfoProps) {
+  const t = useTranslations("sellerInfo");
   return (
     <div className="bg-white rounded-lg shadow p-6 mb-8">
       <div className="flex items-center space-x-6">
-        <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center">
-          {imageUrl ? (
-            <UserAvatar userId={id} src={imageUrl} alt={name} />
-          ) : (
+        {imageUrl ? (
+          <UserAvatar userId={id} src={imageUrl} alt={name} />
+        ) : (
+          <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center">
             <span className="text-xl font-bold text-gray-700">
               {name.charAt(0).toUpperCase()}
             </span>
-          )}
-        </div>
+          </div>
+        )}
         <div>
           <h1 className="text-2xl font-bold">{name}</h1>
           <div className="flex items-center mt-2">
@@ -53,15 +55,15 @@ export default function SellerInfo({
                   ))}
                 </div>
                 <span className="ml-2 text-gray-700">
-                  {Number(averageRating).toFixed(1)} ({totalReviews} reseñas)
+                  {Number(averageRating).toFixed(1)} ({totalReviews} {t("reviews")})
                 </span>
               </>
             ) : (
-              <span className="text-gray-500">Sin valoraciones</span>
+              <span className="text-gray-500">{t("ratting")}</span>
             )}
           </div>
           <p className="text-sm text-gray-500 mt-1">
-            Miembro desde {format(new Date(createdAt), "MMMM yyyy")}
+            {t("memberSince")} {format(new Date(createdAt), "MMMM yyyy")}
           </p>
         </div>
       </div>

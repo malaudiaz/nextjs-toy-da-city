@@ -47,6 +47,7 @@ export const getBreadcrumbs = (
       cart: t("Cart"),
       contact: t("Contact"),
       mission: t("Mission"),
+      reviews: t("Reviews"),
     };
 
     const label = labelMap[path] || decodedLabel;

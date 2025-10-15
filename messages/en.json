@@ -487,7 +487,8 @@
     "Search": "Search",
     "Cart": "Cart",
     "Contact": "Contact",
-    "Mission": "Our Mission"
+    "Mission": "Our Mission",
+    "Reviews": "Reviews"
   },
   "expandableText": {
     "ShowMore": "Show more",
@@ -734,12 +735,35 @@
     "cantReview": "You can't review this seller",
     "thank": "Thanks for your review!",
     "notFound": "Seller not found",
-    "review": "Reseñar a  ",
+    "review": "Review to  ",
     "loginMsg": "You must be logged in to leave a review.",
     "eligible": "Only buyers who have completed a confirmed purchase can leave reviews."
   },
   "profile": {
     "unavailable": "Seller unavailable"
+  },
+  "cartCard": { 
+    "seller": "Seller",
+    "delete": "Delete from cart",
+    "error": "Loading error"
+  },
+  "sellerInfo": {
+    "reviews": "reviews",
+    "ratting": "No ratings",
+    "memberSince": "Member since"
+  },
+  "reviewForm": {
+    "title": "Rate this seller",
+    "subtitle": "Your rating",
+    "rating": "Rate with",
+    "stars": "stars",
+    "comment": "Comment (optional)",
+    "experience": "Tell us about your experience.",
+    "submiting": "Submitting...",
+    "submit": "Submit Review",
+    "success": "Review sent successfully!",
+    "error": "Please select a rating.",
+    "sendingError": "Error submitting review"
   }
 }
 

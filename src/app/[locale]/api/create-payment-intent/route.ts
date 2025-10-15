@@ -81,16 +81,53 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Crear PaymentIntent en tu cuenta
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: totalAmount,
-      currency: "usd",
-      payment_method_types: ["card"],
-      metadata: {
-        buyer_id: buyerId,
-        transfers: JSON.stringify(transferDetails),
-      },
-    });
+    // 👇 Manejo específico del error al crear el PaymentIntent
+    let paymentIntent: Stripe.Response<Stripe.PaymentIntent>;
+    try {
+      paymentIntent = await stripe.paymentIntents.create({
+        amount: totalAmount,
+        currency: "usd",
+        payment_method_types: ["card"],
+        metadata: {
+          buyer_id: buyerId,
+          transfers: JSON.stringify(transferDetails),
+        },
+      });
+    } catch (error) {
+      // Tipado seguro del error de Stripe
+      if (error instanceof Stripe.errors.StripeError) {
+        console.error("Stripe error al crear PaymentIntent:", {
+          message: error.message,
+          type: error.type,
+          code: error.code,
+          statusCode: error.statusCode,
+        });
+
+        let userMessage = "No se pudo procesar el pago. Inténtalo de nuevo.";
+        if (error.code === "card_declined") {
+          userMessage = "La tarjeta fue rechazada. Usa otra tarjeta.";
+        } else if (error.code === "insufficient_funds") {
+          userMessage = "Fondos insuficientes en la tarjeta.";
+        } else if (error.code === "expired_card") {
+          userMessage = "La tarjeta ha expirado.";
+        } else if (error.code === "incorrect_cvc") {
+          userMessage = "El código de seguridad (CVC) es incorrecto.";
+        } else if (error.code === "processing_error") {
+          userMessage = "Error al procesar la tarjeta. Inténtalo más tarde.";
+        } else if (error.type === "StripeInvalidRequestError") {
+          userMessage = "Datos de pago inválidos.";
+        }
+
+        return NextResponse.json({ error: userMessage }, { status: 400 });
+      } else {
+        // Error no relacionado con Stripe (red, timeout, etc.)
+        console.error("Error inesperado:", error);
+        return NextResponse.json(
+          { error: "Error al conectar con el sistema de pagos." },
+          { status: 500 }
+        );
+      }
+    }
 
     // Buscar los juguetes reales en la base de datos
     const toyIds = cartItems.map((item) => item.id);

@@ -485,7 +485,8 @@
     "Search": "Buscar",
     "Cart": "Carrito",
     "Contact": "Contacto",
-    "Mission": "Nuestra Misión"
+    "Mission": "Nuestra Misión",
+    "Reviews": "Reseñas"
   },
   "expandableText": {
     "ShowMore": "Ver más",
@@ -738,6 +739,28 @@
   },
   "profile": {
     "unavailable": "Vendedor no disponible"
-  }
-
+  },
+  "cartCard": { 
+    "seller": "Vendedor",
+    "delete": "Eliminar del carrito",
+    "error": "Error al cargar"
+  },
+  "sellerInfo": {
+    "reviews": "reseñas",
+    "ratting": "Sin valoraciones",
+    "memberSince": "Miembro desde "
+  },
+  "reviewForm": {
+    "title": "Califica a este vendedor",
+    "subtitle": "Tú calificación",
+    "rating": "Califica con",
+    "stars": "estrellas",
+    "comment": "Comentario (opcional)",
+    "experience": "Cuéntanos tu experiencia.",
+    "submiting": "Enviando...",
+    "submit": "Enviar reseña",
+    "success": "¡Reseña enviada exitosamente!",
+    "error": "Seleccione una calificación.",
+    "sendingError": "Error al enviar la reseña"
+  }  
 }

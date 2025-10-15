@@ -10,6 +10,7 @@ import ReviewForm from "@/components/shared/reviews/ReviewForm";
 import SellerInfo from "@/components/shared/reviews/SellerInfo";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl"; // ✅ Importa el hook
+import Breadcrumbs from "@/components/shared/BreadCrumbs";
 
 // Tipos
 interface UserProfile {
@@ -46,9 +47,6 @@ export default function ReviewPage() {
     sellerId ? `/api/profiles/${sellerId}` : null,
     fetcher
   );
-
-  console.log("Seller data:", seller);
-
   // Verificar elegibilidad
   useEffect(() => {
     if (!clerkUser || !sellerId) return;
@@ -102,6 +100,11 @@ export default function ReviewPage() {
 
   return (
     <div className="max-w-2xl mx-auto p-4 md:p-6">
+
+      <div className="py-3">
+        <Breadcrumbs productName={seller.name}  />
+      </div>
+
       <h1 className="text-2xl font-bold mb-6">
         {t("review")} {seller.name}
       </h1>
