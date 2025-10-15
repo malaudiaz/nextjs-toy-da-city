@@ -19,7 +19,7 @@ export default function ConfigLayout({
 }) {
   return (
     <SidebarProvider>
-      <AppSidebar/> 
+      <AppSidebar  variant="sidebar" collapsible="none" /> 
       {/* Contenedor principal */}
       <SidebarInset className="flex flex-col">
         {/* Contenido dinámico */}

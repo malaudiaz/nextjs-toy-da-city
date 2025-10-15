@@ -161,3 +161,10 @@ h1 {
   height: 100%;
   z-index: 9999; /* ¡Muy por encima de todo! */
 }
+
+/* En tu archivo global.css o module.css */
+.sidebar-container-fix {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+}

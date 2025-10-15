@@ -77,7 +77,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   ];
 
   return (
-    <Sidebar {...props}>
+    <Sidebar {...props} className="sidebar-container-fix">
       <SidebarHeader>
         <div className="px-4 py-4 flex flex-col items-center justify-between border-b border-[#f0f0f0] bg-white">
           <div className="flex items-center gap-4">
