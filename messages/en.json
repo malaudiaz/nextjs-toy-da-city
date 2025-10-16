@@ -764,6 +764,14 @@
     "success": "Review sent successfully!",
     "error": "Please select a rating.",
     "sendingError": "Error submitting review"
+  },
+  "sendMail": {
+    "validationsErrors": "Mandatory data is missing",
+    "subject": "¡Thank you for your purchase!",
+    "greeting": "Hello ",
+    "gratitude": "Thank you for your purchase.",
+    "products": "Products:",
+    "farewell": "We look forward to seeing you soon!"
   }
 }
 

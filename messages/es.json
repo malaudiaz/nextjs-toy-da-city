@@ -762,5 +762,13 @@
     "success": "¡Reseña enviada exitosamente!",
     "error": "Seleccione una calificación.",
     "sendingError": "Error al enviar la reseña"
-  }  
+  },
+  "sendMail": {
+    "validationsErrors": "Faltan datos obligatorios",
+    "subject": "¡Gracias por tu compra!",
+    "greeting": "¡Hola ",
+    "gratitude": "Gracias por tu compra.",
+    "products": "Productos:",
+    "farewell": "¡Te esperamos pronto!"
+  }
 }

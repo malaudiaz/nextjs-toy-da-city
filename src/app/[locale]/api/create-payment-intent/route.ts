@@ -181,7 +181,8 @@ export async function POST(req: NextRequest) {
         statusId: 3, // sold
         isActive: false
       },
-    });    
+    });   
+     
 
     return NextResponse.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
