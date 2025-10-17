@@ -216,7 +216,9 @@ enum OrderStatus {
   CONFIRMED
   CANCELED
   TRANSFERRED
+  TRANSFER_IN_PROGRESS
   REEMBURSED
+  ERROR
 }
 
 model Transfer {
