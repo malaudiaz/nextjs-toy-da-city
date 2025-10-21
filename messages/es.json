@@ -773,8 +773,9 @@
     "validationsErrors": "Faltan datos obligatorios",
     "subject": "¡Gracias por tu compra!",
     "greeting": "¡Hola ",
-    "gratitude": "Gracias por tu compra.",
+    "gratitude": "Gracias por tu compra en Toydacity. Tu pago fue procesado con éxito.",
     "products": "Productos:",
-    "farewell": "¡Te esperamos pronto!"
+    "farewell": "Difruta tu compra, te esperamos pronto",
+    "totalPaid": "Total Pagado:"
   }
 }

@@ -775,9 +775,10 @@
     "validationsErrors": "Mandatory data is missing",
     "subject": "¡Thank you for your purchase!",
     "greeting": "Hello ",
-    "gratitude": "Thank you for your purchase.",
+    "gratitude": "Thank you for your purchase at Toydacity. Your payment was processed successfully.",
     "products": "Products:",
-    "farewell": "We look forward to seeing you soon!"
+    "farewell": "Enjoy your purchase, we hope to see you soon.",
+    "totalPaid": "Total paid:"
   }
 }
 

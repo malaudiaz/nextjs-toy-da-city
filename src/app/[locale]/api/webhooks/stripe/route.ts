@@ -1,6 +1,7 @@
 // app/api/webhooks/stripe/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
+import { sendEmail } from "@/lib/nodemailer";
+
 import Stripe from "stripe";
 import prisma from "@/lib/prisma";
 import { OrderStatus } from "@prisma/client";
@@ -13,12 +14,6 @@ export const config = {
   },
 };
 
-interface Producto {
-  nombre: string;
-  precio: number; // o string, según cómo lo envíes
-}
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
   timeout: 10000,
@@ -113,27 +108,21 @@ export async function POST(req: NextRequest) {
         precio: item.priceAtPurchase / 100, // convertir de centavos a dólares
       }));
 
-      const { error: mailError } = await resend.emails.send({
-      from: 'Toydacity <support@toydacity.com>',
-      to: order.buyer.email,
-      subject: t("subject"),
-      html: `
-        <h1>${t("greeting")}${order.buyer.name}</h1>
-        <p>${t("gratitude")}</p>
-        <p><strong>Total:</strong> $${order.totalAmount}</p>
-        <h2>${t("products")}</h2>
-        <ul>
-          ${productos.map((p: Producto) => `<li>${p.nombre} - $${p.precio}</li>`).join('')}
-        </ul>
-        <p>${t("farewell")}</p>
-      `,
+      await sendEmail({
+        to: order.buyer.email,
+        subject: t("subject"),
+        html: `
+          <h2>${t("greeting")} ${order.buyer.name}!</h2>
+          <p>${t("gratitude")}</p>
+          <p><strong>${t("totalPaid")}:</strong> $${(paymentIntent.amount / 100).toFixed(2)}</p>
+          <h3>${t("products")}</h3>
+          <ul>
+            ${productos.map(p => `<li>${p.nombre} - $${p.precio.toFixed(2)}</li>`).join('')}
+          </ul>
+          <p>${t("farewell")}</p>
+        `,
       });
 
-      if (mailError) {
-        console.error("Error al enviar correo:", mailError);
-      } else {
-        console.log("✅ Correo enviado a", order.buyer.email);
-      }
     } catch (err) {
       console.error("Error procesando el webhook:", err);
     }
