@@ -43,7 +43,7 @@ export async function PATCH(
       message: `Condition ${updatedCondition.isActive ? 'activado' : 'desactivado'} correctamente`
     })
 
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { 
         success: false, 

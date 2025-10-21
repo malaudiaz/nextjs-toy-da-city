@@ -47,7 +47,7 @@ export async function PATCH(
       message: `Categoria ${updatedCategory.isActive ? 'activado' : 'desactivado'} correctamente`
     })
 
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { 
         success: false, 
