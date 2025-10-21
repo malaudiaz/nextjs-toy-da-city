@@ -23,7 +23,9 @@
       "ServerError": "Error interno del servidor",
       "NotFound": "Categoría no encontrada",
       "UpdateError": "Error actualizando categoría",
-      "DeleteError": "Error eliminando categoría"
+      "DeleteError": "Error eliminando categoría",
+      "InvalidId": "Incorrecto ID de la categoría",
+      "DeletedSuccessfully": "Operación de borrado satisfactoria"
     }
   },
   "Status": {
@@ -33,7 +35,9 @@
       "ServerError": "Error interno del servidor",
       "NotFound": "Categoría no encontrada",
       "UpdateError": "Error actualizando categoría",
-      "DeleteError": "Error eliminando categoría"
+      "DeleteError": "Error eliminando categoría",
+      "InvalidId": "Incorrecto ID des estado",
+      "DeletedSuccessfully": "Operación de borrado satisfactoria"
     }
   },
   "Condition": {
@@ -43,7 +47,9 @@
       "ServerError": "Error interno del servidor",
       "NotFound": "Condición no encontrada",
       "UpdateError": "Error actualizando condición del juguete",
-      "DeleteError": "Error eliminando condición del juguete"
+      "DeleteError": "Error eliminando condición del juguete",
+      "InvalidId": "Incorrecto ID de la condición",
+      "DeletedSuccessfully": "Operación de borrado satisfactoria"
     }
   },
   "Toy": {

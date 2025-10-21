@@ -24,7 +24,7 @@ export async function PATCH(
 
     if (!existingStatus) {
       return NextResponse.json(
-        { success: false, error: t("InvalidSatusID") },
+        { success: false, error: t("InvalidId") },
         { status: 404 }
       )
     }
@@ -44,11 +44,10 @@ export async function PATCH(
     })
 
   } catch (error) {
-    console.error('Error al cambiar estado:', error)
     return NextResponse.json(
       { 
         success: false, 
-        error: 'Error al cambiar el estado del estado' 
+        error: t("UpdateError")
       },
       { status: 500 }
     )

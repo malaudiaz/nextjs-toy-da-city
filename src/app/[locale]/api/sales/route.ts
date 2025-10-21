@@ -137,8 +137,10 @@ export async function GET(
 export async function POST(req: Request) {
   const { userId: buyerId } = await auth();
 
+  const t = await getTranslations("Toy.errors");
+  
   if (!buyerId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
   }
 
   const body = await req.json();
@@ -163,6 +165,6 @@ export async function POST(req: Request) {
     );
   } catch (err) {
     console.error(err);
-    return NextResponse.json({ error: "Sale failed" }, { status: 500 });
+    return NextResponse.json({ error: t("ServerError") }, { status: 500 });
   }
 }

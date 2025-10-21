@@ -23,7 +23,9 @@
       "ServerError": "Internal Server Error",
       "NotFound": "Category not found",
       "UpdateError": "Error updating category",
-      "DeleteError": "Error deleting category"
+      "DeleteError": "Error deleting category",
+      "InvalidId": "Invalid ID category",
+      "DeletedSuccessfully": "Deleted Successfully "
     }
   },
   "Status": {
@@ -33,7 +35,9 @@
       "ServerError": "Internal Server Error",
       "NotFound": "Status not found",
       "UpdateError": "Error updating status",
-      "DeleteError": "Error deleting status"
+      "DeleteError": "Error deleting status",
+      "InvalidId": "Invalid ID status",
+      "DeletedSuccessfully": "Deleted Successfully "
     }
   },
   "Condition": {
@@ -43,7 +47,9 @@
       "ServerError": "Internal Server Error",
       "NotFound": "Condition not found",
       "UpdateError": "Error updating condition",
-      "DeleteError": "Error deleting condition"
+      "DeleteError": "Error deleting condition",
+      "InvalidId": "Invalid ID condition",
+      "DeletedSuccessfully": "Deleted Successfully "
     }
   },
   "Toy": {

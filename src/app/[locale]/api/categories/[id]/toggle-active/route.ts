@@ -13,7 +13,7 @@ export async function PATCH(
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
   }
 
 
@@ -28,7 +28,7 @@ export async function PATCH(
 
     if (!existingCategory) {
       return NextResponse.json(
-        { success: false, error: t("InvalidCategoryID") },
+        { success: false, error: t("InvalidId") },
         { status: 404 }
       )
     }
@@ -48,11 +48,10 @@ export async function PATCH(
     })
 
   } catch (error) {
-    console.error('Error al cambiar estado:', error)
     return NextResponse.json(
       { 
         success: false, 
-        error: 'Error al cambiar el estado de la categoria' 
+        error: t("UpdateError")
       },
       { status: 500 }
     )

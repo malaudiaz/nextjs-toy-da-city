@@ -24,7 +24,7 @@ export async function PATCH(
 
     if (!existingCondition) {
       return NextResponse.json(
-        { success: false, error: t("InvalidConditionID") },
+        { success: false, error: t("InvalidId") },
         { status: 404 }
       )
     }
@@ -44,11 +44,10 @@ export async function PATCH(
     })
 
   } catch (error) {
-    console.error('Error al cambiar estado:', error)
     return NextResponse.json(
       { 
         success: false, 
-        error: 'Error al cambiar el estado de la condición del juguete' 
+        error: t("UpdateError")
       },
       { status: 500 }
     )

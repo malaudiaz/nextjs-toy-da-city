@@ -41,7 +41,7 @@ export async function GET(
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { error: "Failed to fetch status" },
+      { error: t("ServerError") },
       { status: 500 }
     );
   }
@@ -55,7 +55,7 @@ export async function PUT(
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
   }
 
   const { id } = await params; // Safe to use
@@ -64,7 +64,7 @@ export async function PUT(
     // Validar ID
     if (!id || isNaN(Number(id))) {
       return NextResponse.json(
-        { error: t("InvalidCategoryID") },
+        { error: t("InvalidId") },
         { status: 400 }
       );
     }
@@ -111,7 +111,7 @@ export async function DELETE(
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
   }
 
   const { id } = await params; // Safe to use
@@ -119,7 +119,7 @@ export async function DELETE(
   try {
     if (!id || isNaN(Number(id))) {
       return NextResponse.json(
-        { error: t("InvalidCategoryId") },
+        { error: t("InvalidId") },
         { status: 400 }
       );
     }
@@ -129,7 +129,7 @@ export async function DELETE(
     });
 
     return NextResponse.json(
-      { message: t("Deleted Category Successfully") },
+      { message: t("DeletedSuccessfully") },
       { status: 200 }
     );
   } catch (error) {
@@ -153,14 +153,14 @@ export async function PATCH(
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
   }
 
   const { id } = await params; // Safe to use
 
   if (!id || isNaN(Number(id))) {
     return NextResponse.json(
-      { error: t("InvalidCategoryId") },
+      { error: t("InvalidId") },
       { status: 400 }
     );
   }
@@ -184,7 +184,7 @@ export async function PATCH(
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
-          error: "Error de validación",
+          error: t("ValidationsErrors"),
           details: error.errors.map((e) => `${e.path}: ${e.message}`),
         },
         { status: 400 }
@@ -193,16 +193,10 @@ export async function PATCH(
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2025") {
-        return NextResponse.json(
-          { error: "Categoría no encontrada" },
-          { status: 404 }
-        );
+        return NextResponse.json({ error: t("NotFound") }, { status: 404 });
       }
     }
 
-    return NextResponse.json(
-      { error: "Error interno del servidor" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: t("ServerError") }, { status: 500 });
   }
 }
