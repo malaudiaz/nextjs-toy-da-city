@@ -1,7 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
-import Stripe from 'stripe';
-import { auth } from '@clerk/nextjs/server';
+import { NextRequest, NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
+import Stripe from "stripe";
+import { auth } from "@clerk/nextjs/server";
+import { sendEmail } from "@/lib/nodemailer";
+import { getTranslations } from "next-intl/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
@@ -10,85 +12,96 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export async function POST(req: NextRequest) {
+  const t = await getTranslations("confirmDelivery");
   let { userId } = await auth();
 
   if (!userId) {
     userId = req.headers.get("X-User-ID");
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: t("unauthorized") }, { status: 401 });
     }
   }
 
   const user = await prisma.user.findUnique({ where: { clerkId: userId } });
   if (!user) {
-    return NextResponse.json({ error: "Usuario no encontrado" }, { status: 404 });
+    return NextResponse.json(
+      { error: t("userNotFound") },
+      { status: 404 }
+    );
   }
 
   const { orderId } = await req.json();
 
   const order = await prisma.order.findUnique({ where: { id: orderId } });
   if (!order) {
-    return NextResponse.json({ error: "Orden no encontrada" }, { status: 404 });
+    return NextResponse.json({ error: t("orderNotFound") }, { status: 404 });
   }
   if (order.buyerId !== user.id) {
-    return NextResponse.json({ success: false, error: "No autorizado" }, { status: 403 });
+    return NextResponse.json(
+      { success: false, error: t("unauthorized") },
+      { status: 403 }
+    );
   }
   if (order.status !== "AWAITING_CONFIRMATION") {
-    return NextResponse.json({ success: false, error: "Orden no válida para confirmar" }, { status: 400 });
+    return NextResponse.json(
+      { success: false, error: t("invalidOrder") },
+      { status: 400 }
+    );
   }
 
   let intent;
   try {
     intent = await stripe.paymentIntents.retrieve(order.paymentIntentId);
   } catch (error) {
-    console.error("Error al recuperar PaymentIntent:", error);
+    console.error(t("paymentIntentError"), error);
     return NextResponse.json(
-      { success: false, error: "No se pudo verificar el pago." },
+      { success: false, error: t("invalidPayment") },
       { status: 500 }
     );
   }
 
-  const transfers = JSON.parse(intent.metadata.transfers || '[]');
+  const transfers = JSON.parse(intent.metadata.transfers || "[]");
   if (!Array.isArray(transfers) || transfers.length === 0) {
     return NextResponse.json(
-      { success: false, error: "No hay transferencias configuradas para esta orden." },
+      {
+        success: false,
+        error: t("invalidTransfer"),
+      },
       { status: 400 }
     );
   }
 
   // ✅ Intentar crear transferencias con manejo de errores
   const createdTransfers = [];
-  for (const t of transfers) {
+  for (const tfs of transfers) {
     try {
       const transfer = await stripe.transfers.create({
-        amount: t.amount,
-        currency: 'usd',
-        destination: t.stripeAccountId,
-        description: `Transferencia por confirmación de entrega`,
+        amount: tfs.amount,
+        currency: "usd",
+        destination: tfs.stripeAccountId,
+        description: t("transferDescription"),
       });
 
       // Guardar en DB
       const dbTransfer = await prisma.transfer.create({
-         data: {
+        data: {
           orderId: order.id,
-          sellerId: t.sellerId,
-          amount: t.amount,
+          sellerId: tfs.sellerId,
+          amount: tfs.amount,
           stripeTransferId: transfer.id,
-        }
+        },
       });
 
       createdTransfers.push(dbTransfer);
-      
     } catch (error) {
-      console.error("Error al crear transferencia:", error);
+      console.error(t("transferError"), error);
 
-      let errorMessage = "No se pudo transferir el pago al vendedor.";
+      let errorMessage = t("errorMessage");
       if (error instanceof Stripe.errors.StripeError) {
         if (error.code === "balance_insufficient") {
-          errorMessage =
-            "Fondos insuficientes en la cuenta de Stripe. Usa la tarjeta de prueba 4000000000000077 para cargar fondos disponibles.";
+          errorMessage = t("insuficientFunds");
         } else if (error.type === "StripeInvalidRequestError") {
-          errorMessage = `Error en la solicitud: ${error.message}`;
+          errorMessage = `${t("requestError")}${error.message}`;
         }
       }
 
@@ -110,6 +123,31 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  return NextResponse.json({ success: true });
+  // ✉️ ENVIAR CORREO DE TRANSFERENCIA COMPLETADA
+  const orderWithDetails = await prisma.order.findUnique({
+    where: { id: order.id },
+    include: {
+      buyer: { select: { email: true, name: true } },
+      items: {
+        include: {
+          toy: { select: { title: true } },
+        },
+      },
+    },
+  });
 
+  if (orderWithDetails?.buyer?.email) {
+    await sendEmail({
+      to: orderWithDetails.buyer.email,
+      subject: t("subject"),
+      html: `
+      <h2>${t("title")}</h2>
+      <p>${t("hello")} ${orderWithDetails.buyer.name},</p>
+      <p>${t("message")}</p>
+      <p>${t("farewell")}</p>
+    `,
+    });
+  }
+
+  return NextResponse.json({ success: true });
 }

@@ -12,7 +12,8 @@ import {
 } from "@/components/ui/dialog"
 import { confirmOrder } from "@/lib/actions/orderActions";
 import { toast } from "sonner";
-import { useTranslations } from 'next-intl'; // ✅ Importa el hook
+import { useTranslations } from 'next-intl';
+import { useState } from 'react'; // ✅ Importa useState
 
 type Props = {
   orderId: string;
@@ -22,7 +23,8 @@ type Props = {
 };
 
 export function ConfirmOrderDialog({ orderId, btnText, msgsuccess, msgerror }: Props) {
-  const t = useTranslations('confirmOrderDialog'); // ✅ Usa el hook
+  const t = useTranslations('confirmOrderDialog');
+  const [open, setOpen] = useState(false); // ✅ Estado para controlar el modal
 
   const handleConfirm = async () => {
     try {
@@ -30,6 +32,7 @@ export function ConfirmOrderDialog({ orderId, btnText, msgsuccess, msgerror }: P
 
       if (result.success) {
         toast.success(msgsuccess);
+        setOpen(false); // ✅ Cierra el modal después de confirmar
       } else {
         toast.error(result.error || msgerror);
       }
@@ -41,26 +44,30 @@ export function ConfirmOrderDialog({ orderId, btnText, msgsuccess, msgerror }: P
   };
 
   return (
-    <Dialog>
-      <form>
-        <DialogTrigger asChild>
-          <Button variant="success">{btnText}</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>{t('title')}</DialogTitle>
-            <DialogDescription>
-                {t("subtitle")}
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="destructive">{t("btnCancel")}</Button>
-            </DialogClose>
-            <Button type="submit" variant={"success"} onClick={handleConfirm}>{t("btnConfirm")}</Button>
-          </DialogFooter>
-        </DialogContent>
-      </form>
+    <Dialog open={open} onOpenChange={setOpen}> {/* ✅ Controla el estado del modal */}
+      <DialogTrigger asChild>
+        <Button variant="success">{btnText}</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>{t('title')}</DialogTitle>
+          <DialogDescription>
+            {t("subtitle")}
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="destructive">{t("btnCancel")}</Button>
+          </DialogClose>
+          <Button 
+            type="button" // ✅ Importantísimo: type="button" para evitar submit
+            variant={"success"} 
+            onClick={handleConfirm}
+          >
+            {t("btnConfirm")}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   )
 }

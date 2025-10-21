@@ -39,7 +39,10 @@ export async function POST(req: NextRequest) {
   const t = await getTranslations("sendMail");
   const sig = req.headers.get("stripe-signature");
   if (!sig) {
-    return NextResponse.json({ error: "Firma no proporcionada" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Firma no proporcionada" },
+      { status: 400 }
+    );
   }
 
   let rawBody: Buffer;
@@ -60,9 +63,9 @@ export async function POST(req: NextRequest) {
     );
   } catch (err) {
     if (err instanceof Error) {
-        console.error("Error:", err.message);
+      console.error("Error:", err.message);
     } else {
-        console.error("Error desconocido:", err);
+      console.error("Error desconocido:", err);
     }
     return NextResponse.json({ error: "Webhook inválido" }, { status: 400 });
   }
@@ -99,7 +102,7 @@ export async function POST(req: NextRequest) {
       // Actualizar estado de la orden
       await prisma.order.update({
         where: { id: order.id },
-        data: { status: OrderStatus.TRANSFERRED },
+        data: { status: OrderStatus.AWAITING_CONFIRMATION },
       });
 
       // ✉️ ENVIAR CORREO AL COMPRADOR
@@ -110,19 +113,20 @@ export async function POST(req: NextRequest) {
 
       await sendEmail({
         to: order.buyer.email,
-        subject: t("subject"),
+        subject: t("paymentSuccessSubject"), // Cambiar el asunto
         html: `
-          <h2>${t("greeting")} ${order.buyer.name}!</h2>
-          <p>${t("gratitude")}</p>
-          <p><strong>${t("totalPaid")}:</strong> $${(paymentIntent.amount / 100).toFixed(2)}</p>
-          <h3>${t("products")}</h3>
-          <ul>
-            ${productos.map(p => `<li>${p.nombre} - $${p.precio.toFixed(2)}</li>`).join('')}
-          </ul>
-          <p>${t("farewell")}</p>
-        `,
+        <h2>${t("paymentSuccessGreeting")} ${order.buyer.name}!</h2>
+        <p>${t("paymentSuccessMessage")}</p>
+        <p><strong>${t("totalPaid")}:</strong> $${(paymentIntent.amount / 100).toFixed(2)}</p>
+        <h3>${t("products")}</h3>
+        <ul>
+          ${productos.map((p) => `<li>${p.nombre} - $${p.precio.toFixed(2)}</li>`).join("")}
+        </ul>
+        <p>${t("awaitingDelivery")}</p> <!-- Nuevo mensaje -->
+        <p>${t("farewell")}</p>
+      `,
       });
-
+      
     } catch (err) {
       console.error("Error procesando el webhook:", err);
     }

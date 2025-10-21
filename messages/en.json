@@ -772,6 +772,10 @@
     "sendingError": "Error submitting review"
   },
   "sendMail": {
+    "paymentSuccessSubject": "Pago exitoso - Tu compra ha sido procesada",
+    "paymentSuccessGreeting": "Payment confirmed!",
+    "paymentSuccessMessage": "Your payment has been processed successfully.",
+    "awaitingDelivery": "Once you receive your products, confirm delivery to complete the transaction.",
     "validationsErrors": "Mandatory data is missing",
     "subject": "¡Thank you for your purchase!",
     "greeting": "Hello ",
@@ -779,6 +783,26 @@
     "products": "Products:",
     "farewell": "Enjoy your purchase, we hope to see you soon.",
     "totalPaid": "Total paid:"
+  },
+  "confirmDelivery": {
+    "unauthorized": "Unauthorized",
+    "userNotFound": "User not found",
+    "orderNotFound": "Order not found",
+    "invalidOrder": "Order not valid to confirm",
+    "paymentIntentError": "Error retrieving PaymentIntent: ",
+    "invalidPayment": "Payment could not be verified.",
+    "invalidTransfer": "There are no transfers configured for this order.",
+    "transferDescription": "Transfer by delivery confirmation",
+    "subject": "Transfer completed - Your purchase has been confirmed",
+    "title": "Transfer completed!",
+    "hello": "Hello ",
+    "message": "Tu confirmación de entrega ha sido procesada y los fondos han sido transferidos a los vendedores.",
+    "farewell": "Thank you for using our service!",
+    "transferError": "Error al crear transferencia: ",
+    "msgError": "An error occurred while confirming delivery. Please try again later.",
+    "errorMessage": "Payment could not be transferred to the seller.",
+    "insuficientFunds": "Insufficient funds in Stripe account",
+    "requestError": "Error in the request: "
   }
-}
+} 
 

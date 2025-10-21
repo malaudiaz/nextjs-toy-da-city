@@ -770,6 +770,10 @@
     "sendingError": "Error al enviar la reseña"
   },
   "sendMail": {
+    "paymentSuccessSubject": "Payment successful - Your purchase has been processed",
+    "paymentSuccessGreeting": "Payment confirmed!",
+    "paymentSuccessMessage": "Tu pago ha sido procesado exitosamente.",
+    "awaitingDelivery": "Una vez que recibas tus productos, confirma la entrega para completar la transacción.",
     "validationsErrors": "Faltan datos obligatorios",
     "subject": "¡Gracias por tu compra!",
     "greeting": "¡Hola ",
@@ -777,5 +781,24 @@
     "products": "Productos:",
     "farewell": "Difruta tu compra, te esperamos pronto",
     "totalPaid": "Total Pagado:"
+  },
+  "confirmDelivery": {
+    "unauthorized": "No autorizado para confirmar este pedido",
+    "userNotFound": "Usuario no encontrado",
+    "orderNotFound": "Orden no encontrada",
+    "invalidOrder": "Orden no válida para confirmar",
+    "paymentIntentError": "Error al recuperar PaymentIntent: ",
+    "invalidPayment": "No se pudo verificar el pago.",
+    "invalidTransfer": "No hay transferencias configuradas para esta orden.",
+    "transferDescription": "Transferencia por confirmación de entrega",
+    "subject": "Transferencia completada - Tu compra ha sido confirmada",
+    "title": "¡Transferencia completada!",
+    "hello": "Hola ",
+    "message": "Your delivery confirmation has been processed and the funds have been transferred to the sellers.",
+    "farewell": "¡Gracias por usar nuestro servicio!",
+    "transferError": "Error creating transfer: ",
+    "errorMessage": "No se pudo transferir el pago al vendedor.",
+    "insuficientFunds": "Fondos insuficientes en la cuenta de Stripe",
+    "requestError": "Error en la solicitud: "
   }
 }
