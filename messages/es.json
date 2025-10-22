@@ -590,7 +590,9 @@
     "canceled": "Cancelado",
     "category": "Categoria",
     "condition": "Condición",
-    "status": "Estado"
+    "status": "Estado",
+    "buyer": "Comprador",
+    "order": "Orden"
   },
   "gifts": {
     "title": "Juguete Gratis",

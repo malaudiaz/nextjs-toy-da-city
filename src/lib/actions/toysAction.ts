@@ -8,6 +8,8 @@ import * as fs from "fs";
 import * as path from "path";
 import { promises as fsPromises } from "fs";
 import { revalidatePath } from "next/cache"; // ← ¡ESTA LÍNEA FALTABA!
+// types/modelTypes.ts
+import { Prisma } from '@prisma/client'
 
 export type Filters = {
   search?: string | null;
@@ -150,7 +152,39 @@ export async function getOwnToys() {
 
 export type SalesStatus = "available" | "reserved" | "sold" | "canceled";
 
-export async function getSales(status?: SalesStatus) {
+// Actualiza el tipo Sale para que coincida exactamente con tu consulta
+export type Sale = Prisma.ToyGetPayload<{
+  include: {
+    media: true
+    category: true
+    condition: true
+    status: true
+    seller: {
+      select: {
+        id: true
+        name: true
+        email: true
+      }
+    }
+    orderItems: {
+      include: {
+        order: {
+          include: {
+            buyer: {
+              select: {
+                id: true
+                name: true
+                email: true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}>
+
+export async function getSales(status?: SalesStatus): Promise<Sale[]> {
   const { userId } = await auth();
 
   const headers = {
@@ -170,8 +204,8 @@ export async function getSales(status?: SalesStatus) {
         headers: headers,
       }
     );
-    const sales = await response.json();
-    return sales;
+    const toys = await response.json();
+    return toys as Sale[]
   }
 
   const response = await fetch(`${BACKEND_URL}/api/toys/for-sale`, {

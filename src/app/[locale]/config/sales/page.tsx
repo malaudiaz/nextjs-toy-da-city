@@ -3,7 +3,6 @@ import SaleInfo from "@/components/shared/profile/SaleInfo";
 import { getSales } from "@/lib/actions/toysAction";
 import React from "react";
 
-
 const SalesPage = async () => {
   const sales = await getSales();
   return (
