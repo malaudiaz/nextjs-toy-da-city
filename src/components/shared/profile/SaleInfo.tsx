@@ -1,13 +1,40 @@
-import { Sale } from "@/types/modelTypes";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import { Package } from "lucide-react";
 import { SelectFilter } from "./SelectFIlter";
 import { getTranslations } from "next-intl/server";
+import { Calendar, Package, User } from "lucide-react";
+import { Prisma } from '@prisma/client'
+
+type Sale = Prisma.ToyGetPayload<{
+  include: {
+    media: true
+    category: true
+    condition: true
+    status: true
+    seller: { select: { id: true; name: true; email: true } }
+    orderItems: { 
+      include: { 
+        order: { 
+          include: { 
+            buyer: { select: { id: true; name: true; email: true } } 
+          } 
+        } 
+      } 
+    }
+  }
+}>
 
 type SalesProps = {
-  sales: Sale[];
+  sales: Sale[]
+};
+
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("es-ES", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 };
 
 const SaleInfo = async ({ sales }: SalesProps) => {
@@ -88,6 +115,24 @@ const SaleInfo = async ({ sales }: SalesProps) => {
                           <p className="text-red-600 font-semibold">{t(sale.status.name)}</p>                          
                         </div>
                       </div>
+
+                      <Separator />
+
+                      {/* Purchase Details */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <User className="h-4 w-4" />
+                            <span>{t("buyer")}: {sale.orderItems[0].order.buyer.name}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <Calendar className="h-4 w-4" />
+                            <span>{t("order")}: {formatDate(sale.orderItems[0].order.createdAt.toString())}</span>
+                          </div>
+                        </div>
+                      </div>
+
+
                     </div>
                   </div>
                 </CardContent>
