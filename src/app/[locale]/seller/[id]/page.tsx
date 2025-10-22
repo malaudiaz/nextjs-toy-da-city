@@ -14,6 +14,7 @@ import { Toaster, toast } from "sonner";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { UserAvatar } from "@/components/shared/UserAvatar";
+import { useLocale } from "next-intl"; // ✅ Importa useLocale
 
 // Tipado
 interface Review {
@@ -50,6 +51,7 @@ interface SellerProfile {
 
 export default function SellerProfilePage() {
   const t = useTranslations("sellerProfile");
+  const locale = useLocale(); // ✅ Obtiene el locale actual (ej. 'es', 'en')
 
   // ✅ 1. Hooks iniciales (SIEMPRE al inicio, sin condiciones)
   const params = useParams<{ id: string }>();
@@ -203,7 +205,7 @@ export default function SellerProfilePage() {
                 )}
               </div>
               <p className="text-sm text-gray-500 mt-2">
-                Miembro desde {format(new Date(data.createdAt), "MMMM yyyy")}
+                {t("memberSince")} {format(new Date(data.createdAt), "MMMM yyyy")}
               </p>
               <p className="text-sm text-gray-700">
                 Rol: <span className="font-medium capitalize">{data.role}</span>
@@ -242,13 +244,13 @@ export default function SellerProfilePage() {
       {data.toysForSale.length > 0 && (
         <div className="mb-10">
           <h2 className="text-2xl font-bold mb-5 text-gray-900">
-            Juguetes en venta
+            {t("toysSeccionTitle")}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {data.toysForSale.map((toy) => (
               <Link
                 key={toy.id}
-                href={`/toy/${toy.id}`}
+                href={`/${locale}/toys/${toy.id}`}
                 className="group bg-white rounded-lg p-4 shadow hover:shadow-md transition-shadow border border-gray-100 hover:border-blue-200"
               >
                 <div className="aspect-square w-full mb-3 overflow-hidden rounded bg-gray-100">

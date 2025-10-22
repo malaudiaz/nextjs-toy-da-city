@@ -3,10 +3,12 @@ import { notFound } from 'next/navigation';
 import { StarIcon } from '@heroicons/react/24/solid';
 import { format } from 'date-fns';
 import Image from 'next/image';
+import { UserAvatar } from '@/components/shared/UserAvatar';
 
 interface UserProfile {
   id: string;
   name: string;
+  imageUrl?: string;
   clerkId: string;
   role: string;
   reputation: number | null;
@@ -56,9 +58,13 @@ export default async function UserProfilePage({
       <div className="bg-white rounded-lg shadow p-6 mb-8">
         <div className="flex items-center space-x-6">
           <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center">
-            <span className="text-2xl font-bold text-gray-700">
-              {user.name.charAt(0).toUpperCase()}
-            </span>
+
+            {user.imageUrl ? (
+              <UserAvatar userId={user.id} src={user.imageUrl} alt={user.name} />
+            ) : (
+              <span className="font-bold text-gray-700">{user.name.charAt(0).toUpperCase()}</span>
+            )}        
+          
           </div>
           <div>
             <h1 className="text-3xl font-bold">{user.name}</h1>

@@ -834,7 +834,9 @@
     "lastReviewFirst": "Latest reviews first",
     "sellerWithoutReviews": "This seller has no reviews yet.",
     "beTheFirst": "Be the first to leave your review after purchasing!",
-    "purchased": "Purchased in order # "
+    "purchased": "Purchased in order # ",
+    "memberSince": "Member since",
+    "toysSeccionTitle": "Toys for sale"
   }
 } 
 

@@ -830,6 +830,8 @@
     "lastReviewFirst": "Últimas reseñas primero",
     "sellerWithoutReviews": "Este vendedor aún no tiene reseñas",
     "beTheFirst": "¡Sé el primero en dejar tu opinión después de comprarle!",
-    "purchased": "Compró en orden # "
+    "purchased": "Compró en orden # ",
+    "memberSince": "Miembro desde ",
+    "toysSeccionTitle": "Juguetes en venta"
   }
 }
