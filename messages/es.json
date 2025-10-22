@@ -42,14 +42,10 @@
   },
   "Condition": {
     "errors": {
-      "InvalidParams": "Parámetros inválidos",
-      "ValidationsErrors": "Errores de validación",
-      "ServerError": "Error interno del servidor",
       "NotFound": "Condición no encontrada",
       "UpdateError": "Error actualizando condición del juguete",
       "DeleteError": "Error eliminando condición del juguete",
-      "InvalidId": "Incorrecto ID de la condición",
-      "DeletedSuccessfully": "Operación de borrado satisfactoria"
+      "InvalidId": "Incorrecto ID de la condición"
     }
   },
   "Toy": {
@@ -94,6 +90,22 @@
       "DeleteError": "Error eliminando Carrito del usuario",
       "ToyNotFound": "Juguete no encontrado",
       "FailedCreateCart": "Fallo al crear el carrito del usuario"
+    }
+  },
+  "Orders": {
+    "errors": {
+      "NotFound": "Orden no encontrada",
+      "OrderNotValid": "Orden no válida para cancelar"
+    }
+  },
+  "General": {
+    "errors": {
+      "InvalidParams": "Parámetros inválidos",
+      "ValidationsErrors": "Errores de validación",
+      "ServerError": "Error interno del servidor",
+      "Unauthorized": "Usuario no autorizado",
+      "UserNotFound": "Usuario no encontrado",
+      "DeletedSuccessfully": "Operación de borrado satisfactoria"
     }
   },
   "terms": {
