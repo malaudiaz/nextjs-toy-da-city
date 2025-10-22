@@ -96,9 +96,7 @@ export async function GET(req: Request) {
       },
     })
 
-
-
-    // --- 6. Respuesta ---
+   // --- 6. Respuesta ---
     return NextResponse.json(toys, { status: 200 });
   } catch (error) {
     console.error("Error fetching toys for sale:", error);
