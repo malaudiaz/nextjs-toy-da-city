@@ -17,27 +17,18 @@
   },
   "Categories": {
     "errors": {
-      "Unauthorized": "Unauthorized",
-      "InvalidParams": "Invalid Params",
-      "ValidationsErrors": "Validations Errors",
-      "ServerError": "Internal Server Error",
       "NotFound": "Category not found",
       "UpdateError": "Error updating category",
       "DeleteError": "Error deleting category",
-      "InvalidId": "Invalid ID category",
-      "DeletedSuccessfully": "Deleted Successfully "
+      "InvalidId": "Invalid ID category"
     }
   },
   "Status": {
     "errors": {
-      "InvalidParams": "Invalid Params",
-      "ValidationsErrors": "Validations Errors",
-      "ServerError": "Internal Server Error",
       "NotFound": "Status not found",
       "UpdateError": "Error updating status",
       "DeleteError": "Error deleting status",
-      "InvalidId": "Invalid ID status",
-      "DeletedSuccessfully": "Deleted Successfully "
+      "InvalidId": "Invalid ID status"
     }
   },
   "Condition": {
