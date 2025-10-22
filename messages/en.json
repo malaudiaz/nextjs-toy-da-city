@@ -17,15 +17,10 @@
   },
   "Categories": {
     "errors": {
-      "Unauthorized": "Unauthorized",
-      "InvalidParams": "Invalid Params",
-      "ValidationsErrors": "Validations Errors",
-      "ServerError": "Internal Server Error",
       "NotFound": "Category not found",
       "UpdateError": "Error updating category",
       "DeleteError": "Error deleting category",
-      "InvalidId": "Invalid ID category",
-      "DeletedSuccessfully": "Deleted Successfully "
+      "InvalidId": "Invalid ID category"
     }
   },
   "Status": {

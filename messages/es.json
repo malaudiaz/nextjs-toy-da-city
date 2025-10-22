@@ -17,15 +17,10 @@
   },
   "Categories": {
     "errors": {
-      "Unauthorized": "Sin autorización",
-      "InvalidParams": "Parámetros inválidos",
-      "ValidationsErrors": "Errores de validación",
-      "ServerError": "Error interno del servidor",
       "NotFound": "Categoría no encontrada",
       "UpdateError": "Error actualizando categoría",
       "DeleteError": "Error eliminando categoría",
-      "InvalidId": "Incorrecto ID de la categoría",
-      "DeletedSuccessfully": "Operación de borrado satisfactoria"
+      "InvalidId": "Incorrecto ID de la categoría"
     }
   },
   "Status": {

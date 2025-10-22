@@ -9,16 +9,15 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const t = await getTranslations("Categories.errors");
+  const g = await getTranslations("General.errors");
 
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
-
   const { id } = await params; // Safe to use
-
 
   try {
     // 1. Verificar si la categoria existe

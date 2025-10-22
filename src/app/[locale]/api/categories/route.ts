@@ -13,7 +13,7 @@ export async function GET(
 
   const { locale } = await params;
 
-  const t = await getTranslations("Categories.errors");
+  const g = await getTranslations("General.errors");
 
   try {
     const { searchParams } = new URL(req.url!)
@@ -74,17 +74,18 @@ export async function GET(
     });
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ error: t("InvalidParams") }, { status: 400 });
+    return NextResponse.json({ error: g("InvalidParams") }, { status: 400 });
   }
 }
 
 // POST - Insertar nueva categoría.
 export async function POST(req: Request) {
-  const t = await getTranslations("Categories.errors");
+  const g = await getTranslations("General.errors");
+
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   try {
@@ -115,7 +116,7 @@ export async function POST(req: Request) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
-          error: t("ValidationsErrors"),
+          error: g("ValidationsErrors"),
           details: error.errors.map((e) => `${e.path}: ${e.message}`),
         },
         { status: 400 }
@@ -124,7 +125,7 @@ export async function POST(req: Request) {
 
     // Otros errores (ej: fallo en Prisma)
     return NextResponse.json(
-      { error: t("ServerError") },
+      { error: g("ServerError") },
       { status: 500 }
     );
   }
