@@ -7,11 +7,11 @@
   },
   "User": {
     "errors": {
-      "ValidationsErrors": "Errores de validación",
       "ServerError": "Error interno del servidor",
       "NotFound": "Usuario no encontrada",
       "UpdateError": "Error actualizando usuario",
-      "DeleteError": "Error eliminando usuario"
+      "DeleteError": "Error eliminando usuario",
+      "InvaliduserID": "Incorrecto OD de usuario"
     }
   },
   "Categories": {
@@ -40,19 +40,18 @@
   },
   "Toy": {
     "errors": {
-      "ValidationsErrors": "Errores de validación",
       "ServerError": "Error interno del servidor",
       "NotFound": "Juguete no encontrado",
       "CreatedError": "No se pudieron crear juguetes favoritos",
       "UpdateError": "Error actualizando juguete",
       "DeleteError": "Error eliminando juguete",
       "ToyIdRequired": "Id de Juguete es Requerido",
+      "NotExistToyInactive": "No existen juguetes inactivos para eliminar",
       "OneImageRequired": "Debes subir al menos una imagen por publicación"
     }
   },
   "Comments": {
     "errors": {
-      "ValidationsErrors": "Errores de validación",
       "ServerError": "Error interno del servidor",
       "NotFound": "Comentario no encontrado",
       "UpdateError": "Error actualizando comentario",
@@ -61,7 +60,6 @@
   },
   "Favorite": {
     "errors": {
-      "ValidationsErrors": "Errores de validación",
       "ServerError": "Error interno del servidor",
       "NotFound": "Favorito no encontrado",
       "UpdateError": "Error actualizando Favoritos",
@@ -72,7 +70,6 @@
     "title": "Carrito",
     "subtitle": "Resumen",
     "errors": {
-      "ValidationsErrors": "Errores de validación",
       "ServerError": "Error interno del servidor",
       "NotFound": "Cart no encontrado",
       "UpdateError": "Error actualizando Carrito del usuario",

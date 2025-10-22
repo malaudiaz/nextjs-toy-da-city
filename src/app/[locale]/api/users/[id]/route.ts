@@ -15,10 +15,12 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const t = await getTranslations("User.errors");
+  const g = await getTranslations("General.errors");
+  
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   const { id } = await params;
@@ -29,14 +31,14 @@ export async function GET(
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: g("UserNotFound") }, { status: 404 });
     }
 
     return NextResponse.json(user);
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { error: "Failed to fetch user" },
+      { error: t("UpdateError") },
       { status: 500 }
     );
   }
@@ -47,10 +49,12 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const t = await getTranslations("User.errors");
+  const g = await getTranslations("General.errors");
+  
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   const { id } = await params; // Safe to use
@@ -79,7 +83,7 @@ export async function PUT(
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
-          error: t("ValidationsErrors"),
+          error: g("ValidationsError"),
           details: error.errors.map((e) => `${e.path}: ${e.message}`),
         },
         { status: 400 }
@@ -94,7 +98,7 @@ export async function PUT(
       return NextResponse.json({ error: t("NotFound") }, { status: 404 });
     }
 
-    return NextResponse.json({ error: t("ServerError") }, { status: 500 });
+    return NextResponse.json({ error: g("ServerError") }, { status: 500 });
   }
 }
 
@@ -103,10 +107,12 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const t = await getTranslations("User.errors");
+  const g = await getTranslations("General.errors");
+  
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   const { id } = await params; // Safe to use
@@ -114,7 +120,7 @@ export async function DELETE(
   try {
     if (!id) {
       return NextResponse.json(
-        { error: t("InvalidUserId") },
+        { error: t("InvaliduserID") },
         { status: 400 }
       );
     }
@@ -124,7 +130,7 @@ export async function DELETE(
     });
 
     return NextResponse.json(
-      { message: t("Deleted User Successfully") },
+      { message: g("DeletedSuccessfully") },
       { status: 200 }
     );
   } catch (error) {
@@ -136,7 +142,7 @@ export async function DELETE(
       }
     }
 
-    return NextResponse.json({ error: t("ServerError") }, { status: 500 });
+    return NextResponse.json({ error: g("ServerError") }, { status: 500 });
   }
 }
 
@@ -145,17 +151,19 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const t = await getTranslations("User.errors");
+  const g = await getTranslations("General.errors");
+  
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   const { id } = await params; // Safe to use
 
   if (!id) {
     return NextResponse.json(
-      { error: t("InvalidUserId") },
+      { error: t("InvaliduserID") },
       { status: 400 }
     );
   }
@@ -179,7 +187,7 @@ export async function PATCH(
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
-          error: "Error de validación",
+          error: g("ValidationsErrors"),
           details: error.errors.map((e) => `${e.path}: ${e.message}`),
         },
         { status: 400 }
@@ -189,14 +197,14 @@ export async function PATCH(
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2025") {
         return NextResponse.json(
-          { error: "User no encontrada" },
+          { error: g("UserNotFound") },
           { status: 404 }
         );
       }
     }
 
     return NextResponse.json(
-      { error: "Error interno del servidor" },
+      { error: g("ServerError") },
       { status: 500 }
     );
   }

@@ -117,7 +117,7 @@ export async function POST(req: Request) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
-          error: g("ValidationsErrors"),
+          error: g("ValidationsError"),
           details: error.errors.map((e) => `${e.path}: ${e.message}`),
         },
         { status: 400 }

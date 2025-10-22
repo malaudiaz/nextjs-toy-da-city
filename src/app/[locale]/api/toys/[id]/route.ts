@@ -16,6 +16,9 @@ export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string; locale: string }> }
 ) {
+  const t = await getTranslations("Toy.errors");
+  const g = await getTranslations("General.errors");
+
   let { userId } = await auth();
 
   if (!userId) {
@@ -28,7 +31,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: "User not found",
+          error: g("UserNotFound"),
         },
         { status: 404 }
       );
@@ -40,8 +43,6 @@ export async function GET(
   const { id, locale } = await params;
 
   const userLanguageCode = locale;
-
-  const t = await getTranslations("Toy.errors");
 
   try {
     const toy = await prisma.toy.findUnique({
@@ -76,7 +77,7 @@ export async function GET(
     });
 
     if (!toy) {
-      return NextResponse.json({ error: t("ToyNotFound") }, { status: 404 });
+      return NextResponse.json({ error: t("NotFound") }, { status: 404 });
     }
 
     // Verificar si el usuario actual tiene este toy como favorito
@@ -110,7 +111,7 @@ export async function GET(
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { error: "Failed to fetch status" },
+      { error: t("UpdateError") },
       { status: 500 }
     );
   }
@@ -121,13 +122,15 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const t = await getTranslations("Toy.errors");
+  const g = await getTranslations("General.errors");
+
   const { id } = await params;
 
   const { userId } = await auth();
 
   if (!userId) {
     return NextResponse.json(
-      { success: false, error: "Unauthorized" },
+      { success: false, error: g("Unauthorized") },
       { status: 401 }
     );
   }
@@ -164,7 +167,7 @@ export async function PUT(
 
     if (!currentToy) {
       return NextResponse.json(
-        { error: "Juguete no encontrado" },
+        { error: t("NotFound") },
         { status: 404 }
       );
     }
@@ -249,7 +252,7 @@ export async function PUT(
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
-          error: t("ValidationsErrors"),
+          error: g("ValidationsError"),
           details: error.errors.map((e) => `${e.path}: ${e.message}`),
         },
         { status: 400 }
@@ -264,7 +267,7 @@ export async function PUT(
       return NextResponse.json({ error: t("NotFound") }, { status: 404 });
     }
 
-    return NextResponse.json({ error: t("ServerError") }, { status: 500 });
+    return NextResponse.json({ error: g("ServerError") }, { status: 500 });
   }
 }
 
@@ -274,11 +277,13 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const t = await getTranslations("Toy.errors");
+  const g = await getTranslations("General.errors");
+  
   const { userId } = await auth();
 
   if (!userId) {
     return NextResponse.json(
-      { success: false, error: "Unauthorized" },
+      { success: false, error: g("Unauthorized") },
       { status: 401 }
     );
   }
@@ -295,7 +300,7 @@ export async function DELETE(
     if (inactiveToys.length === 0) {
       return NextResponse.json({
         success: true,
-        message: t("No hay juguetes inactivos para eliminar"),
+        message: t("NotExistToyInactive"),
       });
     }
 
@@ -342,7 +347,7 @@ export async function DELETE(
     return NextResponse.json(
       {
         success: false,
-        error: "Error al eliminar juguetes inactivos",
+        error: t("DeleteError"),
         details: error instanceof Error ? error.message : undefined,
       },
       { status: 500 }

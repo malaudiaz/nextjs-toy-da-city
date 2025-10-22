@@ -88,7 +88,7 @@ export async function PUT(
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
-          error: g("ValidationsErrors"),
+          error: g("ValidationsError"),
           details: error.errors.map((e) => `${e.path}: ${e.message}`),
         },
         { status: 400 }
@@ -193,7 +193,7 @@ export async function PATCH(
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
-          error: g("ValidationsErrors"),
+          error: g("ValidationsError"),
           details: error.errors.map((e) => `${e.path}: ${e.message}`),
         },
         { status: 400 }

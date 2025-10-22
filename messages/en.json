@@ -7,11 +7,11 @@
   },
   "User": {
     "errors": {
-      "ValidationsErrors": "Validations Errors",
       "ServerError": "Internal Server Error",
       "NotFound": "User not found",
       "UpdateError": "Error updating user",
-      "DeleteError": "Error deleting user"
+      "DeleteError": "Error deleting user",
+      "InvaliduserID": "Invalid user ID"
     }
   },
   "Categories": {
@@ -40,19 +40,18 @@
   },
   "Toy": {
     "errors": {
-      "ValidationsErrors": "Validations Errors",
       "ServerError": "Internal Server Error",
       "NotFound": "Toy not found",
       "CreatedError": "Failed to create toy favorites",
       "UpdateError": "Error updating toy",
       "DeleteError": "Error deleting toy",
       "ToyIdRequired": "Toy Id is Required",
+      "NotExistToyInactive": "There are no idle toys to be disposed of",
       "OneImageRequired": "One image is Required"
     }
   },
   "Comments": {
     "errors": {
-      "ValidationsErrors": "Validations Errors",
       "ServerError": "Internal Server Error",
       "NotFound": "Comments not found",
       "UpdateError": "Error updating comments",
@@ -61,7 +60,6 @@
   },
   "Favorite": {
     "errors": {
-      "ValidationsErrors": "Validations Errors",
       "ServerError": "Internal Server Error",
       "NotFound": "Favorite not found",
       "UpdateError": "Error updating favorites",
@@ -72,7 +70,6 @@
     "title": "Cart",
     "subtitle": "Summary",
     "errors": {
-      "ValidationsErrors": "Validations Errors",
       "ServerError": "Internal Server Error",
       "NotFound": "Cart not found",
       "UpdateError": "Error updating cart",
