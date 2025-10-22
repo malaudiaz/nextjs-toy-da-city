@@ -8,6 +8,9 @@ import { Filters, getToys } from "@/lib/actions/toysAction";
 import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 
+// Forzar revalidación cada vez que se accede a la página
+export const revalidate = 0; // 0 segundos = siempre fresh
+
 type Props = {
   searchParams: Promise<{ [key: string]: string | undefined }>;
   params: Promise<{ locale: string }>;

@@ -620,7 +620,7 @@
   },
   "reputation": {
     "title": "My reputation as a seller",
-    "verify": "Verified seller",
+    "verify": "Seller",
     "reviewBased": "Based on",
     "reviewtotal": "review",
     "reviewTitle": "Buyer reviews ",
@@ -811,6 +811,27 @@
     "errorMessage": "Payment could not be transferred to the seller.",
     "insuficientFunds": "Insufficient funds in Stripe account",
     "requestError": "Error in the request: "
+  },
+  "sellerProfile": {
+    "gratitude": "Thanks for your review!",
+    "userNotLogged": "You must be logged in",
+    "notLoggedMsg": "Sign in to view seller profiles and leave reviews.",
+    "profileNotFound": "The profile you are looking for does not exist or has been deleted.",
+    "backHome": "Back to home",
+    "review": "review",
+    "notRated": "No ratings",
+    "cancelMsg": "❌ Cancel",
+    "leaveReview": "⭐ Leave a review",
+    "title": "Your opinion is important",
+    "message": "Help other buyers by sharing your experience with this seller.",
+    "noImage": "No image",
+    "buyerReviews": "Buyer reviews",
+    "lastReviewFirst": "Latest reviews first",
+    "sellerWithoutReviews": "This seller has no reviews yet.",
+    "beTheFirst": "Be the first to leave your review after purchasing!",
+    "purchased": "Purchased in order # ",
+    "memberSince": "Member since",
+    "toysSeccionTitle": "Toys for sale"
   }
 } 
 

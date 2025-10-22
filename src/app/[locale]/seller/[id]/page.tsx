@@ -1,17 +1,20 @@
 // app/seller/[id]/page.tsx
-'use client';
+"use client";
 
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import useSWR from 'swr';
-import { StarIcon } from '@heroicons/react/24/solid';
-import { format } from 'date-fns';
-import { useUser } from '@clerk/nextjs';
-import Link from 'next/link';
-import fetcher from '@/lib/fetcher';
-import ReviewForm from '@/components/shared/reviews/ReviewForm';
-import { Toaster, toast } from 'sonner';
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
+import { StarIcon } from "@heroicons/react/24/solid";
+import { format } from "date-fns";
+import { useUser } from "@clerk/nextjs";
+import Link from "next/link";
+import fetcher from "@/lib/fetcher";
+import ReviewForm from "@/components/shared/reviews/ReviewForm";
+import { Toaster, toast } from "sonner";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { UserAvatar } from "@/components/shared/UserAvatar";
+import { useLocale } from "next-intl"; // ✅ Importa useLocale
 
 // Tipado
 interface Review {
@@ -29,6 +32,7 @@ interface Review {
 interface SellerProfile {
   id: string;
   name: string;
+  imageUrl?: string;
   clerkId: string;
   role: string;
   reputation: number | null;
@@ -46,6 +50,9 @@ interface SellerProfile {
 }
 
 export default function SellerProfilePage() {
+  const t = useTranslations("sellerProfile");
+  const locale = useLocale(); // ✅ Obtiene el locale actual (ej. 'es', 'en')
+
   // ✅ 1. Hooks iniciales (SIEMPRE al inicio, sin condiciones)
   const params = useParams<{ id: string }>();
   const { id: sellerId } = params;
@@ -71,14 +78,14 @@ export default function SellerProfilePage() {
     const checkEligibility = async () => {
       try {
         const res = await fetch(`/api/reviews/eligible?sellerId=${sellerId}`);
-        const  eligibility = await res.json();
+        const eligibility = await res.json();
 
         if (eligibility?.canReview) {
           setIsEligible(true);
           setEligibleOrderId(eligibility?.orderId);
         }
       } catch (error) {
-        console.error('Error checking eligibility:', error);
+        console.error("Error checking eligibility:", error);
       }
     };
 
@@ -89,7 +96,7 @@ export default function SellerProfilePage() {
   const handleReviewSubmitted = () => {
     mutate(); // Recarga los datos del vendedor
     setShowReviewForm(false);
-    toast.success('¡Gracias por tu reseña!');
+    toast.success(t("gratitude"));
   };
 
   // ❌ 4. AHORA SÍ returns condicionales (después de todos los hooks)
@@ -98,8 +105,10 @@ export default function SellerProfilePage() {
   if (!clerkUser) {
     return (
       <div className="max-w-4xl mx-auto p-6 text-center">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Debes estar logueado</h2>
-        <p className="text-gray-600">Inicia sesión para ver perfiles de vendedores y dejar reseñas.</p>
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          {t("userNotLogged")}
+        </h2>
+        <p className="text-gray-600">{t("notLoggedMsg")}</p>
       </div>
     );
   }
@@ -131,15 +140,15 @@ export default function SellerProfilePage() {
   if (error || !data) {
     return (
       <div className="max-w-4xl mx-auto p-6 text-center">
-        <h2 className="text-2xl font-bold text-red-600">Vendedor no encontrado</h2>
-        <p className="mt-2 text-gray-600">
-          El perfil que buscas no existe o fue eliminado.
-        </p>
+        <h2 className="text-2xl font-bold text-red-600">
+          Vendedor no encontrado
+        </h2>
+        <p className="mt-2 text-gray-600">{t("profileNotFound")}</p>
         <Link
           href="/"
           className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
-          Volver al inicio
+          {t("backHome")}
         </Link>
       </div>
     );
@@ -155,11 +164,19 @@ export default function SellerProfilePage() {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           {/* Avatar + Info */}
           <div className="flex items-center space-x-6">
-            <div className="w-28 h-28 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-4xl font-bold text-white">
-                {data.name.charAt(0).toUpperCase()}
-              </span>
-            </div>
+            {data.imageUrl ? (
+              <UserAvatar
+                userId={data.id}
+                src={data.imageUrl}
+                alt={data.name}
+              />
+            ) : (
+              <div className="w-28 h-28 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-4xl font-bold text-white">
+                  {data.name.charAt(0).toUpperCase()}
+                </span>
+              </div>
+            )}
             <div>
               <h1 className="text-3xl font-bold text-gray-900">{data.name}</h1>
               <div className="flex items-center mt-3">
@@ -171,24 +188,24 @@ export default function SellerProfilePage() {
                           key={star}
                           className={`h-6 w-6 ${
                             star <= (data.averageRating ?? 0)
-                              ? 'text-yellow-400'
-                              : 'text-gray-300'
+                              ? "text-yellow-400"
+                              : "text-gray-300"
                           }`}
                         />
                       ))}
                     </div>
                     <span className="ml-3 text-xl font-semibold text-gray-800">
                       {Number(data.averageRating).toFixed(1)} (
-                      {data.totalReviews} reseña
-                      {data.totalReviews !== 1 ? 's' : ''})
+                      {data.totalReviews} {t("review")}
+                      {data.totalReviews !== 1 ? "s" : ""})
                     </span>
                   </>
                 ) : (
-                  <span className="text-gray-400">Sin valoraciones</span>
+                  <span className="text-gray-400">{t("notRated")}</span>
                 )}
               </div>
               <p className="text-sm text-gray-500 mt-2">
-                Miembro desde {format(new Date(data.createdAt), 'MMMM yyyy')}
+                {t("memberSince")} {format(new Date(data.createdAt), "MMMM yyyy")}
               </p>
               <p className="text-sm text-gray-700">
                 Rol: <span className="font-medium capitalize">{data.role}</span>
@@ -202,7 +219,7 @@ export default function SellerProfilePage() {
               onClick={() => setShowReviewForm(!showReviewForm)}
               className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium rounded-xl shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
             >
-              {showReviewForm ? '❌ Cancelar' : '⭐ Dejar una reseña'}
+              {showReviewForm ? t("cancelMsg") : t("leaveReview")}
             </button>
           )}
         </div>
@@ -210,10 +227,10 @@ export default function SellerProfilePage() {
         {/* Formulario de reseña (condicional) */}
         {showReviewForm && isEligible && (
           <div className="mt-8 p-6 bg-gray-50 rounded-xl border border-gray-200">
-            <h3 className="text-xl font-bold mb-4 text-gray-800">Tu opinión es importante</h3>
-            <p className="text-gray-600 mb-4">
-              Ayuda a otros compradores compartiendo tu experiencia con este vendedor.
-            </p>
+            <h3 className="text-xl font-bold mb-4 text-gray-800">
+              {t("title")}
+            </h3>
+            <p className="text-gray-600 mb-4">{t("message")}</p>
             <ReviewForm
               targetUserId={sellerId}
               orderId={eligibleOrderId || undefined}
@@ -226,12 +243,14 @@ export default function SellerProfilePage() {
       {/* Sección: Juguetes en venta */}
       {data.toysForSale.length > 0 && (
         <div className="mb-10">
-          <h2 className="text-2xl font-bold mb-5 text-gray-900">Juguetes en venta</h2>
+          <h2 className="text-2xl font-bold mb-5 text-gray-900">
+            {t("toysSeccionTitle")}
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {data.toysForSale.map((toy) => (
               <Link
                 key={toy.id}
-                href={`/toy/${toy.id}`}
+                href={`/${locale}/toys/${toy.id}`}
                 className="group bg-white rounded-lg p-4 shadow hover:shadow-md transition-shadow border border-gray-100 hover:border-blue-200"
               >
                 <div className="aspect-square w-full mb-3 overflow-hidden rounded bg-gray-100">
@@ -245,14 +264,16 @@ export default function SellerProfilePage() {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-gray-400">Sin imagen</span>
+                      <span className="text-gray-400">{t("noImage")}</span>
                     </div>
                   )}
                 </div>
                 <h3 className="font-medium text-gray-900 line-clamp-2 text-sm mb-1">
                   {toy.title}
                 </h3>
-                <p className="text-xs text-gray-500 mb-2">{toy.category.name}</p>
+                <p className="text-xs text-gray-500 mb-2">
+                  {toy.category.name}
+                </p>
                 <p className="font-bold text-lg text-blue-600">
                   €{toy.price.toFixed(2)}
                 </p>
@@ -266,11 +287,11 @@ export default function SellerProfilePage() {
       <div>
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-900">
-            Reseñas de compradores ({data.totalReviews})
+            {t("buyerReviews")} ({data.totalReviews})
           </h2>
           {data.totalReviews > 0 && (
             <span className="text-sm text-gray-500">
-              Últimas reseñas primero
+              {t("lastReviewFirst")}
             </span>
           )}
         </div>
@@ -279,11 +300,9 @@ export default function SellerProfilePage() {
           <div className="bg-gray-50 rounded-xl p-10 text-center border-2 border-dashed border-gray-300">
             <StarIcon className="h-12 w-12 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-700 mb-2">
-              Este vendedor aún no tiene reseñas
+              {t("sellerWithoutReviews")}
             </h3>
-            <p className="text-gray-500">
-              ¡Sé el primero en dejar tu opinión después de comprarle!
-            </p>
+            <p className="text-gray-500">{t("beTheFirst")}</p>
           </div>
         ) : (
           <div className="space-y-6">
@@ -305,7 +324,7 @@ export default function SellerProfilePage() {
                       </p>
                       {review.order && (
                         <p className="text-xs text-gray-500 mt-1">
-                          Compró en orden #{review.order.id}
+                          {t("purchased")} {review.order.id}
                         </p>
                       )}
                       <div className="flex items-center mt-2">
@@ -314,8 +333,8 @@ export default function SellerProfilePage() {
                             key={star}
                             className={`h-5 w-5 ${
                               star <= review.rating
-                                ? 'text-yellow-400'
-                                : 'text-gray-300'
+                                ? "text-yellow-400"
+                                : "text-gray-300"
                             }`}
                           />
                         ))}
@@ -323,7 +342,7 @@ export default function SellerProfilePage() {
                     </div>
                   </div>
                   <p className="text-xs text-gray-400 self-end flex-shrink-0">
-                    {format(new Date(review.createdAt), 'dd MMM yyyy')}
+                    {format(new Date(review.createdAt), "dd MMM yyyy")}
                   </p>
                 </div>
 

@@ -288,7 +288,7 @@ export async function DELETE(
   try {
     // 1. Encontrar todos los juguetes inactivos
     const inactiveToys = await prisma.toy.findMany({
-      where: { id: id, isActive: false },
+      where: { id: id },
       include: { media: true },
     });
 
