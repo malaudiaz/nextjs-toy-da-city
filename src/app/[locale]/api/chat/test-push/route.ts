@@ -3,11 +3,15 @@ import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import { WebPushError } from "web-push";
 import webPush from '@/lib/webpush' // ← Usa el configurado
+import { getTranslations } from "next-intl/server";
+
 
 export async function GET() {
   const { userId } = await auth();
+  const g = await getTranslations("General.errors");
+  
   if (!userId)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
 
   const user = await prisma.user.findUnique({
     where: { clerkId: userId },
@@ -16,7 +20,7 @@ export async function GET() {
 
   if (!user) {
     return NextResponse.json(
-      { error: "No se encontró el usuario" },
+      { error: g("UserNotFound") },
       { status: 404 }
     );
   }
@@ -27,7 +31,7 @@ export async function GET() {
 
   if (subscriptions.length === 0) {
     return NextResponse.json(
-      { error: "No push subscriptions found" },
+      { error: g("NoPushSubscriptionsFound") },
       { status: 404 }
     );
   }

@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { pusher } from '@/lib/pusher'
+import { getTranslations } from "next-intl/server";
 
 export async function POST(req: NextRequest) {
   const { userId } = await auth()
+
+  const g = await getTranslations("General.errors");
+  const t = await getTranslations("User.errors");
+  
   if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: g('Unauthorized') }, { status: 401 })
   }
 
   // ✅ Leer el cuerpo como texto (no JSON)
@@ -36,7 +41,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('Pusher auth error:', error)
     return new Response(
-      JSON.stringify({ error: 'Authentication failed' }),
+      JSON.stringify({ error: t('AuthenticationFailed') }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     )
   }

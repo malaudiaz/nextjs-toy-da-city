@@ -7,7 +7,7 @@
   },
   "User": {
     "errors": {
-      "ServerError": "Internal Server Error",
+      "AuthenticationFailed": "Authentication failed",
       "NotFound": "User not found",
       "UpdateError": "Error updating user",
       "DeleteError": "Error deleting user",
@@ -40,7 +40,6 @@
   },
   "Toy": {
     "errors": {
-      "ServerError": "Internal Server Error",
       "NotFound": "Toy not found",
       "CreatedError": "Failed to create toy favorites",
       "UpdateError": "Error updating toy",
@@ -52,7 +51,6 @@
   },
   "Comments": {
     "errors": {
-      "ServerError": "Internal Server Error",
       "NotFound": "Comments not found",
       "UpdateError": "Error updating comments",
       "DeleteError": "Error deleting comments"
@@ -60,7 +58,6 @@
   },
   "Favorite": {
     "errors": {
-      "ServerError": "Internal Server Error",
       "NotFound": "Favorite not found",
       "UpdateError": "Error updating favorites",
       "DeleteError": "Error deleting favorites"
@@ -70,7 +67,6 @@
     "title": "Cart",
     "subtitle": "Summary",
     "errors": {
-      "ServerError": "Internal Server Error",
       "NotFound": "Cart not found",
       "UpdateError": "Error updating cart",
       "DeleteError": "Error deleting cart",
@@ -81,7 +77,8 @@
   "Orders": {
     "errors": {
       "NotFound": "Orden not found",
-      "OrderNotValid": "Order not valid for cancellation"
+      "OrderNotValid": "Order not valid for cancellation",
+      "NotOrderToProcess": "Not Order To process"
     }
   },
   "General": {
@@ -91,7 +88,9 @@
       "ServerError": "Internal Server Error",
       "Unauthorized": "Unauthorized",
       "UserNotFound": "User not found",
-      "DeletedSuccessfully": "Delete operation successful"
+      "DeletedSuccessfully": "Delete operation successful",
+      "InvalidSubscriptionFormat": "Invalid subscription format",
+      "NoPushSubscriptionsFound": "No push subscriptions found"
     }
   },
   "terms": {
@@ -782,7 +781,9 @@
     "gratitude": "Thank you for your purchase at Toydacity. Your payment was processed successfully.",
     "products": "Products:",
     "farewell": "Enjoy your purchase, we hope to see you soon.",
-    "totalPaid": "Total paid:"
+    "totalPaid": "Total paid:",
+    "Missingdata": "Missing data",
+    "ReceiverNotFound": "Receiver not found !!"
   },
   "confirmDelivery": {
     "unauthorized": "Unauthorized",

@@ -36,7 +36,7 @@ export async function GET(
     });
 
     if (!category) {
-      return NextResponse.json({ error: t("NotFound") }, { status: 404 });
+      return NextResponse.json({ error:t("NotFound") }, { status: 404 });
     }
 
     return NextResponse.json(category);
@@ -103,7 +103,7 @@ export async function PUT(
       return NextResponse.json({ error: t("NotFound") }, { status: 404 });
     }
 
-    return NextResponse.json({ error: t("ServerError") }, { status: 500 });
+    return NextResponse.json({ error: g("ServerError") }, { status: 500 });
   }
 }
 

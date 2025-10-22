@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import Stripe from "stripe";
+import { getTranslations } from "next-intl/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
@@ -14,8 +15,10 @@ const CRON_SECRET = process.env.CRON_SECRET;
 export async function POST(request: Request) {
   // Opcional: autenticación mínima
   const authHeader = request.headers.get("authorization");
+  const g = await getTranslations("General.errors");
+
   if (CRON_SECRET && authHeader !== `Bearer ${CRON_SECRET}`) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   const THREE_DAYS = 72 * 60 * 60 * 1000;

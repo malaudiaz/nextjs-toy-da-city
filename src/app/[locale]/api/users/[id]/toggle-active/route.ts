@@ -3,19 +3,21 @@ import { getTranslations } from "next-intl/server";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 
+
 export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const t = await getTranslations("User.errors");
+  const g = await getTranslations("General.errors");
+  
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   const { id } = await params; // Safe to use
-
 
   try {
     // 1. Verificar si el usuario existe
@@ -49,7 +51,7 @@ export async function PATCH(
     return NextResponse.json(
       { 
         success: false, 
-        error: 'Error changing user status' 
+        error: g('ServerError') 
       },
       { status: 500 }
     )

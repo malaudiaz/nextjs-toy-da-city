@@ -1,18 +1,21 @@
 import prisma from '@/lib/prisma';
 import { auth } from '@clerk/nextjs/server';
 import { NextRequest, NextResponse } from 'next/server';
+import { getTranslations } from "next-intl/server";
+
 
 const ONLINE_THRESHOLD = 60 * 1000; // 60 segundos
 
 export async function GET(req: NextRequest) {
   
   let { userId } = await auth();
-
+  const g = await getTranslations("General.errors");
+  
   if (!userId) {
     userId = req.headers.get("X-User-ID");
 
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
     }
   }
  
@@ -51,7 +54,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error('Error fetching online users:', error);
     return Response.json(
-      { error: 'Internal Server Error', onlineUsers: [] },
+      { error: g('ServerError'), onlineUsers: [] },
       { status: 500 }
     );
   }

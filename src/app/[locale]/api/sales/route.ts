@@ -153,7 +153,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         success: false,
-        error: g("UUserNotFound"),
+        error: g("UserNotFound"),
       },
       { status: 404 }
     );

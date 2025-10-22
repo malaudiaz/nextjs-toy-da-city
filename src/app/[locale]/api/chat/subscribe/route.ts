@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import prisma from '@/lib/prisma'
+import { getTranslations } from "next-intl/server";
+
 
 export async function POST(req: NextRequest) {
   const { userId } = await auth()
 
+  const g = await getTranslations("General.errors");
+  
   if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: g('Unauthorized') }, { status: 401 })
   }
 
   try {
@@ -15,7 +19,7 @@ export async function POST(req: NextRequest) {
     const { endpoint, keys } = subscription
     if (!endpoint || !keys?.p256dh || !keys?.auth) {
       return NextResponse.json(
-        { error: 'Invalid subscription format' },
+        { error: g("InvalidSubscriptionFormat") },
         { status: 400 }
       )
     }
@@ -38,7 +42,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('Error saving push subscription:', error)
     return NextResponse.json(
-      { error: 'Failed to save subscription' },
+      { error: g('ServerError') },
       { status: 500 }
     )
   }

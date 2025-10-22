@@ -2,15 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import { getUserImageUrl } from "@/lib/actions/getUserActions";
+import { getTranslations } from "next-intl/server";
+
 
 export async function GET(req: NextRequest) {
   // --- 1. Autenticación ---
   let { userId: clerkUserId } = await auth();
+  const g = await getTranslations("General.errors");
+  
 
   if (!clerkUserId) {
     clerkUserId = req.headers.get("X-User-ID");
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
     }
   }
 
@@ -21,7 +25,7 @@ export async function GET(req: NextRequest) {
   });
 
   if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+    return NextResponse.json({ error: g("UserNotFound") }, { status: 404 });
   }
 
   try {
@@ -98,7 +102,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error("Error al obtener juguetes con remitentes únicos:", error);
     return NextResponse.json(
-      { error: "Error interno del servidor" },
+      { error: g("ServerError") },
       { status: 500 }
     );
   }

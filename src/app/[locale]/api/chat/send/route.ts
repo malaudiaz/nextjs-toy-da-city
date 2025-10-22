@@ -3,15 +3,22 @@ import { auth } from '@clerk/nextjs/server'
 import prisma from '@/lib/prisma'
 import { pusher } from '@/lib/pusher'
 import webPush from '@/lib/webpush'
+import { getTranslations } from "next-intl/server";
+
 
 export async function POST(req: NextRequest) {
   const { userId } = await auth()
-  if (!userId) return Response.json({ error: 'Unauthorized' }, { status: 401 })
+  
+  const g = await getTranslations("General.errors");
+  const s = await getTranslations("sendMail.errors");
+
+
+  if (!userId) return Response.json({ error: g('Unauthorized') }, { status: 401 })
 
   // Recibir los parmaetros por Body
   const { receiverId, content, toyId } = await req.json()
   if (!receiverId || !content || !toyId) {
-    return Response.json({ error: 'Missing data' }, { status: 400 })
+    return Response.json({ error: s('Missingdata') }, { status: 400 })
   }
 
   // Validar que el receptor exista
@@ -22,7 +29,7 @@ export async function POST(req: NextRequest) {
 
   if (!receiver) {
     return NextResponse.json(
-      { error: "Receiver not found !!" },
+      { error: s("ReceiverNotFound") },
       { status: 404 }
     );
   }

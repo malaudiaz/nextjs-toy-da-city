@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import prisma from '@/lib/prisma'
+import { getTranslations } from "next-intl/server";
 
 export async function GET(req: NextRequest) {
   const { userId } = await auth()
 
+  const g = await getTranslations("General.errors");
+
   if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: g('Unauthorized') }, { status: 401 })
   }
 
   const { searchParams } = new URL(req.url)

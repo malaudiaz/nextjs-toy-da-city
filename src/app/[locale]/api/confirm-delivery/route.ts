@@ -13,19 +13,21 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(req: NextRequest) {
   const t = await getTranslations("confirmDelivery");
+  const g = await getTranslations("General.errors");
+  
   let { userId } = await auth();
 
   if (!userId) {
     userId = req.headers.get("X-User-ID");
     if (!userId) {
-      return NextResponse.json({ error: t("unauthorized") }, { status: 401 });
+      return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
     }
   }
 
   const user = await prisma.user.findUnique({ where: { clerkId: userId } });
   if (!user) {
     return NextResponse.json(
-      { error: t("userNotFound") },
+      { error: g("UserNotFound") },
       { status: 404 }
     );
   }
@@ -38,7 +40,7 @@ export async function POST(req: NextRequest) {
   }
   if (order.buyerId !== user.id) {
     return NextResponse.json(
-      { success: false, error: t("unauthorized") },
+      { success: false, error: g("Unauthorized") },
       { status: 403 }
     );
   }

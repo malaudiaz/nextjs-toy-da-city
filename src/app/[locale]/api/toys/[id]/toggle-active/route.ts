@@ -8,10 +8,12 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const t = await getTranslations("Toy.errors");
+  const g = await getTranslations("General.errors");
+  
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ success: false, error: g("Unauthorized") }, { status: 401 });
   }
 
   const { id } = await params; // Safe to use
@@ -24,7 +26,7 @@ export async function PATCH(
 
     if (!existingToy) {
       return NextResponse.json(
-        { success: false, error: t('ToyNotFound') },
+        { success: false, error: t('NotFound') },
         { status: 404 }
       )
     }
@@ -51,7 +53,7 @@ export async function PATCH(
     return NextResponse.json(
       { 
         success: false, 
-        error: 'Error al cambiar el estado del juguete' 
+        error: t('UpdateError') 
       },
       { status: 500 }
     )

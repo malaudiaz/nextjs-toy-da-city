@@ -2,15 +2,18 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
+import { getTranslations } from "next-intl/server";
 
 export async function GET(req: Request) {
   // --- 1. Autenticación ---
   let { userId } = await auth();
+  const g = await getTranslations("General.errors");
+  
 
   if (!userId) {
     userId = req.headers.get("X-User-ID");
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
     }
   }
 
@@ -21,7 +24,7 @@ export async function GET(req: Request) {
   });
 
   if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+    return NextResponse.json({ error: g("UserNotFound") }, { status: 404 });
   }
 
   // --- 3. Obtener parámetro de estado (opcional) ---
@@ -101,7 +104,7 @@ export async function GET(req: Request) {
   } catch (error) {
     console.error("Error fetching toys for sale:", error);
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: g("ServerError") },
       { status: 500 }
     );
   }

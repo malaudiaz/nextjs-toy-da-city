@@ -1,6 +1,7 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { getTranslations } from "next-intl/server";
 
 const prisma = new PrismaClient();
 
@@ -23,10 +24,13 @@ export async function GET(req: Request) {
   // --- 1. Autenticación ---
   let { userId } = await auth();
 
+  const g = await getTranslations("General.errors");
+
+
   if (!userId) {
     userId = req.headers.get("X-User-ID");
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
     }
   }
 
@@ -90,7 +94,7 @@ export async function GET(req: Request) {
   } catch (error) {
     console.error("Error fetching orders:", error);
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: g("ServerError") },
       { status: 500 }
     );
   }

@@ -2,6 +2,8 @@
 import { NextResponse, NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
+import { getTranslations } from "next-intl/server";
+
 
 // Obtener un favorito por ID
 export async function GET(
@@ -10,8 +12,11 @@ export async function GET(
 ) {
   const { userId } = await auth();
 
+  const g = await getTranslations("General.errors");
+  const t = await getTranslations("Favorite.errors");
+
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   const { id } = await params; // Safe to use
@@ -21,7 +26,7 @@ export async function GET(
     return NextResponse.json(
       {
         success: false,
-        error: "User not found",
+        error: g("UserNotFound"),
       },
       { status: 404 }
     );
@@ -40,7 +45,7 @@ export async function GET(
 
     if (!favorite) {
       return NextResponse.json(
-        { error: "Favorite not found" },
+        { error: t("NotFound") },
         { status: 404 }
       );
     }
@@ -49,7 +54,7 @@ export async function GET(
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { error: "Failed to fetch favorites" },
+      { error: t("UpdateError") },
       { status: 500 }
     );
   }

@@ -3,13 +3,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { auth } from '@clerk/nextjs/server';
+import { getTranslations } from "next-intl/server";
+
 
 const ONLINE_THRESHOLD = 60 * 1000; // 60 segundos
 
 export async function GET(request: NextRequest) {
   const { userId } = await auth();
+  const g = await getTranslations("General.errors");
+  const t = await getTranslations("User.errors");
+  
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   // Extraemos `id` del pathname
@@ -18,7 +23,7 @@ export async function GET(request: NextRequest) {
   const id = pathSegments.pop(); // Último segmento → [id]
 
   if (!id) {
-    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+    return NextResponse.json({ error: t("InvaliduserID") }, { status: 400 });
   }
 
   try {

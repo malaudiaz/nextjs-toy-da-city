@@ -7,7 +7,7 @@
   },
   "User": {
     "errors": {
-      "ServerError": "Error interno del servidor",
+      "AuthenticationFailed": "Autenticación fallida", 
       "NotFound": "Usuario no encontrada",
       "UpdateError": "Error actualizando usuario",
       "DeleteError": "Error eliminando usuario",
@@ -40,7 +40,6 @@
   },
   "Toy": {
     "errors": {
-      "ServerError": "Error interno del servidor",
       "NotFound": "Juguete no encontrado",
       "CreatedError": "No se pudieron crear juguetes favoritos",
       "UpdateError": "Error actualizando juguete",
@@ -52,7 +51,6 @@
   },
   "Comments": {
     "errors": {
-      "ServerError": "Error interno del servidor",
       "NotFound": "Comentario no encontrado",
       "UpdateError": "Error actualizando comentario",
       "DeleteError": "Error eliminando comentario"
@@ -60,7 +58,6 @@
   },
   "Favorite": {
     "errors": {
-      "ServerError": "Error interno del servidor",
       "NotFound": "Favorito no encontrado",
       "UpdateError": "Error actualizando Favoritos",
       "DeleteError": "Error eliminandoFavoritos"
@@ -70,7 +67,6 @@
     "title": "Carrito",
     "subtitle": "Resumen",
     "errors": {
-      "ServerError": "Error interno del servidor",
       "NotFound": "Cart no encontrado",
       "UpdateError": "Error actualizando Carrito del usuario",
       "DeleteError": "Error eliminando Carrito del usuario",
@@ -81,7 +77,8 @@
   "Orders": {
     "errors": {
       "NotFound": "Orden no encontrada",
-      "OrderNotValid": "Orden no válida para cancelar"
+      "OrderNotValid": "Orden no válida para cancelar",
+      "NotOrderToProcess": "No exiten Ordenes para procesar"
     }
   },
   "General": {
@@ -91,7 +88,9 @@
       "ServerError": "Error interno del servidor",
       "Unauthorized": "Usuario no autorizado",
       "UserNotFound": "Usuario no encontrado",
-      "DeletedSuccessfully": "Operación de borrado satisfactoria"
+      "DeletedSuccessfully": "Operación de borrado satisfactoria",
+      "InvalidSubscriptionFormat": "Formato de subscripción no válido",
+      "NoPushSubscriptionsFound": "No se encontraron suscripciones push"
     }
   },
   "terms": {
@@ -184,12 +183,7 @@
     "Section17Content": "No garantizamos acceso ininterrumpido, precisión de datos o éxito de transacciones. Los Servicios se proporcionan 'tal cual', sin garantías de ningún tipo, expresas o implícitas. Su uso de los Servicios es bajo su propio riesgo.",
     "Section18Title": "18. Límite de responsabilidad",
     "Section18Content": "En la medida permitida por la ley, Toydacity no será responsable de daños indirectos, incidentales o consecuentes. Nuestra responsabilidad total hacia usted por cualquier reclamo está limitada a $100 o al monto que haya pagado a Toydacity en los últimos 12 meses.",
-    "Section19Title": "19. Indemnización",
-    "Section19Content": "Usted acepta indemnizar, defender y mantener indemne a Toydacity frente a cualquier reclamo, responsabilidad, daño, pérdida o gasto surgido de su uso de los Servicios, su contenido o su incumplimiento de estos Términos.",
-    "Section20Title": "20. Ley aplicable y jurisdicción",
-    "Section20Content": "Estos Términos se rigen por las leyes del estado de Florida, sin tener en cuenta sus principios de conflicto de leyes. Cualquier reclamo que no esté sujeto a arbitraje deberá resolverse en los tribunales estatales o federales de Florida.",
-    "Section21Title": "21. Información de contacto",
-    "Section21Contact": "Si tiene preguntas, comentarios o necesita ayuda, comuníquese con nosotros en:",
+    "Section19Tsontact": "Si tiene preguntas, comentarios o necesita ayuda, comuníquese con nosotros en:",
     "Section21Email": "Correo electrónico: support@toydacity.com",
     "Section21Address": "Dirección: Toydacity Inc., 2617 NW 55TH ST, FORT LAUDERDALE, FL 33309.",
     "Section21ThankYou": "¡Gracias por usar Toydacity y ayudarnos a promover el intercambio sostenible y divertido de juguetes!",
@@ -255,7 +249,7 @@
     "Section3Sub2ListItem3": "Cumplir con solicitudes legales (por ejemplo, órdenes judiciales, reportes fiscales).",
 
     "Section3Sub3Title": "3.3 Marketing y Mejoras",
-    "Section3Sub3ListItem1": "Enviar correos promocionales (con opción de darse de baja en cualquier momento) sobre campañas de juguetes o descuentos.",
+    "Section3Sub3ListItem1": "Envsiar correos promocionales (con opción de darse de baja en cualquier momento) sobre campañas de juguetes o descuentos.",
     "Section3Sub3ListItem2": "Realizar pruebas A/B para mejorar la interfaz y experiencia de usuario.",
     "Section3Sub3ListItem3": "Compartir tendencias agregadas con socios (por ejemplo, Juguetes Más Comerciados en 2025).",
 
@@ -289,9 +283,7 @@
     "Section5ListItem1Desc": "AES-256 para datos en reposo, TLS 1.3 para transmisiones.",
     "Section5ListItem2Title": "Controles de acceso",
     "Section5ListItem2Desc": "Permisos basados en roles para empleados.",
-    "Section5ListItem3Title": "Auditorías",
-    "Section5ListItem3Desc": "Pruebas de penetración anuales por firmas independientes.",
-    "Section5SecurityNote": "Ningún sistema es 100 % seguro—informe rápidamente cualquier actividad sospechosa a security@toydacity.com.",
+    "Section5ListItem3Title": "Ausún sistema es 100 % seguro—informe rápidamente cualquier actividad sospechosa a security@toydacity.com.",
 
     "Section6Title": "6. Sus Opciones",
     "Section6Sub1Title": "6.1 Configuración de la Cuenta",
@@ -310,7 +302,7 @@
     "Section6Sub3ListItem2Desc": "Limite el seguimiento de anuncios en configuraciones de iOS/Android.",
 
     "Section7Title": "7. Privacidad Infantil",
-    "Section7Intro": "Toydacity se compromete a proteger la privacidad de los niños y cumplir con todas las leyes aplicables, incluyendo la Ley Estadounidense de Protección de la Privacidad Infantil en Línea (COPPA).",
+    "Section7Intro": "Toydacity sse compromete a proteger la privacidad de los niños y cumplir con todas las leyes aplicables, incluyendo la Ley Estadounidense de Protección de la Privacidad Infantil en Línea (COPPA).",
     "Section7Sub1Title": "7.1 Restricciones por Edad",
     "Section7Sub1ListItem1Title": "Menores de 13 años",
     "Section7Sub1ListItem1Desc": "El Servicio Toydacity no está destinado a niños menores de 13 años. No recopilamos, utilizamos ni divulgamos intencionadamente información personal de menores de 13 años sin consentimiento verificable de los padres.",
@@ -328,7 +320,7 @@
     "Section7Sub2ListItem3Title": "Proceso de Verificación",
     "Section7Sub2ListItem3Desc": "Para cuentas sospechosas de pertenecer a usuarios menores, podremos solicitar:",
     "Section7Sub2ListItem3Bullet1": "Prueba de consentimiento parental (por ejemplo, formulario firmado).",
-    "Section7Sub2ListItem3Bullet2": "Documento oficial para confirmar la identidad del tutor.",
+    "Section7Sub2ListItem3Bullet2s": "Documento oficial para confirmar la identidad del tutor.",
 
     "Section8Title": "8. Transferencias Internacionales de Datos",
     "Section8Content": "Los datos se procesan en Estados Unidos. Los usuarios fuera de EE.UU. aceptan esta transferencia.",
@@ -406,7 +398,7 @@
     "Section10Contact1": "Oficial de Privacidad",
     "Section10Contact2": "Toydacity, Inc.",
     "Section10Contact3": "123 Toy Lane, Seattle, WA 98101",
-    "Section10Contact4": "Correo",
+    "Section10Contact4": "Correos",
     "Section10Contact5": "Teléfono: (800) 555-TOYS",
 
     "DeleteDataLink": "Eliminar Datos"
@@ -780,7 +772,9 @@
     "gratitude": "Gracias por tu compra en Toydacity. Tu pago fue procesado con éxito.",
     "products": "Productos:",
     "farewell": "Difruta tu compra, te esperamos pronto",
-    "totalPaid": "Total Pagado:"
+    "totalPaid": "Total Pagado:",
+    "Missingdata": "Datos incompletos",
+    "ReceiverNotFound": "Destinatario no existe !!"
   },
   "confirmDelivery": {
     "unauthorized": "No autorizado para confirmar este pedido",

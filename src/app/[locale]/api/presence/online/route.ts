@@ -2,12 +2,17 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { auth } from "@clerk/nextjs/server";
+import { getTranslations } from "next-intl/server";
+
 
 export async function POST() {
   const { userId } = await auth();
+  const g = await getTranslations("General.errors");
+  const t = await getTranslations("User.errors");
+
 
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   try {
@@ -19,6 +24,6 @@ export async function POST() {
     return Response.json({ success: true });
   } catch (error) {
     console.log(error);
-    return Response.json({ error: 'Failed to update presence' }, { status: 500 });
+    return Response.json({ error: t('UpdateError') }, { status: 500 });
   }
 }
