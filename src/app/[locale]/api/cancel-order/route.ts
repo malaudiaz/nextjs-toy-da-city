@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import Stripe from "stripe";
 import { auth } from "@clerk/nextjs/server";
+import { getTranslations } from "next-intl/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
@@ -12,16 +13,19 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export async function POST(req: NextRequest) {
   let { userId } = await auth();
 
+  const t = await getTranslations("Orders.errors");
+  const g = await getTranslations("General.errors");
+
   if (!userId) {
     userId = req.headers.get("X-User-ID");
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
     }
   }
 
   const user = await prisma.user.findUnique({ where: { clerkId: userId } });
   if (!user) {
-    return NextResponse.json({ error: "Usuario no encontrado" }, { status: 404 });
+    return NextResponse.json({ error: g("UserNotFound") }, { status: 404 });
   }
 
   const { orderId } = await req.json();
@@ -33,21 +37,21 @@ export async function POST(req: NextRequest) {
 
   if (!order) {
     return NextResponse.json(
-      { success: false, error: "Orden no encontrada" },
+      { success: false, error: t("NotFound") },
       { status: 404 }
     );
   }
 
   if (order.buyerId !== user.id) {
     return NextResponse.json(
-      { success: false, error: "No autorizado" },
+      { success: false, error: g("Unauthorized") },
       { status: 403 }
     );
   }
 
   if (order.status !== "AWAITING_CONFIRMATION") {
     return NextResponse.json(
-      { success: false, error: "Orden no válida para cancelar" },
+      { success: false, error: t("OrderNotValid") },
       { status: 400 }
     );
   }
