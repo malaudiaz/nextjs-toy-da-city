@@ -4,6 +4,7 @@ import { Card, CardContent } from "../ui/card";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { getTranslations } from "next-intl/server";
+import DeleteButton from "./DeleteButton";
 
 type Media = {
   id: string;
@@ -89,12 +90,13 @@ export default async function ToyCard({ toy }: ToyCardProps) {
             <Separator />
 
             {toy.isActive ? (
-              <div>
+              <div className="flex flex-row gap-4">
                 <Link href={`/config/toys/edit/${toy.id}`}>
                   <Button className="bg-green-700 hover:bg-green-800 text-white">
                     {t("toys.edit")}
                   </Button>
                 </Link>
+                 <DeleteButton id={toy.id} />
               </div>
             ) : (
               <div className="text-red-600 font-semibold">  

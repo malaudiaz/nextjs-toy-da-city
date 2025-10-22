@@ -67,13 +67,26 @@ export async function GET(req: Request) {
         media: true,
         category: true,
         condition: true,
-        status: true, // Incluye el objeto status en la respuesta
+        status: true,
+        seller: { // Asegúrate de incluir el seller
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        },
         orderItems: {
           include: {
             order: {
               include: {
-                buyer: true,
-              },
+                buyer: {
+                  select: {
+                    id: true,
+                    name: true,
+                    email: true
+                  }
+                }
+              }
             }
           }
         }
@@ -81,9 +94,9 @@ export async function GET(req: Request) {
       orderBy: {
         createdAt: "desc",
       },
-    });
+    })
 
-    // --- 6. Respuesta ---
+   // --- 6. Respuesta ---
     return NextResponse.json(toys, { status: 200 });
   } catch (error) {
     console.error("Error fetching toys for sale:", error);

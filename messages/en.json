@@ -581,7 +581,9 @@
     "canceled": "Canceled",
     "categoty": "Category",
     "condition": "Condition",
-    "status": "Status"
+    "status": "Status",
+    "buyer": "Buyer",
+    "order": "Order"
   },
   "gifts": {
     "title": "Free Toys",
