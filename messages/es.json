@@ -25,14 +25,10 @@
   },
   "Status": {
     "errors": {
-      "InvalidParams": "Parámetros inválidos",
-      "ValidationsErrors": "Errores de validación",
-      "ServerError": "Error interno del servidor",
       "NotFound": "Categoría no encontrada",
       "UpdateError": "Error actualizando categoría",
       "DeleteError": "Error eliminando categoría",
-      "InvalidId": "Incorrecto ID des estado",
-      "DeletedSuccessfully": "Operación de borrado satisfactoria"
+      "InvalidId": "Incorrecto ID des estado"
     }
   },
   "Condition": {

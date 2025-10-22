@@ -14,13 +14,15 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const t = await getTranslations("Status.errors");
+  const g = await getTranslations("General.errors");
+
   let { userId } = await auth();
 
   if (!userId) {
     userId = req.headers.get("X-User-ID");
 
     if (!userId) {
-      return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+      return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
     }
   }
 
@@ -32,14 +34,14 @@ export async function GET(
     });
 
     if (!status) {
-      return NextResponse.json({ error: "NotFound" }, { status: 404 });
+      return NextResponse.json({ error: t("NotFound") }, { status: 404 });
     }
 
     return NextResponse.json(status);
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { error: t("ServerError") },
+      { error: g("ServerError") },
       { status: 500 }
     );
   }
@@ -50,10 +52,12 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const t = await getTranslations("Status.errors");
+  const g = await getTranslations("General.errors");
+
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   const { id } = await params; // Safe to use
@@ -79,7 +83,7 @@ export async function PUT(
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
-          error: t("ValidationsErrors"),
+          error: g("ValidationsErrors"),
           details: error.errors.map((e) => `${e.path}: ${e.message}`),
         },
         { status: 400 }
@@ -94,7 +98,7 @@ export async function PUT(
       return NextResponse.json({ error: t("NotFound") }, { status: 404 });
     }
 
-    return NextResponse.json({ error: t("ServerError") }, { status: 500 });
+    return NextResponse.json({ error: g("ServerError") }, { status: 500 });
   }
 }
 
@@ -103,10 +107,12 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const t = await getTranslations("Status.errors");
+  const g = await getTranslations("General.errors");
+
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   const { id } = await params; // Safe to use
@@ -121,7 +127,7 @@ export async function DELETE(
     });
 
     return NextResponse.json(
-      { message: t("DeletedSuccessfully") },
+      { message: g("DeletedSuccessfully") },
       { status: 200 }
     );
   } catch (error) {
@@ -133,7 +139,7 @@ export async function DELETE(
       }
     }
 
-    return NextResponse.json({ error: t("ServerError") }, { status: 500 });
+    return NextResponse.json({ error: g("ServerError") }, { status: 500 });
   }
 }
 
@@ -143,10 +149,12 @@ export async function PATCH(
 ) {
 
   const t = await getTranslations("Status.errors");
+  const g = await getTranslations("General.errors");
+
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   const { id } = await params; // Safe to use
@@ -178,7 +186,7 @@ export async function PATCH(
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
-          error: t("ValidationsErrors"),
+          error: g("ValidationsErrors"),
           details: error.errors.map((e) => `${e.path}: ${e.message}`),
         },
         { status: 400 }
@@ -191,6 +199,6 @@ export async function PATCH(
       }
     }
 
-    return NextResponse.json({ error: t("ServerError") }, { status: 500 });
+    return NextResponse.json({ error: g("ServerError") }, { status: 500 });
   }
 }
