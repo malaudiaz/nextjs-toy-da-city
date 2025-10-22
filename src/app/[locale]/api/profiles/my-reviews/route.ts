@@ -3,6 +3,26 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { auth } from '@clerk/nextjs/server';
 
+async function getClerkUserById(clerkId: string) {
+  try {
+    const response = await fetch(`https://api.clerk.com/v1/users/${clerkId}`, {
+      headers: {
+        'Authorization': `Bearer ${process.env.CLERK_SECRET_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Clerk API error: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching Clerk user:', error);
+    return null;
+  }
+}
+
 export async function GET() {
   try {
     const { userId } = await auth();
@@ -17,6 +37,7 @@ export async function GET() {
       select: {
         id: true,
         name: true,
+        clerkId: true,
         reputation: true,
         reviewsReceived: {
           include: {
@@ -43,6 +64,17 @@ export async function GET() {
       return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });
     }
 
+    // 2. Obtener avatar desde Clerk usando el clerkId del usuario del perfil
+    let imageUrl: string | null = null;
+    try {
+      const clerkUser = await getClerkUserById(user.clerkId);
+      imageUrl = clerkUser?.image_url || null; // Nota: Clerk usa "image_url" no "imageUrl"
+    } catch {
+      console.warn(`No se pudo obtener avatar de Clerk para clerkId: ${user.clerkId}`);
+      imageUrl = null;
+    }
+
+
     // Calcular promedio (aunque ya lo tienes en `reputation`, lo recalculamos para validar)
     const totalReviews = user.reviewsReceived.length;
     const averageRating =
@@ -59,7 +91,10 @@ export async function GET() {
 
     return NextResponse.json(
       {
+        id: user.id,
+        clerkId: user.clerkId,
         name: user.name,
+        imageUrl,
         reputation: user.reputation || 0,
         averageRating, // redundante, pero para UI
         totalReviews,

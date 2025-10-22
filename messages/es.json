@@ -610,7 +610,7 @@
   },
   "reputation": {
     "title": "Mi reputación como vendedor",
-    "verify": "Vendedor verificado",
+    "verify": "Vendedor",
     "reviewBased": "Basado en",
     "reviewtotal": "reseña",
     "reviewTitle": "Reseñas de compradores ",
@@ -800,5 +800,24 @@
     "errorMessage": "No se pudo transferir el pago al vendedor.",
     "insuficientFunds": "Fondos insuficientes en la cuenta de Stripe",
     "requestError": "Error en la solicitud: "
+  },
+  "sellerProfile": {
+    "gratitude": "¡Gracias por tu reseña!",
+    "userNotLogged": "Debes estar logueado",
+    "notLoggedMsg": "Inicia sesión para ver perfiles de vendedores y dejar reseñas.",
+    "profileNotFound": "El perfil que buscas no existe o fue eliminado.",
+    "backHome": "Volver al inicio",
+    "review": "reseña",
+    "notRated": "Sin valoraciones",
+    "cancelMsg": "❌ Cancelar",
+    "leaveReview": "⭐ Dejar una reseña",
+    "title": "Tu opinión es importante",
+    "message": "Ayuda a otros compradores compartiendo tu experiencia con este vendedor.",
+    "noImage": "Sin imagen",
+    "buyerReviews": "Reseñas de compradores",
+    "lastReviewFirst": "Últimas reseñas primero",
+    "sellerWithoutReviews": "Este vendedor aún no tiene reseñas",
+    "beTheFirst": "¡Sé el primero en dejar tu opinión después de comprarle!",
+    "purchased": "Compró en orden # "
   }
 }

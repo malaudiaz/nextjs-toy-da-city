@@ -9,6 +9,7 @@ import { useUser } from '@clerk/nextjs';
 import fetcher from '@/lib/fetcher';
 import { Toaster } from 'sonner';
 import { useTranslations } from 'next-intl'; // ✅ Importa el hook
+import { UserAvatar } from '@/components/shared/UserAvatar';
 
 // Tipado
 interface Review {
@@ -24,7 +25,10 @@ interface Review {
 }
 
 interface MyReviewsData {
+  id: string;
+  clerkId: string;
   name: string;
+  imageUrl?: string;
   reputation: number;
   averageRating: number;
   totalReviews: number;
@@ -103,9 +107,18 @@ export default function MyReviewsPage() {
       {/* Tarjeta de resumen */}
       <div className="bg-white rounded-lg shadow p-6 mb-8">
         <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-semibold">{data.name}</h2>
-            <p className="text-gray-600">{t('verify')}</p>
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center">
+              {data.imageUrl ? (
+                <UserAvatar userId={data.id} src={data.imageUrl} alt={data.name} />
+              ) : (
+                <span className="font-bold text-gray-700">{data.name.charAt(0).toUpperCase()}</span>
+              )}
+            </div>
+            <div className="flex flex-col">
+              <h2 className="text-xl font-semibold">{data.name}</h2>
+              <p className="text-gray-600 mt-1">{t('verify')}</p>
+            </div>
           </div>
           <div className="text-right">
             <div className="flex items-center justify-end space-x-1">

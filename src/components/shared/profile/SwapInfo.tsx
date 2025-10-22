@@ -11,7 +11,7 @@ type SwapProps = {
 };
 
 const SwapInfo = async ({ swaps }: SwapProps) => {
-  const t = await getTranslations("configurations"); // o el namespace que uses
+  const t = await getTranslations("swap"); // o el namespace que uses
 
   return (
     <div className="min-h-screen p-4 md:p-6">
@@ -30,7 +30,7 @@ const SwapInfo = async ({ swaps }: SwapProps) => {
             <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
               <CardContent className="p-8 text-center">
                 <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">No se encontraron juguetes Intercambiados</p>
+                <p className="text-gray-600">{t("emptyMsg")}</p>
               </CardContent>
             </Card>
           ) : (
@@ -58,17 +58,6 @@ const SwapInfo = async ({ swaps }: SwapProps) => {
                             {swap.title}
                           </h3>
                         </div>
-                        <div className="flex flex-col md:items-end gap-2">
-                          <div className="text-2xl font-bold text-blue-600">
-                            {swap.price === 0 ? (
-                              <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm">
-                                {t("free")}
-                              </span>
-                            ) : (
-                              `$${swap.price.toFixed(2)}`
-                            )}
-                          </div>
-                        </div>
                       </div>
 
                       <Separator />
@@ -78,10 +67,10 @@ const SwapInfo = async ({ swaps }: SwapProps) => {
                         </p>
                         <div className="flex flex-row gap-2">
                           <p className="text-gray-600 text-md">
-                            {t("category")}: {swap.category.name}
+                            {t("category")}: {swap.category.description}
                           </p>
                           <p className="text-gray-600 text-md">
-                            {t("condition")}: {swap.condition.name}
+                            {t("condition")}: {swap.condition.description}
                           </p>
                         </div>
                       </div>
