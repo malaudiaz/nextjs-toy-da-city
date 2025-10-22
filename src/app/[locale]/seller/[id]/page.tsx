@@ -275,7 +275,7 @@ export default function SellerProfilePage() {
                   {toy.category.name}
                 </p>
                 <p className="font-bold text-lg text-blue-600">
-                  €{toy.price.toFixed(2)}
+                  {toy.price.toFixed(2)}
                 </p>
               </Link>
             ))}

@@ -33,7 +33,7 @@ const DeleteButton = ({ id }: { id: string }) => {
             <Button variant="outline">Cancel</Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button variant="destructive">Delete</Button>
+            <Button variant="destructive" onClick={() => handleDelete(id)}>Delete</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

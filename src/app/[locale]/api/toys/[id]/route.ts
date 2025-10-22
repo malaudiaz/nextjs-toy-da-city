@@ -279,13 +279,25 @@ export async function DELETE(
   const t = await getTranslations("Toy.errors");
   const g = await getTranslations("General.errors");
   
-  const { userId } = await auth();
+  let { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json(
-      { success: false, error: g("Unauthorized") },
-      { status: 401 }
-    );
+    userId = req.headers.get("X-User-ID");
+  }
+
+  if (userId) {
+    const user = await prisma.user.findUnique({ where: { clerkId: userId } });
+    if (!user) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: g("UserNotFound"),
+        },
+        { status: 404 }
+      );
+    } else {
+      userId = user.id;
+    }
   }
 
   const { id } = await params; // Safe to use

@@ -9,7 +9,7 @@ import * as path from "path";
 import { promises as fsPromises } from "fs";
 import { revalidatePath } from "next/cache"; // ← ¡ESTA LÍNEA FALTABA!
 // types/modelTypes.ts
-import { Prisma } from '@prisma/client'
+import { Prisma } from "@prisma/client";
 
 export type Filters = {
   search?: string | null;
@@ -155,34 +155,34 @@ export type SalesStatus = "available" | "reserved" | "sold" | "canceled";
 // Actualiza el tipo Sale para que coincida exactamente con tu consulta
 export type Sale = Prisma.ToyGetPayload<{
   include: {
-    media: true
-    category: true
-    condition: true
-    status: true
+    media: true;
+    category: true;
+    condition: true;
+    status: true;
     seller: {
       select: {
-        id: true
-        name: true
-        email: true
-      }
-    }
+        id: true;
+        name: true;
+        email: true;
+      };
+    };
     orderItems: {
       include: {
         order: {
           include: {
             buyer: {
               select: {
-                id: true
-                name: true
-                email: true
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}>
+                id: true;
+                name: true;
+                email: true;
+              };
+            };
+          };
+        };
+      };
+    };
+  };
+}>;
 
 export async function getSales(status?: SalesStatus): Promise<Sale[]> {
   const { userId } = await auth();
@@ -205,7 +205,7 @@ export async function getSales(status?: SalesStatus): Promise<Sale[]> {
       }
     );
     const toys = await response.json();
-    return toys as Sale[]
+    return toys as Sale[];
   }
 
   const response = await fetch(`${BACKEND_URL}/api/toys/for-sale`, {
@@ -307,9 +307,9 @@ export type ToyWithMedia = {
   description: string;
   price: number;
   location: string | null; // ← Cambiado: permite null
-  forSell: boolean;     // ← ¡Así se llama en Prisma!
-  forGifts: boolean;    // ← ¡Así se llama en Prisma!
-  forChanges: boolean;  // ← ¡Así se llama en Prisma!
+  forSell: boolean; // ← ¡Así se llama en Prisma!
+  forGifts: boolean; // ← ¡Así se llama en Prisma!
+  forChanges: boolean; // ← ¡Así se llama en Prisma!
   categoryId: number;
   conditionId: number;
   statusId: number;
@@ -327,7 +327,6 @@ export async function getToyById(
   userId: string
 ): Promise<ToyWithMedia | null> {
   try {
-
     const user = await prisma.user.findUnique({
       where: {
         clerkId: userId,
@@ -490,7 +489,7 @@ export async function updateToy(
 export async function deleteToy(toyId: string) {
   const { userId } = await auth();
 
-const headers = {
+  const headers = {
     "Content-Type": "application/json",
     "X-User-ID": "",
   };
