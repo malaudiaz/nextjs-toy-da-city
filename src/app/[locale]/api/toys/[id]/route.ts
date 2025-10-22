@@ -126,7 +126,26 @@ export async function PUT(
 
   const { id } = await params;
 
-  const { userId } = await auth();
+  let { userId } = await auth();
+
+  if (!userId) {
+    userId = req.headers.get("X-User-ID");
+  }
+
+  if (userId) {
+    const user = await prisma.user.findUnique({ where: { clerkId: userId } });
+    if (!user) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: g("UserNotFound"),
+        },
+        { status: 404 }
+      );
+    } else {
+      userId = user.id;
+    }
+  }
 
   if (!userId) {
     return NextResponse.json(
@@ -298,6 +317,13 @@ export async function DELETE(
     } else {
       userId = user.id;
     }
+  }
+
+  if (!userId) {
+    return NextResponse.json(
+      { success: false, error: g("Unauthorized") },
+      { status: 401 }
+    );
   }
 
   const { id } = await params; // Safe to use
