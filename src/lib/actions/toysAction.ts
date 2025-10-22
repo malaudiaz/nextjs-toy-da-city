@@ -452,3 +452,25 @@ export async function updateToy(
 
   return updatedToy;
 }
+
+export async function deleteToy(toyId: string) {
+  const { userId } = await auth();
+
+const headers = {
+    "Content-Type": "application/json",
+    "X-User-ID": "",
+  };
+
+  if (userId) {
+    headers["X-User-ID"] = userId;
+  }
+  console.log(toyId, userId);
+
+  const toy = await fetch(`${BACKEND_URL}/api/toys/${toyId}`, {
+    method: "DELETE",
+    headers: headers,
+  });
+
+  const result = await toy.json();
+  return result;
+}
