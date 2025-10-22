@@ -6,11 +6,12 @@ import { auth } from "@clerk/nextjs/server";
 
 // GET all favorites con paginación y búsqueda
 export async function GET() {
-  const t = await getTranslations("Favorite.errors");
+  const g = await getTranslations("General.errors");
+
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   const user = await prisma.user.findUnique({ where: { clerkId: userId } });
@@ -18,7 +19,7 @@ export async function GET() {
     return NextResponse.json(
       {
         success: false,
-        error: "User not found",
+        error: g("UserNotFound"),
       },
       { status: 404 }
     );
@@ -50,17 +51,19 @@ export async function GET() {
     });
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ error: t("InvalidParams") }, { status: 400 });
+    return NextResponse.json({ error: g("InvalidInputParams") }, { status: 400 });
   }
 }
 
 // POST add a new favorite toy
 export async function POST(req: Request) {
   const t = await getTranslations("Favorite.errors");
+  const g = await getTranslations("General.errors");
+
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   try {
@@ -69,7 +72,7 @@ export async function POST(req: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: "User not found",
+          error: g("UserNotFound"),
         },
         { status: 404 }
       );
@@ -126,7 +129,7 @@ export async function POST(req: Request) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
-          error: t("ValidationsErrors"),
+          error: g("ValidationsErrors"),
           details: error.errors.map((e) => `${e.path}: ${e.message}`),
         },
         { status: 400 }
@@ -135,7 +138,7 @@ export async function POST(req: Request) {
 
     // Otros errores (ej: fallo en Prisma)
     return NextResponse.json(
-      { error: t("Failed to create toy favorites") },
+      { error: t("CreatedError") },
       { status: 500 }
     );
   }

@@ -7,7 +7,6 @@
   },
   "User": {
     "errors": {
-      "InvalidParams": "Invalid Params",
       "ValidationsErrors": "Validations Errors",
       "ServerError": "Internal Server Error",
       "NotFound": "User not found",
@@ -41,17 +40,18 @@
   },
   "Toy": {
     "errors": {
-      "InvalidParams": "Invalid Params",
       "ValidationsErrors": "Validations Errors",
       "ServerError": "Internal Server Error",
       "NotFound": "Toy not found",
+      "CreatedError": "Failed to create toy favorites",
       "UpdateError": "Error updating toy",
-      "DeleteError": "Error deleting toy"
+      "DeleteError": "Error deleting toy",
+      "ToyIdRequired": "Toy Id is Required",
+      "OneImageRequired": "One image is Required"
     }
   },
   "Comments": {
     "errors": {
-      "InvalidParams": "Invalid Params",
       "ValidationsErrors": "Validations Errors",
       "ServerError": "Internal Server Error",
       "NotFound": "Comments not found",
@@ -61,7 +61,6 @@
   },
   "Favorite": {
     "errors": {
-      "InvalidParams": "Invalid Params",
       "ValidationsErrors": "Validations Errors",
       "ServerError": "Internal Server Error",
       "NotFound": "Favorite not found",
@@ -73,7 +72,6 @@
     "title": "Cart",
     "subtitle": "Summary",
     "errors": {
-      "InvalidParams": "Invalid Params",
       "ValidationsErrors": "Validations Errors",
       "ServerError": "Internal Server Error",
       "NotFound": "Cart not found",
@@ -91,7 +89,7 @@
   },
   "General": {
     "errors": {
-      "InvalidParams": "Invalid Params",
+      "InvalidInputParams": "Invalid Params",
       "ValidationsErrors": "Validations Errors",
       "ServerError": "Internal Server Error",
       "Unauthorized": "Unauthorized",
@@ -99,7 +97,6 @@
       "DeletedSuccessfully": "Delete operation successful"
     }
   },
-  
   "terms": {
     "Title": "Toydacity Terms of Service",
     "Welcome": "Welcome to Toydacity! These Terms of Service (Terms) govern your access to and use of the Toydacity website, mobile applications, and related online services (collectively, the Services). Toydacity Inc. (Toydacity, we, us, or our) is a Florida-based platform created to support the buying, selling, trading, and gifting of secondhand toys. By using our Services, you agree to comply with and be bound by these Terms. If you do not agree, you must not use the Services.",

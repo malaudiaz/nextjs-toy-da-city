@@ -11,14 +11,15 @@ export async function GET(
 ) {
   const { userId } = await auth();
 
+  const g = await getTranslations("General.errors");
+  const s = await getTranslations("Status.errors");
+  
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   const { locale } = await params;
-
-  const t = await getTranslations("Toy.errors");
-
+  
   try {
     const { searchParams } = new URL(request.url!);
 
@@ -34,7 +35,7 @@ export async function GET(
     });
     if (!statusAvailable) {
       return NextResponse.json(
-        { success: false, error: `StatusNotFound.` },
+        { success: false, error: s("NotFound")},
         { status: 400 }
       );
     }
@@ -128,6 +129,6 @@ export async function GET(
     });
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ error: t("InvalidParams") }, { status: 400 });
+    return NextResponse.json({ error: g("InvalidInputParams") }, { status: 400 });
   }
 }

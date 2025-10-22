@@ -11,15 +11,17 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ locale: string }> }
 ) {
+
+  const g = await getTranslations("General.errors");
+  const s = await getTranslations("Status.errors");
+
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   const { locale } = await params;
-
-  const t = await getTranslations("Toy.errors");
 
   try {
     const { searchParams } = new URL(request.url!);
@@ -36,7 +38,7 @@ export async function GET(
     });
     if (!statusAvailable) {
       return NextResponse.json(
-        { success: false, error: `StatusNotFound.` },
+        { success: false, error: s("NotFound")},
         { status: 400 }
       );
     }
@@ -130,17 +132,17 @@ export async function GET(
     });
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ error: t("InvalidParams") }, { status: 400 });
+    return NextResponse.json({ error: g("InvalidInputParams") }, { status: 400 });
   }
 }
 
 export async function POST(req: Request) {
   const { userId: buyerId } = await auth();
 
-  const t = await getTranslations("Toy.errors");
+  const g = await getTranslations("General.errors");
   
   if (!buyerId) {
-    return NextResponse.json({ error: t("Unauthorized") }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   const body = await req.json();
@@ -151,7 +153,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         success: false,
-        error: "User not found",
+        error: g("UUserNotFound"),
       },
       { status: 404 }
     );
@@ -165,6 +167,6 @@ export async function POST(req: Request) {
     );
   } catch (err) {
     console.error(err);
-    return NextResponse.json({ error: t("ServerError") }, { status: 500 });
+    return NextResponse.json({ error: g("ServerError") }, { status: 500 });
   }
 }

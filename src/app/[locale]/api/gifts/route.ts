@@ -9,11 +9,13 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ locale: string }> }
 ) {
-  const t = await getTranslations("Toy.errors");
+  const g = await getTranslations("General.errors");
+  const s = await getTranslations("Status.errors");
+
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
   const { locale } = await params;
@@ -33,7 +35,7 @@ export async function GET(
     });
     if (!statusAvailable) {
       return NextResponse.json(
-        { success: false, error: `StatusNotFound.` },
+        { success: false, error: s("NotFound") },
         { status: 400 }
       );
     }
@@ -127,6 +129,6 @@ export async function GET(
     });
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ error: t("InvalidParams") }, { status: 400 });
+    return NextResponse.json({ error: g("InvalidInputParams") }, { status: 400 });
   }
 }

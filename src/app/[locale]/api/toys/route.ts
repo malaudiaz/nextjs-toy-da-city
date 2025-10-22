@@ -52,7 +52,7 @@ export async function GET(
  
   const { locale } = await params;
 
-  const t = await getTranslations("Toy.errors");
+  const g = await getTranslations("General.errors");
 
   try {
     const { searchParams } = new URL(request.url!)
@@ -210,17 +210,21 @@ export async function GET(
     })
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ error: t("InvalidParams") }, { status: 400 });
+    return NextResponse.json({ error: g("InvalidInputParams") }, { status: 400 });
   }
 }
 
 // POST create a new toy
 export async function POST(request: Request): Promise<NextResponse<ToyResponseSuccess | ToyResponseError>> {
-  //const t = await getTranslations("Toy.errors");
+  const g = await getTranslations("General.errors");
+  const s = await getTranslations("Status.errors");
+  const t = await getTranslations("Toy.errors");
+
+
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ success: false, error: g("Unauthorized") }, { status: 401 });
   }
 
   const user = await prisma.user.findUnique({ where: { clerkId: userId } });
@@ -228,7 +232,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
     return NextResponse.json(
       { 
         success: false, 
-        error: "User not found" 
+        error: g("UserNotFound") 
       },
       { status: 404 }
     )
@@ -239,8 +243,6 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
   
   try {
     await ensureUploadsDirExists()
-
-    // const userId = "user_2wY8ZRoOrheojD7zQXtwk9fg00x"
 
     formData = await clonedRequest.formData();
 
@@ -279,7 +281,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       return NextResponse.json(
         { 
           success: false, 
-          error: `You must upload at least one image per post.` 
+          error: t("OneImageRequired") 
         },
         { status: 400 }
       )
@@ -293,7 +295,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       return NextResponse.json(
         { 
           success: false, 
-          error: `StatusNotFound.` 
+          error: s("NotFound") 
         },
         { status: 400 }
       )

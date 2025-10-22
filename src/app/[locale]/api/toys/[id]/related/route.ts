@@ -13,7 +13,7 @@ export async function GET(
   // Validar que sea un número válido
   const limitNumber = isNaN(limit) || limit < 1 ? 6 : limit;
 
-  const t = await getTranslations("Toy.errors");
+  const g = await getTranslations("General.errors");
 
   const userLanguageCode = locale;
 
@@ -180,6 +180,6 @@ export async function GET(
     });
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ error: t("InvalidParams") }, { status: 400 });
+    return NextResponse.json({ error: g("InvalidInputParams") }, { status: 400 });
   }
 }

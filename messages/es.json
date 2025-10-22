@@ -7,7 +7,6 @@
   },
   "User": {
     "errors": {
-      "InvalidParams": "Parámetros inválidos",
       "ValidationsErrors": "Errores de validación",
       "ServerError": "Error interno del servidor",
       "NotFound": "Usuario no encontrada",
@@ -25,10 +24,10 @@
   },
   "Status": {
     "errors": {
-      "NotFound": "Categoría no encontrada",
-      "UpdateError": "Error actualizando categoría",
-      "DeleteError": "Error eliminando categoría",
-      "InvalidId": "Incorrecto ID des estado"
+      "NotFound": "Estado del juguete no encontrado",
+      "UpdateError": "Error actualizando estado del juguete",
+      "DeleteError": "Error eliminando estado del juguete",
+      "InvalidId": "Incorrecto ID de estado"
     }
   },
   "Condition": {
@@ -41,17 +40,18 @@
   },
   "Toy": {
     "errors": {
-      "InvalidParams": "Parámetros inválidos",
       "ValidationsErrors": "Errores de validación",
       "ServerError": "Error interno del servidor",
       "NotFound": "Juguete no encontrado",
+      "CreatedError": "No se pudieron crear juguetes favoritos",
       "UpdateError": "Error actualizando juguete",
-      "DeleteError": "Error eliminando juguete"
+      "DeleteError": "Error eliminando juguete",
+      "ToyIdRequired": "Id de Juguete es Requerido",
+      "OneImageRequired": "Debes subir al menos una imagen por publicación"
     }
   },
   "Comments": {
     "errors": {
-      "InvalidParams": "Parámetros inválidos",
       "ValidationsErrors": "Errores de validación",
       "ServerError": "Error interno del servidor",
       "NotFound": "Comentario no encontrado",
@@ -61,7 +61,6 @@
   },
   "Favorite": {
     "errors": {
-      "InvalidParams": "Parámetros inválidos",
       "ValidationsErrors": "Errores de validación",
       "ServerError": "Error interno del servidor",
       "NotFound": "Favorito no encontrado",
@@ -73,7 +72,6 @@
     "title": "Carrito",
     "subtitle": "Resumen",
     "errors": {
-      "InvalidParams": "Parámetros inválidos",
       "ValidationsErrors": "Errores de validación",
       "ServerError": "Error interno del servidor",
       "NotFound": "Cart no encontrado",
@@ -91,7 +89,7 @@
   },
   "General": {
     "errors": {
-      "InvalidParams": "Parámetros inválidos",
+      "InvalidInputParams": "Parámetros inválidos",
       "ValidationsErrors": "Errores de validación",
       "ServerError": "Error interno del servidor",
       "Unauthorized": "Usuario no autorizado",
