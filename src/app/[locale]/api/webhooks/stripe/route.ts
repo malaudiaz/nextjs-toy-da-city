@@ -115,15 +115,20 @@ export async function POST(req: NextRequest) {
         to: order.buyer.email,
         subject: t("paymentSuccessSubject"), // Cambiar el asunto
         html: `
-        <h2>${t("paymentSuccessGreeting")} ${order.buyer.name}!</h2>
-        <p>${t("paymentSuccessMessage")}</p>
-        <p><strong>${t("totalPaid")}:</strong> $${(paymentIntent.amount / 100).toFixed(2)}</p>
-        <h3>${t("products")}</h3>
-        <ul>
-          ${productos.map((p) => `<li>${p.nombre} - $${p.precio.toFixed(2)}</li>`).join("")}
-        </ul>
-        <p>${t("awaitingDelivery")}</p> <!-- Nuevo mensaje -->
-        <p>${t("farewell")}</p>
+        <div style="max-width:480px;margin:auto;background:#f8f8f8;border-radius:12px;padding:32px 24px;font-family:sans-serif;color:#222;box-shadow:0 2px 8px #0001;">
+          <h2 style="color:#4c754b;margin-bottom:8px;">${t("paymentSuccessGreeting")} ${order.buyer.name}!</h2>
+          <p style="font-size:1.1em;margin-bottom:16px;">${t("paymentSuccessMessage")}</p>
+          <div style="background:#fffbe6;padding:12px 16px;border-radius:8px;margin-bottom:18px;">
+            <strong style="color:#4c754b;">${t("totalPaid")}:</strong> <span style="font-size:1.2em;">$${(paymentIntent.amount / 100).toFixed(2)}</span>
+          </div>
+          <h3 style="margin-bottom:8px;color:#4c754b;">${t("products")}</h3>
+          <ul style="padding-left:18px;margin-bottom:18px;">
+            ${productos.map((p) => `<li style='margin-bottom:4px;'>${p.nombre} <span style='color:#4c754b;font-weight:bold;'>$${p.precio.toFixed(2)}</span></li>`).join("")}
+          </ul>
+          <p style="margin-bottom:18px;">${t("awaitingDelivery")}</p>
+          <a href="mailto:soporte@toydacity.com" style="display:inline-block;background:#4c754b;color:#fff;padding:10px 22px;border-radius:6px;text-decoration:none;font-weight:500;margin-bottom:18px;">${t("contactSupport") ?? "Contactar soporte"}</a>
+          <p style="margin-top:24px;font-size:1.05em;">${t("farewell")}</p>
+        </div>
       `,
       });
       
