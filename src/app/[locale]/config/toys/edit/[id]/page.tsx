@@ -10,7 +10,7 @@ import { getSellerData } from "@/lib/actions/sellertActions";
 import { auth } from "@clerk/nextjs/server";
 
 type PageProps = {
-  params: Promise<{ id: string }>;
+  params: Promise<{ locale: string; id: string }>;
 };
 
 export default async function EditPostPage({ params }: PageProps) {
@@ -22,9 +22,9 @@ export default async function EditPostPage({ params }: PageProps) {
     redirect("/seller-onboarding");
   }
 
-  const { id } = await params;
+  const { locale, id } = await params;
   const toyId = id;
-  const toy = await getToyById(toyId, userId); // ← Verifica que el juguete pertenezca al vendedor
+  const toy = await getToyById(toyId, locale); // ← Verifica que el juguete pertenezca al vendedor
 
   if (!toy) {
     redirect("/config/toys");

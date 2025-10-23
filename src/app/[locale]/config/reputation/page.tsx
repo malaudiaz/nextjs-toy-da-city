@@ -1,15 +1,15 @@
 // app/profile/my-reviews/page.tsx
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import useSWR from 'swr';
-import { StarIcon } from '@heroicons/react/24/solid';
-import { format } from 'date-fns';
-import { useUser } from '@clerk/nextjs';
-import fetcher from '@/lib/fetcher';
-import { Toaster } from 'sonner';
-import { useTranslations } from 'next-intl'; // ✅ Importa el hook
-import { UserAvatar } from '@/components/shared/UserAvatar';
+import { useEffect } from "react";
+import useSWR from "swr";
+import { StarIcon } from "@heroicons/react/24/solid";
+import { format } from "date-fns";
+import { useUser } from "@clerk/nextjs";
+import fetcher from "@/lib/fetcher";
+import { Toaster } from "sonner";
+import { useTranslations } from "next-intl"; // ✅ Importa el hook
+import { UserAvatar } from "@/components/shared/UserAvatar";
 
 // Tipado
 interface Review {
@@ -20,6 +20,8 @@ interface Review {
   reviewer: {
     id: string;
     name: string;
+    clerkId: string;
+    imageUrl?: string;
   };
   order: { id: string } | null;
 }
@@ -36,12 +38,12 @@ interface MyReviewsData {
 }
 
 export default function MyReviewsPage() {
-  const t = useTranslations('reputation'); // ✅ Usa el hook
+  const t = useTranslations("reputation"); // ✅ Usa el hook
 
   const { user: clerkUser } = useUser();
 
-  const {  data, error, isLoading, mutate } = useSWR<MyReviewsData>(
-    '/api/profiles/my-reviews',
+  const { data, error, isLoading, mutate } = useSWR<MyReviewsData>(
+    "/api/profiles/my-reviews",
     fetcher,
     {
       refreshInterval: 30000, // Refresca cada 30 segundos
@@ -54,8 +56,8 @@ export default function MyReviewsPage() {
       mutate(); // Recargar si alguien deja una reseña
     };
 
-    window.addEventListener('newReview', handleNewReview);
-    return () => window.removeEventListener('newReview', handleNewReview);
+    window.addEventListener("newReview", handleNewReview);
+    return () => window.removeEventListener("newReview", handleNewReview);
   }, [mutate]);
 
   if (!clerkUser) {
@@ -102,22 +104,28 @@ export default function MyReviewsPage() {
   return (
     <div className="max-w-3xl mx-auto p-4 md:p-6">
       <Toaster />
-      <h1 className="text-3xl font-bold mb-6">{t('title')}</h1>
+      <h1 className="text-3xl font-bold mb-6">{t("title")}</h1>
 
       {/* Tarjeta de resumen */}
       <div className="bg-white rounded-lg shadow p-6 mb-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center">
-              {data.imageUrl ? (
-                <UserAvatar userId={data.id} src={data.imageUrl} alt={data.name} />
-              ) : (
-                <span className="font-bold text-gray-700">{data.name.charAt(0).toUpperCase()}</span>
-              )}
-            </div>
+            {data.imageUrl ? (
+              <UserAvatar
+                userId={data.id}
+                src={data.imageUrl}
+                alt={data.name}
+              />
+            ) : (
+              <div className="w-12 h-12 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center">
+                <span className="font-bold text-gray-700">
+                  {data.name.charAt(0).toUpperCase()}
+                </span>
+              </div>
+            )}
             <div className="flex flex-col">
               <h2 className="text-xl font-semibold">{data.name}</h2>
-              <p className="text-gray-600 mt-1">{t('verify')}</p>
+              <p className="text-gray-600 mt-1">{t("verify")}</p>
             </div>
           </div>
           <div className="text-right">
@@ -127,8 +135,8 @@ export default function MyReviewsPage() {
                   key={star}
                   className={`h-6 w-6 ${
                     star <= data.averageRating
-                      ? 'text-yellow-400'
-                      : 'text-gray-300'
+                      ? "text-yellow-400"
+                      : "text-gray-300"
                   }`}
                 />
               ))}
@@ -137,7 +145,8 @@ export default function MyReviewsPage() {
               {data.averageRating.toFixed(1)}
             </p>
             <p className="text-sm text-gray-500">
-             {t("reviewBased")} {data.totalReviews} {t("reviewtotal")}{data.totalReviews !== 1 ? 's' : ''}
+              {t("reviewBased")} {data.totalReviews} {t("reviewtotal")}
+              {data.totalReviews !== 1 ? "s" : ""}
             </p>
           </div>
         </div>
@@ -146,14 +155,12 @@ export default function MyReviewsPage() {
       {/* Lista de reseñas */}
       <div>
         <h2 className="text-2xl font-bold mb-4">
-          {t('reviewTitle')} ({data.totalReviews})
+          {t("reviewTitle")} ({data.totalReviews})
         </h2>
 
         {data.reviews.length === 0 ? (
           <div className="bg-gray-50 rounded-lg p-8 text-center">
-            <p className="text-gray-500 text-lg">
-              {t('emptyMsg')}
-            </p>
+            <p className="text-gray-500 text-lg">{t("emptyMsg")}</p>
           </div>
         ) : (
           <div className="space-y-6">
@@ -164,16 +171,25 @@ export default function MyReviewsPage() {
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="font-bold text-blue-700">
-                        {review.reviewer.name.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
+
+                    {review.reviewer.imageUrl ? (  
+                      <UserAvatar
+                        userId={review.reviewer.id}
+                        src={review.reviewer.imageUrl}
+                        alt={review.reviewer.name}
+                      />
+                    ) : (
+                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                        <span className="font-bold text-blue-700">
+                          {review.reviewer.name.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                    )}
                     <div>
                       <p className="font-medium">{review.reviewer.name}</p>
                       {review.order && (
                         <p className="text-xs text-gray-500">
-                          {t('reviewOrder')} #{review.order.id}
+                          {t("reviewOrder")} #{review.order.id}
                         </p>
                       )}
                     </div>
@@ -184,8 +200,8 @@ export default function MyReviewsPage() {
                         key={star}
                         className={`h-5 w-5 ${
                           star <= review.rating
-                            ? 'text-yellow-400'
-                            : 'text-gray-300'
+                            ? "text-yellow-400"
+                            : "text-gray-300"
                         }`}
                       />
                     ))}
@@ -199,7 +215,7 @@ export default function MyReviewsPage() {
                 )}
 
                 <p className="text-xs text-gray-400 mt-3">
-                  {format(new Date(review.createdAt), 'dd MMMM yyyy, HH:mm')}
+                  {format(new Date(review.createdAt), "dd MMMM yyyy, HH:mm")}
                 </p>
               </div>
             ))}
@@ -213,7 +229,7 @@ export default function MyReviewsPage() {
           onClick={() => mutate()}
           className="px-4 py-2 text-sm bg-gray-200 hover:bg-gray-300 rounded transition-colors"
         >
-          {t('reloadReview')}
+          {t("reloadReview")}
         </button>
       </div>
     </div>

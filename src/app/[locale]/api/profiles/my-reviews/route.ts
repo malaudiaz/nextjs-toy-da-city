@@ -45,6 +45,7 @@ export async function GET() {
               select: {
                 id: true,
                 name: true,
+                clerkId: true
               },
             },
             order: {
@@ -74,6 +75,26 @@ export async function GET() {
       imageUrl = null;
     }
 
+    const reviewsWithImages = await Promise.all(
+      user.reviewsReceived.map(async (review) => {
+        let reviewerImageUrl = null;
+        if (review.reviewer.clerkId) {
+          try {
+            const clerkUser = await getClerkUserById(review.reviewer.clerkId);
+            reviewerImageUrl = clerkUser?.image_url || null;
+          } catch {
+            reviewerImageUrl = null;
+          }
+        }
+        return {
+          ...review,
+          reviewer: {
+            ...review.reviewer,
+            imageUrl: reviewerImageUrl,
+          },
+        };
+      })
+    );    
 
     // Calcular promedio (aunque ya lo tienes en `reputation`, lo recalculamos para validar)
     const totalReviews = user.reviewsReceived.length;
@@ -98,7 +119,7 @@ export async function GET() {
         reputation: user.reputation || 0,
         averageRating, // redundante, pero para UI
         totalReviews,
-        reviews: user.reviewsReceived,
+        reviews: reviewsWithImages, // <-- Usar el array enriquecido
       },
       { status: 200 }
     );

@@ -3,11 +3,11 @@
 import { Toy } from "@/types/toy";
 import { BACKEND_URL } from "../utils";
 import { auth } from "@clerk/nextjs/server";
-import prisma from "../prisma";
+//import prisma from "../prisma";
 import * as fs from "fs";
 import * as path from "path";
-import { promises as fsPromises } from "fs";
-import { revalidatePath } from "next/cache"; // ← ¡ESTA LÍNEA FALTABA!
+//import { promises as fsPromises } from "fs";
+//import { revalidatePath } from "next/cache"; // ← ¡ESTA LÍNEA FALTABA!
 // types/modelTypes.ts
 import { Prisma } from "@prisma/client";
 
@@ -30,7 +30,7 @@ if (!fs.existsSync(UPLOAD_DIR)) {
   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 }
 
-type FileType = "IMAGE" | "VIDEO";
+// type FileType = "IMAGE" | "VIDEO";
 
 export async function getToys(
   page: number,
@@ -324,6 +324,34 @@ export type ToyWithMedia = {
 // ✅ Acción para obtener un juguete por ID y verificar que pertenece al usuario
 export async function getToyById(
   toyId: string,
+  locale?: string
+): Promise<ToyWithMedia | null> {
+
+  const { userId } = await auth();
+
+  const headers = {
+    "Content-Type": "application/json",
+    "X-User-ID": "",
+  };
+
+  if (userId) {
+    headers["X-User-ID"] = userId;
+  }
+  const toyUrl = locale
+    ? `${BACKEND_URL}/${locale}/api/toys/${toyId}`
+    : `${BACKEND_URL}/api/toys/${toyId}`;
+    
+  const response = await fetch(toyUrl, {
+    method: "GET",
+    headers: headers,
+  });
+
+  const toy = await response.json();
+  return toy;
+}
+
+/* export async function getToyById(
+  toyId: string,
   userId: string
 ): Promise<ToyWithMedia | null> {
   try {
@@ -363,8 +391,8 @@ export async function getToyById(
     throw new Error("No se pudo cargar el juguete para edición");
   }
 }
-
-export async function updateToy(
+ */
+/* export async function updateToy(
   toyId: string,
   formData: FormData,
   userId: string // para verificar propiedad
@@ -485,6 +513,7 @@ export async function updateToy(
 
   return updatedToy;
 }
+ */
 
 export async function deleteToy(toyId: string) {
   const { userId } = await auth();

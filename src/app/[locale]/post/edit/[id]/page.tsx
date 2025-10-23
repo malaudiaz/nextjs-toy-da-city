@@ -25,7 +25,7 @@ export default async function EditPostPage({ params }: PageProps) {
   }
 
   const toyId = id;
-  const toy = await getToyById(toyId, userId); // ← Verifica que el juguete pertenezca al vendedor
+  const toy = await getToyById(toyId, locale); // ← Verifica que el juguete pertenezca al vendedor
 
   if (!toy) {
     redirect(`/${locale}/post`);
