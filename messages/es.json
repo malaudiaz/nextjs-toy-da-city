@@ -413,7 +413,13 @@
     "Favorites": "Favoritos",
     "YourReputation": "Tu Reputación",
     "Toys": "Juguetes",
-    "Chat": "Chat"
+    "Chat": "Chat",
+     "Delete": "Eliminar",
+    "DeleteQuestion": "¿Estás seguro de que deseas eliminar este juguete?",
+    "DeleteDescription": " Esta acción no se puede deshacer. Esto eliminará permanentemente tu juguete y eliminará tus datos de nuestros servidores.",
+    "Cancel": "Cancelar",
+    "ToastSuccesfully": "Juguete eliminado con éxito",
+    "ToastError": "Error al eliminar el juguete"
   },
   "filter": {
     "Title": "Filtros",

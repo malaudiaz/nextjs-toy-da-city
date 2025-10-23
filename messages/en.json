@@ -422,7 +422,13 @@
     "Favorites": "Favorites",
     "YourReputation": "Your Reputation",
     "Toys": "Toys",
-    "Chat": "Chat"
+    "Chat": "Chat",
+    "Delete": "Delete",
+    "DeleteQuestion": "Are you sure you want to delete this toy?",
+    "DeleteDescription": "This action cannot be undone. This will permanently delete your toy and remove your data from our servers.",
+    "Cancel": "Cancel",
+    "ToastSuccesfully": "Toy successfully deleted",
+    "ToastError": "Failed to delete toy"
   },
   "filter":{
     "Title": "Filter",

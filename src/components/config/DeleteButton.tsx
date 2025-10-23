@@ -12,28 +12,42 @@ import {
 } from "@/components/ui/dialog";
 import { deleteToy } from "@/lib/actions/toysAction";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 const DeleteButton = ({ id }: { id: string }) => {
+    const t = useTranslations("config");
+  const router = useRouter();
   const handleDelete = async (id: string) => {
-    await deleteToy(id);
+    try {
+      await deleteToy(id);
+      router.refresh();
+      toast.success(t("ToastSuccesfully"));
+    } catch (err) {
+      toast.error(t("ToastError"));
+    }
   };
   return (
     <Dialog>
-      <DialogTrigger className="bg-red-700 text-white px-4 rounded-lg">Delete</DialogTrigger>
+      <DialogTrigger className="bg-red-700 text-white px-4 rounded-lg">
+        {t("Delete")}
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogTitle>{t("DeleteQuestion")}</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your toy
-            and remove your data from our servers.
+           {t("DeleteDescription")}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">{t("Cancel")}</Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button variant="destructive" onClick={() => handleDelete(id)}>Delete</Button>
+            <Button variant="destructive" onClick={() => handleDelete(id)}>
+               {t("Delete")}
+            </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
