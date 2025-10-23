@@ -1,4 +1,9 @@
 {
+  "seo": {
+    "homeTitle": "Toydacity - Juguetes, intercambio y regalos",
+    "homeDescription": "Descubre, compra, intercambia y regala juguetes en Toydacity. Encuentra las mejores ofertas y conecta con otros padres.",
+    "image": "https://next-intl.vercel.app/api/image?id=little-toys-pack&locale=es"
+  },
   "BestSellers": {
     "Title": "Best Sellers",
     "text": "Text",

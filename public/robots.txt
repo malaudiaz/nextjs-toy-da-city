@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://toydacity.com
+
+# Sitemaps
+Sitemap: https://toydacity.com/sitemap.xml
