@@ -24,7 +24,7 @@ const DeleteButton = ({ id }: { id: string }) => {
       await deleteToy(id);
       router.refresh();
       toast.success(t("ToastSuccesfully"));
-    } catch (err) {
+    } catch {
       toast.error(t("ToastError"));
     }
   };
