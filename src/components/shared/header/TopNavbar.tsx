@@ -61,15 +61,27 @@ const TopNavbar = () => {
             </Link>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <SignedIn>
-              <div className="relative inline-block group">
-                <ShoppingCart className="size-6 transition-transform group-hover:scale-110" />
-                {items.length > 0 && (
-                  <div className="absolute -top-1 -right-1 flex items-center justify-center min-w-4 h-4 px-1 bg-[#4c754b] text-white text-xs rounded-full transform transition-all group-hover:scale-125">
-                    {items.length}
-                  </div>
-                )}
+              <div className="flex items-center gap-4">
+                <Link
+                  href={`/${locale}/cart`}
+                  className="relative inline-block group"
+                >
+                  <ShoppingCart className="size-6 transition-transform group-hover:scale-110" />
+                  {items.length > 0 && (
+                    <div className="absolute -top-1 -right-1 flex items-center justify-center min-w-4 h-4 px-1 bg-[#4c754b] text-white text-xs rounded-full transform transition-all group-hover:scale-125">
+                      {items.length}
+                    </div>
+                  )}
+                </Link>
+
+                <Link
+                  href={`/${locale}/config`}
+                  className="text-black hover:text-gray-700"
+                >
+                  <Settings className="size-6" />
+                </Link>
               </div>
             </SignedIn>
 

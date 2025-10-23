@@ -19,11 +19,13 @@ export default function ConfigLayout({
 }) {
   return (
     <SidebarProvider>
-      <AppSidebar  variant="sidebar" collapsible="none" /> 
+      <div className="hidden md:block">
+        <AppSidebar variant="sidebar" collapsible="none" />
+      </div>
       {/* Contenedor principal */}
       <SidebarInset className="flex flex-col">
         {/* Contenido dinámico */}
-        <main className="flex-1 w-full  min-h-screen">
+        <main className="flex-1 w-full min-h-screen">
           {children}
         </main>
       </SidebarInset>

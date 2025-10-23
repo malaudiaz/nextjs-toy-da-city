@@ -419,7 +419,8 @@
     "DeleteDescription": " Esta acción no se puede deshacer. Esto eliminará permanentemente tu juguete y eliminará tus datos de nuestros servidores.",
     "Cancel": "Cancelar",
     "ToastSuccesfully": "Juguete eliminado con éxito",
-    "ToastError": "Error al eliminar el juguete"
+    "ToastError": "Error al eliminar el juguete",
+    "activity": "Tu Actividad"
   },
   "filter": {
     "Title": "Filtros",

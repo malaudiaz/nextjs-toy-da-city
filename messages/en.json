@@ -428,7 +428,8 @@
     "DeleteDescription": "This action cannot be undone. This will permanently delete your toy and remove your data from our servers.",
     "Cancel": "Cancel",
     "ToastSuccesfully": "Toy successfully deleted",
-    "ToastError": "Failed to delete toy"
+    "ToastError": "Failed to delete toy",
+    "activity": "Your Activity"
   },
   "filter":{
     "Title": "Filter",
