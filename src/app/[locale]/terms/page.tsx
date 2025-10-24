@@ -1,6 +1,73 @@
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { Metadata } from "next";
+
+// SEO: metadatos dinámicos
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  // Puedes personalizar el título y descripción por idioma
+  const t = await getTranslations("seo");
+  const resolvedParams = await params;
+  
+  const { locale } = resolvedParams;
+  
+  return {
+    title: t("homeTitle", { locale: locale }) || "Toydacity - Juguetes, intercambio y regalos",
+    description:
+      t("homeDescription", { locale: locale }) ||
+      "Descubre, compra, intercambia y regala juguetes en Toydacity. Encuentra las mejores ofertas y conecta con otros padres.",
+    keywords: ["toys", "juguetes", "swap", "intercambio", "gift", "regalos", "padres", "donaciones", "donate", "donation", "toydacity", "toydacity", "toydacity.es", "toydacity.com", "toydacity.net", "toydacity.org", "toydacity.info", "toydacity.co", "toydacity.io", "toydacity.eu", "toydacity.tv", "toydacity.club", "toydacity.online", "toydacity.app", "toydacity.xyz", "es.toydacity.com", "com.toydacity.es", "net.toydacity.es", "org.toydacity.es", "info.toydacity.es", "co.toydacity.es", "io.toydacity.es", "eu.toydacity.es", "tv.toydacity.es", "club.toydacity.es", "online.toydacity.es", "app.toydacity.es", "xyz.toydacity.es"],
+    alternates: {
+      canonical: `https://toydacity.com/${locale}`,
+    },
+    openGraph: {
+      title: t("homeTitle", { locale: locale }) || "Toydacity - Juguetes, intercambio y regalos",
+      description:
+        t("homeDescription", { locale: locale }) ||
+        "Descubre, compra, intercambia y regala juguetes en Toydacity.",
+      url: `https://toydacity.com/${locale}`,
+      siteName: "Toydacity.com",
+      images: [
+        {
+          url: "/Logo.png",
+          width: 600,
+          height: 200,
+          alt: "Toydacity logo",
+        },
+      ],
+      locale: locale,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      site: "@toydacity",
+      title: t("homeTitle", { locale: locale }) || "Toydacity - Juguetes, intercambio y regalos",
+      description:
+        t("homeDescription", { locale: locale }) ||
+        "Descubre, compra, intercambia y regala juguetes en Toydacity.",
+      images: [
+        {
+          url: "/Logo.png",
+          width: 600,
+          height: 200,
+          alt: "Toydancy logo",
+        },
+      ],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      nocache: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-snippet": -1,
+        "max-image-preview": "large",
+        "max-video-preview": -1,
+      },
+    },
+  };
+};
 
 export default async function TermsOfUse() {
   const t = await getTranslations("terms");

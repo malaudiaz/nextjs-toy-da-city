@@ -1,5 +1,5 @@
 module.exports = {
-  siteUrl: process.env.SITE_URL || 'https://toydacity.com',
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://toydacity.com',
   generateRobotsTxt: true,
   changefreq: 'weekly',
   priority: 0.7,
