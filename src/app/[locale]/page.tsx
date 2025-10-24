@@ -12,10 +12,9 @@ import { Metadata } from "next";
 // SEO: metadatos dinámicos
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   // Puedes personalizar el título y descripción por idioma
-  const t = await getTranslations("seo");
   const resolvedParams = await params;
-  
   const { locale } = resolvedParams;
+  const t = await getTranslations("seo"); // o el namespace que uses
   
   return {
     title: t("homeTitle", { locale: locale }) || "Toydacity - Juguetes, intercambio y regalos",
