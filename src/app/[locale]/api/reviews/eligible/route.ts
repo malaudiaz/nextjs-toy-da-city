@@ -28,7 +28,7 @@ export async function GET(request: Request) {
       where: {
         buyerId: user?.id,
         sellerId: sellerId,
-        status: 'TRANSFERRED',
+        status: 'CONFIRMED',
         review: null,
       },
       select: {
@@ -39,13 +39,14 @@ export async function GET(request: Request) {
     if (!eligibleOrder) {
       return NextResponse.json({
         canReview: false,
-        message: 'No tienes compras confirmadas sin reseñar con este vendedor.',
+        message: 'No tienes ordenes confirmadas sin reseñar con este vendedor.',
       });
     }
 
     return NextResponse.json({
       canReview: true,
       orderId: eligibleOrder.id,
+      message: "Puedes dejar una reseña para esta orden"
     });
   } catch (error) {
     console.error('[REVIEW_ELIGIBLE]', error);

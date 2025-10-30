@@ -13,8 +13,6 @@ type CartCardProps = {
   item: CartItem;
 };
 
-const fromCents = (cents: number) => cents / 100;
-
 const CartCard = ({ item }: CartCardProps) => {
   const { data, error, isLoading } = useSWR("getUsers", getUsers);
   const t = useTranslations("cartCard");
@@ -39,7 +37,7 @@ const CartCard = ({ item }: CartCardProps) => {
             <h3 className="text-md md:text-lg font-semibold line-clamp-1 md:line-clamp-2 max-w-md">
               {item.title}
             </h3>
-            <p className="text-green-700 font-bold">{fromCents(item.price).toFixed(2)}</p>
+            <p className="text-green-700 font-bold">${item.price.toFixed(2)}</p>
 
             {/* Información del vendedor */}
             <div className="flex flex-row gap-2 items-center justify-between">

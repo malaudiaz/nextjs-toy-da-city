@@ -12,8 +12,8 @@ export async function POST(request: Request) {
     }
 
     const user = await prisma.user.findUnique({
-        where: { clerkId: reviewerId },
-        select: { id: true },
+      where: { clerkId: reviewerId },
+      select: { id: true },
     });
 
     if (!user) {
@@ -80,7 +80,7 @@ export async function POST(request: Request) {
 
       if (existingReview) {
         return NextResponse.json(
-          { error: "Ya has dejado una reseña por esta compra." },
+          { error: "Ya has dejado una reseña por esta orden." },
           { status: 409 }
         );
       }
@@ -100,6 +100,19 @@ export async function POST(request: Request) {
         target: true,
       },
     });
+
+    // ✅ ACTUALIZAR EL ESTADO DE LA ORDEN si se proporcionó orderId
+    if (orderId) {
+      try {
+        await prisma.order.update({
+          where: { id: orderId },
+          data: { status: "TRANSFERRED" }, // O el estado que quieras usar
+        });
+      } catch (error) {
+        console.error("Error updating order status:", error);
+        // No fallar la creación de la reseña si falla la actualización del estado
+      }
+    }
 
     // Recalcular reputación del vendedor (target)
     const reviews = await prisma.review.findMany({

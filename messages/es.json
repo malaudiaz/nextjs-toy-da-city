@@ -785,7 +785,8 @@
     "farewell": "Difruta tu compra, te esperamos pronto",
     "totalPaid": "Total Pagado:",
     "Missingdata": "Datos incompletos",
-    "ReceiverNotFound": "Destinatario no existe !!"
+    "ReceiverNotFound": "Destinatario no existe !!",
+    "contactSupport": "Contact support for assistance."
   },
   "confirmDelivery": {
     "unauthorized": "No autorizado para confirmar este pedido",
@@ -799,12 +800,14 @@
     "subject": "Transferencia completada - Tu compra ha sido confirmada",
     "title": "¡Transferencia completada!",
     "hello": "Hola ",
-    "message": "Your delivery confirmation has been processed and the funds have been transferred to the sellers.",
+    "message": "Tu confirmación de entrega ha sido procesada y los fondos han sido transferidos a los vendedores.",
     "farewell": "¡Gracias por usar nuestro servicio!",
     "transferError": "Error creating transfer: ",
     "errorMessage": "No se pudo transferir el pago al vendedor.",
     "insuficientFunds": "Fondos insuficientes en la cuenta de Stripe",
-    "requestError": "Error en la solicitud: "
+    "requestError": "Error en la solicitud: ",
+    "products": "Products:",
+    "contactSupport": "Contacte con el servicio de asistencia para obtener ayuda."
   },
   "sellerProfile": {
     "gratitude": "¡Gracias por tu reseña!",

@@ -119,7 +119,7 @@ export async function POST(req: NextRequest) {
   await prisma.order.update({
     where: { id: order.id },
     data: {
-      status: "TRANSFERRED",
+      status: "CONFIRMED",
       confirmedAt: new Date(),
       transferredAt: new Date(),
     },

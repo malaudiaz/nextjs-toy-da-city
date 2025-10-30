@@ -794,7 +794,8 @@
     "farewell": "Enjoy your purchase, we hope to see you soon.",
     "totalPaid": "Total paid:",
     "Missingdata": "Missing data",
-    "ReceiverNotFound": "Receiver not found !!"
+    "ReceiverNotFound": "Receiver not found !!",
+    "contactSupport": "Contact support for assistance."
   },
   "confirmDelivery": {
     "unauthorized": "Unauthorized",
@@ -808,13 +809,15 @@
     "subject": "Transfer completed - Your purchase has been confirmed",
     "title": "Transfer completed!",
     "hello": "Hello ",
-    "message": "Tu confirmación de entrega ha sido procesada y los fondos han sido transferidos a los vendedores.",
+    "message": "Your delivery confirmation has been processed and the funds have been transferred to the sellers.",
     "farewell": "Thank you for using our service!",
     "transferError": "Error al crear transferencia: ",
     "msgError": "An error occurred while confirming delivery. Please try again later.",
     "errorMessage": "Payment could not be transferred to the seller.",
     "insuficientFunds": "Insufficient funds in Stripe account",
-    "requestError": "Error in the request: "
+    "requestError": "Error in the request: ",
+    "products": "Products:",
+    "contactSupport": "Contact support for assistance."
   },
   "sellerProfile": {
     "gratitude": "Thanks for your review!",
