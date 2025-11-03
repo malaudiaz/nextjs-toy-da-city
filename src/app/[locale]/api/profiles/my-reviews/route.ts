@@ -2,6 +2,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { auth } from '@clerk/nextjs/server';
+import { getTranslations } from "next-intl/server";
 
 async function getClerkUserById(clerkId: string) {
   try {
@@ -24,11 +25,14 @@ async function getClerkUserById(clerkId: string) {
 }
 
 export async function GET() {
+
+  const g = await getTranslations("General.errors");
+
   try {
     const { userId } = await auth();
 
     if (!userId) {
-      return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
+      return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
     }
 
     // Obtener el usuario + sus reseñas recibidas
@@ -62,7 +66,7 @@ export async function GET() {
     });
 
     if (!user) {
-      return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });
+      return NextResponse.json({ error: g("UserNotFound")  }, { status: 404 });
     }
 
     // 2. Obtener avatar desde Clerk usando el clerkId del usuario del perfil
@@ -126,7 +130,7 @@ export async function GET() {
   } catch (error) {
     console.error('[MY_REVIEWS]', error);
     return NextResponse.json(
-      { error: 'Error interno del servidor' },
+      { error: g("ServerError") },
       { status: 500 }
     );
   }
