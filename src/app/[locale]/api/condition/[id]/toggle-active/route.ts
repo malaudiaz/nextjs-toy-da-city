@@ -7,8 +7,8 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string, locale: string }> }
 ) {
-  const t = await getTranslations("Condition.errors");
-  const g = await getTranslations("General.errors");
+  const t = await getTranslations("Condition");
+  const g = await getTranslations("General");
 
   const { userId } = await auth();
   if (!userId) {

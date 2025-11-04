@@ -13,8 +13,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export async function POST(req: NextRequest) {
   let { userId } = await auth();
 
-  const t = await getTranslations("Orders.errors");
-  const g = await getTranslations("General.errors");
+  const t = await getTranslations("Orders");
+  const g = await getTranslations("General");
 
   if (!userId) {
     userId = req.headers.get("X-User-ID");

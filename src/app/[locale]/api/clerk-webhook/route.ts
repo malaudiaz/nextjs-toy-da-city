@@ -3,6 +3,7 @@ import { Webhook } from "svix";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import Stripe from "stripe";
+import { getTranslations } from "next-intl/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
@@ -14,9 +15,12 @@ export async function POST(req: Request) {
 
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 
+  const g = await getTranslations("General");
+  const t = await getTranslations("User");
+
   if (!WEBHOOK_SECRET) {
     return NextResponse.json(
-      { error: "Secreto de webhook no configurado" },
+      { error: g("WebhookNotConfigure") },
       { status: 400 }
     );
   }
@@ -27,7 +31,7 @@ export async function POST(req: Request) {
   const svixSignature = req.headers.get("svix-signature");
 
   if (!svixId || !svixTimestamp || !svixSignature) {
-    return NextResponse.json({ error: "Faltan headers svix" }, { status: 400 });
+    return NextResponse.json({ error: g("MissingHeadersSvix") }, { status: 400 });
   }
 
   // Verificar webhook
@@ -44,7 +48,7 @@ export async function POST(req: Request) {
   } catch (err) {
     console.error("Verificación de webhook fallida:", err);
     return NextResponse.json(
-      { error: "Firma de webhook inválida" },
+      { error: g("WebhookSignInvalid") },
       { status: 400 }
     );
   }
@@ -56,7 +60,7 @@ export async function POST(req: Request) {
 
     if (!email) {
       return NextResponse.json(
-        { error: "El usuario no tiene un correo electrónico" },
+        { error: t("UserWithoutEmail") },
         { status: 400 }
       );
     }
@@ -109,7 +113,7 @@ export async function POST(req: Request) {
     } catch (error) {
       console.error("Error al guardar usuario en la base de datos:", error);
       return NextResponse.json(
-        { error: "No se pudo guardar usuario" },
+        { error: t("UpdateError") },
         { status: 500 }
       );
     }

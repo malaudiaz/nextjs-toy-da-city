@@ -8,7 +8,7 @@ import { auth } from "@clerk/nextjs/server";
 // GET - Obtener todas los usuarios con paginado
 export async function GET(req: NextRequest) {
 
-  const g = await getTranslations("General.errors");
+  const g = await getTranslations("General");
 
   try {
     const { searchParams } = new URL(req.url!)
@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
 
 // POST - Insertar nuevo usuario
 export async function POST(req: Request) {
-  const g = await getTranslations("General.errors");
+  const g = await getTranslations("General");
   
   const { userId } = await auth();
 

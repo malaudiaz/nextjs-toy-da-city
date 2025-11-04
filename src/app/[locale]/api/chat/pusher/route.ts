@@ -6,8 +6,8 @@ import { getTranslations } from "next-intl/server";
 export async function POST(req: NextRequest) {
   const { userId } = await auth()
 
-  const g = await getTranslations("General.errors");
-  const t = await getTranslations("User.errors");
+  const g = await getTranslations("General");
+  const t = await getTranslations("User");
   
   if (!userId) {
     return NextResponse.json({ error: g('Unauthorized') }, { status: 401 })
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 
   if (!socketId || !channelName) {
     return new Response(
-      JSON.stringify({ error: 'Missing socket_id or channel_name' }),
+      JSON.stringify({ error: t("MissingSocket") }),
       { status: 400, headers: { 'Content-Type': 'application/json' } }
     )
   }

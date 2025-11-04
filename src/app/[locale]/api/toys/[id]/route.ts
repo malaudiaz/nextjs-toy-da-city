@@ -16,8 +16,8 @@ export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string; locale: string }> }
 ) {
-  const t = await getTranslations("Toy.errors");
-  const g = await getTranslations("General.errors");
+  const t = await getTranslations("Toy");
+  const g = await getTranslations("General");
 
   let { userId } = await auth();
 
@@ -121,8 +121,8 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const t = await getTranslations("Toy.errors");
-  const g = await getTranslations("General.errors");
+  const t = await getTranslations("Toy");
+  const g = await getTranslations("General");
 
   const { id } = await params;
 
@@ -295,8 +295,8 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const t = await getTranslations("Toy.errors");
-  const g = await getTranslations("General.errors");
+  const t = await getTranslations("Toy.");
+  const g = await getTranslations("General");
   
   let { userId } = await auth();
 

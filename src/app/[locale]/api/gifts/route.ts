@@ -9,8 +9,8 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ locale: string }> }
 ) {
-  const g = await getTranslations("General.errors");
-  const s = await getTranslations("Status.errors");
+  const g = await getTranslations("General");
+  const s = await getTranslations("Status");
 
   const { userId } = await auth();
 

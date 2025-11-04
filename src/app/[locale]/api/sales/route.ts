@@ -12,8 +12,8 @@ export async function GET(
   { params }: { params: Promise<{ locale: string }> }
 ) {
 
-  const g = await getTranslations("General.errors");
-  const s = await getTranslations("Status.errors");
+  const g = await getTranslations("General");
+  const s = await getTranslations("Status");
 
   const { userId } = await auth();
 
@@ -139,7 +139,7 @@ export async function GET(
 export async function POST(req: Request) {
   const { userId: buyerId } = await auth();
 
-  const g = await getTranslations("General.errors");
+  const g = await getTranslations("General");
   
   if (!buyerId) {
     return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });

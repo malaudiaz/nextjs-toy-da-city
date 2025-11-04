@@ -9,8 +9,8 @@ import { getTranslations } from "next-intl/server";
 export async function POST(req: NextRequest) {
   const { userId } = await auth()
   
-  const g = await getTranslations("General.errors");
-  const s = await getTranslations("sendMail.errors");
+  const g = await getTranslations("General");
+  const s = await getTranslations("sendMail");
 
 
   if (!userId) return Response.json({ error: g('Unauthorized') }, { status: 401 })

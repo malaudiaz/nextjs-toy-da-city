@@ -10,8 +10,8 @@ const ONLINE_THRESHOLD = 60 * 1000; // 60 segundos
 
 export async function GET(request: NextRequest) {
   const { userId } = await auth();
-  const g = await getTranslations("General.errors");
-  const t = await getTranslations("User.errors");
+  const g = await getTranslations("General");
+  const t = await getTranslations("User");
   
   if (!userId) {
     return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });

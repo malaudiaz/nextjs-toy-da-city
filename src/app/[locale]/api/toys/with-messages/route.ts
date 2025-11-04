@@ -8,7 +8,7 @@ import { getTranslations } from "next-intl/server";
 export async function GET(req: NextRequest) {
   // --- 1. Autenticación ---
   let { userId: clerkUserId } = await auth();
-  const g = await getTranslations("General.errors");
+  const g = await getTranslations("General");
   
 
   if (!clerkUserId) {

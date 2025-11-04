@@ -15,7 +15,7 @@ const CRON_SECRET = process.env.CRON_SECRET;
 export async function POST(request: Request) {
   // Opcional: autenticación mínima
   const authHeader = request.headers.get("authorization");
-  const g = await getTranslations("General.errors");
+  const g = await getTranslations("General");
 
   if (CRON_SECRET && authHeader !== `Bearer ${CRON_SECRET}`) {
     return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });

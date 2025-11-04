@@ -9,7 +9,7 @@ const ONLINE_THRESHOLD = 60 * 1000; // 60 segundos
 export async function GET(req: NextRequest) {
   
   let { userId } = await auth();
-  const g = await getTranslations("General.errors");
+  const g = await getTranslations("General");
   
   if (!userId) {
     userId = req.headers.get("X-User-ID");
