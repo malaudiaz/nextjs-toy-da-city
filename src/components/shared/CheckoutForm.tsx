@@ -4,6 +4,7 @@ import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js'
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import { useTranslations } from "next-intl";
 
 export interface CartItem {
   id: string;
@@ -22,6 +23,7 @@ export default function CheckoutForm({ cartItems, onSuccess }: CheckoutFormProps
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
+  const t = useTranslations("checkoutForm");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +39,7 @@ export default function CheckoutForm({ cartItems, onSuccess }: CheckoutFormProps
     });
 
     if (error) {
-      toast.error(error.message || 'Error en el pago');
+      toast.error(error.message || t("payError"));
     } else if (onSuccess) {
       onSuccess();
     }
@@ -71,7 +73,7 @@ export default function CheckoutForm({ cartItems, onSuccess }: CheckoutFormProps
         disabled={!stripe || loading}
         className="w-full bg-[#4c754b] hover:bg-[#558d54]"
       >
-        {loading ? 'Procesando...' : `Pagar $${cartItems.reduce((a, b) => a + b.price, 0).toFixed(2)}`}
+        {loading ? t("processing") : `{t("pay")} $${cartItems.reduce((a, b) => a + b.price, 0).toFixed(2)}`}
       </Button>
     </form>
   );

@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import CheckoutForm from "./CheckoutForm";
 import { Elements } from "@stripe/react-stripe-js";
 import { stripePromise } from "@/lib/stripe";
+import { useLocale } from "next-intl"; // ✅ Importa useLocale
+import { useTranslations } from "next-intl";
 
 // --- Tipos ---
 interface CartItem {
@@ -53,6 +55,9 @@ export default function CheckoutModal({
   cartItems: CartItem[];
 }) {
   const { isSignedIn, user } = useUser();
+  const locale = useLocale(); // ✅ Obtiene el locale actual (ej. 'es', 'en')
+  const lang = (!locale ? "en" : locale) as "es" | "en"; // o los locales que necesites
+  const t = useTranslations("checkoutModal");
 
   const shouldFetch =
     isOpen && isSignedIn && user && cartItems.length > 0;
@@ -82,7 +87,7 @@ export default function CheckoutModal({
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       onError: () => {
-        toast.error("Error al iniciar el pago");
+        toast.error(t("payError"));
         onClose();
       },
     }
@@ -122,20 +127,20 @@ export default function CheckoutModal({
         </button>
 
         <h3 className="text-lg font-medium text-gray-900 mb-4">
-          Finalizar compra
+          {t("endPurchase")}
         </h3>
 
         {isLoading ? (
-          <p>Cargando...</p>
+          <p>{t("loading")}</p>
         ) : !isSignedIn ? (
-          <p>Debes iniciar sesión.</p>
+          <p>{t("login")}</p>
         ) : clientSecret ? (
           <Elements 
             stripe={stripePromise} 
             //options={{ clientSecret }}
             options={{
               clientSecret,
-              locale: 'es', 
+              locale: lang, 
               appearance: {
                 theme: 'stripe',
               },
@@ -144,7 +149,7 @@ export default function CheckoutModal({
             <CheckoutForm cartItems={cartItems} onSuccess={onClose} />
           </Elements>
         ) : (
-          <p>Error al cargar el pago.</p>
+          <p>{t("lodingPayError")}</p>
         )}
       </div>
     </div>

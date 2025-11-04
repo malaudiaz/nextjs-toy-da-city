@@ -856,6 +856,18 @@
   },
   "Raiting": {
     "review": "review"
+  },
+  "checkoutModal": {
+    "payError": "Error starting payment",
+    "endPurchase": "End of purchase",
+    "loading": "Loading...",
+    "login": "You must be logged in.",
+    "lodingPayError": "Error loading payment."
+  },
+  "checkoutForm": {
+    "payError": "Payment error",
+    "processing": "Processing...",
+    "pay": "Pay"
   }
 } 
 

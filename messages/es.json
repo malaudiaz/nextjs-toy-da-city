@@ -848,5 +848,15 @@
   },
   "Raiting": {
     "review": "reseña"
+  },
+  "checkoutModal": {
+    "payError": "Error al iniciar el pago",
+    "endPurchase": "Finalizar compra",
+    "loading": "Cargando...",
+    "login": "Debes iniciar sesión.",
+    "lodingPayError": "Error al cargar el pago."
+  },
+  "checkoutForm": {
+    "payError": "Error en el pago",
   }
 }
