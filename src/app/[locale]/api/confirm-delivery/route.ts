@@ -34,7 +34,17 @@ export async function POST(req: NextRequest) {
 
   const { orderId } = await req.json();
 
-  const order = await prisma.order.findUnique({ where: { id: orderId } });
+  const order = await prisma.order.findUnique({ 
+    where: { id: orderId },
+    include: {
+      items: {
+        include: {
+          toy: true
+        }
+      }
+    }
+  });
+
   if (!order) {
     return NextResponse.json({ error: t("orderNotFound") }, { status: 404 });
   }
@@ -114,6 +124,18 @@ export async function POST(req: NextRequest) {
       );
     }
   }
+
+  // ✅ Obtener los IDs de los juguetes de la orden
+  const toyIds = order.items.map(item => item.toy.id);
+
+  // ✅ ACTUALIZAR LOS JUGUETES: marcarlos como vendidos (sold)
+  await prisma.toy.updateMany({
+    where: { id: { in: toyIds } },
+    data: {
+      statusId: 3, // sold
+      isActive: false
+    },
+  });
 
   // ✅ Actualizar estado de la orden
   await prisma.order.update({

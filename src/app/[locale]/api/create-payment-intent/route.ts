@@ -16,6 +16,28 @@ interface CartItem {
   userId: string; // sellerId
 }
 
+// Alternativa más simple: usar un ID único basado en el contenido
+function generateCartId(cartItems: CartItem[], buyerId: string): string {
+  const cartString = JSON.stringify({
+    items: cartItems.map(item => ({
+      id: item.id,
+      price: item.price,
+      quantity: item.quantity
+    })),
+    buyerId
+  });
+  
+  // Crear un hash simple (no criptográfico pero suficiente para este caso)
+  let hash = 0;
+  for (let i = 0; i < cartString.length; i++) {
+    const char = cartString.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  
+  return `cart_${buyerId}_${Math.abs(hash).toString(36)}`;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { cartItems, buyerId }: { cartItems: CartItem[]; buyerId: string } = await req.json();
@@ -24,13 +46,23 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Datos inválidos" }, { status: 400 });
     }
 
-    // Idempotencia
-    const cartId = `cart_${buyerId}_${Date.now()}`;
-    const existingOrder = await prisma.order.findUnique({ where: { cartId } });
+    const cartId = generateCartId(cartItems, buyerId);
+
+    const existingOrder = await prisma.order.findUnique({ where: { cartId, status: { in: ["AWAITING_CONFIRMATION"]}}});
+
     if (existingOrder) {
-      const intent = await stripe.paymentIntents.retrieve(existingOrder.paymentIntentId);
-      return NextResponse.json({ clientSecret: intent.client_secret });
-    }    
+      try {
+        const intent = await stripe.paymentIntents.retrieve(existingOrder.paymentIntentId);
+        // Verificar que el PaymentIntent todavía sea usable
+        if (intent.status === 'requires_payment_method' || intent.status === 'requires_confirmation') {
+          return NextResponse.json({ clientSecret: intent.client_secret });
+        }
+      } catch {
+        // Si el payment intent no existe en Stripe, continuar con la creación
+        console.log("PaymentIntent no encontrado en Stripe, creando uno nuevo");
+      }
+    }
+
 
     // Agrupar por vendedor
     const itemsBySeller = cartItems.reduce((acc, item) => {
@@ -156,30 +188,42 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No se encontró el usuario" }, { status: 404 });
     }
 
-    // Crear la orden y conectar los juguetes
-    await prisma.order.create({
-      data: {
-        cartId,
-        paymentIntentId: paymentIntent.id,
-        buyerId: buller.id,
-        sellerId: transferDetails[0].sellerId,
-        totalAmount,
-        status: "AWAITING_CONFIRMATION",
-        items: {
-          create: cartItems.map(item => ({
-            toy: { connect: { id: item.id } },
-            priceAtPurchase: Math.round(item.price * 100),
-          })),
+    // Si existe una orden anterior con el mismo cartId pero PaymentIntent inválido, actualizarla
+    if (existingOrder) {
+      await prisma.order.update({
+        where: { id: existingOrder.id },
+        data: {
+          paymentIntentId: paymentIntent.id,
+          totalAmount,
+          status: "AWAITING_CONFIRMATION",
         },
-      },
-    });
+      });
+    } else {
+      // Crear nueva orden
+      await prisma.order.create({
+        data: {
+          cartId,
+          paymentIntentId: paymentIntent.id,
+          buyerId: buller.id,
+          sellerId: transferDetails[0].sellerId,
+          totalAmount,
+          status: "AWAITING_CONFIRMATION",
+          items: {
+            create: cartItems.map(item => ({
+              toy: { connect: { id: item.id } },
+              priceAtPurchase: Math.round(item.price * 100),
+            })),
+          },
+        },
+      });
+    }
 
     // ✅ ACTUALIZAR LOS JUGUETES: forSell = false, active = false
     await prisma.toy.updateMany({
       where: { id: { in: toyIds } },
       data: {
-        statusId: 3, // sold
-        isActive: false
+        statusId: 2, // reserved
+        isActive: true
       },
     });   
      

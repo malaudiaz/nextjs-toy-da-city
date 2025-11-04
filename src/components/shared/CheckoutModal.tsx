@@ -130,7 +130,17 @@ export default function CheckoutModal({
         ) : !isSignedIn ? (
           <p>Debes iniciar sesión.</p>
         ) : clientSecret ? (
-          <Elements stripe={stripePromise} options={{ clientSecret }}>
+          <Elements 
+            stripe={stripePromise} 
+            //options={{ clientSecret }}
+            options={{
+              clientSecret,
+              locale: 'es', 
+              appearance: {
+                theme: 'stripe',
+              },
+            }}            
+          >
             <CheckoutForm cartItems={cartItems} onSuccess={onClose} />
           </Elements>
         ) : (

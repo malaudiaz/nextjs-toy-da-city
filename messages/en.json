@@ -444,7 +444,8 @@
     "Free": "Free",
     "Swap": "Swap",
     "Buttom1": "Apply",
-    "Buttom2": "Clear"
+    "Buttom2": "Clear",
+    "miles": "miles"
   },
   "navbar": {
     "Search": "Search toys...",
@@ -839,6 +840,22 @@
     "purchased": "Purchased in order # ",
     "memberSince": "Member since",
     "toysSeccionTitle": "Toys for sale"
+  },
+  "ProductSearchCard": {
+    "free": "FREE",    
+    "addToCart": "Add to Cart",
+    "addToFavorites": "Add to Favorites",
+    "removeFromFavorites": "Remove from Favorites",
+    "failedAddToFavorites": "Failed to add to favorites",
+    "loadingLocation": "Loading location...",
+    "locationNotFound": "Not exists location"
+  },
+  "FeaturesProduct": {
+    "title": "You Might Also Like",
+    "free": "FREE"  
+  },
+  "Raiting": {
+    "review": "review"
   }
 } 
 

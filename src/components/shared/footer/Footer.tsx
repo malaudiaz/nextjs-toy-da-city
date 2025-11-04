@@ -20,7 +20,7 @@ const Footer = () => {
             </Link>
           </div>
           <div className="flex flex-col space-y-1">
-            <Link href={"/"} className="text-white font-medium">
+{/*             <Link href={"/"} className="text-white font-medium">
               ▸ {t("Footer3")}
             </Link>
             <Link href={"/"} className="text-white font-medium">
@@ -29,7 +29,7 @@ const Footer = () => {
             <Link href={"/"} className="text-white font-medium">
               ▸ {t("Footer5")}
             </Link>
-          </div>
+ */}          </div>
         </div>
       </div>
       <div className="flex items-center justify-center gap-2 w-full">

@@ -288,6 +288,8 @@
     "Section5ListItem2Title": "Controles de acceso",
     "Section5ListItem2Desc": "Permisos basados en roles para empleados.",
     "Section5ListItem3Title": "Ausún sistema es 100 % seguro—informe rápidamente cualquier actividad sospechosa a security@toydacity.com.",
+    "Section5ListItem3Desc": "Pruebas de penetración anuales realizadas por empresas externas.",
+    "Section5SecurityNote": "Ningún sistema es 100% seguro; informe inmediatamente cualquier actividad sospechosa a security@toydacity.com.",
 
     "Section6Title": "6. Sus Opciones",
     "Section6Sub1Title": "6.1 Configuración de la Cuenta",
@@ -324,7 +326,7 @@
     "Section7Sub2ListItem3Title": "Proceso de Verificación",
     "Section7Sub2ListItem3Desc": "Para cuentas sospechosas de pertenecer a usuarios menores, podremos solicitar:",
     "Section7Sub2ListItem3Bullet1": "Prueba de consentimiento parental (por ejemplo, formulario firmado).",
-    "Section7Sub2ListItem3Bullet2s": "Documento oficial para confirmar la identidad del tutor.",
+    "Section7Sub2ListItem3Bullet2": "Documento oficial para confirmar la identidad del tutor.",
 
     "Section8Title": "8. Transferencias Internacionales de Datos",
     "Section8Content": "Los datos se procesan en Estados Unidos. Los usuarios fuera de EE.UU. aceptan esta transferencia.",
@@ -428,14 +430,15 @@
   },
   "filter": {
     "Title": "Filtros",
-    "Filter1": "Maxima Distancia",
+    "Filter1": "Máxima Distancia",
     "Filter2": "Rango de Precios",
     "Type": "Juguetes",
     "Sale": "Venta",
-    "Free": "Gratis",
+    "Free": "Grátis",
     "Swap": "Intercambio",
     "Buttom1": "Aplicar",
-    "Buttom2": "Limpiar"
+    "Buttom2": "Limpiar",
+    "miles": "millás"
   },
   "navbar": {
     "Search": "Buscar juguetes...",
@@ -672,7 +675,7 @@
     "phone": "Teléfono",
     "website": "Sitio web",
     "policy": "Política de privacidad",
-    "terms": "Terminos de servicio"
+    "terms": "Términos de servicio"
   },
   "deleteData": {
     "title": "Cómo eliminar tu cuenta/datos",
@@ -829,5 +832,21 @@
     "purchased": "Compró en orden # ",
     "memberSince": "Miembro desde ",
     "toysSeccionTitle": "Juguetes en venta"
+  },
+  "ProductSearchCard": {
+    "free": "GRATIS",
+    "addToCart": "Agregar al carrito",
+    "addToFavorites": "Agregar a favoritos",
+    "removeFromFavorites": "Eliminar de favoritos",
+    "failedAddToFavorites": "Error al añadir a favoritos",
+    "loadingLocation": "Cargando ubicación...",
+    "locationNotFound": "No existe ubicación"
+  },
+  "FeaturesProduct": {
+    "title": "Puedes ver también",
+    "free": "GRATIS"  
+  },
+  "Raiting": {
+    "review": "reseña"
   }
 }

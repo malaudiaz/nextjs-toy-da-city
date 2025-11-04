@@ -47,7 +47,25 @@ export default function CheckoutForm({ cartItems, onSuccess }: CheckoutFormProps
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <PaymentElement />
+      
+      
+      <PaymentElement 
+        options={{
+          layout: {
+            type: 'tabs',
+            defaultCollapsed: false,
+            spacedAccordionItems: false
+          },
+          fields: {
+            billingDetails: {
+              address: {
+                country: 'never' // Oculta el campo país si no lo necesitas
+              }
+            }
+          }
+        }}
+      />
+
       <Button
         type="submit"
         disabled={!stripe || loading}

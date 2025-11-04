@@ -2,15 +2,17 @@ import { Toy } from '@/types/toy'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import { getTranslations } from "next-intl/server";
 
 type FeaturesProductProps = {
 products: Toy[]
 }
 
 const FeaturesProduct = async ({products}: FeaturesProductProps) => {
+  const t = await getTranslations("FeaturesProduct");
   return (
     <section className="mt-16">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">You Might Also Like</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">{t("title")}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {products.map((product) => (
           <Link key={product.id} href={`/toys/${product.id}`}>
@@ -27,7 +29,7 @@ const FeaturesProduct = async ({products}: FeaturesProductProps) => {
                 {product.price ? (
                   <p className="text-md text-green-700 font-bold">${product.price.toFixed(2)}</p>
                 ) : (
-                  <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm w-1/4">FREE</span>
+                  <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm w-1/4">{t("free")}</span>
                 )}
               </div>
             </div>

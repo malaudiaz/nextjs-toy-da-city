@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl'; // ✅ Importa el hook
+
 type Props = {
   rating: number; // Ej: 4.3
   reviewCount?: number; // Opcional: número total de reseñas
@@ -5,6 +7,7 @@ type Props = {
 
 export function RatingStars({ rating = 0, reviewCount = 0 } : Props) {
   // Aseguramos que el rating esté entre 0 y 5
+  const t = useTranslations('Raiting'); // ✅ Usa el hook
   const normalizedRating = Math.min(5, Math.max(0, rating));
   
   // Generamos un array de 5 estrellas
@@ -27,7 +30,7 @@ export function RatingStars({ rating = 0, reviewCount = 0 } : Props) {
 
       {/* Mostrar el rating y número de reseñas */}
       <span className="text-xs text-gray-500 ml-1">
-        ({reviewCount} reseña{reviewCount !== 1 ? 's' : ''})
+        ({reviewCount} {t('review')}{reviewCount !== 1 ? 's' : ''})
       </span>
     </div>
   );
