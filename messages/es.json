@@ -858,5 +858,7 @@
   },
   "checkoutForm": {
     "payError": "Error en el pago",
+    "processing": "Procesando...",
+    "pay": "Pagar"
   }
 }
