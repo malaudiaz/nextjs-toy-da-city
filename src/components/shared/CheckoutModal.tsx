@@ -6,8 +6,9 @@ import { toast } from "sonner";
 import CheckoutForm from "./CheckoutForm";
 import { Elements } from "@stripe/react-stripe-js";
 import { stripePromise } from "@/lib/stripe";
-import { useLocale } from "next-intl"; // ✅ Importa useLocale
+import { useLocale } from "next-intl";
 import { useTranslations } from "next-intl";
+import { useEffect } from "react"; // ✅ Importa useEffect
 
 // --- Tipos ---
 interface CartItem {
@@ -55,9 +56,22 @@ export default function CheckoutModal({
   cartItems: CartItem[];
 }) {
   const { isSignedIn, user } = useUser();
-  const locale = useLocale(); // ✅ Obtiene el locale actual (ej. 'es', 'en')
-  const lang = (!locale ? "en" : locale) as "es" | "en"; // o los locales que necesites
+  const locale = useLocale();
+  const lang = (!locale ? "en" : locale) as "es" | "en";
   const t = useTranslations("checkoutModal");
+
+  // ✅ Prevenir scroll del body cuando el modal está abierto
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   const shouldFetch =
     isOpen && isSignedIn && user && cartItems.length > 0;
@@ -96,7 +110,6 @@ export default function CheckoutModal({
   if (!isOpen) return null;
 
   if (error || (data && data.error)) {
-    // Cierra el modal si hay error (evita bucle con setTimeout si es necesario)
     setTimeout(onClose, 0);
     return null;
   }
@@ -104,53 +117,57 @@ export default function CheckoutModal({
   const clientSecret = data?.clientSecret;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg p-6 max-w-md w-full relative">
-        <button
-          type="button"
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-          onClick={onClose}
-        >
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* ✅ Fondo semitransparente con blur */}
+      <div 
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm" 
+        onClick={onClose}
+      />
+      
+      {/* ✅ Contenido del modal */}
+      <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="flex justify-between items-center p-6 border-b">
+          <h2 className="text-xl font-semibold text-gray-900">
+            {t("endPurchase")}
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 transition-colors text-2xl font-light"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-
-        <h3 className="text-lg font-medium text-gray-900 mb-4">
-          {t("endPurchase")}
-        </h3>
-
-        {isLoading ? (
-          <p>{t("loading")}</p>
-        ) : !isSignedIn ? (
-          <p>{t("login")}</p>
-        ) : clientSecret ? (
-          <Elements 
-            stripe={stripePromise} 
-            //options={{ clientSecret }}
-            options={{
-              clientSecret,
-              locale: lang, 
-              appearance: {
-                theme: 'stripe',
-              },
-            }}            
-          >
-            <CheckoutForm cartItems={cartItems} onSuccess={onClose} />
-          </Elements>
-        ) : (
-          <p>{t("lodingPayError")}</p>
-        )}
+            ×
+          </button>
+        </div>
+        
+        {/* Contenido */}
+        <div className="p-6">
+          {isLoading ? (
+            <div className="text-center py-4">
+              <p className="text-gray-600">{t("loading")}</p>
+            </div>
+          ) : !isSignedIn ? (
+            <div className="text-center py-4">
+              <p className="text-gray-600">{t("login")}</p>
+            </div>
+          ) : clientSecret ? (
+            <Elements 
+              stripe={stripePromise} 
+              options={{
+                clientSecret,
+                locale: lang, 
+                appearance: {
+                  theme: 'stripe',
+                },
+              }}            
+            >
+              <CheckoutForm cartItems={cartItems} onSuccess={onClose} />
+            </Elements>
+          ) : (
+            <div className="text-center py-4">
+              <p className="text-gray-600">{t("lodingPayError")}</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -73,7 +73,7 @@ export default function CheckoutForm({ cartItems, onSuccess }: CheckoutFormProps
         disabled={!stripe || loading}
         className="w-full bg-[#4c754b] hover:bg-[#558d54]"
       >
-        {loading ? t("processing") : `{t("pay")} $${cartItems.reduce((a, b) => a + b.price, 0).toFixed(2)}`}
+        {loading ? t("processing") : `${t("pay")} $${cartItems.reduce((a, b) => a + b.price, 0).toFixed(2)}`}
       </Button>
     </form>
   );
