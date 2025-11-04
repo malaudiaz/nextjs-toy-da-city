@@ -13,7 +13,7 @@ export async function GET(
   // Validar que sea un número válido
   const limitNumber = isNaN(limit) || limit < 1 ? 6 : limit;
 
-  const g = await getTranslations("General.errors");
+  const g = await getTranslations("General");
 
   const userLanguageCode = locale;
 

@@ -52,7 +52,7 @@ export async function GET(
  
   const { locale } = await params;
 
-  const g = await getTranslations("General.errors");
+  const g = await getTranslations("General");
 
   try {
     const { searchParams } = new URL(request.url!)
@@ -216,9 +216,9 @@ export async function GET(
 
 // POST create a new toy
 export async function POST(request: Request): Promise<NextResponse<ToyResponseSuccess | ToyResponseError>> {
-  const g = await getTranslations("General.errors");
-  const s = await getTranslations("Status.errors");
-  const t = await getTranslations("Toy.errors");
+  const g = await getTranslations("General");
+  const s = await getTranslations("Status");
+  const t = await getTranslations("Toy");
 
 
   const { userId } = await auth();

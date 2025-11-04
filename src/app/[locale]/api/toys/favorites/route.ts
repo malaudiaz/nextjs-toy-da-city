@@ -6,7 +6,7 @@ import { getTranslations } from "next-intl/server";
 export async function GET(req: Request) {
   // --- 1. Autenticación ---
   let { userId } = await auth();
-  const g = await getTranslations("General.errors");
+  const g = await getTranslations("General");
   
   if (!userId) {
     userId = req.headers.get("X-User-ID");

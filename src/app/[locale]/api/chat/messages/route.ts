@@ -6,7 +6,7 @@ import { getTranslations } from "next-intl/server";
 export async function GET(req: NextRequest) {
   const { userId } = await auth()
 
-  const g = await getTranslations("General.errors");
+  const g = await getTranslations("General");
 
   if (!userId) {
     return NextResponse.json({ error: g('Unauthorized') }, { status: 401 })

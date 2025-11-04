@@ -9,6 +9,7 @@ export async function GET(
   { params }: { params: Promise<{ locale: string }> }
 ) {
   let { userId } = await auth();
+  const g = await getTranslations("General");
 
   if (!userId) {
     userId = req.headers.get("X-User-ID");
@@ -20,7 +21,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: "User not found",
+          error: g("UserNotFound"),
         },
         { status: 404 }
       );
@@ -33,7 +34,7 @@ export async function GET(
 
   const userLanguageCode = locale;
 
-  const t = await getTranslations("Toy.errors");
+  const t = await getTranslations("Toy");
 
   try {
     const toy = await prisma.toy.findMany({
@@ -75,7 +76,7 @@ export async function GET(
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { error: "Failed to fetch status" },
+      { error: g("ServerError") },
       { status: 500 }
     );
   }

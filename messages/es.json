@@ -10,62 +10,50 @@
     "description": "250 piezas coloridas, incluye manual y 5 modelos de edificios..."
   },
   "User": {
-    "errors": {
-      "AuthenticationFailed": "Autenticación fallida", 
-      "NotFound": "Usuario no encontrada",
-      "UpdateError": "Error actualizando usuario",
-      "DeleteError": "Error eliminando usuario",
-      "InvaliduserID": "Incorrecto OD de usuario"
-    }
+    "AuthenticationFailed": "Autenticación fallida", 
+    "NotFound": "Usuario no encontrada",
+    "UpdateError": "Error actualizando usuario",
+    "DeleteError": "Error eliminando usuario",
+    "InvaliduserID": "Incorrecto OD de usuario",
+    "MissingSocket": "Falta id o nombre de canal",
+    "UserWithoutEmail": "El usuario no tiene correo electrónico."
   },
   "Categories": {
-    "errors": {
-      "NotFound": "Categoría no encontrada",
-      "UpdateError": "Error actualizando categoría",
-      "DeleteError": "Error eliminando categoría",
-      "InvalidId": "Incorrecto ID de la categoría"
-    }
+    "NotFound": "Categoría no encontrada",
+    "UpdateError": "Error actualizando categoría",
+    "DeleteError": "Error eliminando categoría",
+    "InvalidId": "Incorrecto ID de la categoría"
   },
   "Status": {
-    "errors": {
-      "NotFound": "Estado del juguete no encontrado",
-      "UpdateError": "Error actualizando estado del juguete",
-      "DeleteError": "Error eliminando estado del juguete",
-      "InvalidId": "Incorrecto ID de estado"
-    }
+    "NotFound": "Estado del juguete no encontrado",
+    "UpdateError": "Error actualizando estado del juguete",
+    "DeleteError": "Error eliminando estado del juguete",
+    "InvalidId": "Incorrecto ID de estado"
   },
   "Condition": {
-    "errors": {
-      "NotFound": "Condición no encontrada",
-      "UpdateError": "Error actualizando condición del juguete",
-      "DeleteError": "Error eliminando condición del juguete",
-      "InvalidId": "Incorrecto ID de la condición"
-    }
+    "NotFound": "Condición no encontrada",
+    "UpdateError": "Error actualizando condición del juguete",
+    "DeleteError": "Error eliminando condición del juguete",
+    "InvalidId": "Incorrecto ID de la condición"
   },
   "Toy": {
-    "errors": {
-      "NotFound": "Juguete no encontrado",
-      "CreatedError": "No se pudieron crear juguetes favoritos",
-      "UpdateError": "Error actualizando juguete",
-      "DeleteError": "Error eliminando juguete",
-      "ToyIdRequired": "Id de Juguete es Requerido",
-      "NotExistToyInactive": "No existen juguetes inactivos para eliminar",
-      "OneImageRequired": "Debes subir al menos una imagen por publicación"
-    }
+    "NotFound": "Juguete no encontrado",
+    "CreatedError": "No se pudieron crear juguetes favoritos",
+    "UpdateError": "Error actualizando juguete",
+    "DeleteError": "Error eliminando juguete",
+    "ToyIdRequired": "Id de Juguete es Requerido",
+    "NotExistToyInactive": "No existen juguetes inactivos para eliminar",
+    "OneImageRequired": "Debes subir al menos una imagen por publicación"
   },
   "Comments": {
-    "errors": {
-      "NotFound": "Comentario no encontrado",
-      "UpdateError": "Error actualizando comentario",
-      "DeleteError": "Error eliminando comentario"
-    }
+    "NotFound": "Comentario no encontrado",
+    "UpdateError": "Error actualizando comentario",
+    "DeleteError": "Error eliminando comentario"
   },
   "Favorite": {
-    "errors": {
-      "NotFound": "Favorito no encontrado",
-      "UpdateError": "Error actualizando Favoritos",
-      "DeleteError": "Error eliminandoFavoritos"
-    }
+    "NotFound": "Favorito no encontrado",
+    "UpdateError": "Error actualizando Favoritos",
+    "DeleteError": "Error eliminandoFavoritos"
   },
   "Cart": {
     "title": "Carrito",
@@ -79,23 +67,22 @@
     }
   },
   "Orders": {
-    "errors": {
-      "NotFound": "Orden no encontrada",
-      "OrderNotValid": "Orden no válida para cancelar",
-      "NotOrderToProcess": "No exiten Ordenes para procesar"
-    }
+    "NotFound": "Orden no encontrada",
+    "OrderNotValid": "Orden no válida para cancelar",
+    "NotOrderToProcess": "No exiten Ordenes para procesar"
   },
   "General": {
-    "errors": {
-      "InvalidInputParams": "Parámetros inválidos",
-      "ValidationsErrors": "Errores de validación",
-      "ServerError": "Error interno del servidor",
-      "Unauthorized": "Usuario no autorizado",
-      "UserNotFound": "Usuario no encontrado",
-      "DeletedSuccessfully": "Operación de borrado satisfactoria",
-      "InvalidSubscriptionFormat": "Formato de subscripción no válido",
-      "NoPushSubscriptionsFound": "No se encontraron suscripciones push"
-    }
+    "InvalidInputParams": "Parámetros inválidos",
+    "ValidationsErrors": "Errores de validación",
+    "ServerError": "Error interno del servidor",
+    "Unauthorized": "Usuario no autorizado",
+    "UserNotFound": "Usuario no encontrado",
+    "DeletedSuccessfully": "Operación de borrado satisfactoria",
+    "InvalidSubscriptionFormat": "Formato de subscripción no válido",
+    "NoPushSubscriptionsFound": "No se encontraron suscripciones push",
+    "WebhookNotConfigure": "Secreto de webhook no configurado",
+    "WebhookSignInvalid": "Firma de webhook inválida",
+    "MissingHeadersSvix": "Faltan headers svix"
   },
   "terms": {
     "Title": "Términos de Servicio de Toydacity",

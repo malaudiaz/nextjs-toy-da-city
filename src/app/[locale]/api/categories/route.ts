@@ -13,7 +13,7 @@ export async function GET(
 
   const { locale } = await params;
 
-  const g = await getTranslations("General.errors");
+  const g = await getTranslations("General");
 
   try {
     const { searchParams } = new URL(req.url!)
@@ -80,7 +80,7 @@ export async function GET(
 
 // POST - Insertar nueva categoría.
 export async function POST(req: Request) {
-  const g = await getTranslations("General.errors");
+  const g = await getTranslations("General");
 
   const { userId } = await auth();
 

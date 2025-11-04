@@ -11,8 +11,8 @@ export async function GET(
 ) {
   const { userId } = await auth();
 
-  const g = await getTranslations("General.errors");
-  const s = await getTranslations("Status.errors");
+  const g = await getTranslations("General");
+  const s = await getTranslations("Status");
   
   if (!userId) {
     return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });

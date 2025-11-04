@@ -8,8 +8,8 @@ export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const t = await getTranslations("User.errors");
-  const g = await getTranslations("General.errors");
+  const t = await getTranslations("User");
+  const g = await getTranslations("General");
   
   const { userId } = await auth();
 

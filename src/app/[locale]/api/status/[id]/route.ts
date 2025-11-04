@@ -13,8 +13,8 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const t = await getTranslations("Status.errors");
-  const g = await getTranslations("General.errors");
+  const t = await getTranslations("Status");
+  const g = await getTranslations("General");
 
   let { userId } = await auth();
 
@@ -51,8 +51,8 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const t = await getTranslations("Status.errors");
-  const g = await getTranslations("General.errors");
+  const t = await getTranslations("Status");
+  const g = await getTranslations("General");
 
   const { userId } = await auth();
 
@@ -106,8 +106,8 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const t = await getTranslations("Status.errors");
-  const g = await getTranslations("General.errors");
+  const t = await getTranslations("Status");
+  const g = await getTranslations("General");
 
   const { userId } = await auth();
 
@@ -148,8 +148,8 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
 
-  const t = await getTranslations("Status.errors");
-  const g = await getTranslations("General.errors");
+  const t = await getTranslations("Status");
+  const g = await getTranslations("General");
 
   const { userId } = await auth();
 

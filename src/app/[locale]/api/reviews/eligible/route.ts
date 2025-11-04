@@ -2,13 +2,18 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { auth } from '@clerk/nextjs/server';
+import { getTranslations } from "next-intl/server";
 
 export async function GET(request: Request) {
+
+  const g = await getTranslations("General");
+  const t = await getTranslations("Orders");
+
   try {
     const { userId: reviewerId } = await auth();
 
     if (!reviewerId) {
-      return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
+      return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
     }
 
     const user = await prisma.user.findUnique({
@@ -20,7 +25,7 @@ export async function GET(request: Request) {
     const sellerId = searchParams.get('sellerId');
 
     if (!sellerId) {
-      return NextResponse.json({ error: 'sellerId requerido' }, { status: 400 });
+      return NextResponse.json({ error: t('SellerIdRequeried') }, { status: 400 });
     }
 
     // Buscar orden CONFIRMED sin reseña

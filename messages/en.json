@@ -10,62 +10,50 @@
     "description": "250 colorful pieces, includes manual and 5 buildings models..."
   },
   "User": {
-    "errors": {
-      "AuthenticationFailed": "Authentication failed",
-      "NotFound": "User not found",
-      "UpdateError": "Error updating user",
-      "DeleteError": "Error deleting user",
-      "InvaliduserID": "Invalid user ID"
-    }
+    "AuthenticationFailed": "Authentication failed",
+    "NotFound": "User not found",
+    "UpdateError": "Error updating user",
+    "DeleteError": "Error deleting user",
+    "InvaliduserID": "Invalid user ID",
+    "MissingSocket": "Missing socket_id or channel_name",
+    "UserWithoutEmail": "The user does not have an email address."
   },
   "Categories": {
-    "errors": {
-      "NotFound": "Category not found",
-      "UpdateError": "Error updating category",
-      "DeleteError": "Error deleting category",
-      "InvalidId": "Invalid ID category"
-    }
+    "NotFound": "Category not found",
+    "UpdateError": "Error updating category",
+    "DeleteError": "Error deleting category",
+    "InvalidId": "Invalid ID category"
   },
   "Status": {
-    "errors": {
-      "NotFound": "Status not found",
-      "UpdateError": "Error updating status",
-      "DeleteError": "Error deleting status",
-      "InvalidId": "Invalid ID status"
-    }
+    "NotFound": "Status not found",
+    "UpdateError": "Error updating status",
+    "DeleteError": "Error deleting status",
+    "InvalidId": "Invalid ID status"
   },
   "Condition": {
-    "errors": {
-      "NotFound": "Condition not found",
-      "UpdateError": "Error updating condition",
-      "DeleteError": "Error deleting condition",
-      "InvalidId": "Invalid ID condition"
-    }
+    "NotFound": "Condition not found",
+    "UpdateError": "Error updating condition",
+    "DeleteError": "Error deleting condition",
+    "InvalidId": "Invalid ID condition"
   },
   "Toy": {
-    "errors": {
-      "NotFound": "Toy not found",
-      "CreatedError": "Failed to create toy favorites",
-      "UpdateError": "Error updating toy",
-      "DeleteError": "Error deleting toy",
-      "ToyIdRequired": "Toy Id is Required",
-      "NotExistToyInactive": "There are no idle toys to be disposed of",
-      "OneImageRequired": "One image is Required"
-    }
+    "NotFound": "Toy not found",
+    "CreatedError": "Failed to create toy favorites",
+    "UpdateError": "Error updating toy",
+    "DeleteError": "Error deleting toy",
+    "ToyIdRequired": "Toy Id is Required",
+    "NotExistToyInactive": "There are no idle toys to be disposed of",
+    "OneImageRequired": "One image is Required"
   },
   "Comments": {
-    "errors": {
-      "NotFound": "Comments not found",
-      "UpdateError": "Error updating comments",
-      "DeleteError": "Error deleting comments"
-    }
+    "NotFound": "Comments not found",
+    "UpdateError": "Error updating comments",
+    "DeleteError": "Error deleting comments"
   },
   "Favorite": {
-    "errors": {
-      "NotFound": "Favorite not found",
-      "UpdateError": "Error updating favorites",
-      "DeleteError": "Error deleting favorites"
-    }
+    "NotFound": "Favorite not found",
+    "UpdateError": "Error updating favorites",
+    "DeleteError": "Error deleting favorites"
   },
   "Cart": {
     "title": "Cart",
@@ -79,23 +67,23 @@
     }
   },
   "Orders": {
-    "errors": {
-      "NotFound": "Orden not found",
-      "OrderNotValid": "Order not valid for cancellation",
-      "NotOrderToProcess": "Not Order To process"
-    }
+    "NotFound": "Orden not found",
+    "OrderNotValid": "Order not valid for cancellation",
+    "NotOrderToProcess": "Not Order To process",
+    "SellerIdRequeried": "Seller Id is Requeried"
   },
   "General": {
-    "errors": {
-      "InvalidInputParams": "Invalid Params",
-      "ValidationsErrors": "Validations Errors",
-      "ServerError": "Internal Server Error",
-      "Unauthorized": "Unauthorized",
-      "UserNotFound": "User not found",
-      "DeletedSuccessfully": "Delete operation successful",
-      "InvalidSubscriptionFormat": "Invalid subscription format",
-      "NoPushSubscriptionsFound": "No push subscriptions found"
-    }
+    "InvalidInputParams": "Invalid Params",
+    "ValidationsErrors": "Validations Errors",
+    "ServerError": "Internal Server Error",
+    "Unauthorized": "Unauthorized",
+    "UserNotFound": "User not found",
+    "DeletedSuccessfully": "Delete operation successful",
+    "InvalidSubscriptionFormat": "Invalid subscription format",
+    "NoPushSubscriptionsFound": "No push subscriptions found",
+    "WebhookNotConfigure": "Webhook secret not configured",
+    "WebhookSignInvalid": "Webhook Sign Invalid",
+    "MissingHeadersSvix": "Svix headers are missing"
   },
   "terms": {
     "Title": "Toydacity Terms of Service",

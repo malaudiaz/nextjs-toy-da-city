@@ -7,8 +7,8 @@ import { getTranslations } from "next-intl/server";
 
 export async function POST() {
   const { userId } = await auth();
-  const g = await getTranslations("General.errors");
-  const t = await getTranslations("User.errors");
+  const g = await getTranslations("General");
+  const t = await getTranslations("User");
 
 
   if (!userId) {

@@ -26,8 +26,8 @@ async function getClerkUserById(clerkId: string) {
 
 export async function GET() {
 
-  const g = await getTranslations("General.errors");
-
+  const g = await getTranslations("General");
+  
   try {
     const { userId } = await auth();
 

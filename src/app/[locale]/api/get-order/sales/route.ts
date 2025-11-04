@@ -23,7 +23,7 @@ function isValidOrderStatus(status: string): status is OrderStatusFilter {
 export async function GET(req: Request) {
   // --- 1. Autenticación ---
   let { userId } = await auth();
-  const g = await getTranslations("General.errors");
+  const g = await getTranslations("General");
   
 
   if (!userId) {

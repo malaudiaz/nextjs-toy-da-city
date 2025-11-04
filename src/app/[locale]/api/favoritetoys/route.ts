@@ -6,7 +6,7 @@ import { auth } from "@clerk/nextjs/server";
 
 // GET all favorites con paginación y búsqueda
 export async function GET() {
-  const g = await getTranslations("General.errors");
+  const g = await getTranslations("General");
 
   const { userId } = await auth();
 
@@ -57,8 +57,8 @@ export async function GET() {
 
 // POST add a new favorite toy
 export async function POST(req: Request) {
-  const t = await getTranslations("Favorite.errors");
-  const g = await getTranslations("General.errors");
+  const t = await getTranslations("Favorite");
+  const g = await getTranslations("General");
 
   const { userId } = await auth();
 

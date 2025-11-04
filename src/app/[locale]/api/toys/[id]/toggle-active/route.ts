@@ -7,8 +7,8 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const t = await getTranslations("Toy.errors");
-  const g = await getTranslations("General.errors");
+  const t = await getTranslations("Toy");
+  const g = await getTranslations("General");
   
   const { userId } = await auth();
 
