@@ -85,6 +85,16 @@
     "WebhookSignInvalid": "Webhook Sign Invalid",
     "MissingHeadersSvix": "Svix headers are missing"
   },
+  "Payments": {
+    "card_declined": "Your card was declined. Please use another card.",
+    "insufficient_funds": "Insufficient funds on the card.",
+    "expired_card": "The card has expired.",
+    "incorrect_cvc": "The security code (CVC) is incorrect.",
+    "processing_error": "Error processing card. Please try again later.",
+    "StripeInvalidRequestError": "Invalid payment details.",
+    "PaymentNotProcessed": "The payment could not be processed. Please try again.",
+    "ErrorConnectingPaymentSystem": "Error connecting to the payment system."
+  },
   "terms": {
     "Title": "Toydacity Terms of Service",
     "Welcome": "Welcome to Toydacity! These Terms of Service (Terms) govern your access to and use of the Toydacity website, mobile applications, and related online services (collectively, the Services). Toydacity Inc. (Toydacity, we, us, or our) is a Florida-based platform created to support the buying, selling, trading, and gifting of secondhand toys. By using our Services, you agree to comply with and be bound by these Terms. If you do not agree, you must not use the Services.",
