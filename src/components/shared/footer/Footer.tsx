@@ -45,7 +45,7 @@ const Footer = () => {
 
       </div>
       <span className="text-white border-r-2 border-white/50 flex justify-center mt-1">
-          <Image src={"/Logo2.png"} alt={"Toy"} width={118} height={23} />
+          &copy; 2025 <Image src={"/Logo2.png"} alt={"Toy"} width={118} height={23} />
       </span>
     </div>
   );
