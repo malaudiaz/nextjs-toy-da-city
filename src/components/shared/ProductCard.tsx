@@ -1,8 +1,11 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import { Heart } from "lucide-react";
 import Link from "next/link";
 import ConditionBadge from "./ConditionBadge";
+import LocationDisplay from "./LocationDisplay";
 import { useTranslations } from "next-intl";
 import { FavoriteToy } from "@prisma/client";
 
@@ -25,6 +28,7 @@ const ProductCard = ({
   price,
   conditionDescription,
   favorites,
+  location
 }: ProductCardProps) => {
   
   const t = useTranslations("toys");
@@ -41,7 +45,7 @@ const ProductCard = ({
           src={image || "/image 4.png"}
           alt={description}
           fill
-          unoptimized={true} // ← ¡ESTO ES CLAVE!
+          unoptimized={true}
           className="object-cover transition-transform duration-300 hover:scale-105"
           sizes="(max-width: 640px) 90vw, (max-width: 768px) 45vw, (max-width: 1024px) 22vw, 15vw"
         />
@@ -84,8 +88,14 @@ const ProductCard = ({
           {description}
         </p>
 
-        {/* Ubicación */}
-        {/* <p className="text-sm text-gray-500 truncate">{location}</p> */}
+        {/* Ubicación usando el nuevo componente */}
+        <div className="mt-3 pt-3 border-t border-gray-200 flex justify-between items-center">
+          <LocationDisplay 
+            location={location}
+            className="flex-grow"
+          />
+        </div>
+
       </div>
     </Link>
   );

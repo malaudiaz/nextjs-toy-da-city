@@ -1,8 +1,11 @@
 import { Toy } from "@/types/toy";
 import React, { Suspense } from "react";
 import Await from "../Await";
-import ProductRow from "./ProductRow";
-import SkeletonProductSearch from "./SkeletonProductSearch";
+//import ProductRow from "./ProductRow";
+import ProductList from "../home/ProductList";
+//import SkeletonProductSearch from "./SkeletonProductSearch";
+import SkeletonProductCard from "../SkeletonProductCard";
+import { useTranslations } from "next-intl";
 
 interface ProductData {
   data: Toy[];
@@ -13,12 +16,13 @@ type ProductsProps = {
 };
 
 const ProductsSearch = ({ toysPromise }: ProductsProps) => {
+  const t = useTranslations("ProductSearch");
   return (
-    <Suspense fallback={<SkeletonProductSearch count={3} />}>
+    <Suspense fallback={<SkeletonProductCard count={12} />}>
       <Await promise={toysPromise}>
         {(data) =>
           data.data.length > 0 ? (
-            <ProductRow toys={data.data} />
+            <ProductList toys={data.data} />
           ) : (
             <div className="flex flex-col text-center items-center justify-center w-full px-4">
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 text-gray-400 mb-4">
@@ -44,11 +48,10 @@ const ProductsSearch = ({ toysPromise }: ProductsProps) => {
               </div>
 
               <h2 className="text-xl font-semibold text-gray-700 mb-2">
-                No se encontraron productos
+                {t("title")}
               </h2>
               <p className="text-gray-500 mb-6 max-w-md mx-auto">
-                No hay juguetes que coincidan con tus filtros. Prueba ajustar tu
-                búsqueda o limpiar los filtros.
+                {t("subtitle")}
               </p>
             </div>
           )

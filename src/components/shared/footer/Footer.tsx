@@ -7,31 +7,7 @@ import React from "react";
 const Footer = () => {
   const t = useTranslations("footer");
   return (
-    <div className="w-full h-full mt-auto bg-[#24272A]">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8  py-10">
-        <div className="grid grid-cols-2 gap-4 place-items-center">
-          <div className="flex flex-col space-y-1">
-            <Image src={"/Logo2.png"} alt={"Toy"} width={118} height={23} />
-            <Link href={"/mission"} className="text-white font-medium">
-              {t("Footer1")}
-            </Link>
-            <Link href={"/contact"} className="text-white font-medium">
-              {t("Footer2")}
-            </Link>
-          </div>
-          <div className="flex flex-col space-y-1">
-{/*             <Link href={"/"} className="text-white font-medium">
-              ▸ {t("Footer3")}
-            </Link>
-            <Link href={"/"} className="text-white font-medium">
-              ▸ {t("Footer4")}
-            </Link>
-            <Link href={"/"} className="text-white font-medium">
-              ▸ {t("Footer5")}
-            </Link>
- */}          </div>
-        </div>
-      </div>
+    <div className="w-full h-full mt-auto bg-[#24272A] pt-4 pb-4">
       <div className="flex items-center justify-center gap-2 w-full">
         <Link href={"/"} className="text-white font-medium">
           {" "}
@@ -47,6 +23,10 @@ const Footer = () => {
         </Link>
       </div>
       <div className="flex flex-wrap justify-center gap-2 text-sm text-white mt-1">
+        <Link href={"/mission"} className="text-white font-medium">
+          {t("Footer1")}
+        </Link>
+        <span className="sm:inline text-white">|</span>
         <Link href="/terms" className="hover:underline">
           {t("Footer6")}
         </Link>
@@ -58,9 +38,14 @@ const Footer = () => {
         <Link href="/deletedata" className="hover:underline">
           {t("Footer8")}
         </Link>
+        <span className="sm:inline">|</span>
+        <Link href={"/contact"} className="text-white font-medium">
+          {t("Footer2")}
+        </Link>
+
       </div>
       <span className="text-white border-r-2 border-white/50 flex justify-center mt-1">
-        © 2025 Toydacity
+          <Image src={"/Logo2.png"} alt={"Toy"} width={118} height={23} />
       </span>
     </div>
   );

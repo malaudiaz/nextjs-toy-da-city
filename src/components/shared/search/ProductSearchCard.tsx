@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { Heart } from "lucide-react";
 import Link from "next/link";
-import useSWR from "swr";
 import ConditionBadge from "../ConditionBadge";
+import LocationDisplay from "../LocationDisplay"; // Importar el nuevo componente
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@clerk/nextjs";
@@ -24,9 +24,6 @@ type ProductCardProps = {
   location: string;
 };
 
-// Fetcher para useSWR
-const fetcher = (url: string) => fetch(url).then(res => res.json());
-
 const ProductSearchCard = ({
   id,
   description,
@@ -44,35 +41,6 @@ const ProductSearchCard = ({
   const [favorite, setFavorite] = useState(isFavorite);
 
   const { addToFavorites } = useFavorite();
-
-  // Parsear coordenadas y usar useSWR para obtener la ciudad
-  const getCoordinates = () => {
-    if (!location) return null;
-    try {
-      const [longitude, latitude] = JSON.parse(location);
-      return { latitude, longitude };
-    } catch (error) {
-      console.error("Error parsing location:", error);
-      return null;
-    }
-  };
-
-  const coordinates = getCoordinates();
-  
-  // useSWR para obtener la ciudad
-  const { data: cityData, isLoading: loadingCity } = useSWR(
-    coordinates 
-      ? `/api/geocode?lat=${coordinates.latitude}&lon=${coordinates.longitude}`
-      : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      shouldRetryOnError: false,
-    }
-  );
-
-  const city = cityData?.city || t("locationNotFound");
 
   const handleFavorite = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -146,36 +114,15 @@ const ProductSearchCard = ({
           {description}
         </p>
 
-        {/* Mostrar la ciudad aquí - ANTES del botón Add to Cart */}
+        {/* Mostrar la ciudad usando LocationDisplay - ANTES del botón Add to Cart */}
         <div className="mt-3 pt-3 border-t border-gray-200 flex justify-between items-center">
-          <div className="flex items-center text-sm text-gray-600">
-            {loadingCity ? (
-              <span className="text-gray-400">{t("loadingLocation")}</span>
-            ) : (
-              <span className="flex items-center">
-                <svg 
-                  className="w-4 h-4 mr-1 text-gray-500" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" 
-                  />
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" 
-                  />
-                </svg>
-                {city}
-              </span>
-            )}
-          </div>
+          <LocationDisplay 
+            location={location}
+            className="flex-grow"
+            loadingText={t("loadingLocation")}
+            notFoundText={t("locationNotFound")}
+            showIcon={true}
+          />
           
           <Button className="rounded-xl bg-[#e07a5f] hover:bg-[#bb664f]">
             {t("addToCart")}

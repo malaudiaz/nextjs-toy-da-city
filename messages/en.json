@@ -507,7 +507,8 @@
   },
   "toys": {
     "emptyMsg": "There are no toys published yet.",
-    "free": "FREE"
+    "free": "FREE",
+    "locationNotFound": "Location not found"
   },
   "stripeCheckoutButton": {
     "Checkout": "Pay with Stripe",
@@ -828,6 +829,10 @@
     "purchased": "Purchased in order # ",
     "memberSince": "Member since",
     "toysSeccionTitle": "Toys for sale"
+  },
+  "ProductSearch": {
+    "title": "No products were found",
+    "subtitle": "No toys match your filters. Try adjusting your search or clearing your filters."
   },
   "ProductSearchCard": {
     "free": "FREE",    

@@ -1,7 +1,6 @@
-// components/ChatModal.tsx
 "use client";
 
-import { useState, useRef, useEffect } from "react"; // ← Añadimos useCallback
+import { useState, useRef, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { Toy } from "@/types/toy";
 import Image from "next/image";
@@ -61,13 +60,26 @@ export default function ChatModal({
 }: ChatModalProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [forceRender, setForceRender] = useState(false); // ← Nuevo estado para forzar repaint
+  const [forceRender, setForceRender] = useState(false);
 
   const { user } = useUser();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const modalContentRef = useRef<HTMLDivElement>(null); // ← Nuevo ref
+  const modalContentRef = useRef<HTMLDivElement>(null);
+
+  // ✅ Prevenir scroll del body cuando el modal está abierto
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   // Cargar historial
   useEffect(() => {
@@ -86,7 +98,7 @@ export default function ChatModal({
     };
 
     loadChat();
-  }, [isOpen, currentUserId, seller.clerkId, seller.id, toy.id]); // ← Añadidos seller.id y toy.id
+  }, [isOpen, currentUserId, seller.clerkId, seller.id, toy.id]);
   
   // Suscribirse a Pusher
   useEffect(() => {
@@ -116,12 +128,9 @@ export default function ChatModal({
     try {
       channel.bind("pusher:subscription_error", (err: PusherSubscriptionError) => {
         console.error("❌ Error de suscripción:", err);
-        // Opcional: enviar a tu sistema de logs (Sentry, etc.)
-        // captureException(err);
       });
     } catch (error) {
       console.error("🚨 Error inesperado al bindear suscripción:", error);
-      // ¡La app sigue corriendo!
     }
 
     channel.bind("new-message", (data: PusherMessageEvent) => {
@@ -138,7 +147,7 @@ export default function ChatModal({
       console.log("🧹 Desuscribiendo de:", channelName);
       channel.unsubscribe();
     };
-  }, [isOpen, currentUserId, seller.id]); // ← Añadimos isOpen
+  }, [isOpen, currentUserId, seller.id]);
 
   // Enviar mensaje
   const sendMessage = async (content: string) => {
@@ -203,7 +212,6 @@ export default function ChatModal({
   // ✅ FORZAR REPAINT cuando el modal se abre
   useEffect(() => {
     if (isOpen) {
-      // Pequeño delay para asegurar que el DOM esté listo
       const timer = setTimeout(() => {
         setForceRender(true);
       }, 50);
@@ -211,19 +219,20 @@ export default function ChatModal({
       return () => clearTimeout(timer);
     } else {
       setForceRender(false);
-      setIsLoaded(false); // Resetear cuando se cierra
+      setIsLoaded(false);
     }
   }, [isOpen]);
 
-  // Si no está abierto, no renderizamos nada
   if (!isOpen) return null;
 
-  // Si está cargando, mostramos un loader en portal
+  // Si está cargando, mostramos un loader
   if (!isLoaded) {
     return (
       <ModalPortal>
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+        {/* ✅ Fondo semitransparente con blur */}
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+          <div className="relative bg-white p-6 rounded-lg shadow-xl">
             <p className="text-gray-700">Cargando chat...</p>
           </div>
         </div>
@@ -231,17 +240,23 @@ export default function ChatModal({
     );
   }
 
-  // ✅ Renderizamos el modal solo si forceRender es true (evita render prematuro)
   if (!forceRender) {
     return null;
   }
 
   return (
     <ModalPortal>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      {/* ✅ Fondo semitransparente con blur */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div 
+          className="absolute inset-0 bg-black/50 backdrop-blur-sm" 
+          onClick={onCloseAction}
+        />
+        
+        {/* ✅ Contenido del modal */}
         <div
           ref={modalContentRef}
-          className="relative w-11/12 max-w-md rounded-lg bg-white shadow-xl"
+          className="relative w-11/12 max-w-md rounded-lg bg-white shadow-xl max-h-[90vh] overflow-hidden"
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b px-4 py-3">
@@ -250,9 +265,9 @@ export default function ChatModal({
             </h3>
             <button
               onClick={onCloseAction}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-gray-500 hover:text-gray-700 text-xl font-light"
             >
-              ✕
+              ×
             </button>
           </div>
 

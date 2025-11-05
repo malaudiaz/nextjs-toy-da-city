@@ -499,7 +499,8 @@
   },
   "toys": {
     "emptyMsg": "No existen juguetes publicados aún",
-    "free": "Gratis"
+    "free": "Grátis",
+    "locationNotFound": "Ubicación no encontrada"
   },
   "stripeCheckoutButton": {
     "Checkout": "Pagar con Stripe",
@@ -819,6 +820,10 @@
     "purchased": "Compró en orden # ",
     "memberSince": "Miembro desde ",
     "toysSeccionTitle": "Juguetes en venta"
+  },
+  "ProductSearch": {
+    "title": "No se encontraron productos",
+    "subtitle": "No hay juguetes que coincidan con tus filtros. Prueba ajustar tu búsqueda o limpiar los filtros."
   },
   "ProductSearchCard": {
     "free": "GRATIS",
