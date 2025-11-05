@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import Stripe from "stripe";
+import { getTranslations } from "next-intl/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
@@ -39,11 +40,16 @@ function generateCartId(cartItems: CartItem[], buyerId: string): string {
 }
 
 export async function POST(req: NextRequest) {
+
+  const g = await getTranslations("General");
+  const t = await getTranslations("Payments");
+  const u = await getTranslations("User");
+    
   try {
     const { cartItems, buyerId }: { cartItems: CartItem[]; buyerId: string } = await req.json();
 
     if (!cartItems?.length || !buyerId) {
-      return NextResponse.json({ error: "Datos inválidos" }, { status: 400 });
+      return NextResponse.json({ error: g("InvalidInputParams") }, { status: 400 });
     }
 
     const cartId = generateCartId(cartItems, buyerId);
@@ -135,27 +141,42 @@ export async function POST(req: NextRequest) {
           statusCode: error.statusCode,
         });
 
-        let userMessage = "No se pudo procesar el pago. Inténtalo de nuevo.";
+        let userMessage = t("PaymentNotProcessed");
         if (error.code === "card_declined") {
-          userMessage = "La tarjeta fue rechazada. Usa otra tarjeta.";
+          userMessage = t("card_declined");
         } else if (error.code === "insufficient_funds") {
-          userMessage = "Fondos insuficientes en la tarjeta.";
+          userMessage = t("insufficient_funds");
         } else if (error.code === "expired_card") {
-          userMessage = "La tarjeta ha expirado.";
+          userMessage = t("expired_card");
         } else if (error.code === "incorrect_cvc") {
-          userMessage = "El código de seguridad (CVC) es incorrecto.";
+          userMessage = t("incorrect_cvc");
         } else if (error.code === "processing_error") {
-          userMessage = "Error al procesar la tarjeta. Inténtalo más tarde.";
+          userMessage = t("processing_error");
         } else if (error.type === "StripeInvalidRequestError") {
-          userMessage = "Datos de pago inválidos.";
+          userMessage = t("StripeInvalidRequestError");
         }
+
+        // let userMessage = "No se pudo procesar el pago. Inténtalo de nuevo.";
+        // if (error.code === "card_declined") {
+        //   userMessage = "La tarjeta fue rechazada. Usa otra tarjeta.";
+        // } else if (error.code === "insufficient_funds") {
+        //   userMessage = "Fondos insuficientes en la tarjeta.";
+        // } else if (error.code === "expired_card") {
+        //   userMessage = "La tarjeta ha expirado.";
+        // } else if (error.code === "incorrect_cvc") {
+        //   userMessage = "El código de seguridad (CVC) es incorrecto.";
+        // } else if (error.code === "processing_error") {
+        //   userMessage = "Error al procesar la tarjeta. Inténtalo más tarde.";
+        // } else if (error.type === "StripeInvalidRequestError") {
+        //   userMessage = "Datos de pago inválidos.";
+        // }
 
         return NextResponse.json({ error: userMessage }, { status: 400 });
       } else {
         // Error no relacionado con Stripe (red, timeout, etc.)
         console.error("Error inesperado:", error);
         return NextResponse.json(
-          { error: "Error al conectar con el sistema de pagos." },
+          { error: t("ErrorConnectingPaymentSystem") },
           { status: 500 }
         );
       }
@@ -185,7 +206,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!buller) {
-      return NextResponse.json({ error: "No se encontró el usuario" }, { status: 404 });
+      return NextResponse.json({ error: u("NotFound") }, { status: 404 });
     }
 
     // Si existe una orden anterior con el mismo cartId pero PaymentIntent inválido, actualizarla
@@ -231,6 +252,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
     console.error("Error creando PaymentIntent:", error);
-    return NextResponse.json({ error: "Error interno" }, { status: 500 });
+    return NextResponse.json({ error: g("ServerError") }, { status: 500 });
   }
 }

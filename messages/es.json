@@ -37,7 +37,7 @@
     "InvalidId": "Incorrecto ID de la condición"
   },
   "Toy": {
-    "NotFound": "Juguete no encontrado",
+    "NotFound": "Juguete(s) no encontrado (s)",
     "CreatedError": "No se pudieron crear juguetes favoritos",
     "UpdateError": "Error actualizando juguete",
     "DeleteError": "Error eliminando juguete",
@@ -83,6 +83,16 @@
     "WebhookNotConfigure": "Secreto de webhook no configurado",
     "WebhookSignInvalid": "Firma de webhook inválida",
     "MissingHeadersSvix": "Faltan headers svix"
+  },
+  "Payments": {
+    "card_declined": "La tarjeta fue rechazada. Use otra tarjeta.",
+    "insufficient_funds": "Fondos insuficientes en la tarjeta.",
+    "expired_card": "La tarjeta ha expirado.",
+    "incorrect_cvc": "El código de seguridad (CVC) es incorrecto.",
+    "processing_error": "Error al procesar la tarjeta. Inténtalo más tarde.",
+    "StripeInvalidRequestError": "Datos de pago inválidos.",
+    "PaymentNotProcessed": "No se pudo procesar el pago. Inténtalo de nuevo.",
+    "ErrorConnectingPaymentSystem": "Error conectando con el sistema de pagos"
   },
   "terms": {
     "Title": "Términos de Servicio de Toydacity",

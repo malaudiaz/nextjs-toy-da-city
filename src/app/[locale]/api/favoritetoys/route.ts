@@ -138,7 +138,7 @@ export async function POST(req: Request) {
 
     // Otros errores (ej: fallo en Prisma)
     return NextResponse.json(
-      { error: t("CreatedError") },
+      { error: t("UpdateError") },
       { status: 500 }
     );
   }
