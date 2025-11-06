@@ -41,13 +41,13 @@ const SearchPage = async ({ searchParams, params }: Props) => {
         : undefined,
   };
 
-    const { totalPosts } = await getToys(
-      currentPage,
-      postsPerPage,
-      locale,
-      filters
-    );
-  
+  const { totalPosts } = await getToys(
+    currentPage,
+    postsPerPage,
+    locale,
+    filters
+  );
+
   const toysPromise = getToys(currentPage, postsPerPage, locale, filters).then(
     (data) => ({
       data: data.toys,
@@ -55,12 +55,12 @@ const SearchPage = async ({ searchParams, params }: Props) => {
   );
 
   return (
-    <div className="w-full bg-[#FBFAF4] min-h-screen">
+    <main>
       {/* FilterBar ahora es responsive */}
       <FilterBar conditions={conditions} />
-      
+
       {/* Contenido principal */}
-      <div className="flex-1">
+      <div className="flex-1 mb-6">
         <Suspense
           key={filters.search}
           fallback={<SkeletonProductCard count={postsPerPage} />}
@@ -68,16 +68,16 @@ const SearchPage = async ({ searchParams, params }: Props) => {
           <ProductsSearch toysPromise={toysPromise} />
         </Suspense>
       </div>
-      {totalPosts > 0 && (
-              <nav className="mt-8 mb-4" aria-label="Paginación">
-                <PaginationWithLinks
-                  page={currentPage}
-                  pageSize={postsPerPage}
-                  totalCount={totalPosts}
-                />
-              </nav>
-            )}
-    </div>
+      {totalPosts > postsPerPage && (
+        <nav className="mb-6" aria-label="Paginación">
+          <PaginationWithLinks
+            page={currentPage}
+            pageSize={postsPerPage}
+            totalCount={totalPosts}
+          />
+        </nav>
+      )}
+    </main>
   );
 };
 

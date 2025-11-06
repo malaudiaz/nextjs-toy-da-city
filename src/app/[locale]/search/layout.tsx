@@ -1,15 +1,15 @@
-import BannerCarousel from '@/components/shared/banner/BannerCarousel'
-import  { PropsWithChildren } from 'react'
+import BannerCarousel from "@/components/shared/banner/BannerCarousel";
+import { PropsWithChildren } from "react";
 
-type Props = PropsWithChildren
+type Props = PropsWithChildren;
 
-const SearchLayout = ({children}: Props) => {
+const SearchLayout = ({ children }: Props) => {
   return (
-    <div className=''>
-        <BannerCarousel/>
+    <div className="bg-[#FBFAF4]">
+      <BannerCarousel />
       {children}
     </div>
-  )
-}
+  );
+};
 
-export default SearchLayout
+export default SearchLayout;

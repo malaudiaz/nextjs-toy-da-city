@@ -186,14 +186,14 @@ export default async function Home({ searchParams, params }: Props) {
           key={filters.search}
           fallback={<SkeletonProductCard count={postsPerPage} />}
         >
-          <section aria-label="Listado de juguetes">
+          <section aria-label="toys list" className="mb-6">
             <Products toysPromise={toysPromise} />
           </section>
         </Suspense>
       )}
 
-      {totalPosts > 0 && (
-        <nav className="mt-8 mb-4" aria-label="Paginación">
+      {totalPosts > postsPerPage && (
+        <nav className="mb-6" aria-label="Paginación">
           <PaginationWithLinks
             page={currentPage}
             pageSize={postsPerPage}
