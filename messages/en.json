@@ -443,7 +443,8 @@
     "Swap": "Swap",
     "Buttom1": "Apply",
     "Buttom2": "Clear",
-    "miles": "miles"
+    "miles": "miles",
+    "condition": "Condition"
   },
   "navbar": {
     "Search": "Search toys...",

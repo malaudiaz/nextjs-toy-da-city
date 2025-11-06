@@ -1,5 +1,8 @@
+"use client";
+
 import { Condition } from '@/types/modelTypes'
 import React from 'react'
+import { useTranslations } from "next-intl";
 
 type Props = {
     data: Condition[]
@@ -8,9 +11,10 @@ type Props = {
 }
 
 const ConditionFilter = ({ data, selections, onChange }: Props) => {
+  const t = useTranslations("filter");
   return (
     <div className=' border-t-1 border-gray-200 px-4 py-2'>
-        <h3 className='text-lg'>Condition</h3>
+        <h3 className='text-lg'>{t("condition")}</h3>
       {data.map((condition) => (
         <div key={condition.id} className='flex flex-row gap-2 items-center'>
           <input 
