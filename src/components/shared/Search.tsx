@@ -29,6 +29,7 @@ const Search = () => {
 
   const applySearch = () => {
     const current = new URLSearchParams(searchParams.toString());
+    current.delete("page");
 
     if (inputValue.trim()) {
       current.set("search", inputValue.trim());

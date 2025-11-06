@@ -2,6 +2,7 @@ import FilterBar from "@/components/shared/home/FilterBar"; // Tu FilterBar mejo
 import ProductsSearch from "@/components/shared/search/ProductsSearch";
 //import SkeletonProductSearch from "@/components/shared/search/SkeletonProductSearch";
 import SkeletonProductCard from "@/components/shared/SkeletonProductCard";
+import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import { getConditions } from "@/lib/actions/conditionActions";
 import { Filters, getToys } from "@/lib/actions/toysAction";
 import React, { Suspense } from "react";
@@ -39,6 +40,13 @@ const SearchPage = async ({ searchParams, params }: Props) => {
           }
         : undefined,
   };
+
+    const { totalPosts } = await getToys(
+      currentPage,
+      postsPerPage,
+      locale,
+      filters
+    );
   
   const toysPromise = getToys(currentPage, postsPerPage, locale, filters).then(
     (data) => ({
@@ -60,6 +68,15 @@ const SearchPage = async ({ searchParams, params }: Props) => {
           <ProductsSearch toysPromise={toysPromise} />
         </Suspense>
       </div>
+      {totalPosts > 0 && (
+              <nav className="mt-8 mb-4" aria-label="Paginación">
+                <PaginationWithLinks
+                  page={currentPage}
+                  pageSize={postsPerPage}
+                  totalCount={totalPosts}
+                />
+              </nav>
+            )}
     </div>
   );
 };
