@@ -68,6 +68,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Define un tipo para el locale válido
+type ValidLocale = "en" | "es";
+
 export default async function RootLayout({
   children,
   params,
@@ -81,26 +84,35 @@ export default async function RootLayout({
     notFound();
   }
 
+    // Asegura que locale sea del tipo correcto
+  const validLocale = locale as ValidLocale;
+
   // 👇 Carga los mensajes para el locale actual
-  const messages = await getMessages({ locale });
+  const messages = await getMessages({ locale: validLocale });
 
   // Selecciona la localización de Clerk basada en el `locale`
-  const localization =
-    clerkLocalizations[locale as keyof typeof clerkLocalizations];
+  // Selecciona la localización de Clerk
+  const localization = clerkLocalizations[validLocale];  
+
+  //const localization = clerkLocalizations[locale as keyof typeof clerkLocalizations];
 
   return (
     <html
-      lang={locale}
+      lang={validLocale}
       className={`${inter.variable} ${poppins.variable}`}
       suppressHydrationWarning
     >
       <ClerkProvider
         localization={localization}
         appearance={{ baseTheme: dark }}
+        signInUrl="/sign-in"
+        signUpUrl="/sign-up"
+        signInForceRedirectUrl={`/${validLocale}/auth-callback?from=signin`}
+        signUpForceRedirectUrl={`/${validLocale}/auth-callback?from=registration`}
       >
         <body className={`min-h-screen flex flex-col antialiased font-inter`}>
-          <NextIntlClientProvider locale={locale} messages={messages}>
-            <Navbar />
+          <NextIntlClientProvider locale={validLocale} messages={messages}>
+            <Navbar locale={validLocale} />
             {children}
             <ScrollToTop />
             <Footer />

@@ -56,8 +56,8 @@ export async function GET(
     ]);
 
     const result_condition = condition.map(condition => ({
-      id: condition.id, name: condition.translations[0]?.value || condition.name,
-      description: condition.description, userId: condition.userId, isActive: condition.isActive
+      id: condition.id, name: condition.name,
+      description: condition.translations[0]?.value, userId: condition.userId, isActive: condition.isActive
     })
     
     )

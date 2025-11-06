@@ -862,5 +862,15 @@
     "payError": "Error en el pago",
     "processing": "Procesando...",
     "pay": "Pagar"
+  },
+  "auth-callback": {
+    "loading": "Cargando...",
+    "redirecting": "Redirigiendo a configuración de cuenta...",
+    "title": "Teléfono no asociado",
+    "message": "Tu cuenta no tiene un número de teléfono asociado. Para aprovechar todas las funcionalidades, te recomendamos agregar un número de teléfono a tu cuenta.",
+    "question": "¿Deseas agregar un número de teléfono ahora?",
+    "btnYes": "Sí, agregar",
+    "btnNo": "No, continuar",
+    "note": "Puedes agregar tu teléfono más tarde desde la configuración de tu cuenta."
   }
 }

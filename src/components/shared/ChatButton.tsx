@@ -64,9 +64,9 @@ export function ChatButton({ toy, seller }: ChatButtonProps) {
   return (
     <>
       <Button
-        variant="outline"
+        variant="secondary"
         size="sm"
-        className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white"
+        className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
         onClick={handleClick}
         disabled={!isEnabled}
       >

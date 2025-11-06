@@ -8,6 +8,8 @@ type UserData = {
   fullName: string;
   imageUrl: string;
   clerkId: string;
+  email: string;
+  phone?: string;
   reputation?: number;
   reviews?: number;
 };
@@ -24,7 +26,7 @@ export async function getUserById(userId: string): Promise<UserData | null> {
     const { users } = await clerkClient();
     const seller = await users.getUser(user!.clerkId);
 
-    const { firstName, lastName, imageUrl, id: clerkId } = seller;
+    const { firstName, lastName, imageUrl, id: clerkId, emailAddresses, phoneNumbers } = seller;
     const fullName = `${firstName} ${lastName}`.trim() || "Usuario anónimo";
 
     return {
@@ -32,6 +34,8 @@ export async function getUserById(userId: string): Promise<UserData | null> {
       fullName,
       imageUrl,
       clerkId,
+      email: emailAddresses[0]?.emailAddress || "",
+      phone: phoneNumbers[0]?.phoneNumber || "",
       reputation: user?.reputation || 0,
       reviews: user?.reputation || 0
     };

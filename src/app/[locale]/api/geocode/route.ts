@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     }    
     
     // Extraer la ciudad de diferentes campos posibles
-    const city = data.city + ", " + data.principalSubdivision || 'Ubicación no disponible';
+    const city = data.city || 'Ubicación no disponible';
     
     return Response.json({ 
       city

@@ -871,6 +871,16 @@
     "payError": "Payment error",
     "processing": "Processing...",
     "pay": "Pay"
+  },
+  "auth-callback": {
+    "loading": "Loading...",
+    "redirecting": "Redirecting to account settings...",
+    "title": "Phone number not associated",
+    "message": "Your account does not have a phone number associated with it. To take full advantage of all features, we recommend adding a phone number to your account.",
+    "question": "Do you want to add a phone number now?",
+    "btnYes": "Yes, add",
+    "btnNo": "No, continue",
+    "note": "You can add your phone later from your account settings."
   }
 } 
 

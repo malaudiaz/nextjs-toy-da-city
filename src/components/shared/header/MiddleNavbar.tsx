@@ -12,7 +12,11 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 
-const MiddleNavbar = () => {
+interface MiddleNavbarProps {
+  locale: string; // ← Asegúrate que acepte string
+}
+
+const MiddleNavbar = ({ locale }: MiddleNavbarProps) => {
   return (
     <div className="bg-[#3D5D3C] w-full">
       <div className="mx-auto max-w-7xl flex flex-col py-3 px-3">
@@ -24,12 +28,12 @@ const MiddleNavbar = () => {
           </Link>
           <div className="flex items-center gap-2">
             <SignedOut>
-              <SignUpButton mode="modal">
+              <SignUpButton mode="modal" forceRedirectUrl={`/${locale}/auth-callback?from=registration`}>
                 <span className="text-sm text-white sm:inline cursor-pointer hover:underline">
                   ▸ Create your account
                 </span>
               </SignUpButton>
-              <SignInButton mode="modal">
+              <SignInButton mode="modal" forceRedirectUrl={`/${locale}/auth-callback?from=signin`}>
                 <span className="text-sm text-white sm:inline cursor-pointer hover:underline">
                   ▸ Login
                 </span>

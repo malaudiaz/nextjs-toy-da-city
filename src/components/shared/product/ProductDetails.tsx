@@ -17,6 +17,7 @@ import Profile from "../Profile";
 import { ChatButton } from "../ChatButton";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
+import WhatsAppContact from "../WhatsAppContact";
 
 // Importación dinámica con exportación por defecto correcta
 const MapComponent = dynamic(
@@ -39,6 +40,7 @@ type ProductDetailsProps = {
     imageUrl: string;
     clerkId: string;
     email?: string | null;
+    phone?: string | null;
     reputation?: number;
     reviews?: number;
   } | null;
@@ -178,7 +180,6 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
                   />
                 </button>
               )}
-
             </div>
             <div className="flex items-center space-x-2 justify-between">
               <h2 className="inline-block text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-lg">
@@ -234,9 +235,19 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
                 <Link href={`/seller/${toy.sellerId}`}>
                   <Profile user={seller} />
                 </Link>
-                {isSignedIn && !isCurrentUser && (
-                  <ChatButton toy={toy} seller={seller} />
-                )}
+                <div className="flex items-center gap-2">
+                  {isSignedIn && !isCurrentUser && (
+                    <ChatButton toy={toy} seller={seller} />
+                  )}
+
+                  {seller?.phone && isSignedIn && !isCurrentUser && (
+                    <WhatsAppContact
+                      phoneNumber={seller.phone}
+                      size="small"
+                      iconOnly={true}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>

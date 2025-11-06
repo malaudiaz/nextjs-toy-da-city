@@ -4,13 +4,15 @@ import React from "react";
 import TopNavbar from "./TopNavbar";
 import MiddleNavbar from "./MiddleNavbar";
 
-const Navbar = () => {
+interface NavbarProps {
+  locale: string; // ← Asegúrate que acepte string
+}
+
+export default function Navbar({ locale }: NavbarProps) {
   return (
     <>
       <TopNavbar />
-      <MiddleNavbar />
+      <MiddleNavbar locale={locale} />
     </>
   );
 };
-
-export default Navbar;
