@@ -767,7 +767,13 @@
   "sellerInfo": {
     "reviews": "reviews",
     "ratting": "No ratings",
-    "memberSince": "Member since"
+    "memberSince": "Member since",
+    "withoutSigns": "This seller has no reviews yet.",
+    "byOrder": "By order",
+    "dashboard": "Seller Dashboard",
+    "loading": "Loading...",
+    "stripeAccountOk": "Your Stripe account is set up. Start adding products!",
+    "onBoardingError": "Please complete the seller onboarding process."
   },
   "reviewForm": {
     "title": "Rate this seller",
@@ -780,7 +786,8 @@
     "submit": "Submit Review",
     "success": "Review sent successfully!",
     "error": "Please select a rating.",
-    "sendingError": "Error submitting review"
+    "sendingError": "Error submitting review",
+    "back": "Back to home"
   },
   "sendMail": {
     "paymentSuccessSubject": "Pago exitoso - Tu compra ha sido procesada",

@@ -759,7 +759,14 @@
   "sellerInfo": {
     "reviews": "reseñas",
     "ratting": "Sin valoraciones",
-    "memberSince": "Miembro desde "
+    "memberSince": "Miembro desde ",
+    "withoutSigns": "Este vendedor aún no tiene reseñas.",
+    "byOrder": "Por orden",
+    "dashboard": "Panel de vendedor",
+    "loading": "Cargando...",
+    "stripeAccountOk": "Tu cuenta de Stripe ya está configurada. ¡Empieza a añadir productos!",
+    "onBoardingError": "Por favor, complete el proceso de incorporación de vendedores.",
+    "back": "Volver"
   },
   "reviewForm": {
     "title": "Califica a este vendedor",

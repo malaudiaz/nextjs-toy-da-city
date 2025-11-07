@@ -1,9 +1,10 @@
-// app/profile/[id]/page.tsx
+
 import { notFound } from 'next/navigation';
 import { StarIcon } from '@heroicons/react/24/solid';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import { UserAvatar } from '@/components/shared/UserAvatar';
+import { getTranslations } from "next-intl/server";
 
 interface UserProfile {
   id: string;
@@ -40,6 +41,9 @@ export default async function UserProfilePage({
 }: {
   params: Promise<{ id: string }>; // ✅ Tipo correcto: Promise<{ id: string }>
 }) {
+
+  const t = await getTranslations("sellerInfo");
+
   const { id } = await params; // ✅ Ahora es correcto
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/en/api/profiles/${id}`, {
@@ -92,7 +96,7 @@ export default async function UserProfilePage({
               )}
             </div>
             <p className="mt-2 text-sm text-gray-500">
-              Miembro desde {format(new Date(user.createdAt), 'MMMM yyyy')}
+              {t("memberSince")} {format(new Date(user.createdAt), "MMMM yyyy")}
             </p>
             <p className="text-sm">
               Rol: <span className="font-medium capitalize">{user.role}</span>
@@ -137,7 +141,7 @@ export default async function UserProfilePage({
       <div>
         <h2 className="text-2xl font-bold mb-4">Reseñas ({user.totalReviews})</h2>
         {user.reviewsReceived.length === 0 ? (
-          <p className="text-gray-500">Este usuario aún no tiene reseñas.</p>
+          <p className="text-gray-500">{t("withoutSigns")}</p>
         ) : (
           <div className="space-y-4">
             {user.reviewsReceived.map((review) => (
@@ -153,7 +157,7 @@ export default async function UserProfilePage({
                       <p className="font-medium">{review.reviewer.name}</p>
                       {review.order && (
                         <p className="text-xs text-gray-500">
-                          Por orden #{review.order.id}
+                          {t("byOrder")} #{review.order.id}
                         </p>
                       )}
                     </div>
