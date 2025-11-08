@@ -70,7 +70,8 @@
     "NotFound": "Orden not found",
     "OrderNotValid": "Order not valid for cancellation",
     "NotOrderToProcess": "Not Order To process",
-    "SellerIdRequeried": "Seller Id is Requeried"
+    "SellerIdRequeried": "Seller Id is Requeried",
+    "InvalidTransfersMetadata": "InvalidTransfersMetadata"
   },
   "General": {
     "InvalidInputParams": "Invalid Params",

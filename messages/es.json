@@ -69,7 +69,9 @@
   "Orders": {
     "NotFound": "Orden no encontrada",
     "OrderNotValid": "Orden no válida para cancelar",
-    "NotOrderToProcess": "No exiten Ordenes para procesar"
+    "NotOrderToProcess": "No exiten Ordenes para procesar",
+    "InvalidTransfersMetadata": "Metadatos de transferencias no válidos",
+    "SellerIdRequeried": "Seller Id is Requeried"
   },
   "General": {
     "InvalidInputParams": "Parámetros inválidos",

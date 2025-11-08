@@ -16,6 +16,7 @@ export async function POST(request: Request) {
   // Opcional: autenticación mínima
   const authHeader = request.headers.get("authorization");
   const g = await getTranslations("General");
+  const t = await getTranslations("Orders");
 
   if (CRON_SECRET && authHeader !== `Bearer ${CRON_SECRET}`) {
     return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
@@ -35,7 +36,7 @@ export async function POST(request: Request) {
   });
 
   if (orders.length === 0) {
-    return NextResponse.json({ processed: 0, message: "No orders to process" });
+    return NextResponse.json({ processed: 0, message: t("NotOrderToProcess") });
   }
 
   const results = [];
@@ -61,7 +62,7 @@ export async function POST(request: Request) {
           where: { id: order.id },
           data: { status: "ERROR", transferredAt: new Date() },
         });
-        results.push({ orderId: order.id, error: "Invalid transfers metadata" });
+        results.push({ orderId: order.id, error: t("InvalidTransfersMetadata") });
         continue;
       }
 

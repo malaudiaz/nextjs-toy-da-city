@@ -1,6 +1,7 @@
 // app/api/profiles/[id]/route.ts
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { getTranslations } from "next-intl/server";
 
 async function getClerkUserById(clerkId: string) {
   try {
@@ -27,8 +28,11 @@ export async function GET(request: Request) {
   const pathSegments = url.pathname.split('/').filter(Boolean);
   const id = pathSegments.pop();
 
+  const g = await getTranslations("General");
+  const t = await getTranslations("User");
+
   if (!id) {
-    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+    return NextResponse.json({ error: t("InvaliduserID") }, { status: 400 });
   }
 
   try {
@@ -55,7 +59,7 @@ export async function GET(request: Request) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });
+      return NextResponse.json({ error: t("NotFound") }, { status: 404 });
     }
 
     // 2. Obtener avatar desde Clerk usando el clerkId del usuario del perfil
@@ -101,7 +105,7 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error('[PROFILE_GET]', error);
     return NextResponse.json(
-      { error: 'Error interno del servidor' },
+      { error: g("ServerError") },
       { status: 500 }
     );
   }
