@@ -1,13 +1,16 @@
 // app/api/geocode/route.js
 import { NextRequest } from "next/server";
+import { getTranslations } from "next-intl/server";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const lat = searchParams.get('lat');
   const lon = searchParams.get('lon');
 
+  const t = await getTranslations("Toy");
+
   if (!lat || !lon) {
-    return Response.json({ error: 'Latitude and longitude are required' }, { status: 400 });
+    return Response.json({ error: t("LatitudeLongitudeRequired") }, { status: 400 });
   }
 
   try {
@@ -23,13 +26,13 @@ export async function GET(request: NextRequest) {
 
     if (data.error) {
       return Response.json({ 
-        error: 'Location not found',
+        error: t("LocationNotFound"),
         details: data.error 
       }, { status: 404 });
     }    
     
     // Extraer la ciudad de diferentes campos posibles
-    const city = data.city || 'Ubicación no disponible';
+    const city = data.city || t("LocationNotDisponsible");
     
     return Response.json({ 
       city
@@ -37,6 +40,6 @@ export async function GET(request: NextRequest) {
 
   } catch (error) {
     console.error('Geocoding error:', error);
-    return Response.json({ error: 'Error fetching location data' }, { status: 500 });
+    return Response.json({ error: t("ErrorFetchingLocationData") }, { status: 500 });
   }
 }

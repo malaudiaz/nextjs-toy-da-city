@@ -43,7 +43,11 @@
     "DeleteError": "Error eliminando juguete",
     "ToyIdRequired": "Id de Juguete es Requerido",
     "NotExistToyInactive": "No existen juguetes inactivos para eliminar",
-    "OneImageRequired": "Debes subir al menos una imagen por publicación"
+    "OneImageRequired": "Debes subir al menos una imagen por publicación",
+    "LatitudeLongitudeRequired": "Latitud y longitud son requidas",
+    "LocationNotFound": "Location not found",
+    "LocationNotDisponsible": "Ubicación no disponible",
+    "ErrorFetchingLocationData": "Error obteniendo datos de ubicación"
   },
   "Comments": {
     "NotFound": "Comentario no encontrado",

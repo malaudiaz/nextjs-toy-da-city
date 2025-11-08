@@ -43,7 +43,11 @@
     "DeleteError": "Error deleting toy",
     "ToyIdRequired": "Toy Id is Required",
     "NotExistToyInactive": "There are no idle toys to be disposed of",
-    "OneImageRequired": "One image is Required"
+    "OneImageRequired": "One image is Required",
+    "LatitudeLongitudeRequired": "Latitude and longitude are required",
+    "LocationNotFound": "Locación no encontrada",
+    "LocationNotDisponsible": "Location Not Disponsible",
+    "ErrorFetchingLocationData": "Error fetching location data"
   },
   "Comments": {
     "NotFound": "Comments not found",
