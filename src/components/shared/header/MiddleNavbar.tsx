@@ -26,7 +26,7 @@ const MiddleNavbar = ({ locale }: MiddleNavbarProps) => {
         <Search />
         <div className="flex items-center justify-between gap-2 pt-2 px-1">
           <Link href={"/en/post"} className="text-white font-medium">
-            Post Toy
+            {t("Post")}
           </Link>
           <div className="flex items-center gap-2">
             <SignedOut>
