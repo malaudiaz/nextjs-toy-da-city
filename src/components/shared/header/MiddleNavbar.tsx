@@ -3,6 +3,7 @@
 import React from "react";
 import Search from "../Search";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 import {
   SignedIn,
@@ -17,6 +18,7 @@ interface MiddleNavbarProps {
 }
 
 const MiddleNavbar = ({ locale }: MiddleNavbarProps) => {
+  const t = useTranslations("navbar");
   return (
     <div className="bg-[#3D5D3C] w-full">
       <div className="mx-auto max-w-7xl flex flex-col py-3 px-3">
@@ -30,12 +32,12 @@ const MiddleNavbar = ({ locale }: MiddleNavbarProps) => {
             <SignedOut>
               <SignUpButton mode="modal" forceRedirectUrl={`/${locale}/auth-callback?from=registration`}>
                 <span className="text-sm text-white sm:inline cursor-pointer hover:underline">
-                  ▸ Create your account
+                  ▸ {t("Create your account")}
                 </span>
               </SignUpButton>
               <SignInButton mode="modal" forceRedirectUrl={`/${locale}/auth-callback?from=signin`}>
                 <span className="text-sm text-white sm:inline cursor-pointer hover:underline">
-                  ▸ Login
+                  ▸ {t("Login")}
                 </span>
               </SignInButton>
             </SignedOut>
