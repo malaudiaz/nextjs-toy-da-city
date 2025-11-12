@@ -289,3 +289,16 @@ model Review {
   @@index([targetId])
   @@map("reviews")
 }
+
+model WebhookError {
+  id           String   @id @default(cuid())
+  clerkId      String
+  email        String?
+  errorType    String
+  errorMessage String
+  payload      String?
+  createdAt    DateTime @default(now())
+  
+  @@index([clerkId])
+  @@index([createdAt])
+}
