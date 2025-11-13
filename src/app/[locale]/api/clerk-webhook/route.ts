@@ -22,6 +22,36 @@ interface OperationError {
   stack?: string;
 }
 
+// Interfaces para el payload de Clerk
+interface ClerkEmail {
+  email_address: string;
+}
+
+interface ClerkMetadata {
+  locale?: string;
+}
+
+interface ClerkUserData {
+  id: string;
+  email_addresses: ClerkEmail[];
+  first_name?: string;
+  last_name?: string;
+  unsafe_metadata?: ClerkMetadata;
+  public_metadata?: ClerkMetadata;
+  private_metadata?: ClerkMetadata;
+}
+
+interface ClerkWebhookPayload {
+  type: string;
+  data: ClerkUserData;
+}
+
+interface LocaleUrls {
+  locale: string;
+  refreshUrl: string;
+  returnUrl: string;
+}
+
 // Función con reintentos automáticos y tipos específicos
 async function retryOperation<T>(
   operation: () => Promise<T>,
@@ -52,6 +82,43 @@ async function retryOperation<T>(
   }
   
   throw new Error(`Operation failed after ${maxRetries} attempts. Last error: ${lastError?.message}`);
+}
+
+// Función para obtener el locale y construir URLs
+function getLocaleAndUrls(payload: ClerkWebhookPayload): LocaleUrls {
+  // Obtener el locale del usuario desde Clerk
+  // Puede estar en diferentes ubicaciones dependiendo del evento
+  let locale = 'en'; // valor por defecto
+  
+  const metadataSources = [
+    payload.data.unsafe_metadata,
+    payload.data.public_metadata,
+    payload.data.private_metadata
+  ];
+  
+  for (const metadata of metadataSources) {
+    if (metadata?.locale) {
+      locale = metadata.locale;
+      break;
+    }
+  }
+  
+  // Validar que el locale sea soportado
+  const supportedLocales = ['en', 'es'];
+  if (!supportedLocales.includes(locale)) {
+    locale = 'en'; // fallback a inglés
+  }
+  
+  // Construir URLs basadas en el locale
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  const refreshUrl = `${baseUrl}/${locale}/seller-onboarding`;
+  const returnUrl = `${baseUrl}/${locale}/seller-dashboard`;
+  
+  return {
+    locale,
+    refreshUrl,
+    returnUrl
+  };
 }
 
 export async function POST(req: Request) {
@@ -126,6 +193,9 @@ export async function POST(req: Request) {
         );
       }
 
+      // Obtener locale y URLs dinámicas
+      const { refreshUrl, returnUrl } = getLocaleAndUrls(payload);
+
       // Crear cuenta de Stripe con reintentos
       const account = await retryOperation(() =>
         stripe.accounts.create({
@@ -143,8 +213,8 @@ export async function POST(req: Request) {
       const accountLink = await retryOperation(() =>
         stripe.accountLinks.create({
           account: account.id,
-          refresh_url: `${process.env.NEXT_PUBLIC_SITE_URL}/en/seller-onboarding`,
-          return_url: `${process.env.NEXT_PUBLIC_SITE_URL}/en/seller-dashboard`,
+          refresh_url: refreshUrl,
+          return_url: returnUrl,
           type: "account_onboarding",
         })
       );
