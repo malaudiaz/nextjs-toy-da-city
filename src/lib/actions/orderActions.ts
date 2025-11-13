@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { BACKEND_URL } from "../utils";
 import { Order } from "@/types/modelTypes";
 import { revalidatePath } from "next/cache";
+import { getLocale } from 'next-intl/server';
 
 export type OrderStatus =
   | "AWAITING_CONFIRMATION"
@@ -12,6 +13,7 @@ export type OrderStatus =
   | "REEMBURSED";
 
 export async function getOrder(status?: OrderStatus) {
+  const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
 
   const headers = {
@@ -24,7 +26,7 @@ export async function getOrder(status?: OrderStatus) {
   }
 
   const response = await fetch(
-    `${BACKEND_URL}/api/get-order/purchase?status=${status}`,
+    `${BACKEND_URL}/${locale}/api/get-order/purchase?status=${status}`,
     {
       method: "GET",
       headers: headers,
@@ -35,6 +37,7 @@ export async function getOrder(status?: OrderStatus) {
 }
 
 export async function cancelOrder(orderId: string) {
+  const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
   const headers = {
     "Content-Type": "application/json",
@@ -46,7 +49,7 @@ export async function cancelOrder(orderId: string) {
   }
 
   try {
-    const response = await fetch(`${BACKEND_URL}/api/cancel-order`, {
+    const response = await fetch(`${BACKEND_URL}/${locale}/api/cancel-order`, {
       method: "POST",
       headers: headers,
       body: JSON.stringify({ orderId }),
@@ -55,7 +58,7 @@ export async function cancelOrder(orderId: string) {
     
     // Solo revalida si la respuesta fue exitosa
     if (response.ok) {
-      revalidatePath("/[locale]/config/purchases");
+      revalidatePath(`/${locale}/config/purchases`);
     }
     
     return result;    
@@ -66,6 +69,7 @@ export async function cancelOrder(orderId: string) {
 }
 
 export async function confirmOrder(orderId: string) {
+  const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
   const headers = {
     "Content-Type": "application/json",
@@ -77,7 +81,7 @@ export async function confirmOrder(orderId: string) {
   }
 
   try {
-    const response = await fetch(`${BACKEND_URL}/api/confirm-delivery`, {
+    const response = await fetch(`${BACKEND_URL}/${locale}/api/confirm-delivery`, {
       method: "POST",
       headers: headers,
       body: JSON.stringify({ orderId }),
@@ -87,7 +91,7 @@ export async function confirmOrder(orderId: string) {
     
     // Solo revalida si la respuesta fue exitosa
     if (response.ok) {
-      revalidatePath("/[locale]/config/purchases");
+      revalidatePath(`/${locale}/config/purchases`);
     }
     
     return result;    

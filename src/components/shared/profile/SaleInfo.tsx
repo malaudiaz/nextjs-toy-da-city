@@ -1,10 +1,13 @@
+"use client"; 
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { SelectFilter } from "./SelectFIlter";
-import { getTranslations } from "next-intl/server";
-import { Calendar, Package, User } from "lucide-react";
+import { useTranslations } from "next-intl"; // ✅ Importa el hook
+import { Calendar, User } from "lucide-react";
 import { Prisma } from '@prisma/client'
+import Empty from "../Empty";
 
 type Sale = Prisma.ToyGetPayload<{
   include: {
@@ -37,8 +40,8 @@ const formatDate = (dateString: string) => {
   });
 };
 
-const SaleInfo = async ({ sales }: SalesProps) => {
-  const t = await getTranslations("sales");
+const SaleInfo = ({ sales }: SalesProps) => {
+  const t = useTranslations("sales");
 
   const options = [
     { id: "ALL", name: t("all") },
@@ -65,10 +68,7 @@ const SaleInfo = async ({ sales }: SalesProps) => {
           {sales.length === 0 ? (
             <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
               <CardContent className="p-8 text-center">
-                <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">
-                  {t("emptyMsg")}
-                </p>
+                <Empty title={t("title")} subtitle={t("emptyMsg")} />
               </CardContent>
             </Card>
           ) : (

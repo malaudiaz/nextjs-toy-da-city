@@ -136,12 +136,12 @@ const TopNavbar = () => {
 
             <div className="flex flex-col items-start gap-1">
               <SignedOut>
-                <SignUpButton mode="modal">
+                <SignUpButton mode="modal" forceRedirectUrl={`/${locale}/auth-callback?from=registration`}>
                   <span className="text-sm text-black sm:inline cursor-pointer hover:underline">
                     ▸ {t("Create your account")}
                   </span>
                 </SignUpButton>
-                <SignInButton mode="modal">
+                <SignInButton mode="modal" forceRedirectUrl={`/${locale}/auth-callback?from=signin`}>
                   <span className="text-sm text-black sm:inline cursor-pointer hover:underline">
                     ▸ {t("Login")}
                   </span>

@@ -1,4 +1,22 @@
 {
+  "auth": {
+    "userNotAuthenticatedTitle": "User Not Authenticated",
+    "userNotAuthenticatedDescription": "You must be logged in to access this page.",
+    "userNotFoundTitle": "Account Setup Incomplete",
+    "userNotFoundDescription": "Your authentication was successful, but your account wasn't properly created in our system. This might be due to a temporary issue during registration.",
+    "databaseErrorTitle": "Database Connection Error",
+    "databaseErrorDescription": "We're experiencing technical difficulties. Please try again in a few moments.",
+    "genericErrorTitle": "Authentication Error",
+    "genericErrorDescription": "An unexpected error occurred during authentication.",
+    "loggedInAs": "Logged in as",
+    "signOut": "Sign Out",
+    "signIn": "Sign In",
+    "retry": "Try Again",
+    "goToSignUp": "Register",
+    "contactSupport": "Contact Support",
+    "contactSupportMessage": "If the problem persists, please contact our support team.",
+    "loadig": "Loading..."
+  },
   "seo": {
     "homeTitle": "Toydacity - Toys, Exchanges, and Gifts",
     "homeDescription": "Discover, buy, trade, and gift toys at Toydacity. Find the best deals and connect with other parents."
@@ -8,6 +26,10 @@
     "text": "Text",
     "subtitle": "Little Toys Pack",
     "description": "250 colorful pieces, includes manual and 5 buildings models..."
+  },
+  "Main": {
+    "emptyTitle": "Toys Published",
+    "emptyMsg": "No toys published yet."
   },
   "User": {
     "AuthenticationFailed": "Authentication failed",
@@ -668,9 +690,11 @@
     }
   },
   "cart": {
-    "title": "Cart",
-    "subtitle": "Summary",
-    "Checkout": "Checkout"
+    "title": "Shopping Cart",
+    "subtitle": "Order Summary",
+    "Checkout": "Checkout",
+    "emptyTitle": "Empty Cart",
+    "emptyMessage": "Your cart is empty. Add some items to continue!"
   },
   "chat": {
     "sendError": "The message could not be sent",

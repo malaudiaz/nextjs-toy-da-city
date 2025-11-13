@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Coins,
   Gift,
@@ -16,65 +17,67 @@ import React from "react";
 import { useTranslations } from "next-intl";
 import { redirect, usePathname } from "next/navigation";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useLocale } from "next-intl"; // ✅
 
 const ConfigurationsPage = () => {
+  const locale = useLocale(); // ✅ Siempre actualizado
   const t = useTranslations("config");
 
   const links = [
     {
       title: t("Toys"),
-      url: "/config/toys",
+      url: `/${locale}/config/toys`,
       icon: <ToyBrick size={24} />,
     },
     {
       title: t("Purchases"),
-      url: "/config/purchases",
+      url: `/${locale}/config/purchases`,
       icon: <ShoppingBag size={24} />,
     },
     {
       title: t("Sales"),
-      url: `/config/sales`,
+      url: `/${locale}/config/sales`,
       icon: <Coins size={24} />,
     },
     {
       title: t("Swap"),
-      url: "/config/swap",
+      url: `/${locale}/config/swap`,
       icon: <Repeat size={24} />,
     },
     {
       title: t("Free"),
-      url: "/config/free",
+      url: `/${locale}/config/free`,
       icon: <Gift size={24} />,
     },
     {
       title: t("Favorites"),
-      url: "/config/favorites",
+      url: `/${locale}/config/favorites`,
       icon: <Heart size={24} />,
     },
     {
       title: "Messages",
-      url: "/config/messages",
+      url: `/${locale}/config/messages`,
       icon: <MessageCircle size={24} />,
     },
     {
       title: t("YourReputation"),
-      url: "/config/reputation",
+      url: `/${locale}/config/reputation`,
       icon: <Star size={24} />,
     },
   ];
   const isMobile = !useMediaQuery("(min-width: 768px)");
 
   const pathname = usePathname();
-  const language = pathname.split("/")[1];
+  //const language = pathname.split("/")[1];
 
   // En desktop, redirigir a la página de juguetes si estamos en la ruta base de config
-  if (!isMobile && pathname === `/${language}/config`) {
-    redirect(`/${language}/config/toys`);
+  if (!isMobile && pathname === `/${locale}/config`) {
+    redirect(`/${locale}/config/toys`);
   }
 
   // En móvil, mostrar la página de menú solo si estamos en la ruta base de config
-  if (isMobile && pathname !== `/${language}/config`) {
-    redirect(`/${language}/config`);
+  if (isMobile && pathname !== `/${locale}/config`) {
+    redirect(`/${locale}/config`);
   }
 
   return (

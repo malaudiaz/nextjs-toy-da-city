@@ -27,51 +27,52 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useUser } from "@clerk/nextjs";
 import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl"; // ✅
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const locale = useLocale(); // ✅ Siempre actualizado
   const pathname = usePathname();
-  const language = pathname.split("/")[1];
   const { user } = useUser();
   const t = useTranslations("config");
   const navigationItems = [
     {
       title: t("Toys"),
-      url: "/config/toys",
+      url: `/${locale}/config/toys`,
       icon: ToyBrick,
     },
     {
       title: t("Purchases"),
-      url: "/config/purchases",
+      url: `/${locale}/config/purchases`,
       icon: ShoppingBag,
     },
     {
       title: t("Sales"),
-      url: `/config/sales`,
+      url: `/${locale}/config/sales`,
       icon: Coins,
     },
     {
       title: t("Swap"),
-      url: "/config/swap",
+      url: `/${locale}/config/swap`,
       icon: Repeat,
     },
     {
       title: t("Free"),
-      url: "/config/free",
+      url: `/${locale}/config/free`,
       icon: Gift,
     },
     {
       title: t("Favorites"),
-      url: "/config/favorites",
+      url: `/${locale}/config/favorites`,
       icon: Heart,
     },
     {
       title: "Messages",
-      url: "/config/messages",
+      url: `/${locale}/config/messages`,
       icon: MessageCircle,
     },
     {
       title: t("YourReputation"),
-      url: "/config/reputation",
+      url: `/${locale}/config/reputation`,
       icon: Star,
     },
   ];
@@ -102,7 +103,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarGroupContent>
             <SidebarMenu>
               {navigationItems.map((item) => {
-                const itemUrl = `/${language}${item.url}`;
+                const itemUrl = item.url;
                 const isActive = pathname === itemUrl;
 
                 return (

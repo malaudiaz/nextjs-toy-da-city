@@ -1,4 +1,22 @@
 {
+  "auth": {
+    "userNotAuthenticatedTitle": "No autenticado",
+    "userNotAuthenticatedDescription": "Debes iniciar sesión para acceder a esta página.",
+    "userNotFoundTitle": "Configuración de Cuenta Incompleta",
+    "userNotFoundDescription": "Tu autenticación fue exitosa, pero tu cuenta no se creó correctamente en nuestro sistema. Esto puede deberse a un problema temporal durante el registro.",
+    "databaseErrorTitle": "Error de Conexión a la Base de Datos",
+    "databaseErrorDescription": "Estamos experimentando dificultades técnicas. Por favor, intenta nuevamente en unos momentos.",
+    "genericErrorTitle": "Error de Autenticación",
+    "genericErrorDescription": "Ocurrió un error inesperado durante la autenticación.",
+    "loggedInAs": "Conectado como",
+    "signOut": "Cerrar Sesión",
+    "signIn": "Iniciar Sesión",
+    "retry": "Intentar Nuevamente",
+    "goToSignUp": "Registrarse",
+    "contactSupport": "Contactar Soporte",
+    "contactSupportMessage": "Si el problema persiste, por favor contacta a nuestro equipo de soporte.",
+    "loadig": "Cargando..."
+  },  
   "seo": {
     "homeTitle": "Toydacity - Juguetes, intercambio y regalos",
     "homeDescription": "Descubre, compra, intercambia y regala juguetes en Toydacity. Encuentra las mejores ofertas y conecta con otros padres."
@@ -8,6 +26,10 @@
     "text": "Texto",
     "subtitle": "Paquete de pequeños juguetes",
     "description": "250 piezas coloridas, incluye manual y 5 modelos de edificios..."
+  },
+  "Main": {
+    "emptyTitle": "Juguetes publicados",
+    "emptyMsg": "Aún no se han publicado juguetes."
   },
   "User": {
     "AuthenticationFailed": "Autenticación fallida", 
@@ -585,25 +607,25 @@
     "reserved": "Reservado",
     "sold": "Vendido",
     "canceled": "Cancelado",
-    "category": "Categoria",
+    "category": "Categoría",
     "condition": "Condición",
     "status": "Estado",
     "buyer": "Comprador",
     "order": "Orden"
   },
   "gifts": {
-    "title": "Juguete Gratis",
+    "title": "Juguetes Grátis",
     "emptyMsg": "No se encontraron juguetes con los filtros seleccionados",
-    "free": "Gratis",
-    "category": "Categoria",
+    "free": "Grátis",
+    "category": "Categoría",
     "condition": "Condición"
   },
   "swap": {
     "title": "Juguetes para Intercambios",
-    "emptyMsg": "No toys were found with the selected filters.",
-    "free": "Free",
-    "category": "Category",
-    "condition": "Condition"
+    "emptyMsg": "No se encontraron juguetes con los filtros seleccionados",
+    "free": "Grátis",
+    "category": "Categoría",
+    "condition": "Condición"
   },
   "favorites": {
     "title": "Mis Favoritos",
@@ -661,9 +683,11 @@
     }
   },
   "cart": {
-    "title": "Carrito",
-    "subtitle": "Resumen",
-    "Checkout": "Comprar"
+    "title": "Carrito de Compras",
+    "subtitle": "Resumen del Pedido",
+    "Checkout": "Comprar",
+    "emptyTitle": "Carrito Vacío",
+    "emptyMessage": "No hay productos en tu carrito. ¡Agrega algunos productos para continuar!"
   },
   "chat": {
     "sendError": "No se pudo enviar el mensaje",

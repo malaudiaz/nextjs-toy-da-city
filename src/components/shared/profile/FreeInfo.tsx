@@ -1,16 +1,18 @@
+"use client";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import { Package } from "lucide-react";
 import { Sale } from "@/types/modelTypes";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl"; // ✅ Importa el hook
+import Empty from "../Empty";
 
 type FreeProps = {
   free: Sale[];
 };
 
-const FreeInfo = async ({ free }: FreeProps) => {
-  const t = await getTranslations("gifts"); 
+const FreeInfo = ({ free }: FreeProps) => {
+  const t = useTranslations("gifts"); 
 
   return (
     <div className="min-h-screen p-4 md:p-6">
@@ -28,10 +30,7 @@ const FreeInfo = async ({ free }: FreeProps) => {
           {free.length === 0 ? (
             <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
               <CardContent className="p-8 text-center">
-                <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">
-                  {t("emptyMsg")}
-                </p>
+                <Empty title={t("title")} subtitle={t("emptyMsg")} />
               </CardContent>
             </Card>
           ) : (

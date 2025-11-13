@@ -9,7 +9,8 @@ export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localh
 export const getBreadcrumbs = (
   pathname: string,
   t: (key: string) => string, // Recibimos la función de traducción como parámetro
-  productName?: string
+  locale: string,
+  productName?: string,
 ): { 
   
   
@@ -17,7 +18,7 @@ export const getBreadcrumbs = (
 
 }[] => {
   const paths = pathname.split('/').filter(Boolean);
-  const breadcrumbs = [{ label: t("Home"), href: '/' }];
+  const breadcrumbs = [{ label: t("Home"), href: `/${locale}` }];
   const ignoreSegments = ['en', 'es', 'toys', 'edit'];
 
 
@@ -59,7 +60,7 @@ export const getBreadcrumbs = (
         href: ''
       });
     } else {
-      currentPath += `/${path}`;
+      currentPath += `/${locale}/${path}`;
       breadcrumbs.push({ label, href: currentPath });
     }
   }

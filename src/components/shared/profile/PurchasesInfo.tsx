@@ -1,13 +1,16 @@
+"use client"; 
+
 import Image from "next/image";
-import { Calendar, Package, User } from "lucide-react";
+import { Calendar, User } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Order } from "@/types/modelTypes";
 import { SelectFilter } from "./SelectFIlter";
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl"; // ✅ Importa el hook
 import { CancelOrderDialog } from "./CancelOrderDialog";
 import { ConfirmOrderDialog } from "./ConfirmOrderDialog";
+import Empty from "../Empty";
 
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString("es-ES", {
@@ -24,8 +27,8 @@ type PurchaseProps = {
 
 const fromCents = (cents: number) => cents / 100;
 
-const PurchasesInfo = async ({ orders }: PurchaseProps) => {
-  const t = await getTranslations("purchases");
+const PurchasesInfo = ({ orders }: PurchaseProps) => {
+  const t = useTranslations("purchases");
 
   const options = [
     { id: "ALL", name: t("ALL") },
@@ -53,10 +56,7 @@ const PurchasesInfo = async ({ orders }: PurchaseProps) => {
           {orders.length === 0 ? (
             <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
               <CardContent className="p-8 text-center">
-                <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">
-                  {t("emptyMsg")}
-                </p>
+                <Empty title={t("title")} subtitle={t("emptyMsg")} />
               </CardContent>
             </Card>
           ) : (

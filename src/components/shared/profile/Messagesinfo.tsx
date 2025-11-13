@@ -1,11 +1,14 @@
+"use client";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import { Package, User } from "lucide-react";
+import { User } from "lucide-react";
 import Link from "next/link";
 import { ChatButton } from "../ChatButton";
 import { FavoriteToy } from "@prisma/client";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl"; // ✅ Importa el hook
+import Empty from "../Empty";
 
 type Media = {
   id: string;
@@ -53,8 +56,8 @@ type MessagesProps = {
   messages: Messages[];
 };
 
-const MessagesInfo = async ({ messages }: MessagesProps) => {
-  const t = await getTranslations("messages"); 
+const MessagesInfo = ({ messages }: MessagesProps) => {
+  const t = useTranslations("messages"); 
 
   return (
     <div className="min-h-screen p-4 md:p-6">
@@ -70,10 +73,7 @@ const MessagesInfo = async ({ messages }: MessagesProps) => {
           {messages.length === 0 ? (
             <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
               <CardContent className="p-8 text-center">
-                <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">
-                  {t('emptyMsg')}
-                </p>
+                <Empty title={t('title')} subtitle={t('emptyMsg')} />
               </CardContent>
             </Card>
           ) : (

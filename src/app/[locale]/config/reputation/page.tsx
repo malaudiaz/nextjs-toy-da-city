@@ -10,6 +10,7 @@ import fetcher from "@/lib/fetcher";
 import { Toaster } from "sonner";
 import { useTranslations } from "next-intl"; // ✅ Importa el hook
 import { UserAvatar } from "@/components/shared/UserAvatar";
+import { useLocale } from "next-intl"; // ✅
 
 // Tipado
 interface Review {
@@ -38,12 +39,13 @@ interface MyReviewsData {
 }
 
 export default function MyReviewsPage() {
+  const locale = useLocale(); // ✅ Siempre actualizado
   const t = useTranslations("reputation"); // ✅ Usa el hook
 
   const { user: clerkUser } = useUser();
 
   const { data, error, isLoading, mutate } = useSWR<MyReviewsData>(
-    "/api/profiles/my-reviews",
+    `/${locale}/api/profiles/my-reviews`,
     fetcher,
     {
       refreshInterval: 30000, // Refresca cada 30 segundos

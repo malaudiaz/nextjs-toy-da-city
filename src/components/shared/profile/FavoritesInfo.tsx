@@ -3,7 +3,6 @@
 import React from "react";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-import { Package } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Sale } from "@/types/modelTypes";
@@ -12,6 +11,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl"; // ✅ Importa el hook
 import Link from "next/link";
+import Empty from "../Empty";
 
 type FavoritesProps = {
   favorites: Sale[];
@@ -57,8 +57,7 @@ const FavoritesInfo = ({ favorites }: FavoritesProps) => {
           {favorites.length === 0 ? (
             <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
               <CardContent className="p-8 text-center">
-                <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">{t("emptyMsg")}</p>
+                <Empty title={t("title")} subtitle={t("emptyMsg")} />
               </CardContent>
             </Card>
           ) : (

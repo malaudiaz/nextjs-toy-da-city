@@ -3,13 +3,10 @@
 import { Toy } from "@/types/toy";
 import { BACKEND_URL } from "../utils";
 import { auth } from "@clerk/nextjs/server";
-//import prisma from "../prisma";
 import * as fs from "fs";
 import * as path from "path";
-//import { promises as fsPromises } from "fs";
-//import { revalidatePath } from "next/cache"; // ← ¡ESTA LÍNEA FALTABA!
-// types/modelTypes.ts
 import { Prisma } from "@prisma/client";
+import { getLocale } from 'next-intl/server';
 
 export type Filters = {
   search?: string | null;
@@ -87,6 +84,7 @@ export async function getToys(
 
 export async function getToy(id: string) {
   const { userId } = await auth();
+  const locale = await getLocale(); // ✅ Obtiene el locale actual
 
   const headers = {
     "Content-Type": "application/json",
@@ -97,7 +95,7 @@ export async function getToy(id: string) {
     headers["X-User-ID"] = userId;
   }
 
-  const response = await fetch(`${BACKEND_URL}/api/toys/${id}`, {
+  const response = await fetch(`${BACKEND_URL}/${locale}/api/toys/${id}`, {
     method: "GET",
     headers: headers,
   });
@@ -109,6 +107,7 @@ export async function getToy(id: string) {
 
 export async function getRelatedToys(id: string) {
   const { userId } = await auth();
+  const locale = await getLocale(); // ✅ Obtiene el locale actual
 
   const headers = {
     "Content-Type": "application/json",
@@ -119,7 +118,7 @@ export async function getRelatedToys(id: string) {
     headers["X-User-ID"] = userId;
   }
 
-  const response = await fetch(`${BACKEND_URL}/api/toys/${id}/related`, {
+  const response = await fetch(`${BACKEND_URL}/${locale}/api/toys/${id}/related`, {
     method: "GET",
     headers: headers,
   });
@@ -130,6 +129,7 @@ export async function getRelatedToys(id: string) {
 }
 
 export async function getOwnToys() {
+  const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
 
   const headers = {
@@ -141,10 +141,12 @@ export async function getOwnToys() {
     headers["X-User-ID"] = userId;
   }
 
-  const response = await fetch(`${BACKEND_URL}/api/toys/own`, {
+  const response = await fetch(`${BACKEND_URL}/${locale}/api/toys/own`, {
     method: "GET",
     headers: headers,
   });
+
+  console.log("Response", response);
 
   const toys = await response.json();
   return toys as Toy[];
@@ -185,6 +187,7 @@ export type Sale = Prisma.ToyGetPayload<{
 }>;
 
 export async function getSales(status?: SalesStatus): Promise<Sale[]> {
+  const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
 
   const headers = {
@@ -198,7 +201,7 @@ export async function getSales(status?: SalesStatus): Promise<Sale[]> {
 
   if (status) {
     const response = await fetch(
-      `${BACKEND_URL}/api/toys/for-sale?status=${status}`,
+      `${BACKEND_URL}/${locale}/api/toys/for-sale?status=${status}`,
       {
         method: "GET",
         headers: headers,
@@ -208,7 +211,7 @@ export async function getSales(status?: SalesStatus): Promise<Sale[]> {
     return toys as Sale[];
   }
 
-  const response = await fetch(`${BACKEND_URL}/api/toys/for-sale`, {
+  const response = await fetch(`${BACKEND_URL}/${locale}/api/toys/for-sale`, {
     method: "GET",
     headers: headers,
   });
@@ -218,6 +221,7 @@ export async function getSales(status?: SalesStatus): Promise<Sale[]> {
 }
 
 export async function getFree() {
+  const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
 
   const headers = {
@@ -229,7 +233,7 @@ export async function getFree() {
     headers["X-User-ID"] = userId;
   }
 
-  const response = await fetch(`${BACKEND_URL}/api/toys/for-free`, {
+  const response = await fetch(`${BACKEND_URL}/${locale}/api/toys/for-free`, {
     method: "GET",
     headers: headers,
   });
@@ -239,6 +243,7 @@ export async function getFree() {
 }
 
 export async function getFavorites() {
+  const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
 
   const headers = {
@@ -250,7 +255,7 @@ export async function getFavorites() {
     headers["X-User-ID"] = userId;
   }
 
-  const response = await fetch(`${BACKEND_URL}/api/toys/favorites`, {
+  const response = await fetch(`${BACKEND_URL}/${locale}/api/toys/favorites`, {
     method: "GET",
     headers: headers,
   });
@@ -260,6 +265,7 @@ export async function getFavorites() {
 }
 
 export async function getSwaps() {
+  const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
 
   const headers = {
@@ -271,7 +277,7 @@ export async function getSwaps() {
     headers["X-User-ID"] = userId;
   }
 
-  const response = await fetch(`${BACKEND_URL}/api/toys/for-swap`, {
+  const response = await fetch(`${BACKEND_URL}/${locale}/api/toys/for-swap`, {
     method: "GET",
     headers: headers,
   });
@@ -281,6 +287,7 @@ export async function getSwaps() {
 }
 
 export async function getMessages() {
+  const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
 
   const headers = {
@@ -292,7 +299,7 @@ export async function getMessages() {
     headers["X-User-ID"] = userId;
   }
 
-  const response = await fetch(`${BACKEND_URL}/api/toys/with-messages`, {
+  const response = await fetch(`${BACKEND_URL}/${locale}/api/toys/with-messages`, {
     method: "GET",
     headers: headers,
   });
@@ -337,9 +344,7 @@ export async function getToyById(
   if (userId) {
     headers["X-User-ID"] = userId;
   }
-  const toyUrl = locale
-    ? `${BACKEND_URL}/${locale}/api/toys/${toyId}`
-    : `${BACKEND_URL}/api/toys/${toyId}`;
+  const toyUrl = `${BACKEND_URL}/${locale}/api/toys/${toyId}`;
     
   const response = await fetch(toyUrl, {
     method: "GET",
@@ -350,172 +355,8 @@ export async function getToyById(
   return toy;
 }
 
-/* export async function getToyById(
-  toyId: string,
-  userId: string
-): Promise<ToyWithMedia | null> {
-  try {
-    const user = await prisma.user.findUnique({
-      where: {
-        clerkId: userId,
-      },
-    });
-
-    const toy = await prisma.toy.findUnique({
-      where: {
-        id: toyId,
-        sellerId: user?.id, // 🔐 Solo el dueño puede editarlo
-        isActive: true, // Opcional: solo juguetes activos
-      },
-      include: {
-        media: {
-          select: {
-            id: true,
-            fileUrl: true,
-            type: true,
-          },
-        },
-      },
-    });
-
-    if (!toy) {
-      return null;
-    }
-
-    return {
-      ...toy,
-      media: toy.media || [],
-    };
-  } catch (error) {
-    console.error("Error fetching toy:", error);
-    throw new Error("No se pudo cargar el juguete para edición");
-  }
-}
- */
-/* export async function updateToy(
-  toyId: string,
-  formData: FormData,
-  userId: string // para verificar propiedad
-) {
-  // 1. Verificar que el juguete existe y pertenece al usuario
-  const existingToy = await prisma.toy.findUnique({
-    where: { id: toyId, sellerId: userId },
-  });
-
-  if (!existingToy) {
-    throw new Error("Juguete no encontrado o no autorizado");
-  }
-
-  // 2. Extraer datos del formulario
-  const title = formData.get("title")?.toString() || existingToy.title;
-  const description =
-    formData.get("description")?.toString() || existingToy.description;
-  const forSell = formData.get("forSell") === "true";
-  const forGifts = formData.get("forGifts") === "true";
-  const forChanges = formData.get("forChanges") === "true";
-  const price = parseFloat(formData.get("price")?.toString() || "0");
-  const categoryId = parseInt(
-    formData.get("categoryId")?.toString() || existingToy.categoryId.toString()
-  );
-  const conditionId = parseInt(
-    formData.get("conditionId")?.toString() ||
-      existingToy.conditionId.toString()
-  );
-  const location = formData.get("location")?.toString() || existingToy.location;
-
-  // 3. Manejo de imágenes
-  const existingImageIds = formData.getAll("existingImageIds") as string[];
-  const newFiles = formData.getAll("newFiles") as File[];
-
-  // 3.1. Eliminar imágenes que NO están en existingImageIds
-  const currentMedia = await prisma.media.findMany({
-    where: { toyId: toyId },
-    select: { id: true, fileUrl: true },
-  });
-
-  const mediaToDelete = currentMedia.filter(
-    (media) => !existingImageIds.includes(media.id)
-  );
-
-  for (const media of mediaToDelete) {
-    // Eliminar archivo del sistema de archivos
-    try {
-      const filePath = path.join(
-        process.cwd(),
-        "public",
-        media.fileUrl.replace("/uploads/", "")
-      );
-      if (fs.existsSync(filePath)) {
-        await fsPromises.unlink(filePath);
-      }
-    } catch (err) {
-      console.warn("No se pudo eliminar archivo físico:", err);
-    }
-
-    // Eliminar de la base de datos
-    await prisma.media.delete({ where: { id: media.id } });
-  }
-
-  // 3.2. Subir nuevas imágenes
-  const newMedia: {
-    fileUrl: string;
-    type: FileType; // ← Ahora TypeScript sabe que solo acepta "IMAGE" o "VIDEO"
-    toyId: string;
-  }[] = [];
-
-  for (const file of newFiles) {
-    if (file.size > 0) {
-      const buffer = Buffer.from(await file.arrayBuffer());
-      const extension = file.name.split(".").pop() || "jpg";
-      const safeFileName = `${Date.now()}_${Math.random()
-        .toString(36)
-        .substring(2, 9)}.${extension}`;
-      const uploadPath = path.join(UPLOAD_DIR, safeFileName);
-
-      // Guardar archivo
-      await fsPromises.writeFile(uploadPath, buffer);
-
-      // URL pública (asumiendo que sirves /public como /)
-      const fileUrl = `/uploads/${safeFileName}`;
-
-      newMedia.push({
-        fileUrl,
-        type: file.type.startsWith("image") ? "IMAGE" : ("VIDEO" as const), // ← ¡Así TypeScript sabe que es del enum!
-        toyId: toyId,
-      });
-    }
-  }
-
-  // 3.3. Insertar nuevas imágenes en la DB
-  if (newMedia.length > 0) {
-    await prisma.media.createMany({ data: newMedia });
-  }
-
-  // 4. Actualizar el juguete
-  const updatedToy = await prisma.toy.update({
-    where: { id: toyId },
-    data: {
-      title,
-      description,
-      forSell,
-      forGifts,
-      forChanges,
-      price,
-      categoryId,
-      conditionId,
-      location,
-      updatedAt: new Date(),
-    },
-  });
-
-  revalidatePath(`/toy/${toyId}`);
-  revalidatePath("/profile");
-
-  return updatedToy;
-}
- */
-
 export async function deleteToy(toyId: string) {
+  const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
 
   const headers = {
@@ -526,9 +367,8 @@ export async function deleteToy(toyId: string) {
   if (userId) {
     headers["X-User-ID"] = userId;
   }
-  console.log(toyId, userId);
 
-  const toy = await fetch(`${BACKEND_URL}/api/toys/${toyId}`, {
+  const toy = await fetch(`${BACKEND_URL}/${locale}/api/toys/${toyId}`, {
     method: "DELETE",
     headers: headers,
   });
