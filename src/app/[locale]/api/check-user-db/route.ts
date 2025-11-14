@@ -1,23 +1,22 @@
 // app/api/check-db/route.ts
 import { NextResponse } from 'next/server';
-import { currentUser } from '@clerk/nextjs/server'; // Importante para obtener el usuario de Clerk
 import prisma from '@/lib/prisma'; // Asume que tienes un cliente Prisma inicializado
 
 // Esta API se llama internamente desde el middleware
-export async function GET() {
-  // Nota: Dado que esta API es llamada *después* de que Clerk valida el token,
-  // podemos usar la función 'currentUser' de Clerk para obtener el userId.
-  const user = await currentUser(); 
+export async function GET(request: Request) {
   
-  if (!user || !user.id) {
-    // Esto no debería pasar si el middleware hizo su trabajo, pero es un buen control
+  // 1. Obtener el userId de los headers (el middleware lo pasó)
+  const userId = request.headers.get('X-User-ID'); 
+  
+  if (!userId) {
+    // Si por alguna razón el middleware no pasó el ID (debería ser imposible)
     return new NextResponse(null, { status: 401 }); // No autorizado
-  }
+  }  
 
   try {
     // 🛑 Consulta a Prisma
     const dbUser = await prisma.user.findUnique({
-      where: { clerkId: user.id }, // Asume que guardas el ID de Clerk como 'clerkId'
+      where: { clerkId: userId }, // Asume que guardas el ID de Clerk como 'clerkId'
       select: { id: true },
     });
 
