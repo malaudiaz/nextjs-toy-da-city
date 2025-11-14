@@ -57,8 +57,8 @@ export async function GET(
     ]);
 
     const result_category = categories.map(category => ({
-      id: category.id, name: category.translations[0]?.value || category.name,
-      description: category.description, userId: category.userId
+      id: category.id, name: category.name,
+      description: category.translations[0]?.value, userId: category.userId
     })
     )
 
