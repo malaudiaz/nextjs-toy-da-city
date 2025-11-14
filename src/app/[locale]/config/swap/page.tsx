@@ -1,5 +1,5 @@
-import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import SwapInfo from "@/components/shared/profile/SwapInfo";
+import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
 import { getSwaps } from "@/lib/actions/toysAction";
 
 export default async function ExchangesPage() {
@@ -7,7 +7,7 @@ export default async function ExchangesPage() {
     return (
       <div className="max-w-7xl mx-auto min-h-screen bg-background">
         <div className="px-5 py-3">
-          <Breadcrumbs />
+        <TitleBreakcrumbs translationScope="swap" />
         </div>
         <SwapInfo swaps={swaps}   />
       </div>

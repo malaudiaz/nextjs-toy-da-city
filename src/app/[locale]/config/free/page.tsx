@@ -1,5 +1,5 @@
-import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import FreeInfo from "@/components/shared/profile/FreeInfo";
+import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
 import { getFree } from "@/lib/actions/toysAction";
 
 
@@ -8,7 +8,7 @@ const RegalosPage = async() => {
     return (
       <div className="max-w-7xl mx-auto min-h-screen bg-background">
         <div className="px-5 py-3">
-          <Breadcrumbs />
+          <TitleBreakcrumbs translationScope="gifts" />
         </div>
         <FreeInfo free={free}  />
       </div>

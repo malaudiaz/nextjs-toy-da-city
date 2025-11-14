@@ -1,7 +1,7 @@
 import React from "react";
-import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import PurchasesInfo from "@/components/shared/profile/PurchasesInfo";
 import { getOrder } from "@/lib/actions/orderActions";
+import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
 
 export type OrderStatus =
   | "AWAITING_CONFIRMATION"
@@ -20,7 +20,7 @@ const ComprasPage = async ({ searchParams }: Props) => {
   return (
     <div className="max-w-7xl mx-auto min-h-screen bg-background">
       <div className="px-5 py-3">
-        <Breadcrumbs  />
+        <TitleBreakcrumbs translationScope="purchases" />
       </div>
       <PurchasesInfo orders={purchases}  />
     </div>

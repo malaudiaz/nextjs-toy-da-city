@@ -350,7 +350,7 @@ const CreatePostForm = ({
           >
             {categories.data.map((category) => (
               <option key={category.id} value={category.id}>
-                {category.name}
+                {category.description}
               </option>
             ))}
           </select>
@@ -374,7 +374,7 @@ const CreatePostForm = ({
           >
             {conditions.data.map((condition) => (
               <option key={condition.id} value={condition.id}>
-                {condition.name}
+                {condition.description}
               </option>
             ))}
           </select>

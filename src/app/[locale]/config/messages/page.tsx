@@ -1,6 +1,6 @@
 import MessageInfo from "@/components/shared/profile/Messagesinfo";
+import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
 import { getMessages } from "@/lib/actions/toysAction";
-import Breadcrumbs from "@/components/shared/BreadCrumbs";
 
 const MessagesPage = async () => {
   const messages = await getMessages();
@@ -8,7 +8,7 @@ const MessagesPage = async () => {
   return (
     <div className="max-w-7xl mx-auto min-h-screen bg-background">
       <div className="px-5 py-3">
-        <Breadcrumbs />
+          <TitleBreakcrumbs translationScope="messages" />
       </div>
       <MessageInfo messages={messages} />
     </div>

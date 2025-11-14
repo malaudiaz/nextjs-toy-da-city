@@ -1,7 +1,8 @@
 import ToyGrid from "@/components/config/ToyGrid";
-import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import React from "react";
 import { getOwnToys } from "@/lib/actions/toysAction";
+import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
+
 
 const ToysPage = async () => {
   const toys = await getOwnToys();
@@ -9,7 +10,7 @@ const ToysPage = async () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto max-w-7xl px-4 py-8">
-        <Breadcrumbs />
+        <TitleBreakcrumbs translationScope="configurations.toys" />
         <ToyGrid toys={toys} />
       </div>
     </div>
