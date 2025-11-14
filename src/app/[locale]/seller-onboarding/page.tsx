@@ -5,13 +5,14 @@ import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
 import { useLocale } from "next-intl"; // ✅ Importa useLocale
 import { useTranslations } from "next-intl";
-
+import { useRouter } from "next/navigation";
 
 export default function SellerOnboarding() {
   const t = useTranslations("sellerOnboarding");
   const { user } = useUser();
   const [loading, setLoading] = useState(false);
   const locale = useLocale(); // ✅ Obtiene el locale actual (ej. 'es', 'en')
+  const router = useRouter();
 
   const handleBecomeSeller = async () => {
     if (!user) return;
@@ -27,7 +28,8 @@ export default function SellerOnboarding() {
       });
 
       if (!response.ok) {
-        throw new Error(t("error"));
+        router.push(`/${locale}/auth-error?reason=database_error`);
+        return;
       }
 
       const data = await response.json();

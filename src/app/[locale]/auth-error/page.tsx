@@ -3,7 +3,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { SignInButton, SignUpButton, useUser } from "@clerk/nextjs";
+import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import { useLocale } from "next-intl"; // ✅ Importa useLocale
 
 export default function AuthErrorPage() {
@@ -108,14 +108,11 @@ export default function AuthErrorPage() {
                       </button>
                     </SignInButton>
                   ) : (
-                    <SignUpButton
-                      mode="modal"
-                      forceRedirectUrl={`/${locale}/auth-callback?from=registration`}
-                    >
+                    <SignOutButton>
                       <button className="w-full bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors">
                         {t("signOut")}
                       </button>
-                    </SignUpButton>
+                    </SignOutButton>
                   )}
 
                   {errorInfo.action === "retry" && (

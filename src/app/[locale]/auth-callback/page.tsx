@@ -5,8 +5,10 @@ import { useUser, useClerk } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl"; // ✅
 
 export default function AuthCallback() {
+  const locale = useLocale(); // ✅ Siempre actualizado
   const t = useTranslations("auth-callback");
   const { user, isLoaded } = useUser();
   const { openUserProfile } = useClerk();
@@ -22,7 +24,7 @@ export default function AuthCallback() {
     if (!isLoaded) return;
 
     if (!user) {
-      router.push("/sign-in");
+      router.push(`/${locale}/sign-in`);
       return;
     }
 
@@ -44,12 +46,12 @@ export default function AuthCallback() {
         setShowPrompt(true);
       } else {
         // Redirigir al home si ya tiene teléfono o no es necesario
-        router.push("/");
+        router.push(`/${locale}`);
       }
     };
 
     checkUser();
-  }, [isLoaded, user, router, searchParams]);
+  }, [isLoaded, user, router, searchParams, locale]);
 
   const handleYes = () => {
     setStatus("redirecting");
@@ -66,7 +68,7 @@ export default function AuthCallback() {
 
   const handleNo = () => {
     setShowPrompt(false);
-    router.push("/");
+    router.push(`/${locale}`);
   };
 
   if (status === "loading") {
