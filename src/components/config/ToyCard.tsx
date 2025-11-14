@@ -1,9 +1,11 @@
+"use client";
+
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { Card, CardContent } from "../ui/card";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 import DeleteButton from "./DeleteButton";
 
 type Media = {
@@ -41,8 +43,8 @@ type ToyCardProps = {
   toy: Toy;
 };
 
-export default async function ToyCard({ toy }: ToyCardProps) {
-  const t = await getTranslations("configurations");
+export default function ToyCard({ toy }: ToyCardProps) {
+  const t = useTranslations("configurations");
 
   return (
     <Card

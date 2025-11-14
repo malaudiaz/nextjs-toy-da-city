@@ -1,18 +1,19 @@
-// components/config/TitleBreakcrumbs.jsx
 "use client";
 
 import { useTranslations } from "next-intl";
 import Breadcrumbs from "./BreadCrumbs";
 
-// 1. Define una interfaz para el objeto de props
 interface TitleBreakcrumbsProps {
   translationScope: string;
+  titleKey?: string; 
 }
 
-// 2. Acepta el objeto de props y desestructúralo
-export default function TitleBreakcrumbs({ translationScope }: TitleBreakcrumbsProps) {
+export default function TitleBreakcrumbs({ 
+    translationScope, 
+    titleKey = 'title' 
+}: TitleBreakcrumbsProps) {
   const t = useTranslations(translationScope); 
   
-  // Asume que la clave para el título es 'title' dentro de ese scope
-  return <Breadcrumbs productName={t('title')} />;
+  // Usa la prop titleKey (o su valor por defecto 'title') para buscar la traducción
+  return <Breadcrumbs productName={t(titleKey)} />;
 }

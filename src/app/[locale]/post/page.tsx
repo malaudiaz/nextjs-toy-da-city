@@ -1,12 +1,12 @@
 // app/post/page.jsx
 import { redirect } from "next/navigation"; // Importa redirect
-import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import CreatePostForm from "@/components/shared/post/CreatePostForm";
 import Sigin from "@/components/shared/Sigin";
 import { getCategories } from "@/lib/actions/categoriesAction";
 import { getConditions } from "@/lib/actions/conditionActions";
 import { getSellerData } from "@/lib/actions/sellertActions";
 import { auth } from "@clerk/nextjs/server";
+import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
 
 export default async function PostPage({ params }: { params: Promise<{ locale: string }> }) {
   const { userId } = await auth();
@@ -27,7 +27,7 @@ export default async function PostPage({ params }: { params: Promise<{ locale: s
     <div>
       {userId ? (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <Breadcrumbs />
+          <TitleBreakcrumbs translationScope="breadcrumbs" titleKey="Post" />
           <CreatePostForm
             categories={categories}
             conditions={{ data: condition }}
