@@ -459,7 +459,7 @@
     "Filter2": "Rango de Precios",
     "Type": "Juguetes",
     "Sale": "Venta",
-    "Free": "Grátis",
+    "Free": "Gratis",
     "Swap": "Intercambio",
     "Buttom1": "Aplicar",
     "Buttom2": "Limpiar",
@@ -538,7 +538,7 @@
   },
   "toys": {
     "emptyMsg": "No existen juguetes publicados aún",
-    "free": "Grátis",
+    "free": "Gratis",
     "locationNotFound": "Ubicación no encontrada"
   },
   "stripeCheckoutButton": {
@@ -614,16 +614,16 @@
     "order": "Orden"
   },
   "gifts": {
-    "title": "Juguetes Grátis",
+    "title": "Juguetes Gratis",
     "emptyMsg": "No se encontraron juguetes con los filtros seleccionados",
-    "free": "Grátis",
+    "free": "Gratis",
     "category": "Categoría",
     "condition": "Condición"
   },
   "swap": {
     "title": "Juguetes para Intercambios",
     "emptyMsg": "No se encontraron juguetes con los filtros seleccionados",
-    "free": "Grátis",
+    "free": "Gratis",
     "category": "Categoría",
     "condition": "Condición"
   },
