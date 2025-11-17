@@ -6,10 +6,32 @@ import prisma from "@/lib/prisma";
 import { ToySchema } from "@/lib/schemas/toy";
 import { getTranslations } from "next-intl/server";
 import { Prisma } from "@prisma/client";
-import { deleteUploadedFile, handleFileUpload } from "@/lib/fileUtils";
+import { deleteUploadedFile } from "@/lib/fileUtils";
 import { auth } from "@clerk/nextjs/server";
+import { join } from 'path';
+import { writeFile, mkdir } from 'fs/promises'
+import { v4 as uuidv4 } from 'uuid'; // Asumiendo que usas 'uuid'
+
+const ALLOWED_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+  'video/mp4',
+  'video/quicktime',
+  'video/webm'
+];
 
 const MAX_MEDIA_FILES = 6;
+const UPLOADS_DIR = join(process.cwd(), 'public', 'uploads')
+
+async function ensureUploadsDirExists() {
+  try {
+    await mkdir(UPLOADS_DIR, { recursive: true })
+  } catch (error) {
+    console.error('Error creating uploads directory:', error)
+  }
+}
 
 // Obtener un juguete por ID
 export async function GET(
@@ -155,6 +177,9 @@ export async function PUT(
   }
 
   try {
+    // AÑADIDO: Asegurar que el directorio de subidas existe, como en el POST
+    await ensureUploadsDirExists();
+    
     const formData = await req.formData();
 
     const stringforSell = formData.get("forSale") || "false";
@@ -174,9 +199,9 @@ export async function PUT(
       forChanges: stringforChanges === "true",
     });
 
-    // 2. Procesar archivos nuevos
+    // 2. Procesar archivos nuevos y IDs a eliminar
     const newFiles = formData.getAll("newFiles") as File[];
-    const mediaToDelete = formData.getAll("deleteMedia") as string[]; // IDs de medios a eliminar
+    const mediaToDelete = formData.getAll("deleteMedia") as string[];
 
     // 3. Obtener juguete actual para validación
     const currentToy = await prisma.toy.findUnique({
@@ -200,12 +225,21 @@ export async function PUT(
       throw new Error(`Excediste el límite de ${MAX_MEDIA_FILES} archivos`);
     }
 
+    // AÑADIDO: Validar tipos de archivos nuevos antes de la transacción
+    for (const file of newFiles) {
+        if (!ALLOWED_TYPES.includes(file.type)) {
+            // Podrías necesitar revertir el formData.get('title') etc. si ya lo has usado.
+            // En este caso, simplemente lanzamos un error antes de la transacción.
+            return NextResponse.json(
+                { success: false, error: `Unsupported file type: ${file.type}` },
+                { status: 400 }
+            )
+        }
+    }
+
     // 5. Transacción para actualización atómica
     const updatedToy = await prisma.$transaction(async (tx) => {
-      // Procesar eliminación de medios
-      const mediaToDelete = formData.getAll("deleteMedia") as string[];
-
-      // Filtrar solo IDs válidos
+      // Procesar eliminación de medios (Mantenido)
       const validMediaToDelete = mediaToDelete.filter(
         (id): id is string => typeof id === "string" && id.trim() !== ""
       );
@@ -214,7 +248,7 @@ export async function PUT(
         // Obtener registros para borrar físicamente los archivos
         const mediaToRemove = await tx.media.findMany({
           where: { id: { in: validMediaToDelete } },
-          select: { fileUrl: true, id: true }, // Solo lo necesario
+          select: { fileUrl: true, id: true },
         });
 
         // Eliminar de la base de datos
@@ -228,13 +262,25 @@ export async function PUT(
         );
       }
 
-      // Subir nuevos archivos
-      const newFiles = formData.getAll("newFiles") as File[];
+      // **CAMBIO CLAVE: Subir nuevos archivos con la lógica del POST**
       const newMedia: Prisma.MediaCreateWithoutToyInput[] = await Promise.all(
-        newFiles.map(async (file) => ({
-          fileUrl: await handleFileUpload(file),
-          type: file.type.startsWith("image") ? "IMAGE" : ("VIDEO" as const),
-        }))
+        newFiles.map(async (file) => {
+          // 1. Generar nombre de archivo único
+          const extension = file.type.split('/')[1];
+          const filename = `${uuidv4()}.${extension}`;
+          const filePath = join(UPLOADS_DIR, filename);
+
+          // 2. Guardar archivo físicamente
+          // Es importante convertir File a Buffer para writeFile
+          const buffer = Buffer.from(await file.arrayBuffer()); 
+          await writeFile(filePath, buffer);
+
+          // 3. Devolver el objeto Media para la base de datos
+          return {
+            fileUrl: `/en/api/uploads/${filename}`, // La misma estructura de ruta que en el POST
+            type: file.type.startsWith("image") ? "IMAGE" : ("VIDEO" as const),
+          };
+        })
       );
 
       // IDs de imágenes existentes que se mantienen
@@ -246,21 +292,27 @@ export async function PUT(
 
       try {
         // Actualizar juguete
-        await tx.toy.update({
+        return await tx.toy.update({
           where: { id: id },
           data: {
             ...toyData,
             media: {
+              // Conectar a las imágenes existentes que se mantienen
               connect: existingImageIds.map((id) => ({ id })),
+              // Crear los nuevos registros de media
               create: newMedia,
             },
           },
           include: { media: true },
         });
       } catch (error) {
-        console.log("Error:", error);
+        console.log("Error en la actualización de la DB:", error);
+        // Opcional: Si la actualización falla, podrías querer borrar los archivos recién subidos (Rollback físico)
+        await Promise.all(
+            newMedia.map(media => deleteUploadedFile(media.fileUrl))
+        );
+        throw error; // Re-lanzar para que la transacción falle
       }
-
     });
 
     return NextResponse.json({
@@ -268,6 +320,7 @@ export async function PUT(
       data: updatedToy,
     });
   } catch (error) {
+    // ... manejo de errores (mantenido)
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
@@ -278,7 +331,6 @@ export async function PUT(
       );
     }
 
-    // Manejar errores de Prisma (ej: registro no encontrado)
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === "P2025"
@@ -286,6 +338,7 @@ export async function PUT(
       return NextResponse.json({ error: t("NotFound") }, { status: 404 });
     }
 
+    console.error('Error en PUT:', error);
     return NextResponse.json({ error: g("ServerError") }, { status: 500 });
   }
 }
