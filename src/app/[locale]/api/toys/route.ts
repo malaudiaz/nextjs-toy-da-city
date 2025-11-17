@@ -8,6 +8,7 @@ import { getTranslations } from "next-intl/server";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { ToyResponseSuccess, ToyResponseError } from "@/types/toy";
+import { revalidatePath } from 'next/cache'; // 👈 Necesitas esta importación
 
 const ALLOWED_TYPES = [
   'image/jpeg',
@@ -391,6 +392,8 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
         }))
       }
     }    
+
+    revalidatePath('/');
 
     return NextResponse.json(
       responseData,

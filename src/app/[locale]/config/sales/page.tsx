@@ -1,16 +1,33 @@
 import SaleInfo from "@/components/shared/profile/SaleInfo";
+import SaleInfoSkeleton from "@/components/shared/profile/SaleInfoSkeleton"; // 1. Importa el Skeleton
 import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
 import { getSales } from "@/lib/actions/toysAction";
-import React from "react";
+import React, { Suspense } from "react"; // 2. Importa Suspense
 
+// 3. Componente async que realiza el fetching (la parte lenta)
+const SalesContent = async ({ salesPromise }: { salesPromise: ReturnType<typeof getSales> }) => {
+  // Espera a que la promesa de datos se resuelva
+  const sales = await salesPromise;
+  
+  return <SaleInfo sales={sales} />;
+}
+
+// 4. El Page Component se convierte en el contenedor de Suspense
 const SalesPage = async () => {
-  const sales = await getSales();
+  // La función getSales() devuelve una Promesa.
+  const salesPromise = getSales();
+  
   return (
     <div className="max-w-7xl mx-auto min-h-screen bg-background">
       <div className="px-5 py-3">
         <TitleBreakcrumbs translationScope="sales" />
       </div>
-      <SaleInfo sales={sales} />
+      
+      {/* 5. Envuelve el contenido lento con Suspense */}
+      <Suspense fallback={<SaleInfoSkeleton />}>
+        {/* Pasamos la Promesa al componente Content */}
+        <SalesContent salesPromise={salesPromise} />
+      </Suspense>
     </div>
   );
 };

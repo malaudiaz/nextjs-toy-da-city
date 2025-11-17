@@ -1,7 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useUser } from "@clerk/nextjs";
+import useSWR from "swr"; // 1. Importa useSWR
+
+// Función fetcher global para useSWR
+// useSWR requiere una función para manejar la lógica de fetching.
+// Esta función será llamada por useSWR con la 'key' si no es null.
+const fetcher = async (url: string) => {
+  const res = await fetch(url, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    // Si la API falla, lanzamos un error que useSWR capturará
+    const errorText = await res.text();
+    throw new Error(`Failed to fetch presence: ${res.status} ${errorText}`);
+  }
+
+  return res.json();
+};
 
 export function UserAvatar({
   userId,
@@ -12,41 +32,43 @@ export function UserAvatar({
   src: string;
   alt: string;
 }) {
-  const [online, setOnline] = useState<boolean | null>(null); // null = loading
+  const { isLoaded, isSignedIn } = useUser();
+  
+  // 2. Define la 'key' de SWR. Será la URL de la API.
+  // La key se establece a `null` si el usuario no está autenticado,
+  // lo que evita que useSWR ejecute el fetcher.
+  const apiPath = `/api/presence/${encodeURIComponent(userId)}`;
+  const swrKey = isLoaded && isSignedIn ? apiPath : null;
 
-  useEffect(() => {
-    const checkPresence = async () => {
-      try {
-        const res = await fetch(`/api/presence/${encodeURIComponent(userId)}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-          cache: "no-store",
-        });
+  // 3. Usa useSWR.
+  const { data, error, isLoading } = useSWR(
+    swrKey, 
+    fetcher, 
+    {
+        // 4. Configura el revalidado automático, reemplazando el setInterval.
+        // revalidateOnFocus: true, // Opcional: Revalidar al enfocar la ventana
+        refreshInterval: 10_000, // Revalidar cada 10 segundos
+    }
+  );
 
-        if (!res.ok) {
-          console.warn(
-            `Presence API failed for user ${userId}: ${res.status} ${res.statusText}`
-          );
-          //throw new Error("Failed to fetch user presence");
-        }
+  // 5. Determina el estado de 'online' basado en SWR
+  let onlineState: boolean | null = null;
+  
+  if (isLoading || !isLoaded) {
+    // Estado inicial, o esperando la respuesta de Clerk
+    onlineState = null; 
+  } else if (error) {
+    // Hubo un error en el fetcher (incluye cuando swrKey es null y no hay datos)
+    console.error("Presence check failed via SWR:", error);
+    onlineState = false; // Asume offline en caso de error
+  } else if (data) {
+    // Datos recibidos correctamente
+    onlineState = data.online ?? false;
+  } else if (!isSignedIn) {
+    // Clerk cargó, no está autenticado, y swrKey fue null (no se hizo el fetch)
+    onlineState = false;
+  }
 
-        const data = await res.json();
-        setOnline(data.online ?? false); // fallback por si falta la propiedad
-      } catch (error) {
-        console.error("Presence check failed:", error);
-        setOnline(false); // default: offline
-      }
-    };
-
-    // Ejecutar inmediatamente
-    checkPresence();
-
-    // Repetir cada 10 segundos
-    const interval = setInterval(checkPresence, 10_000);
-
-    // Limpiar intervalo al desmontar
-    return () => clearInterval(interval);
-  }, [userId]);
 
   return (
     <div className="flex flex-col gap-0.5 items-center space-y-1">
@@ -84,7 +106,7 @@ export function UserAvatar({
           textAlign: "center",
         }}
       >
-        {online === null ? "..." : online ? "online" : "offline"}
+        {onlineState === null ? "..." : onlineState ? "online" : "offline"}
       </span>
     </div>
   );

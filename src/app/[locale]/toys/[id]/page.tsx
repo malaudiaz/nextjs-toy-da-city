@@ -1,14 +1,14 @@
-import React from "react";
-
+import React, { Suspense } from "react"; // 1. Importa Suspense
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import { getRelatedToys, getToy } from "@/lib/actions/toysAction";
 import ProductDetails from "@/components/shared/product/ProductDetails";
 import FeaturesProduct from "@/components/shared/product/FeaturesProduct";
 import { getUserById } from "@/lib/actions/getUserActions";
 import { Metadata } from "next";
+import ProductDetailsSkeleton from "@/components/shared/product/ProductDetailsSkeleton"; // 2. Importa el Skeleton
 
 type ProductDataProps = {
-  params: Promise<{ id: string, locale: string }>;
+  params: { id: string, locale: string }; // Ajustado a objeto simple para consistencia con Next.js props
 };
 
 async function getToyData(id: string, locale: string) {
@@ -23,9 +23,10 @@ async function getToyData(id: string, locale: string) {
 
 export async function generateMetadata({
   params,
-}: ProductDataProps): Promise<Metadata> {
-  const toyId = (await params).id;
-  const locale  = (await params).locale;
+}: { params: { id: string, locale: string } }): Promise<Metadata> {
+  // Nota: generateMetadata no recibe un Promise en params, sino el objeto directo.
+  const toyId = params.id;
+  const locale = params.locale;
   const {toy, baseUrl} = await getToyData(toyId, locale);
 
   if (!toy) {
@@ -41,26 +42,45 @@ export async function generateMetadata({
   return {
     title: `${toy.title} | MetadataWebsite`,
     description: `${toy.description} Price: $${toy.price}. ${
-      toy.isctive ? "In Stock" : "Out of Stock"}.`,
+      toy.isActive ? "In Stock" : "Out of Stock"}.`,
     keywords: [toy.title.toLowerCase()],
   };
 }
 
-async function ProductDetailsPage({ params }: ProductDataProps) {
-  const toyId = (await params).id;
-  const locale  = (await params).locale;
-  const { toy } = await getToyData(toyId, locale);
-  const featuredToys = await getRelatedToys(toyId);
+// 3. Nuevo componente async que realiza todo el fetching
+async function ProductContent({ params }: ProductDataProps) {
+    const toyId = params.id;
+    const locale = params.locale;
+    
+    // Ejecutar todas las promesas
+    const { toy } = await getToyData(toyId, locale);
+    const featuredToys = await getRelatedToys(toyId);
 
-  // Obtener datos del vendedor
-  const seller = await getUserById(toy.sellerId);  
+    // Obtener datos del vendedor
+    const seller = await getUserById(toy.sellerId);  
+    
+    return (
+        <>
+            <Breadcrumbs productName={toy.title} />
+            <ProductDetails toy={toy} seller={seller}/>
+            {featuredToys.toys.length > 0 && <FeaturesProduct products={featuredToys.toys} />}
+        </>
+    );
+}
+
+// 4. El Page Component envuelve el contenido lento con Suspense
+async function ProductDetailsPage({ params }: ProductDataProps) {
+  
+  // Convertir params a objeto simple si era promesa (para consistencia)
+  const resolvedParams = params instanceof Promise ? await params : params;
 
   return (
     <div className="min-h-screen bg-[#FAF1DE]">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Breadcrumbs productName={toy.title} />
-        <ProductDetails toy={toy} seller={seller}/>
-        {featuredToys.toys.length > 0 && <FeaturesProduct products={featuredToys.toys} />}
+        {/* Envuelve el contenido que hace el fetch en Suspense */}
+        <Suspense fallback={<ProductDetailsSkeleton />}>
+            <ProductContent params={resolvedParams} />
+        </Suspense>
       </main>
     </div>
   );
