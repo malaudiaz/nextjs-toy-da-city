@@ -17,6 +17,7 @@ export type Filters = {
     lng: number;
     radius: number;
   };
+  conditionId?: number
   locale?: string;
 };
 
@@ -56,6 +57,9 @@ export async function getToys(
     url.searchParams.set("lat", String(filters.locationRadius.lat));
     url.searchParams.set("lng", String(filters.locationRadius.lng));
     url.searchParams.set("radius", String(filters.locationRadius.radius));
+  }
+  if(filters.conditionId){
+    url.searchParams.set("conditionId", String(filters.conditionId));
   }
 
   const headers = {

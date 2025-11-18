@@ -9,6 +9,7 @@ import { Filters, getToys } from "@/lib/actions/toysAction";
 import { Suspense } from "react";
 import { Metadata } from "next";
 import Empty from "@/components/shared/Empty";
+import { FiltersAction } from "@/components/shared/home/Filters";
 
 // SEO: metadatos dinámicos
 export async function generateMetadata({
@@ -239,7 +240,7 @@ export default async function Home({ searchParams, params }: Props) {
 
       {totalPosts > 0 && (
         <section className="w-full px-3" aria-label="Filtros">
-          <FilterBar conditions={conditions} />
+         <FiltersAction conditions={conditions} />
         </section>
       )}
 

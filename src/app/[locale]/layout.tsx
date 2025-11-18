@@ -13,11 +13,12 @@ import { dark } from "@clerk/themes";
 import Navbar from "@/components/shared/header/Navbar";
 import Footer from "@/components/shared/footer/Footer";
 import ScrollToTop from "@/components/shared/ScrollToTop";
-import { PushNotifier } from '@/components/shared/PushNotifier';
+import { PushNotifier } from "@/components/shared/PushNotifier";
 import { clerkLocalizations } from "@/lib/clerkLocalization";
 import { Toaster } from "sonner";
 import { OnlineTracker } from "@/components/shared/OlineTracker";
 import { getMessages } from "next-intl/server"; // 👈 Importa getMessages
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
   description: "Compra y vende juguetes únicos y coleccionables en Toydacity.",
   icons: {
     icon: [
-      { url: "/favicon/icon1.png" },           // 16x16 (default)
+      { url: "/favicon/icon1.png" }, // 16x16 (default)
       { url: "/favicon/icon2.png", sizes: "32x32", type: "image/png" },
     ],
     shortcut: [{ url: "/favicon/icon1.png" }],
@@ -47,7 +48,8 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
   openGraph: {
     title: "Toydacity Marketplace",
-    description: "Compra y vende juguetes únicos y coleccionables en Toydacity.",
+    description:
+      "Compra y vende juguetes únicos y coleccionables en Toydacity.",
     url: "https://toydacity.com",
     siteName: "Toydacity",
     images: [
@@ -63,7 +65,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Toydacity Marketplace",
-    description: "Compra y vende juguetes únicos y coleccionables en Toydacity.",
+    description:
+      "Compra y vende juguetes únicos y coleccionables en Toydacity.",
     images: ["/og-image.jpg"],
   },
 };
@@ -84,7 +87,7 @@ export default async function RootLayout({
     notFound();
   }
 
-    // Asegura que locale sea del tipo correcto
+  // Asegura que locale sea del tipo correcto
   const validLocale = locale as ValidLocale;
 
   // 👇 Carga los mensajes para el locale actual
@@ -92,7 +95,7 @@ export default async function RootLayout({
 
   // Selecciona la localización de Clerk basada en el `locale`
   // Selecciona la localización de Clerk
-  const localization = clerkLocalizations[validLocale];  
+  const localization = clerkLocalizations[validLocale];
 
   //const localization = clerkLocalizations[locale as keyof typeof clerkLocalizations];
 
@@ -113,7 +116,7 @@ export default async function RootLayout({
         <body className={`min-h-screen flex flex-col antialiased font-inter`}>
           <NextIntlClientProvider locale={validLocale} messages={messages}>
             <Navbar locale={validLocale} />
-            {children}
+            <NuqsAdapter>{children}</NuqsAdapter>
             <ScrollToTop />
             <Footer />
           </NextIntlClientProvider>
