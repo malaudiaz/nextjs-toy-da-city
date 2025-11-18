@@ -125,6 +125,27 @@ export async function POST(req: NextRequest) {
     },
   });
 
+  // ✅ Obtener los IDs de los juguetes de esta orden
+  const orderItems = await prisma.orderItem.findMany({
+    where: { orderId: order.id },
+    select: { toyId: true },
+  });
+
+  const toyIds = orderItems.map((item) => item.toyId);  
+
+// ✅ Actualizar el estado de los juguetes a Sold/Inactivo
+if (toyIds.length > 0) {
+    await prisma.toy.updateMany({
+      where: {
+        id: { in: toyIds },
+      },
+      data: {
+        statusId: 3, // Asume que '3' es el ID para "Entregado"
+        isActive: false, // El juguete ya no está disponible para la venta
+      },
+    });
+  }  
+
   // ✉️ ENVIAR CORREO DE TRANSFERENCIA COMPLETADA
   const orderWithDetails = await prisma.order.findUnique({
     where: { id: order.id },

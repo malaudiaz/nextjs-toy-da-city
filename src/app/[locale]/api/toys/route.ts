@@ -89,7 +89,7 @@ export async function GET(
 
     // Construir query de filtrado
     
-    const where: Prisma.ToyWhereInput = {isActive: true};
+    const where: Prisma.ToyWhereInput = {statusId: 1, isActive: true};
     
     // Filtro por precio
     if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {

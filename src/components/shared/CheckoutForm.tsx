@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from "next-intl";
-import { useLocale } from "next-intl";
 
 export interface CartItem {
   id: string;
@@ -21,7 +20,6 @@ interface CheckoutFormProps {
 }
 
 export default function CheckoutForm({ cartItems, onSuccess }: CheckoutFormProps) {
-  const locale = useLocale();
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
@@ -29,8 +27,6 @@ export default function CheckoutForm({ cartItems, onSuccess }: CheckoutFormProps
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const return_url = `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/success`;
 
 
     if (!stripe || !elements) return;
@@ -40,7 +36,7 @@ export default function CheckoutForm({ cartItems, onSuccess }: CheckoutFormProps
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: return_url,
+        return_url: `${window.location.origin}/success`,
       },
     });
 
@@ -64,13 +60,6 @@ export default function CheckoutForm({ cartItems, onSuccess }: CheckoutFormProps
             defaultCollapsed: false,
             spacedAccordionItems: false
           },
-          fields: {
-            billingDetails: {
-              address: {
-                country: 'never' // Oculta el campo país si no lo necesitas
-              }
-            }
-          }
         }}
       />
 
