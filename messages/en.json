@@ -462,6 +462,7 @@
   },
   "filter":{
     "Title": "Filter",
+    "Clear": "Clear Filters",
     "Filter1": "Max Distance",
     "Filter2": "Price Range",
     "Type": "Toys",
@@ -471,7 +472,9 @@
     "Buttom1": "Apply",
     "Buttom2": "Clear",
     "miles": "miles",
-    "condition": "Condition"
+    "condition": "Condition",
+    "maxDistance": "Max Distance",
+    "priceRange": "Price Range"
   },
   "navbar": {
     "Search": "Search toys...",

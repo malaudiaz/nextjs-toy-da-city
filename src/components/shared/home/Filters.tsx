@@ -48,12 +48,18 @@ export function FiltersAction({ conditions }: Props) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">Filters</Button>
+        <Button variant="outline">{t("Title")}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 md:w-64" align="start">
         <div className="flex justify-between py-2">
           <DropdownMenuLabel>{t("Type")}</DropdownMenuLabel>
-        <Button variant="outline" className="mr-4" onClick={() => router.push("/")}>Eliminar Filtros</Button>
+          <Button
+            variant="outline"
+            className="mr-4"
+            onClick={() => router.push("/")}
+          >
+            {t("Clear")}
+          </Button>
         </div>
         <DropdownMenuGroup className="flex flex-col gap-1">
           <DropdownMenuItem
@@ -108,7 +114,7 @@ export function FiltersAction({ conditions }: Props) {
         {/* --- Rango de Precio (Slider) --- */}
         <DropdownMenuGroup className="px-2 py-2">
           <div className="space-y-3">
-            <Label>Rango de precio</Label>
+            <Label>{t("priceRange")}</Label>
             <div className="px-2">
               <Slider
                 min={0}
@@ -131,7 +137,7 @@ export function FiltersAction({ conditions }: Props) {
         {/* --- Maxima Distancia (Slider) --- */}
         <DropdownMenuGroup className="px-2 py-2">
           <div className="space-y-3">
-            <Label>Maxima Distancia</Label>
+            <Label>{t("maxDistance")}</Label>
             <div className="px-2">
               <Slider
                 min={0}
@@ -143,8 +149,10 @@ export function FiltersAction({ conditions }: Props) {
               />
             </div>
             <div className="flex items-center justify-between text-sm text-muted-foreground">
-              <span>0 miles</span>
-              <span>{maxDistance} miles</span>
+              <span>0 {t("miles")}</span>
+              <span>
+                {maxDistance} {t("miles")}
+              </span>
             </div>
           </div>
         </DropdownMenuGroup>
@@ -154,23 +162,23 @@ export function FiltersAction({ conditions }: Props) {
         {/* --- Condición (Checkbox Múltiple) --- */}
         <DropdownMenuLabel>Condición</DropdownMenuLabel>
         <DropdownMenuGroup className="px-2 pb-2 flex flex-col gap-1">
-
-            {conditions.map((condition) => (
-                        <DropdownMenuItem onSelect={preventClose}
-                key={condition.id}
-                className="flex flex-row gap-2 items-center"
-              >
-                <Input
-                  type="checkbox"
-                  name="condition"
-                  value={condition.id}
-                  className="size-4"
-                  checked={activeConditions.includes(condition.id.toString())} // Verificar si está activo
-                  onChange={handleConditionChange} // Conectar el handler
-                />
-                <label className="font-medium">{condition.description}</label>
-                </DropdownMenuItem>
-            ))}
+          {conditions.map((condition) => (
+            <DropdownMenuItem
+              onSelect={preventClose}
+              key={condition.id}
+              className="flex flex-row gap-2 items-center"
+            >
+              <Input
+                type="checkbox"
+                name="condition"
+                value={condition.id}
+                className="size-4"
+                checked={activeConditions.includes(condition.id.toString())} // Verificar si está activo
+                onChange={handleConditionChange} // Conectar el handler
+              />
+              <label className="font-medium">{condition.description}</label>
+            </DropdownMenuItem>
+          ))}
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

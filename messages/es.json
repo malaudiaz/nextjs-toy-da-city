@@ -455,6 +455,7 @@
   },
   "filter": {
     "Title": "Filtros",
+    "Clear": "Eliminar Filtros",
     "Filter1": "Máxima Distancia",
     "Filter2": "Rango de Precios",
     "Type": "Juguetes",
@@ -464,7 +465,9 @@
     "Buttom1": "Aplicar",
     "Buttom2": "Limpiar",
     "miles": "millás",
-    "condition": "Condición"
+    "condition": "Condición",
+    "maxDistance": "Máxima Distancia",
+    "priceRange": "Rango de Precios"
   },
   "navbar": {
     "Search": "Buscar juguetes...",
