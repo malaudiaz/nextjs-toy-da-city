@@ -4,80 +4,31 @@ import {
   parseAsString,
   useQueryState,
 } from "nuqs";
-import { useGeolocation } from "./useGeolocation";
-import { useEffect, useState } from "react";
 
 export const useFiltersAction = () => {
-  const [forSale, setForSell] = useQueryState(
-    "forSale",
-    parseAsBoolean.withOptions({ shallow: false })
-  );
-  const [forSwap, setForSwap] = useQueryState(
-    "forSwap",
-    parseAsBoolean.withOptions({ shallow: false })
-  );
-  const [forFree, setForFree] = useQueryState(
-    "forFree",
-    parseAsBoolean.withOptions({ shallow: false })
-  );
-
-  const [minPrice, setMinPrice] = useQueryState(
-    "minPrice",
-    parseAsInteger.withDefault(0).withOptions({ shallow: false })
-  );
-  const [maxPrice, setMaxPrice] = useQueryState(
-    "maxPrice",
-    parseAsInteger.withDefault(500).withOptions({ shallow: false })
-  );
-
-  const [maxDistance, setMaxDistance] = useQueryState(
-    "maxDistance",
-    parseAsInteger.withDefault(300).withOptions({ shallow: false })
-  );
-  const { latitude, longitude } = useGeolocation();
-  const [hasLocation, setHasLocation] = useState(false);
-
-  useEffect(() => {
-    if (!hasLocation && latitude && longitude) {
-      setHasLocation(true);
-    }
-  }, [latitude, longitude, hasLocation]);
-
-  const [conditions, setConditions] = useQueryState(
-    "conditionId",
-    parseAsString.withOptions({ shallow: false })
-  );
+  const [lat, setLat] = useQueryState("lat", parseAsString.withOptions({ shallow: false }));
+  const [lng, setLng] = useQueryState("lng", parseAsString.withOptions({ shallow: false }));
+  const [radius, setRadius] = useQueryState("radius", parseAsInteger.withDefault(300).withOptions({ shallow: false }));
+  const [forSell, setForSell] = useQueryState("forSell", parseAsBoolean.withOptions({ shallow: false }) );
+  const [forChanges, setForChanges] = useQueryState("forChanges",parseAsBoolean.withOptions({ shallow: false }) );
+  const [forGifts, setForGifts] = useQueryState( "forGifts",parseAsBoolean.withOptions({ shallow: false }));
+  const [minPrice, setMinPrice] = useQueryState("minPrice",parseAsInteger.withDefault(0).withOptions({ shallow: false }));
+  const [maxPrice, setMaxPrice] = useQueryState("maxPrice",parseAsInteger.withDefault(500).withOptions({ shallow: false }));
+  const [maxDistance, setMaxDistance] = useQueryState("",parseAsInteger.withDefault(300).withOptions({ shallow: false }));
+  const [conditions, setConditions] = useQueryState("conditions",parseAsString.withOptions({ shallow: false }));
 
   const handleForSellChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
-
     setForSell(isChecked || null);
-
-    if (isChecked) {
-      setForSwap(false);
-      setForFree(false);
-    }
   };
 
-  const handleForSwapChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleForChangesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
-
-    setForSwap(isChecked || null);
-
-    if (isChecked) {
-      setForSell(false);
-      setForFree(false);
-    }
+    setForChanges(isChecked || null);
   };
-  const handleForFreeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleForGiftsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
-
-    setForFree(isChecked || null);
-
-    if (isChecked) {
-      setForSell(false);
-      setForSwap(false);
-    }
+    setForGifts(isChecked || null);
   };
 
   const handlePriceChange = (values: number[]) => {
@@ -85,9 +36,13 @@ export const useFiltersAction = () => {
     setMaxPrice(newMaxPrice === 500 ? null : newMaxPrice);
   };
 
-  const handleDistanceChange = (values: number[]) => {
-    const newMaxDistance = values[0];
-    setMaxDistance(newMaxDistance === 300 ? null : newMaxDistance);
+ const handleDistanceChange =  (values: number[]) => {
+  const newRadius = values[0];
+   setRadius(newRadius)
+      navigator.geolocation.getCurrentPosition((pos) => {
+      setLat(pos.coords.latitude.toString());
+      setLng(pos.coords.longitude.toString());
+    });
   };
 
   const handleConditionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,17 +61,18 @@ export const useFiltersAction = () => {
   };
 
   return {
-    forSell: forSale || false,
-    forSwap: forSwap || false,
-    forFree: forFree || false,
+    forSell: forSell || false,
+    forChanges: forChanges || false,
+    forGifts: forGifts || false,
     minPrice: minPrice || 0,
     maxPrice: maxPrice || 500,
     maxDistance: maxDistance || 300,
     conditions: conditions || "",
+    radius: radius || 300,
 
     handleForSellChange,
-    handleForSwapChange,
-    handleForFreeChange,
+    handleForChangesChange,
+    handleForGiftsChange,
     handlePriceChange,
     handleDistanceChange,
     handleConditionChange,
