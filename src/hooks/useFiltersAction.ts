@@ -6,15 +6,15 @@ import {
 } from "nuqs";
 
 export const useFiltersAction = () => {
-  const [lat, setLat] = useQueryState("lat", parseAsString.withOptions({ shallow: false }));
-  const [lng, setLng] = useQueryState("lng", parseAsString.withOptions({ shallow: false }));
+  const [, setLat] = useQueryState("lat", parseAsString.withOptions({ shallow: false }));
+  const [, setLng] = useQueryState("lng", parseAsString.withOptions({ shallow: false }));
   const [radius, setRadius] = useQueryState("radius", parseAsInteger.withDefault(300).withOptions({ shallow: false }));
   const [forSell, setForSell] = useQueryState("forSell", parseAsBoolean.withOptions({ shallow: false }) );
   const [forChanges, setForChanges] = useQueryState("forChanges",parseAsBoolean.withOptions({ shallow: false }) );
   const [forGifts, setForGifts] = useQueryState( "forGifts",parseAsBoolean.withOptions({ shallow: false }));
-  const [minPrice, setMinPrice] = useQueryState("minPrice",parseAsInteger.withDefault(0).withOptions({ shallow: false }));
+  const [minPrice, ] = useQueryState("minPrice",parseAsInteger.withDefault(0).withOptions({ shallow: false }));
   const [maxPrice, setMaxPrice] = useQueryState("maxPrice",parseAsInteger.withDefault(500).withOptions({ shallow: false }));
-  const [maxDistance, setMaxDistance] = useQueryState("",parseAsInteger.withDefault(300).withOptions({ shallow: false }));
+  const [maxDistance, ] = useQueryState("",parseAsInteger.withDefault(300).withOptions({ shallow: false }));
   const [conditions, setConditions] = useQueryState("conditions",parseAsString.withOptions({ shallow: false }));
 
   const handleForSellChange = (e: React.ChangeEvent<HTMLInputElement>) => {
