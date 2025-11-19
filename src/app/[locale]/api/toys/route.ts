@@ -69,8 +69,8 @@ export async function GET(
       minPrice: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined,
       maxPrice: searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined,
       forSell: searchParams.get('forSell') ? String(searchParams.get('forSell')) : undefined,
-      forGifts: searchParams.get('forGifts') ? String(searchParams.get('forGifts')) : undefined,
-      forChanges: searchParams.get('forChanges') ? String(searchParams.get('forChanges')) : undefined,
+      forGifts: searchParams.get('forGifts') ? String(searchParams.get('forGifts')) : undefined, 
+      forChanges: searchParams.get('forChanges') ? String(searchParams.get('forChanges')) : undefined,      
       categoryId: searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined,
       conditions: searchParams.get('conditions') ? String(searchParams.get('conditions')) : undefined,
       locationRadius: searchParams.get('lat') && searchParams.get('lng') && searchParams.get('radius')
@@ -86,10 +86,15 @@ export async function GET(
     const conditionIds = filters.conditions 
       ? filters.conditions.split(',').map(id => parseInt(id.trim()))
       : [];
-
-    // Construir query de filtrado
+   
+    // 1. Inicializar el array de condiciones base
+    const andConditions: Prisma.ToyWhereInput[] = [
+      { statusId: 1 }, // Solo activos y disponibles
+      { isActive: true }
+    ];
     
-    const where: Prisma.ToyWhereInput = {statusId: 1, isActive: true};
+    // Construir where object
+    const where: Prisma.ToyWhereInput = {};
     
     // Filtro por precio
     if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {
@@ -108,21 +113,52 @@ export async function GET(
     if (filters.categoryId) where.categoryId = filters.categoryId;
     if (filters.conditionId) where.conditionId = filters.conditionId;
     
-    // Búsqueda por texto (en título o descripción)
+    // 2. Agregar Búsqueda por texto a AND
     if (filters.search) {
-      where.OR = [
-        { title: { contains: filters.search, mode: "insensitive" } },
-        { description: { contains: filters.search, mode: "insensitive" } },
-      ];
+      andConditions.push({
+        OR: [
+          { title: { contains: filters.search, mode: "insensitive" } },
+          { description: { contains: filters.search, mode: "insensitive" } },
+        ]
+      });
     }
 
-    if (filters.forSell || filters.forGifts || filters.forChanges) {
-      where.OR = [
-        ...(filters.forSell ? [{ forSell: true }] : []),
-        ...(filters.forGifts ? [{ forGifts: true }] : []),
-        ...(filters.forChanges ? [{ forChanges: true }] : []),
-      ];
+    // 3. Lógica de filtros de tipo de transacción
+    const transactionFilters: Prisma.ToyWhereInput[] = [];
+    
+    if (filters.forSell === 'true') {
+      transactionFilters.push({ forSell: true });
     }
+    if (filters.forGifts === 'true') {
+      transactionFilters.push({ forGifts: true });
+    }
+    if (filters.forChanges === 'true') {
+      transactionFilters.push({ forChanges: true });
+    }
+
+    // Si se seleccionó CUALQUIER filtro de transacción, se añaden al AND principal.
+    // **IMPORTANTE**: Al usar AND, si se selecciona forGifts=true, solo devolverá
+    // juguetes que sean (statusId=1 AND isActive=true AND forGifts=true).
+    if (transactionFilters.length > 0) {
+      // Si solo se selecciona uno (ej. forGifts), se aplica forGifts: true
+      // Si se seleccionan múltiples, se aplicará OR si quieres que cumpla cualquiera,
+      // pero si quieres que cumpla solo los marcados, los dejas como AND.
+      // Ya que quieres solo los forGifts=true (si es el único marcado),
+      // los añadimos al array AND. Si solo hay un elemento en transactionFilters,
+      // se comportará como un filtro único.
+      andConditions.push(...transactionFilters); 
+    }
+    
+    // 4. Aplicar todas las condiciones acumuladas
+    // Combina todas las condiciones de 'where' con las de 'andConditions'
+    // La combinación de las condiciones fijas (`statusId`, `isActive`) con los filtros de búsqueda
+    // y los filtros de tipo de transacción se hace aquí:
+    
+    // Aseguramos que la cláusula where principal contenga el AND de todas las sub-cláusulas.
+    where.AND = [
+        ...andConditions,
+        { ...where } // Incluir los filtros de precio, categoría, condición que están fuera del array AND
+    ].filter(Boolean); // Eliminar posibles entradas vacías
 
     // Consulta base
     const query = {

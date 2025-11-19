@@ -6,7 +6,7 @@ import { auth } from "@clerk/nextjs/server";
 import * as fs from "fs";
 import * as path from "path";
 import { Prisma } from "@prisma/client";
-import { getLocale } from 'next-intl/server';
+import { getLocale } from "next-intl/server";
 
 export type Filters = {
   search?: string | null;
@@ -18,6 +18,10 @@ export type Filters = {
     radius: number;
   };
   locale?: string;
+  forSell?: boolean;
+  forGifts?: boolean;
+  forChanges?: boolean;
+  conditions?: string;
 };
 
 // Asegúrate de que la carpeta de uploads exista
@@ -56,6 +60,21 @@ export async function getToys(
     url.searchParams.set("lat", String(filters.locationRadius.lat));
     url.searchParams.set("lng", String(filters.locationRadius.lng));
     url.searchParams.set("radius", String(filters.locationRadius.radius));
+  }
+
+if (filters.forSell !== undefined) {
+    url.searchParams.set("forSell", String(filters.forSell));
+  }
+  if (filters.forGifts !== undefined) {
+    url.searchParams.set("forGifts", String(filters.forGifts));
+  }
+  if (filters.forChanges !== undefined) {
+    url.searchParams.set("forChanges", String(filters.forChanges));
+  }
+
+  // Filtros de Condiciones
+  if (typeof filters.conditions === "string" && filters.conditions.trim()) {
+    url.searchParams.set("conditions", filters.conditions.trim());
   }
 
   const headers = {
@@ -118,10 +137,13 @@ export async function getRelatedToys(id: string) {
     headers["X-User-ID"] = userId;
   }
 
-  const response = await fetch(`${BACKEND_URL}/${locale}/api/toys/${id}/related`, {
-    method: "GET",
-    headers: headers,
-  });
+  const response = await fetch(
+    `${BACKEND_URL}/${locale}/api/toys/${id}/related`,
+    {
+      method: "GET",
+      headers: headers,
+    }
+  );
 
   const toys = await response.json();
 
@@ -299,10 +321,13 @@ export async function getMessages() {
     headers["X-User-ID"] = userId;
   }
 
-  const response = await fetch(`${BACKEND_URL}/${locale}/api/toys/with-messages`, {
-    method: "GET",
-    headers: headers,
-  });
+  const response = await fetch(
+    `${BACKEND_URL}/${locale}/api/toys/with-messages`,
+    {
+      method: "GET",
+      headers: headers,
+    }
+  );
 
   const messages = await response.json();
   return messages;
@@ -333,7 +358,6 @@ export async function getToyById(
   toyId: string,
   locale?: string
 ): Promise<ToyWithMedia | null> {
-
   const { userId } = await auth();
 
   const headers = {
@@ -345,7 +369,7 @@ export async function getToyById(
     headers["X-User-ID"] = userId;
   }
   const toyUrl = `${BACKEND_URL}/${locale}/api/toys/${toyId}`;
-    
+
   const response = await fetch(toyUrl, {
     method: "GET",
     headers: headers,
