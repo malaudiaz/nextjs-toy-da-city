@@ -1,6 +1,5 @@
 import BannerCarousel from "@/components/shared/banner/BannerCarousel";
 import { getTranslations } from "next-intl/server";
-import FilterBar from "@/components/shared/home/FilterBar";
 import Products from "@/components/shared/home/Products";
 import SkeletonProductCard from "@/components/shared/SkeletonProductCard";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
