@@ -27,6 +27,8 @@ export default function CheckoutForm({ cartItems, onSuccess }: CheckoutFormProps
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+
     if (!stripe || !elements) return;
 
     setLoading(true);
@@ -58,13 +60,6 @@ export default function CheckoutForm({ cartItems, onSuccess }: CheckoutFormProps
             defaultCollapsed: false,
             spacedAccordionItems: false
           },
-          fields: {
-            billingDetails: {
-              address: {
-                country: 'never' // Oculta el campo país si no lo necesitas
-              }
-            }
-          }
         }}
       />
 

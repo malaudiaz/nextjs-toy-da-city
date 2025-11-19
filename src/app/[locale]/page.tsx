@@ -163,6 +163,11 @@ export default async function Home({ searchParams, params }: Props) {
             radius: Number(resolvedSearchParams.radius),
           }
         : undefined,
+
+    forSell: resolvedSearchParams.forSell === 'true' ? true : undefined,
+    forGifts: resolvedSearchParams.forGifts === 'true' ? true : undefined, // Usamos 'forGifts' para Regalo/Gratis
+    forChanges: resolvedSearchParams.forChanges === 'true' ? true : undefined, // Usamos 'forChanges' para Intercambio
+    conditions: resolvedSearchParams.conditions || undefined, // ¡Añadir condiciones!        
   };
 
   const { totalPosts } = await getToys(

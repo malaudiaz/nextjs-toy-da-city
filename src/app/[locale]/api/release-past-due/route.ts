@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       status: "AWAITING_CONFIRMATION",
       createdAt: { lte: cutoff },
       chargeId: { not: null },
-      paymentIntentId: {  not: null as unknown as string },
+      paymentIntentId: { not: null as unknown as string },
     },
   });
 
@@ -49,10 +49,16 @@ export async function POST(request: Request) {
         data: { status: "TRANSFER_IN_PROGRESS" },
       });
 
-      const intent = await stripe.paymentIntents.retrieve(order.paymentIntentId!);
+      const intent = await stripe.paymentIntents.retrieve(
+        order.paymentIntentId!
+      );
 
       // Validar y parsear transfers
-      let transfers: { amount: number; stripeAccountId: string; sellerId: string }[] = [];
+      let transfers: {
+        amount: number;
+        stripeAccountId: string;
+        sellerId: string;
+      }[] = [];
       try {
         transfers = JSON.parse(intent.metadata.transfers || "[]");
         if (!Array.isArray(transfers)) throw new Error("Not an array");
@@ -62,7 +68,10 @@ export async function POST(request: Request) {
           where: { id: order.id },
           data: { status: "ERROR", transferredAt: new Date() },
         });
-        results.push({ orderId: order.id, error: t("InvalidTransfersMetadata") });
+        results.push({
+          orderId: order.id,
+          error: t("InvalidTransfersMetadata"),
+        });
         continue;
       }
 
@@ -70,7 +79,11 @@ export async function POST(request: Request) {
         // No hay transferencias → marcar como completado
         await prisma.order.update({
           where: { id: order.id },
-          data: { status: "TRANSFERRED", transferredAt: new Date() },
+          data: {
+            status: "CONFIRMED",
+            confirmedAt: new Date(),
+            transferredAt: new Date(),
+          }
         });
         results.push({ orderId: order.id, success: true, transfers: 0 });
         continue;
@@ -100,7 +113,10 @@ export async function POST(request: Request) {
             createdTransfers.push(dbTransfer);
           } catch (error) {
             // Si falla cualquier transferencia, abortar todo
-            console.error(`Transferencia fallida para orden ${order.id}:`, error);
+            console.error(
+              `Transferencia fallida para orden ${order.id}:`,
+              error
+            );
             throw error; // Esto aborta la transacción
           }
         }
@@ -109,7 +125,8 @@ export async function POST(request: Request) {
         await tx.order.update({
           where: { id: order.id },
           data: {
-            status: "TRANSFERRED",
+            status: "CONFIRMED",
+            confirmedAt: new Date(),
             transferredAt: new Date(),
           },
         });
@@ -117,12 +134,32 @@ export async function POST(request: Request) {
         return createdTransfers;
       });
 
+      // ✅ Obtener los IDs de los juguetes de esta orden
+      const orderItems = await prisma.orderItem.findMany({
+        where: { orderId: order.id },
+        select: { toyId: true },
+      });
+
+      const toyIds = orderItems.map((item) => item.toyId);
+
+      // ✅ Actualizar el estado de los juguetes a Sold/Inactivo
+      if (toyIds.length > 0) {
+        await prisma.toy.updateMany({
+          where: {
+            id: { in: toyIds },
+          },
+          data: {
+            statusId: 3, // Asume que '3' es el ID para "Entregado"
+            isActive: false, // El juguete ya no está disponible para la venta
+          },
+        });
+      }
+
       results.push({
         orderId: order.id,
         success: true,
         transfers: dbTransfers.length,
       });
-
     } catch (error) {
       // Error grave: no se pudo completar el proceso
       console.error(`Error procesando orden ${order.id}:`, error);
@@ -147,7 +184,7 @@ export async function POST(request: Request) {
     }
   }
 
-  const successful = results.filter(r => r.success).length;
+  const successful = results.filter((r) => r.success).length;
   return NextResponse.json({
     processed: orders.length,
     successful,
