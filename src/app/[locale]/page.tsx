@@ -242,11 +242,9 @@ export default async function Home({ searchParams, params }: Props) {
       />
       <BannerCarousel />
 
-      {totalPosts > 0 && (
         <section className="w-full px-3 py-3 mx-auto max-w-7xl" aria-label="Filtros">
          <FiltersAction conditions={conditions} />
         </section>
-      )}
 
       {totalPosts === 0 ? (
         <section
