@@ -1,9 +1,9 @@
 "use server";
 import { auth } from "@clerk/nextjs/server";
 import { BACKEND_URL } from "../utils";
-import { Order } from "@/types/modelTypes";
 import { revalidatePath } from "next/cache";
 import { getLocale } from 'next-intl/server';
+import type { ClientOrderWithItems } from "@/types/prisma-types";
 
 export type OrderStatus =
   | "AWAITING_CONFIRMATION"
@@ -12,7 +12,8 @@ export type OrderStatus =
   | "TRANSFERRED"
   | "REEMBURSED";
 
-export async function getOrder(status?: OrderStatus) {
+
+export async function getOrder(status?: OrderStatus): Promise<ClientOrderWithItems[]> {
   const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
 
@@ -33,7 +34,7 @@ export async function getOrder(status?: OrderStatus) {
     }
   );
   const order = await response.json();
-  return order as Order[];
+  return order as ClientOrderWithItems[];
 }
 
 export async function cancelOrder(orderId: string) {

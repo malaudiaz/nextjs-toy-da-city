@@ -600,7 +600,10 @@
     "CONFIRMED": "Confirmado",
     "CANCELED": "Cancelado",
     "TRANSFERRED": "Transferido",
-    "REEMBURSED": "Reembolsado"
+    "REEMBURSED": "Reembolsado",
+    "orderNumber": "Número de Orden",
+    "itemsTitle": "Elementos",
+    "reviewSellerLinkText": "Reseñar vendedor"    
   },
   "sales": {
     "title": "Mis Ventas",

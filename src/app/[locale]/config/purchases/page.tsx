@@ -1,16 +1,9 @@
 import React, { Suspense } from "react";
 import PurchasesInfo from "@/components/shared/profile/PurchasesInfo";
-import { getOrder } from "@/lib/actions/orderActions";
+import { getOrder, OrderStatus } from "@/lib/actions/orderActions";
 import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
 import PurchasesInfoSkeleton from "@/components/shared/profile/PurchasesInfoSkeleton"; 
 import type { Metadata } from "next";
-
-export type OrderStatus =
-  | "AWAITING_CONFIRMATION"
-  | "CONFIRMED"
-  | "CANCELED"
-  | "TRANSFERRED"
-  | "REEMBURSED";
 
 // Tipos para los parámetros de la página
 interface PageProps {
@@ -30,7 +23,7 @@ const PurchasesContent = async ({ searchParams }: { searchParams: Promise<{ stat
   const filter = resolvedSearchParams || {};
   
   // Aquí se realiza la llamada a la base de datos
-  const purchases = await getOrder(filter.status);
+  const purchases = await getOrder(filter.status); // ✅ Tipado correcto
   
   return <PurchasesInfo orders={purchases} />;
 }

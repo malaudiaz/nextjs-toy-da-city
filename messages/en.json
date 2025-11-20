@@ -607,7 +607,10 @@
     "CONFIRMED": "Confirmed",
     "CANCELED": "Canceled",
     "TRANSFERRED": "Transferred",
-    "REEMBURSED": "Reembursed"
+    "REEMBURSED": "Reembursed",
+    "orderNumber": "Order Number",
+    "itemsTitle": "Items",
+    "reviewSellerLinkText": "Review Seller"
   },
   "sales": {
     "title": "My Sales",
