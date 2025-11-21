@@ -13,24 +13,36 @@ export const getBreadcrumbs = (
   productName?: string,
   ignoreSegment?: string
 ): { 
-  
-  
-  label: string; href?: string 
-
+  label: string; 
+  href?: string 
 }[] => {
   const paths = pathname.split('/').filter(Boolean);
   const breadcrumbs = [{ label: t("Home"), href: `/${locale}` }];
-  const ignoreSegments = ['en', 'es', 'toys', 'edit', ignoreSegment];
+  
+  // Segmentos que siempre se ignoran (locale, palabras clave de navegación, etc.)
+  const permanentIgnoreSegments = ['en', 'es', 'toys', 'edit'];
+  
+  // Lista final de segmentos a ignorar de la VISTA del breadcrumb
+  const viewIgnoreSegments = ignoreSegment 
+    ? [...permanentIgnoreSegments, ignoreSegment] 
+    : permanentIgnoreSegments;
 
-  console.log(ignoreSegment)
-
-
-  let currentPath = '';
-  for (let i = 0; i < paths.length; i++) {
+  let currentPath = `/${locale}`;
+  for (let i = 1; i < paths.length; i++) {
     const path = paths[i];
+    
+    // 1. Siempre construimos la URL completa, ya que es necesaria para el href de los siguientes elementos.
+    currentPath += `/${path}`;
 
-    if (ignoreSegments.includes(path)) continue;
-
+    // 2. Comprobamos si el segmento debe ser omitido de la VISTA del breadcrumb.
+    // Si la ruta es /en/config/mytoys/... y pasamos ignoreSegment='config', 
+    // y estamos en 'config', esta condición es true.
+    if (viewIgnoreSegments.includes(path)) {
+      continue; // Simplemente saltamos la adición al array 'breadcrumbs', pero 'currentPath' ya se actualizó.
+    } 
+    
+    // --- Lógica para añadir el breadcrumb ---
+    
     const decodedLabel = decodeURIComponent(path.replace(/-/g, ' '));
 
     // Mapeo de rutas a nombres amigables
@@ -64,7 +76,7 @@ export const getBreadcrumbs = (
         href: ''
       });
     } else {
-      currentPath += `/${locale}/${path}`;
+      // ✅ Se añade al breadcrumb con la URL completa
       breadcrumbs.push({ label, href: currentPath });
     }
   }
