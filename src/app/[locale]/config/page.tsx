@@ -26,7 +26,7 @@ const ConfigurationsPage = () => {
   const links = [
     {
       title: t("Toys"),
-      url: `/${locale}/config/toys`,
+      url: `/${locale}/config/mytoys`,
       icon: <ToyBrick size={24} />,
     },
     {

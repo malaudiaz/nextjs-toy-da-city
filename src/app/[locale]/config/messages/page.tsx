@@ -1,8 +1,8 @@
 import MessageInfo from "@/components/shared/profile/Messagesinfo";
 import MessageInfoSkeleton from "@/components/shared/profile/MessageInfoSkeleton"; // 1. Importa el Skeleton
-import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
 import React, { Suspense } from "react"; // 2. Importa Suspense
 import { getMessages } from "@/lib/actions/toysAction";
+import Breadcrumbs from "@/components/shared/BreadCrumbs";
 
 // 3. Componente async que realiza el fetching
 const MessagesContent = async ({ messagesPromise }: { messagesPromise: ReturnType<typeof getMessages> }) => {
@@ -20,7 +20,8 @@ const MessagesPage = async () => {
   return (
     <div className="max-w-7xl mx-auto min-h-screen bg-background">
       <div className="px-5 py-3">
-        <TitleBreakcrumbs translationScope="messages" />
+               <Breadcrumbs className="hidden md:block" ignoreSegment="config"/>
+               <Breadcrumbs className="md:hidden"/>
       </div>
       
       {/* 5. Envuelve el contenido lento con Suspense */}

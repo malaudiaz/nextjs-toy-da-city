@@ -11,7 +11,7 @@ import { Toaster } from "sonner";
 import { useTranslations } from "next-intl"; // ✅ Importa el hook
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import { useLocale } from "next-intl"; // ✅
-import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
+import Breadcrumbs from "@/components/shared/BreadCrumbs";
 
 // Tipado
 interface Review {
@@ -107,7 +107,8 @@ export default function MyReviewsPage() {
   return (
     <div className="max-w-7xl mx-auto min-h-screen bg-background">
       <div className="px-5 py-3">
-        <TitleBreakcrumbs translationScope={"reputation"} />
+                <Breadcrumbs className="hidden md:block" ignoreSegment="config"/>
+                <Breadcrumbs className="md:hidden"/>
       </div>
 
       <div className="max-w-3xl mx-auto p-4 md:p-6">

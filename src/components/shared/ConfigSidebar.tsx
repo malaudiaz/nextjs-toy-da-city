@@ -37,7 +37,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const navigationItems = [
     {
       title: t("Toys"),
-      url: `/${locale}/config/toys`,
+      url: `/${locale}/config/mytoys`,
       icon: ToyBrick,
     },
     {

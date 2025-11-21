@@ -1,6 +1,6 @@
+import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import SwapInfo from "@/components/shared/profile/SwapInfo";
 import SwapInfoSkeleton from "@/components/shared/profile/SwapInfoSkeleton"; // 1. Importa el Skeleton
-import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
 import { getSwaps } from "@/lib/actions/toysAction";
 import React, { Suspense } from "react"; // 2. Importa Suspense
 
@@ -20,7 +20,8 @@ export default async function ExchangesPage() {
   return (
     <div className="max-w-7xl mx-auto min-h-screen bg-background">
       <div className="px-5 py-3">
-        <TitleBreakcrumbs translationScope="swap" />
+                <Breadcrumbs className="hidden md:block" ignoreSegment="config"/>
+                <Breadcrumbs className="md:hidden"/>
       </div>
       
       {/* 5. Envuelve el contenido lento con Suspense */}

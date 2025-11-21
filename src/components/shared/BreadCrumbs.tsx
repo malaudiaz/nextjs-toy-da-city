@@ -9,16 +9,18 @@ import { useLocale } from "next-intl"; // ✅
 
 interface BreadcrumbsProps {
   productName?: string;
+  className?: string;
+  ignoreSegment?: string
 }
 
-export default function Breadcrumbs({ productName }: BreadcrumbsProps) {
+export default function Breadcrumbs({ productName,className, ignoreSegment }: BreadcrumbsProps) {
   const locale = useLocale(); // ✅ Siempre actualizado
   const t = useTranslations("breadcrumbs");
   const pathname = usePathname();
-  const breadcrumbs = getBreadcrumbs(pathname, t, locale, productName);
+  const breadcrumbs = getBreadcrumbs(pathname, t, locale, productName, ignoreSegment);
 
   return (
-    <nav aria-label="Breadcrumb" className="mb-3">
+    <nav aria-label="Breadcrumb" className={`mb-3 ${className ? className : ""}`}>
       <ol className="flex items-center gap-1 text-sm text-gray-500 ">
         {breadcrumbs.map((crumb, index) => (
           <li key={index} className="flex items-center gap-1">

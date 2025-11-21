@@ -1,6 +1,6 @@
+import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import SaleInfo from "@/components/shared/profile/SaleInfo";
 import SaleInfoSkeleton from "@/components/shared/profile/SaleInfoSkeleton"; // 1. Importa el Skeleton
-import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
 import { getSales } from "@/lib/actions/toysAction";
 import React, { Suspense } from "react"; // 2. Importa Suspense
 
@@ -20,7 +20,8 @@ const SalesPage = async () => {
   return (
     <div className="max-w-7xl mx-auto min-h-screen bg-background">
       <div className="px-5 py-3">
-        <TitleBreakcrumbs translationScope="sales" />
+                <Breadcrumbs className="hidden md:block" ignoreSegment="config"/>
+                <Breadcrumbs className="md:hidden"/>
       </div>
       
       {/* 5. Envuelve el contenido lento con Suspense */}
