@@ -93,7 +93,7 @@ export default function ToyCard({ toy }: ToyCardProps) {
 
             {toy.isActive ? (
               <div className="flex flex-row gap-4">
-                <Link href={`/config/toys/edit/${toy.id}`}>
+                <Link href={`/config/mytoys/edit/${toy.id}`}>
                   <Button className="bg-green-700 hover:bg-green-800 text-white">
                     {t("toys.edit")}
                   </Button>

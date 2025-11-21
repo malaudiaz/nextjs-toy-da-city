@@ -2,7 +2,6 @@ import ToyGrid from "@/components/config/ToyGrid";
 import ToyGridSkeleton from "@/components/config/ToyGridSkeleton"; // 1. Importa el Skeleton
 import React, { Suspense } from "react"; // 2. Importa Suspense
 import { getOwnToys } from "@/lib/actions/toysAction";
-import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 
 

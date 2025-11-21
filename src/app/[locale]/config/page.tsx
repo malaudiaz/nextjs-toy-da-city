@@ -72,7 +72,7 @@ const ConfigurationsPage = () => {
 
   // En desktop, redirigir a la página de juguetes si estamos en la ruta base de config
   if (!isMobile && pathname === `/${locale}/config`) {
-    redirect(`/${locale}/config/toys`);
+    redirect(`/${locale}/config/mytoys`);
   }
 
   // En móvil, mostrar la página de menú solo si estamos en la ruta base de config
