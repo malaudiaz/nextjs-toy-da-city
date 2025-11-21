@@ -2,9 +2,8 @@
 
 const CreatePostSkeleton = () => {
   return (
-    <div className="flex flex-col gap-6 px-3 py-4 animate-pulse">
-      {/* Título y Descripción */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 px-3 py-4 animate-pulse w-full">
+        <div className="flex flex-col gap-2">
         <div className="h-4 w-24 bg-gray-200 rounded"></div> {/* Label */}
         <div className="h-10 w-full bg-gray-200 rounded"></div> {/* Input Title */}
       </div>

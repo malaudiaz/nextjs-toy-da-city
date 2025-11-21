@@ -194,6 +194,7 @@ export async function PUT(
       price: Number(formData.get("price")),
       categoryId: Number(formData.get("categoryId")),
       conditionId: Number(formData.get("conditionId")),
+      statusId: Number(formData.get("statusId")),
       forSell: stringforSell === "true",
       forGifts: stringforGifts === "true",
       forChanges: stringforChanges === "true",

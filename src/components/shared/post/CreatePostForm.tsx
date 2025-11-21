@@ -254,7 +254,7 @@ const CreatePostForm = ({
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-2 px-3 py-4 "
+        className="flex flex-col gap-2 px-3 py-4 w-full"      
       >
         {/* Campo de título */}
         <div className="flex flex-col gap-1">
