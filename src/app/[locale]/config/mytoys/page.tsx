@@ -3,6 +3,7 @@ import ToyGridSkeleton from "@/components/config/ToyGridSkeleton"; // 1. Importa
 import React, { Suspense } from "react"; // 2. Importa Suspense
 import { getOwnToys } from "@/lib/actions/toysAction";
 import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
+import Breadcrumbs from "@/components/shared/BreadCrumbs";
 
 
 const ToysPage = async () => {
@@ -12,7 +13,8 @@ const ToysPage = async () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto max-w-7xl px-4 py-8">
-        <TitleBreakcrumbs translationScope="configurations.toys" />
+        <Breadcrumbs className="hidden md:block" ignoreSegment="config"/>
+        <Breadcrumbs className="md:hidden"/>
         
         {/* 3. Envuelve ToyGrid con Suspense */}
         <Suspense fallback={<ToyGridSkeleton />}>

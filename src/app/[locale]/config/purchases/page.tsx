@@ -1,9 +1,9 @@
 import React, { Suspense } from "react";
 import PurchasesInfo from "@/components/shared/profile/PurchasesInfo";
 import { getOrder, OrderStatus } from "@/lib/actions/orderActions";
-import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
 import PurchasesInfoSkeleton from "@/components/shared/profile/PurchasesInfoSkeleton"; 
 import type { Metadata } from "next";
+import Breadcrumbs from "@/components/shared/BreadCrumbs";
 
 // Tipos para los parámetros de la página
 interface PageProps {
@@ -33,7 +33,8 @@ const PurchasePage = async ({ searchParams }: PageProps) => {
   return (
     <div className="max-w-7xl mx-auto min-h-screen bg-background">
       <div className="px-5 py-3">
-        <TitleBreakcrumbs translationScope="purchases" />
+                <Breadcrumbs className="hidden md:block" ignoreSegment="config"/>
+                <Breadcrumbs className="md:hidden"/>
       </div>
       
       <Suspense fallback={<PurchasesInfoSkeleton />}>

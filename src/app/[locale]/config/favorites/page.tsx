@@ -3,6 +3,7 @@ import FavoritesInfoSkeleton from "@/components/shared/profile/FavoritesInfoSkel
 import React, { Suspense } from "react"; // 2. Importa Suspense
 import { getFavorites } from "@/lib/actions/toysAction";
 import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
+import Breadcrumbs from "@/components/shared/BreadCrumbs";
 
 // 3. Componente async que realiza el fetching (la parte lenta)
 // Este componente se suspenderá hasta que la promesa se resuelva.
@@ -21,7 +22,8 @@ const FavoritosPage = async () => {
   return (
     <div className="max-w-7xl mx-auto min-h-screen bg-background">
       <div className="px-5 py-3">
-          <TitleBreakcrumbs translationScope="favorites" />
+                 <Breadcrumbs className="hidden md:block" ignoreSegment="config"/>
+                 <Breadcrumbs className="md:hidden"/>
       </div>
       
       {/* 5. Envuelve el contenido que puede suspenderse en Suspense */}

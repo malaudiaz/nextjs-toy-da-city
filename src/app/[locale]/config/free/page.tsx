@@ -1,8 +1,8 @@
 import FreeInfo from "@/components/shared/profile/FreeInfo";
 import FreeInfoSkeleton from "@/components/shared/profile/FreeInfoSkeleton"; // 1. Importa el Skeleton
-import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
 import React, { Suspense } from "react"; // 2. Importa Suspense
 import { getFree } from "@/lib/actions/toysAction";
+import Breadcrumbs from "@/components/shared/BreadCrumbs";
 
 // 3. Componente async que realiza el fetching
 const FreeContent = async ({ freePromise }: { freePromise: ReturnType<typeof getFree> }) => {
@@ -22,7 +22,8 @@ const FreePage = async() => {
     return (
       <div className="max-w-7xl mx-auto min-h-screen bg-background">
         <div className="px-5 py-3">
-          <TitleBreakcrumbs translationScope="gifts" />
+                  <Breadcrumbs className="hidden md:block" ignoreSegment="config"/>
+                  <Breadcrumbs className="md:hidden"/>
         </div>
         
         {/* 5. Envuelve el contenido lento con Suspense */}
