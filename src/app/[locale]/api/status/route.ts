@@ -38,7 +38,7 @@ export async function GET(
       prisma.status.findMany({
         skip: (pagination.page - 1) * pagination.limit,
         take: pagination.limit,
-        orderBy: { createdAt: "desc" },
+        orderBy: { id: "asc" },
         include: {translations: 
           {
             where: {
@@ -58,8 +58,8 @@ export async function GET(
     ]);
 
     const result_status = status.map(status => ({
-      id: status.id, name: status.translations[0]?.value || status.name,
-      description: status.description, userId: status.userId
+      id: status.id, name: status.name,
+      description: status.translations[0]?.value, userId: status.userId
     })
     )
 

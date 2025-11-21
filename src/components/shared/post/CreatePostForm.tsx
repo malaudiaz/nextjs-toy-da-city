@@ -12,6 +12,13 @@ import { useTranslations } from "next-intl";
 
 const MAX_FILES = 6;
 
+type Status = { // (Añade este tipo si no está en un archivo de tipos compartido)
+  id: number;
+  name: string;
+  description: string;
+  isActive: boolean;
+};
+
 type Category = {
   id: number;
   name: string;
@@ -33,6 +40,9 @@ type CreatePostFormProps = {
   conditions: {
     data: Condition[];
   };
+  statuses: { // ✨ NUEVO
+    data: Status[];
+  };
 };
 
 // Importación dinámica con exportación por defecto correcta
@@ -51,6 +61,7 @@ const MapComponent = dynamic(
 const CreatePostForm = ({
   categories,
   conditions,
+  statuses
 }: CreatePostFormProps) => {
   const t = useTranslations("createPostForm");
   const [files, setFiles] = useState<File[]>([]);
@@ -84,7 +95,7 @@ const CreatePostForm = ({
       forGift: false,
       forChange: false,
       categoryId: undefined,
-      //statusId: undefined,
+      statusId: undefined,
       conditionId: undefined,
     },
   });
@@ -384,6 +395,34 @@ const CreatePostForm = ({
             </p>
           )}
         </div>
+
+        {/* Status */}
+        <div>
+          <label htmlFor="statusId" className="block mb-1">
+            {t("Status")} {/* Asumiendo que tienes una traducción para "Status" */}
+          </label>
+          <select
+            id="statusId"
+            className="w-full p-2 border rounded"
+            // Asegúrate de que toyFormSchema incluya 'statusId' como un número
+            {...register("statusId", { valueAsNumber: true })} 
+            required
+          >
+            {/* Opcional: Opción por defecto deshabilitada/vacía si defaultValues.statusId es undefined */}
+            <option value="" disabled hidden>{t("SelectStatusPlaceholder")}</option>           
+            {statuses.data.map((status) => (
+              <option key={status.id} value={status.id}>
+                {status.description} {/* Usar description si es el campo localizado */}
+              </option>
+            ))}
+
+          </select>
+          {errors.statusId && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.statusId.message}
+            </p>
+          )}
+        </div>        
 
         {/* Imágenes */}
         <div className="flex flex-col gap-2 px-3 py-3 border-dashed border-2 border-gray-300 rounded-md">

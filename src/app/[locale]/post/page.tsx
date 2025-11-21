@@ -7,6 +7,7 @@ import { getConditions } from "@/lib/actions/conditionActions";
 import { getSellerData } from "@/lib/actions/sellertActions";
 import { auth } from "@clerk/nextjs/server";
 import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
+import { getStatuses } from "@/lib/actions/statusActions";
 
 export default async function PostPage({ params }: { params: Promise<{ locale: string }> }) {
   const { userId } = await auth();
@@ -22,6 +23,7 @@ export default async function PostPage({ params }: { params: Promise<{ locale: s
 
   const categories = await getCategories();
   const condition = await getConditions();
+  const statuses = await getStatuses();
 
   return (
     <div>
@@ -31,6 +33,7 @@ export default async function PostPage({ params }: { params: Promise<{ locale: s
           <CreatePostForm
             categories={categories}
             conditions={{ data: condition }}
+            statuses={{ data: statuses }}
           />
         </div>
       ) : (

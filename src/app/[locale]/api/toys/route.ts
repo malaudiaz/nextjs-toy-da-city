@@ -254,7 +254,6 @@ export async function GET(
 // POST create a new toy
 export async function POST(request: Request): Promise<NextResponse<ToyResponseSuccess | ToyResponseError>> {
   const g = await getTranslations("General");
-  const s = await getTranslations("Status");
   const t = await getTranslations("Toy");
 
 
@@ -296,6 +295,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       price: Number(formData.get('price')),
       categoryId: Number(formData.get('categoryId')),
       conditionId: Number(formData.get('conditionId')),
+      statusId: Number(formData.get('statusId')),
       forSell: forSale,
       forGifts: forGift,
       forChanges: forChange,
@@ -324,20 +324,6 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       )
     }
 
-    // Crear el primer toy
-    // const userId = 'user_2wY8ZRoOrheojD7zQXtwk9fg00x'
-
-    const statusAvailable = await prisma.status.findUnique({ where: { name: "available" } });
-    if (!statusAvailable) {
-      return NextResponse.json(
-        { 
-          success: false, 
-          error: s("NotFound") 
-        },
-        { status: 400 }
-      )
-    }
-
     const toy = await prisma.toy.create({
       data: {
         title: toyData.title,
@@ -346,7 +332,7 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
         location:toyData.location,
         sellerId: user?.id,
         categoryId: toyData.categoryId,
-        statusId: statusAvailable.id,
+        statusId: toyData.statusId,
         conditionId: toyData.conditionId,
         forSell: toyData.forSell,
         forGifts: toyData.forGifts,

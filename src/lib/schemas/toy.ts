@@ -32,6 +32,7 @@ export const ToySchema = z.object({
     ),
   categoryId: z.number().min(0).max(10000),
   conditionId: z.number().min(0).max(10000),
+  statusId: z.number().min(0).max(10000),
   forSell: z
     .union([z.boolean(), z.string().transform((val) => val === "true")])
     .default(true),
@@ -90,7 +91,7 @@ export const toyFormSchema = z
       .number()
       .int("Must be an integer")
       .min(1, "You must select a condition"),
-    //statusId: z.number().int('Must be an integer').min(1, 'You must select a status'),
+    statusId: z.number().int('Must be an integer').min(1, 'You must select a status'),
     forSale: z.boolean(),
     forGift: z.boolean(),
     forChange: z.boolean(),

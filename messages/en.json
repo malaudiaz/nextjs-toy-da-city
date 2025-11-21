@@ -503,6 +503,7 @@
     "forChange": "Swap",
     "Category": "Category",
     "Status": "Status",
+    "SelectStatusPlaceholder": "Select a status",
     "Condition": "Condition",
     "Image": "Take picture of your item and upload them to improve the result",
     "Add More": "+ Add More",

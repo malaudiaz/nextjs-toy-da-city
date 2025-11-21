@@ -14,6 +14,13 @@ import Image from "next/image";
 
 const MAX_FILES = 6;
 
+type Status = { // (Añade este tipo si no está en un archivo de tipos compartido)
+  id: number;
+  name: string;
+  description: string;
+  isActive: boolean;
+};
+
 type Category = {
   id: number;
   name: string;
@@ -38,6 +45,7 @@ type Toy = {
   price?: number;
   categoryId: number;
   conditionId: number;
+  statusId: number; // ✨ NUEVO
   location: string | null; // "lat,lng"
   media: { id: string; fileUrl: string }[]; // ← Asumiendo que guardas imágenes en la DB con ID y URL
 };
@@ -49,6 +57,9 @@ type EditPostFormProps = {
   };
   conditions: {
     data: Condition[];
+  };
+  statuses: { // ✨ NUEVO
+    data: Status[];
   };
 };
 
@@ -64,7 +75,7 @@ const MapComponent = dynamic(
   }
 );
 
-const EditPostForm = ({ toy, categories, conditions }: EditPostFormProps) => {
+const EditPostForm = ({ toy, categories, conditions, statuses }: EditPostFormProps) => {
   const t = useTranslations("createPostForm");
   const [files, setFiles] = useState<File[]>([]);
   const [existingImages, setExistingImages] = useState<
@@ -89,10 +100,10 @@ const EditPostForm = ({ toy, categories, conditions }: EditPostFormProps) => {
   const {
     register,
     handleSubmit,
-    //reset,
+    reset,
     formState: { errors },
     control,
-    //getValues,
+    getValues,
     setValue,
     watch,
   } = useForm<ToyFormValues>({
@@ -107,6 +118,7 @@ const EditPostForm = ({ toy, categories, conditions }: EditPostFormProps) => {
       price: toy.price || undefined,
       categoryId: toy.categoryId,
       conditionId: toy.conditionId,
+      statusId: toy.statusId,
     },
   });
 
@@ -220,6 +232,8 @@ const EditPostForm = ({ toy, categories, conditions }: EditPostFormProps) => {
       }
 
       setSubmitSuccess(true);
+      reset();
+      setFiles([]);
     } catch (error) {
       console.error("Error:", error);
       setSubmitError(
@@ -231,11 +245,18 @@ const EditPostForm = ({ toy, categories, conditions }: EditPostFormProps) => {
   };
 
   const handleCheckboxChange = (name: "forSale" | "forGift" | "forChange") => {
+    const currentValue = getValues(name);
+    // Si ya está activo, lo dejamos como está (opcional)
+    if (currentValue) return;
+
+    // Desactivamos todos
     setValue("forSale", false);
     setValue("forGift", false);
     setValue("forChange", false);
+
+    // Activamos solo el seleccionado
     setValue(name, true);
-  };
+  };  
 
   return (
     <>
@@ -337,7 +358,7 @@ const EditPostForm = ({ toy, categories, conditions }: EditPostFormProps) => {
           >
             {categories.data.map((category) => (
               <option key={category.id} value={category.id}>
-                {category.name}
+                {category.description}
               </option>
             ))}
           </select>
@@ -361,7 +382,7 @@ const EditPostForm = ({ toy, categories, conditions }: EditPostFormProps) => {
           >
             {conditions.data.map((condition) => (
               <option key={condition.id} value={condition.id}>
-                {condition.name}
+                {condition.description}
               </option>
             ))}
           </select>
@@ -371,6 +392,34 @@ const EditPostForm = ({ toy, categories, conditions }: EditPostFormProps) => {
             </p>
           )}
         </div>
+
+        {/* Status */}
+        <div>
+          <label htmlFor="statusId" className="block mb-1">
+            {t("Status")} {/* Asumiendo que tienes una traducción para "Status" */}
+          </label>
+          <select
+            id="statusId"
+            className="w-full p-2 border rounded"
+            // Asegúrate de que toyFormSchema incluya 'statusId' como un número
+            {...register("statusId", { valueAsNumber: true })} 
+            required
+          >
+            {/* Opcional: Opción por defecto deshabilitada/vacía si defaultValues.statusId es undefined */}
+            <option value="" disabled hidden>{t("SelectStatusPlaceholder")}</option>           
+            {statuses.data.map((status) => (
+              <option key={status.id} value={status.id}>
+                {status.description} {/* Usar description si es el campo localizado */}
+              </option>
+            ))}
+
+          </select>
+          {errors.statusId && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.statusId.message}
+            </p>
+          )}
+        </div>        
 
         {/* Imágenes (existentes + nuevas) */}
         <div className="flex flex-col gap-2 px-3 py-3 border-dashed border-2 border-gray-300 rounded-md">
