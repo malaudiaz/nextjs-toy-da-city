@@ -1,8 +1,7 @@
 import FavoritesInfo from "@/components/shared/profile/FavoritesInfo";
-import FavoritesInfoSkeleton from "@/components/shared/profile/FavoritesInfoSkeleton"; // 1. Importa el Skeleton
-import React, { Suspense } from "react"; // 2. Importa Suspense
+import FavoritesInfoSkeleton from "@/components/shared/profile/FavoritesInfoSkeleton";
+import React, { Suspense } from "react"; 
 import { getFavorites } from "@/lib/actions/toysAction";
-import TitleBreakcrumbs from "@/components/shared/TitleBreakcrum";
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 
 // 3. Componente async que realiza el fetching (la parte lenta)

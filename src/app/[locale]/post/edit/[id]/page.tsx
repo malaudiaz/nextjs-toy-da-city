@@ -8,6 +8,7 @@ import { getCategories } from "@/lib/actions/categoriesAction";
 import { getConditions } from "@/lib/actions/conditionActions";
 import { getSellerData } from "@/lib/actions/sellertActions";
 import { auth } from "@clerk/nextjs/server";
+import { getStatuses } from "@/lib/actions/statusActions";
 
 type PageProps = {
   params: Promise<{ id: string, locale: string }>;
@@ -33,6 +34,7 @@ export default async function EditPostPage({ params }: PageProps) {
 
   const categories = await getCategories();
   const conditions = await getConditions();
+  const statuses = await getStatuses();
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -41,6 +43,7 @@ export default async function EditPostPage({ params }: PageProps) {
         toy={toy}
         categories={categories}
         conditions={{ data: conditions }}
+        statuses={{data: statuses}}
       />
     </div>
   );
