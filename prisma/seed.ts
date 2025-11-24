@@ -8,6 +8,8 @@ dotenv.config();
 
 const prisma = new PrismaClient();
 
+export type TransactionClient = Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'>;
+
 console.log(process.env.NODE_ENV);
 
 async function main() {
@@ -34,7 +36,7 @@ async function main() {
     await prisma.user.deleteMany();
   });
 
-  await prisma.$transaction(async (tx) => {
+  await prisma.$transaction(async (tx: TransactionClient) => {
     // === IDIOMAS ===
     await tx.language.createMany({
       data: [
