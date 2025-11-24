@@ -3,12 +3,18 @@ import prisma from "@/lib/prisma";
 import Stripe from "stripe";
 import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
+import { Prisma } from "@prisma/client";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
   timeout: 10000,
   maxNetworkRetries: 2,
 });
+
+// 1. Definir el tipo para la orden con items incluidos
+type OrderWithItems = Prisma.OrderGetPayload<{
+  include: { items: true };
+}>;
 
 export async function POST(req: NextRequest) {
   let { userId } = await auth();
@@ -30,17 +36,20 @@ export async function POST(req: NextRequest) {
 
   const { orderId } = await req.json();
 
-  const order = await prisma.order.findUnique({
+  const orderRaw = await prisma.order.findUnique({
     where: { id: orderId },
     include: { items: true },
   });
 
-  if (!order) {
+  if (!orderRaw) {
     return NextResponse.json(
       { success: false, error: t("NotFound") },
       { status: 404 }
     );
   }
+
+  // Usamos el tipo definido
+  const order: OrderWithItems = orderRaw;  
 
   if (order.buyerId !== user.id) {
     return NextResponse.json(
