@@ -5,7 +5,7 @@ import CreatePostSkeleton from "@/components/shared/post/CreatePostSkeleton";
 // Esto es opcional, ya que el tipo inferido es React.FC
 const Loading: React.FC = () => {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:min-w-4xl lg:min-w-7xl">
       <TitleBreakcrumbs translationScope="breadcrumbs" titleKey="Post" />
       <CreatePostSkeleton />
     </div>
