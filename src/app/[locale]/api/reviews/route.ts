@@ -46,13 +46,34 @@ export async function POST(request: Request) {
       );
     }
 
-    // Verificar que el reviewer haya comprado algo al target
-    const hasPurchased = await prisma.order.findFirst({
+    const hasPurchased = await prisma.order.findMany({
       where: {
+        // 1. La orden DEBE ser del comprador actual
         buyerId: user?.id,
-        sellerId: targetUserId,
-        status: "TRANSFERRED",
-        ...(orderId ? { id: orderId } : {}),
+        status: "CONFIRMED",
+
+        // 2. Y debe cumplir esta condición compleja:
+        items: {
+          some: {
+            // "Al menos un ítem de la orden..."
+            toy: {
+              sellerId: targetUserId, // "...pertenece a ESTE vendedor específico"
+            },
+          },
+        },
+      },
+      // Opcional: Traer los detalles para verificar visualmente
+      include: {
+        items: {
+          where: {
+            toy: {
+              sellerId: targetUserId, // Opcional: Si solo quieres ver los items de ESE vendedor en el resultado
+            },
+          },
+          include: {
+            toy: true,
+          },
+        },
       },
     });
 

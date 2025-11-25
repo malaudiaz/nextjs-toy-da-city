@@ -4,36 +4,15 @@ import { getRelatedToys, getToy } from "@/lib/actions/toysAction";
 import ProductDetails from "@/components/shared/product/ProductDetails";
 import FeaturesProduct from "@/components/shared/product/FeaturesProduct";
 import { getUserById } from "@/lib/actions/getUserActions";
-import { Metadata } from "next";
 import ProductDetailsSkeleton from "@/components/shared/product/ProductDetailsSkeleton";
 
-
-// generateMetadata recibe params como objeto simple
-export async function generateMetadata({ params }: { params: Promise<{ id: string, locale: string }> }): Promise<Metadata> {
-  const toy = await getToy((await params).id);
-
-  if (!toy) {
-    return {
-      title: "Toy Not Found",
-      description: "The requested toy could not be found.",
-    };
-  }
-
-  return {
-    title: `${toy.title} | MetadataWebsite`,
-    description: `${toy.description} Price: $${toy.price}. ${
-      toy.isActive ? "In Stock" : "Out of Stock"
-    }.`,
-    keywords: [toy.title.toLowerCase()],
-  };
-}
 
 // Componente interno - CORREGIDO: ahora recibe props simples, no Promises
 async function ProductContent({ id }: { id: string; locale: string }) {
   const toy = await getToy(id);
   const featuredToys = await getRelatedToys(id);
   const seller = await getUserById(toy.sellerId);  
-  
+ 
   return (
     <>
       <Breadcrumbs productName={toy.title} />

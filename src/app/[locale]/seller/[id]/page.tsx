@@ -25,6 +25,7 @@ interface Review {
   reviewer: {
     id: string;
     name: string;
+    imageUrl?: string;
   };
   order: { id: string } | null;
 }
@@ -205,7 +206,8 @@ export default function SellerProfilePage() {
                 )}
               </div>
               <p className="text-sm text-gray-500 mt-2">
-                {t("memberSince")} {format(new Date(data.createdAt), "MMMM yyyy")}
+                {t("memberSince")}{" "}
+                {format(new Date(data.createdAt), "MMMM yyyy")}
               </p>
               <p className="text-sm text-gray-700">
                 Rol: <span className="font-medium capitalize">{data.role}</span>
@@ -275,7 +277,20 @@ export default function SellerProfilePage() {
                   {toy.category.name}
                 </p>
                 <p className="font-bold text-lg text-blue-600">
-                  {toy.price.toFixed(2)}
+                  <span className="font-bold text-[calc(14px_+_0.5vw)] text-green-700">
+                    {toy.price === 0 ? (
+                      <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm">
+                        {t("free")}
+                      </span>
+                    ) : (
+                      `$${toy.price.toFixed(2).split(".")[0]}`
+                    )}
+                    <span className="text-[0.7em] align-super ml-px">
+                      {toy.price === 0
+                        ? ""
+                        : toy.price.toFixed(2).split(".")[1] || "00"}
+                    </span>
+                  </span>
                 </p>
               </Link>
             ))}
@@ -314,9 +329,17 @@ export default function SellerProfilePage() {
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                   <div className="flex items-start space-x-4">
                     <div className="w-14 h-14 bg-gray-200 rounded-full flex-shrink-0 flex items-center justify-center">
-                      <span className="font-bold text-gray-700">
-                        {review.reviewer.name.charAt(0).toUpperCase()}
-                      </span>
+                      {review.reviewer.imageUrl ? (
+                        <UserAvatar
+                          userId={review.reviewer.id}
+                          src={review.reviewer.imageUrl}
+                          alt={review.reviewer.name}
+                        />
+                      ) : (
+                        <span className="font-bold text-gray-700">
+                          {review.reviewer.name.charAt(0).toUpperCase()}
+                        </span>
+                      )}
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">

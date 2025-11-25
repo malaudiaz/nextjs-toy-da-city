@@ -190,8 +190,8 @@ model Order {
 
   transfers Transfer[]
   refunds   Refund[]
-  // ✅ CORREGIDO: sin @relation, sin fields
-  review    Review?
+  
+  reviews Review[] // ✅ Add this line for the 1:N relation
 
   @@index([paymentIntentId])
   @@index([chargeId])
@@ -280,11 +280,14 @@ model Review {
   target     User     @relation("ReviewTarget", fields: [targetId], references: [id])
   rating     Int
   comment    String?
-  orderId    String?  @unique // ← clave foránea → este modelo "posee" la relación
-  // ✅ Aquí SÍ va fields + references
+  // ❌ Eliminado @unique para permitir múltiples reseñas por orden
+  orderId    String?
+  // ✅ Relación 1:N (una orden tiene muchas reseñas)
   order      Order?   @relation(fields: [orderId], references: [id])
   createdAt  DateTime @default(now())
 
+  // ✅ Modificado: asegura que un comprador solo pueda reseñar a un vendedor UNA VEZ por ORDEN
+  // Esto permite múltiples reseñas en la misma orden, siempre que el vendedor (targetId) sea diferente.
   @@unique([reviewerId, targetId, orderId])
   @@index([targetId])
   @@map("reviews")
@@ -298,7 +301,7 @@ model WebhookError {
   errorMessage String
   payload      String?
   createdAt    DateTime @default(now())
-  
+
   @@index([clerkId])
   @@index([createdAt])
 }

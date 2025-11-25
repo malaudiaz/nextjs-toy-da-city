@@ -123,7 +123,10 @@ export async function getToy(id: string) {
     headers: headers,
   });
 
-  const toy = await response.json();
+  let toy = null;
+  if (response.status === 200 ) {
+    toy = await response.json();
+  }
 
   return toy;
 }

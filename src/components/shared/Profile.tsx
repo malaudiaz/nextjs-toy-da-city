@@ -8,11 +8,15 @@ import { useTranslations } from 'next-intl'; // ✅ Importa el hook
 
 type Props = {
   user: {
-    id: string;
+    id: string; // ID de Prisma (id de la tabla 'users')
     fullName: string;
     imageUrl: string;
-    reputation?: number;
-    reviews?: number;
+    clerkId: string;
+    email: string;
+    phone: string;
+    role: string; // Incluir el rol para la validación/información
+    reputation: number;
+    reviewsCount: number; // Cantidad total de reseñas recibidas
   } | null;
 };
 
@@ -37,7 +41,7 @@ export default function Profile({ user }: Props) {
         <p className="text-sm md:text-base font-medium text-gray-800">
           {user.fullName}
         </p>
-        <RatingStars rating={user.reputation || 0} reviewCount={user.reviews || 0} />
+        <RatingStars rating={user.reputation || 0} reviewCount={user.reviewsCount || 0} />
       </div>
     </div>
   );

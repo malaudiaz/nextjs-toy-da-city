@@ -24,9 +24,7 @@ function isValidOrderStatus(status: string): status is OrderStatusFilter {
 export async function GET(req: Request) {
   // --- 1. Autenticación ---
   let { userId } = await auth();
-
   const g = await getTranslations("General");
-
 
   if (!userId) {
     userId = req.headers.get("X-User-ID");
@@ -40,6 +38,10 @@ export async function GET(req: Request) {
     select: { id: true, name: true },
   });
 
+  if (!user) {
+    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
+  }
+
   // --- 2. Obtener y validar parámetro `status` ---
   const { searchParams } = new URL(req.url);
   const statusParam = searchParams.get("status");
@@ -48,13 +50,12 @@ export async function GET(req: Request) {
   if (statusParam && isValidOrderStatus(statusParam)) {
     statusFilter = statusParam;
   }
-  // Si no es válido o no existe → simplemente será null, y no filtramos por estado
 
   try {
     // --- 3. Construir filtro ---
     const where: Prisma.OrderWhereInput = {
-      buyerId: user!.id, // ✅ Solo órdenes del comprador logueado
-      ...(statusFilter && { status: statusFilter }), // ✅ Solo si se pasa un estado válido
+      buyerId: user.id, 
+      ...(statusFilter && { status: statusFilter }),
     };
 
     // --- 4. Consultar órdenes ---
@@ -66,45 +67,65 @@ export async function GET(req: Request) {
       },
     });
 
-    // 4. Identificar todos los SellerIds que tienen al menos una orden 'CONFIRMED'
-    // con este comprador (el usuario actual).
-    const eligibleSellerIds = new Set<string>();
+    // --- 5. Lógica de Elegibilidad de Reseña ---
 
-    orders.forEach(order => {
-        // La elegibilidad para reseña solo se basa en órdenes CONFIRMED.
-        // Asumimos que la reseña es por el VENDEDOR, no por la ORDEN.
-        if (order.status === "CONFIRMED") {
-            // Recorremos los ítems de la orden CONFIRMED
-            order.items.forEach(item => {
-                // Añadimos el ID del vendedor del juguete al set de elegibles
-                eligibleSellerIds.add(item.toy.seller.id);
-            });
-        }
+    // A. Identificar Vendedores con órdenes CONFIRMED (Lógica existente)
+    const sellersWithConfirmedOrders = new Set<string>();
+
+    orders.forEach((order) => {
+      if (order.status === "CONFIRMED") {
+        order.items.forEach((item) => {
+          sellersWithConfirmedOrders.add(item.toy.seller.id);
+        });
+      }
     });
 
+    // B. Consultar si el comprador YA ha reseñado a estos vendedores (NUEVO)
+    // NOTA: Asumo que tu modelo se llama 'review' y tiene campos 'authorId' y 'sellerId'.
+    // Ajusta los nombres de los campos según tu schema.prisma real.
+    const reviewedSellerIds = new Set<string>();
 
-    // 5. Mapear las órdenes para inyectar la bandera isEligibleForReview
-    const ordersWithEligibility = orders.map(order => ({
-        ...order,
-        // Recorremos los ítems
-        items: order.items.map(item => ({
-            ...item,
-            // Modificamos el juguete
-            toy: {
-                ...item.toy,
-                // Modificamos el vendedor
-                seller: {
-                    ...item.toy.seller,
-                    // ✅ INYECTAMOS EL NUEVO CAMPO DTO
-                    isEligibleForReview: eligibleSellerIds.has(item.toy.seller.id),
-                }
-            }
-        }))
+    if (sellersWithConfirmedOrders.size > 0) {
+      const existingReviews = await prisma.review.findMany({
+        where: {
+          reviewerId: user.id, // El comprador actual
+          targetId: { in: Array.from(sellersWithConfirmedOrders) }, // Solo buscamos reviews de los vendedores relevantes
+        },
+        select: {
+          targetId: true,
+        },
+      });
+
+      existingReviews.forEach((review) => {
+        reviewedSellerIds.add(review.targetId);
+      });
+    }
+
+    // --- 6. Mapeo Final ---
+    const ordersWithEligibility = orders.map((order) => ({
+      ...order,
+      items: order.items.map((item) => {
+        const sellerId = item.toy.seller.id;
+        
+        // ELEGIBLE SI:
+        // 1. Tiene orden confirmada (está en sellersWithConfirmedOrders)
+        // 2. NO ha sido reseñado aún (NO está en reviewedSellerIds)
+        const isEligible = sellersWithConfirmedOrders.has(sellerId) && !reviewedSellerIds.has(sellerId);
+
+        return {
+          ...item,
+          toy: {
+            ...item.toy,
+            seller: {
+              ...item.toy.seller,
+              isEligibleForReview: isEligible,
+            },
+          },
+        };
+      }),
     }));
 
-    // --- 6. Respuesta FINAL ---
-    // Devolvemos el array mapeado con el campo inyectado.
-    return NextResponse.json(ordersWithEligibility, { status: 200 });    
+    return NextResponse.json(ordersWithEligibility, { status: 200 });
 
   } catch (error) {
     console.error("Error fetching orders:", error);

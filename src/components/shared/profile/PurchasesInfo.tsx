@@ -147,7 +147,9 @@ const PurchasesInfo = ({ orders }: PurchaseProps) => {
                             </span>
 
                             {/* ✅ APLICACIÓN DE LA CONDICIÓN DE ELEGIBILIDAD */}
+
                             {item.toy.seller.isEligibleForReview && ( // <--- SOLO MUESTRA SI ES ELEGIBLE
+
                               <>
                                 {/* Separador visual (opcional) */}
                                 <span className="text-gray-400">|</span>
@@ -164,6 +166,7 @@ const PurchasesInfo = ({ orders }: PurchaseProps) => {
                                 </Link>
                               </>
                             )}
+                            
                           </div>
                         </div>
 

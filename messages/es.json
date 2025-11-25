@@ -573,7 +573,8 @@
     "acceptable": "Aceptable",
     "likeNew": "Como nuevo",
     "good": "Bueno" ,
-    "toRepair": "Para Reparar"
+    "toRepair": "Para Reparar",
+    "status": "Estado"
   },
   "configurations": {
     "title": "Configuraciones",
@@ -875,7 +876,8 @@
     "beTheFirst": "¡Sé el primero en dejar tu opinión después de comprarle!",
     "purchased": "Compró en orden # ",
     "memberSince": "Miembro desde ",
-    "toysSeccionTitle": "Juguetes en venta"
+    "toysSeccionTitle": "Juguetes en venta",
+    "free": "GRATIS"
   },
   "ProductSearch": {
     "title": "No se encontraron productos",

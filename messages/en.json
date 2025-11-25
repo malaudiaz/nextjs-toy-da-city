@@ -580,7 +580,8 @@
     "acceptable": "Acceptable",
     "likeNew": "Like New",
     "good": "Good",
-    "toRepair": "To Repair"
+    "toRepair": "To Repair",
+    "status": "Status"
   },
   "configurations": {
     "title": "Configurations",
@@ -883,7 +884,8 @@
     "beTheFirst": "Be the first to leave your review after purchasing!",
     "purchased": "Purchased in order # ",
     "memberSince": "Member since",
-    "toysSeccionTitle": "Toys for sale"
+    "toysSeccionTitle": "Toys for sale",
+    "free": "FREE"
   },
   "ProductSearch": {
     "title": "No products were found",

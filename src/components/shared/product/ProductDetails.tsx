@@ -3,7 +3,7 @@
 import { Toy } from "@/types/toy";
 import React, { useState } from "react";
 import { Heart, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
-import { NumberToCategory, NumberToCondition } from "@/lib/utils";
+import { NumberToCategory } from "@/lib/utils";
 import Image from "next/image";
 import ExpandableText from "../ExpandableText";
 import dynamic from "next/dynamic";
@@ -35,14 +35,15 @@ const MapComponent = dynamic(
 type ProductDetailsProps = {
   toy: Toy;
   seller: {
-    id: string;
+    id: string; // ID de Prisma (id de la tabla 'users')
     fullName: string;
     imageUrl: string;
     clerkId: string;
-    email?: string | null;
-    phone?: string | null;
-    reputation?: number;
-    reviews?: number;
+    email: string;
+    phone: string;
+    role: string; // Incluir el rol para la validación/información
+    reputation: number;
+    reviewsCount: number; // Cantidad total de reseñas recibidas
   } | null;
 };
 
@@ -165,7 +166,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
                 ${toy.forSell ? toy.price.toFixed(2) : t("free")}
               </span>
 
-              {isSignedIn && !isCurrentUser && (
+              {isSignedIn && !isCurrentUser && toy.isActive && (
                 <button
                   disabled={!isSignedIn}
                   onClick={handleFavorite}
@@ -181,10 +182,14 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
                 </button>
               )}
             </div>
-            <div className="flex items-center space-x-2 justify-between">
-              <h2 className="inline-block text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-lg">
-                {t("condition")}: {NumberToCondition(toy.conditionId, t)}
+            <div className="flex flex-col gap-2 space-x-2 justify-between">
+              <h2 className="inline-block text-sm font-medium px-2 py-1 rounded-lg">
+                <span>{t("condition")}:</span> <span className="text-green-600 font-bold">{toy.conditionDescription}</span>
               </h2>
+              <h2 className="inline-block text-sm font-medium px-2 py-1 rounded-lg">
+                <span>{t("status")}:</span> <span className={toy.isActive ? "text-green-600 font-bold" : "text-red-700 font-bold"}>{toy.statusDescription}</span>
+              </h2>
+
             </div>
           </div>
 
@@ -207,7 +212,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
 
           <div className="flex flex-col gap-4">
             <div className="flex items-center">
-              {toy.forSell && isSignedIn && !isCurrentUser && (
+              {toy.forSell && toy.isActive && isSignedIn && !isCurrentUser && (
                 <button
                   onClick={() => {
                     const added = addToCart({
@@ -236,11 +241,11 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
                   <Profile user={seller} />
                 </Link>
                 <div className="flex items-center gap-2">
-                  {isSignedIn && !isCurrentUser && (
+                  {isSignedIn && !isCurrentUser && toy.isActive && (
                     <ChatButton toy={toy} seller={seller} />
                   )}
 
-                  {seller?.phone && isSignedIn && !isCurrentUser && (
+                  {seller?.phone && isSignedIn && !isCurrentUser && toy.isActive && (
                     <WhatsAppContact
                       phoneNumber={seller.phone}
                       size="small"

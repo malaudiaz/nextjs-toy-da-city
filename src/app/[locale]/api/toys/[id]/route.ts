@@ -68,7 +68,7 @@ export async function GET(
 
   try {
     const toy = await prisma.toy.findUnique({
-      where: { id: id, isActive: true },
+      where: { id: id },
       include: {
         media: true,
         category: {

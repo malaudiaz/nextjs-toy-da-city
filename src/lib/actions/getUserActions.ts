@@ -3,44 +3,72 @@ import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { BACKEND_URL } from "../utils";
 
+// 1. Definición de tipo de datos del usuario que se devolverán
 type UserData = {
-  id: string;
+  id: string; // ID de Prisma (id de la tabla 'users')
   fullName: string;
   imageUrl: string;
   clerkId: string;
   email: string;
-  phone?: string;
-  reputation?: number;
-  reviews?: number;
-};
+  phone: string;
+  role: string; // Incluir el rol para la validación/información
+  reputation: number;
+  reviewsCount: number; // Cantidad total de reseñas recibidas
+}
 
 export async function getUserById(userId: string): Promise<UserData | null> {
   if (!userId) return null;
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { clerkId: true, reputation: true },
-  });
+try {
+    // 1. Buscar usuario en Prisma, obteniendo su clerkId, reputación y rol.
+    // También contamos directamente las reseñas recibidas.
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        clerkId: true,
+        reputation: true,
+        role: true, // Necesitamos el rol para la validación
+        reviewsReceived: { // Contar las reseñas recibidas
+          select: { id: true },
+        },
+      },
+    });
 
-  try {
+    // 2. Validación de existencia y rol.
+    if (!user) {
+      console.warn(`Usuario con ID ${userId} no encontrado en Prisma.`);
+      return null;
+    }
+
+    // El requisito es que "tenga el roll de seller". Si es 'seller' (vendedor):
+    if (user.role !== "seller") {
+      console.warn(`Usuario ${userId} tiene el rol "${user.role}" en lugar de "buyer".`);
+      return null;
+    }
+
+    // 3. Obtener datos de Clerk usando el clerkId.
     const { users } = await clerkClient();
     const seller = await users.getUser(user!.clerkId);
 
+    // 4. Desestructuración y formateo de datos
     const { firstName, lastName, imageUrl, id: clerkId, emailAddresses, phoneNumbers } = seller;
     const fullName = `${firstName} ${lastName}`.trim() || "Usuario anónimo";
 
+    // 5. Construir y devolver el objeto UserData
     return {
-      id: seller.id,
+      id: user.id, // ID de la tabla 'users'
       fullName,
       imageUrl,
-      clerkId,
+      clerkId: clerkId, // ID de Clerk
       email: emailAddresses[0]?.emailAddress || "",
       phone: phoneNumbers[0]?.phoneNumber || "",
-      reputation: user?.reputation || 0,
-      reviews: user?.reputation || 0
+      role: user.role, // Rol validado
+      reputation: user.reputation ?? 0, // Usar 0 si es null
+      reviewsCount: user.reviewsReceived.length, // Cantidad de reseñas
     };
   } catch (error) {
-    console.error("Error al obtener usuario de Clerk:", error);
+    console.error("Error al obtener usuario", error);
     return null;
   }
 }

@@ -10,13 +10,15 @@ import Pusher from "pusher-js";
 import ModalPortal from "./profile/ModalPortal";
 
 type Seller = {
-  id: string;
-  fullName: string;
-  imageUrl: string;
-  clerkId: string;
-  email?: string | null;
-  reputation?: number;
-  reviews?: number;
+    id: string; // ID de Prisma (id de la tabla 'users')
+    fullName: string;
+    imageUrl: string;
+    clerkId: string;
+    email: string;
+    phone: string;
+    role: string; // Incluir el rol para la validación/información
+    reputation: number;
+    reviewsCount: number; // Cantidad total de reseñas recibidas
 };
 
 interface ChatModalProps {

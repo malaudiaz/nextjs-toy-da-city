@@ -1,4 +1,3 @@
-// app/api/reviews/eligible/route.ts
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { auth } from '@clerk/nextjs/server';
@@ -17,7 +16,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
     }
 
-    // 2. Obtener el ID de la base de datos
+    // 2. Obtener el ID de la base de datos y validar
     const reviewer = await prisma.user.findUnique({
         where: { clerkId: clerkReviewerId },
         select: { id: true },
@@ -28,7 +27,7 @@ export async function GET(request: Request) {
     }
     const buyerId = reviewer.id; // ID del comprador/reseñador en la DB
 
-    // 3. Obtener Parámetros
+    // 3. Obtener Parámetros: SellerId (requerido para saber a quién reseñar)
     const { searchParams } = new URL(request.url);
     const sellerId = searchParams.get('sellerId');
 
@@ -36,53 +35,71 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: g('InvalidRequest') }, { status: 400 });
     }
     
-    // 4. Buscar orden CONFIRMED elegible a través de los ítems de la orden (OrderItem)
-    // Buscamos un OrderItem donde:
-    // a) El juguete (Toy) pertenezca al SellerId buscado.
-    // b) La Orden (Order) esté confirmada, tenga el buyerId del usuario actual y no haya sido reseñada.
+    // --- LÓGICA DE ELEGIBILIDAD COHERENTE CON LA RUTA DE ÓRDENES ---
     
-    // Nota: Asumimos que la relación es Order -> OrderItem -> Toy -> Seller
-    const eligibleOrderItem = await prisma.orderItem.findFirst({
+    // 4. PASO 1: Verificar el requisito MÍNIMO (Interacción Confirmada)
+    // Buscamos si existe al menos una Orden CONFIRMED entre el comprador y el vendedor.
+    const hasConfirmedOrder = await prisma.orderItem.findFirst({
         where: {
-            // Condición A: El juguete asociado al ítem pertenece al vendedor
+            // El ítem de la orden debe pertenecer a un juguete de este vendedor
             toy: {
                 sellerId: sellerId,
             },
-            // Condición B: La orden asociada al ítem cumple los criterios del comprador/estado/reseña
+            // La orden asociada debe estar CONFIRMED y pertenecer a este comprador
             order: {
                 buyerId: buyerId,
                 status: 'CONFIRMED',
-                review: null, // Asume que la reseña se relaciona con la ORDEN, no con el OrderItem.
             }
         },
         select: {
-            orderId: true, // Obtenemos el ID de la orden para la reseña
+            orderId: true, // Solo necesitamos saber si existe y obtener la orden (opcional)
         },
-        orderBy: {
-            order: {
-                createdAt: 'desc', // Buscar la orden más reciente
-            }
-        }
     });
 
+    if (!hasConfirmedOrder) {
+        // Si no hay interacción CONFIRMED, no es elegible
+        return NextResponse.json({
+            canReview: false,
+            message: t('NoConfirmedOrderFound'),
+        });
+    }
 
-    // 5. Determinar Elegibilidad
-    if (!eligibleOrderItem) {
-      return NextResponse.json({
-        canReview: false,
-        message: t('NoConfirmedUnreviewedOrder'),
-      });
+    // 5. PASO 2: Verificar la regla de negocio (Ya reseñó al vendedor)
+    // Buscamos si el comprador YA ha creado una reseña para este vendedor.
+    // Asumo que el modelo de reseña tiene los campos 'authorId' (el comprador) y 'sellerId'.
+    const existingReview = await prisma.review.findFirst({
+        where: {
+            reviewerId: buyerId,
+            targetId: sellerId,
+        },
+    });
+
+    if (existingReview) {
+        // Si ya existe una reseña, no es elegible de nuevo
+        return NextResponse.json({
+            canReview: false,
+            message: t('AlreadyReviewedSeller'),
+        });
     }
     
-    // Si encontramos un OrderItem elegible, extraemos el ID de la orden
-    const orderId = eligibleOrderItem.orderId;
+    // 6. Respuesta Positiva: Es elegible y tiene al menos una OrderId asociada
+    // Devolvemos el orderId de la orden CONFIRMED más reciente para vincular la reseña
+    // (Opcional, pero útil si quieres enlazar la reseña a una orden específica)
+    
+    // Dado que hasConfirmedOrder nos dio el OrderId de la primera orden CONFIRMED que encontró,
+    // usaremos ese. Si necesitas el OrderId *más reciente*, se requeriría una consulta adicional
+    // o modificar hasConfirmedOrder para usar orderBy: { order: { createdAt: 'desc' } }
+    
+    // Para ser coherentes y simples, usamos el OrderId encontrado en el paso 4.
+    const orderIdToAttach = hasConfirmedOrder.orderId;
 
-    // 6. Respuesta Positiva
+
     return NextResponse.json({
       canReview: true,
-      orderId: orderId,
+      orderId: orderIdToAttach,
       message: t("EligibleForReview") 
     });
+    
   } catch (error) {
     console.error('[REVIEW_ELIGIBLE_ERROR]', error);
     return NextResponse.json(
