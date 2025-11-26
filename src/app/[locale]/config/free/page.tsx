@@ -5,34 +5,38 @@ import { getFree } from "@/lib/actions/toysAction";
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 
 // 3. Componente async que realiza el fetching
-const FreeContent = async ({ freePromise }: { freePromise: ReturnType<typeof getFree> }) => {
-    // Espera a que la promesa de datos se resuelva
-    const free = await freePromise;
-    
-    return <FreeInfo free={free} />;
-}
+const FreeContent = async ({
+  freePromise,
+}: {
+  freePromise: ReturnType<typeof getFree>;
+}) => {
+  // Espera a que la promesa de datos se resuelva
+  const free = await freePromise;
 
-// 4. El Page Component se convierte en el contenedor de Suspense
-const FreePage = async() => {
-    // La función getFree() devuelve una Promesa.
-    const freePromise = getFree(); 
-    
-    // Ya no hacemos `await getFree()` aquí.
-
-    return (
-      <div className="max-w-7xl mx-auto min-h-screen bg-background">
-        <div className="px-5 py-3">
-                  <Breadcrumbs className="hidden md:block" ignoreSegment="config"/>
-                  <Breadcrumbs className="md:hidden"/>
-        </div>
-        
-        {/* 5. Envuelve el contenido lento con Suspense */}
-        <Suspense fallback={<FreeInfoSkeleton />}>
-          {/* Pasamos la Promesa al componente Content */}
-          <FreeContent freePromise={freePromise} />
-        </Suspense>
-      </div>
-    );
+  return <FreeInfo free={free} />;
 };
 
-export default FreePage
+// 4. El Page Component se convierte en el contenedor de Suspense
+const FreePage = async () => {
+  // La función getFree() devuelve una Promesa.
+  const freePromise = getFree();
+
+  // Ya no hacemos `await getFree()` aquí.
+
+  return (
+    <div className="max-w-7xl mx-auto min-h-screen bg-background">
+      <div className="px-5 py-3">
+        <Breadcrumbs className="hidden md:block" ignoreSegment="config" />
+        <Breadcrumbs className="md:hidden" />
+      </div>
+
+      {/* 5. Envuelve el contenido lento con Suspense */}
+      <Suspense fallback={<FreeInfoSkeleton />}>
+        {/* Pasamos la Promesa al componente Content */}
+        <FreeContent freePromise={freePromise} />
+      </Suspense>
+    </div>
+  );
+};
+
+export default FreePage;

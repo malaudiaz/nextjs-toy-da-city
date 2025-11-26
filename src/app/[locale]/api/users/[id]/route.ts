@@ -8,39 +8,119 @@ import { getTranslations } from "next-intl/server";
 import { Prisma } from "@prisma/client";
 import { UserUpdateSchema } from "@/lib/schemas/user";
 import { auth } from "@clerk/nextjs/server";
+import { clerkClient } from "@clerk/nextjs/server";
+
+export type UserData = {
+  id: string; // ID de Prisma (id de la tabla 'users')
+  fullName: string;
+  imageUrl: string;
+  clerkId: string;
+  email: string;
+  phone: string;
+  role: string; // Incluir el rol para la validación/información
+  reputation: number;
+  reviewsCount: number; // Cantidad total de reseñas recibidas
+}
 
 // Obtener un usuario por su ID
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
-  const t = await getTranslations("User");
   const g = await getTranslations("General");
   
-  const { userId } = await auth();
+  let { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
+    userId = req.headers.get("X-User-ID");
+  }
+
+  if (userId) {
+    const user = await prisma.user.findUnique({ where: { clerkId: userId } });
+    if (!user) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: g("UserNotFound"),
+        },
+        { status: 404 }
+      );
+    }
   }
 
   const { id } = await params;
 
   try {
+    // 1. Buscar usuario en Prisma, obteniendo su clerkId, reputación y rol.
+    // También contamos directamente las reseñas recibidas.
     const user = await prisma.user.findUnique({
-      where: { id: String(id) },
+      where: { id: id },
+      select: {
+        id: true,
+        clerkId: true,
+        reputation: true,
+        role: true, // Necesitamos el rol para la validación
+        reviewsReceived: {
+          // Contar las reseñas recibidas
+          select: { id: true },
+        },
+      },
     });
 
+    // 2. Validación de existencia y rol (CORREGIDO: Devuelve error en lugar de null).
     if (!user) {
-      return NextResponse.json({ error: g("UserNotFound") }, { status: 404 });
+      console.warn(`Usuario con ID ${id} no encontrado en Prisma.`);
+      return NextResponse.json(
+        { success: false, error: g("UserNotFound") },
+        { status: 404 }
+      );
     }
 
-    return NextResponse.json(user);
+    // El requisito es que "tenga el rol de seller". Si no lo es, devolvemos un error.
+    if (user.role !== "seller") {
+      console.warn(
+        `Usuario ${id} tiene el rol "${user.role}" en lugar de "seller".`
+      );
+      return NextResponse.json(
+        { success: false, error: "Access Denied: User is not a seller." },
+        { status: 403 } // 403 Forbidden o 404 para ocultar que el usuario existe pero no cumple el rol.
+      );
+    }
+
+    // 3. Obtener datos de Clerk usando el clerkId.
+    const { users } = await clerkClient();
+    const seller = await users.getUser(user!.clerkId);
+
+    // 4. Desestructuración y formateo de datos
+    const {
+      firstName,
+      lastName,
+      imageUrl,
+      id: clerkId,
+      emailAddresses,
+      phoneNumbers,
+    } = seller;
+    const fullName = `${firstName} ${lastName}`.trim() || "Usuario anónimo";
+
+    // 5. Construir y devolver el objeto UserData
+    const userData: UserData = {
+      id: user.id, 
+      fullName,
+      imageUrl,
+      clerkId: clerkId, 
+      // Se asume que siempre hay al menos una dirección de correo/teléfono o se usa un string vacío
+      email: emailAddresses[0]?.emailAddress || "",
+      phone: phoneNumbers[0]?.phoneNumber || "",
+      role: user.role, 
+      reputation: user.reputation ?? 0, 
+      reviewsCount: user.reviewsReceived.length, 
+    };
+
+    // 7. Devolver el objeto UserData con un status 200 (CORREGIDO: Usa NextResponse.json)
+    return NextResponse.json(userData, { status: 200 });
   } catch (error) {
-    console.log(error);
-    return NextResponse.json(
-      { error: t("UpdateError") },
-      { status: 500 }
-    );
+    console.error("Error al obtener usuario", error);
+    return null;
   }
 }
 

@@ -920,5 +920,10 @@
     "btnYes": "Sí, agregar",
     "btnNo": "No, continuar",
     "note": "Puedes agregar tu teléfono más tarde desde la configuración de tu cuenta."
+  },
+  "Reviews": {
+    "NoConfirmedOrderFound": "Orden sin confirmar",
+    "AlreadyReviewedSeller": "El vendedor ya fue reseñado por usted",
+    "EligibleForReview": "El vendedor es elegible para reseñar"
   }
 }

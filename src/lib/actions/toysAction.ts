@@ -7,6 +7,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { Prisma } from "@prisma/client";
 import { getLocale } from "next-intl/server";
+import { revalidatePath } from "next/cache";
 
 export type Filters = {
   search?: string | null;
@@ -228,25 +229,18 @@ export async function getSales(status?: SalesStatus): Promise<Sale[]> {
     headers["X-User-ID"] = userId;
   }
 
-  if (status) {
-    const response = await fetch(
-      `${BACKEND_URL}/${locale}/api/toys/for-sale?status=${status}`,
-      {
-        method: "GET",
-        headers: headers,
-      }
-    );
-    const toys = await response.json();
-    return toys as Sale[];
-  }
-
-  const response = await fetch(`${BACKEND_URL}/${locale}/api/toys/for-sale`, {
-    method: "GET",
-    headers: headers,
-  });
-
+  const response = await fetch(
+    `${BACKEND_URL}/${locale}/api/toys/for-sale?status=${status}`,
+    {
+      method: "GET",
+      headers: headers,
+    }
+  );
   const sales = await response.json();
-  return sales;
+  if (response.status === 200) {
+    return sales as Sale[];
+  }
+  return [];
 }
 
 export async function getFree() {
@@ -406,4 +400,37 @@ export async function deleteToy(toyId: string) {
 
   const result = await toy.json();
   return result;
+}
+
+export async function requestToy(toyId: string) {
+  const locale = await getLocale(); // ✅ Obtiene el locale actual
+  const { userId } = await auth();
+
+  const headers = {
+    "Content-Type": "application/json",
+    "X-User-ID": "",
+  };
+
+  if (userId) {
+    headers["X-User-ID"] = userId;
+  }
+
+  try {
+    const response = await fetch(`${BACKEND_URL}/${locale}/api/toys/request`, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify({ toyId }),
+    });
+    const result = await response.json();
+    
+    // Solo revalida si la respuesta fue exitosa
+    if (response.ok) {
+      revalidatePath(`/${locale}/toys/${toyId}`);
+    }
+    
+    return result;    
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: "Error canceling order" };
+  }
 }

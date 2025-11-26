@@ -2,7 +2,7 @@
 
 import { Toy } from "@/types/toy";
 import React, { useState } from "react";
-import { Heart, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
+import { Heart, ShoppingCart, ChevronLeft, ChevronRight, Send } from "lucide-react";
 import { NumberToCategory } from "@/lib/utils";
 import Image from "next/image";
 import ExpandableText from "../ExpandableText";
@@ -18,6 +18,7 @@ import { ChatButton } from "../ChatButton";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import WhatsAppContact from "../WhatsAppContact";
+import { requestToy } from "@/lib/actions/toysAction";
 
 // Importación dinámica con exportación por defecto correcta
 const MapComponent = dynamic(
@@ -90,6 +91,21 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
 
   const addToCart = useCartStore((state) => state.addToCart);
   const coordinates = toy.location ? toy.location.split(",").map(Number) : [];
+
+  const handleRequest = async () => {   
+    try {
+      const res = await requestToy(toy.id);
+
+      if (res.data) {
+        toast.success(t("requestSuccess"));
+      } else {
+        toast.error(t("requestError"));
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to request toy");
+    }
+  };
 
   return (
     <div>
@@ -233,6 +249,17 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
                   <ShoppingCart className="w-5 h-5" />
                   <span>{t("addToCart")}</span>
                 </button>
+              )}
+              {!toy.forSell && toy.isActive && isSignedIn && !isCurrentUser && (
+                <button
+                  onClick={() => {
+                    handleRequest()
+                  }}
+                  className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 px-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 w-full"
+                >
+                    <Send className="w-5 h-5" />
+                    <span>Solicitar</span>
+                </button>                  
               )}
             </div>
             <div className="flex flex-col gap-2">
