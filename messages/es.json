@@ -97,7 +97,9 @@
     "OrderNotValid": "Orden no válida para cancelar",
     "NotOrderToProcess": "No exiten Ordenes para procesar",
     "InvalidTransfersMetadata": "Metadatos de transferencias no válidos",
-    "SellerIdRequeried": "Seller Id is Requeried"
+    "SellerIdRequeried": "Seller Id is Requeried",
+    "TransferFailed": "Transferencia fallida",
+    "TransferAutomatPorOrden": "Transferencia automática por orden"
   },
   "General": {
     "InvalidInputParams": "Parámetros inválidos",
