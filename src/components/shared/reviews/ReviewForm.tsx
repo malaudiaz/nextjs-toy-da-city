@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { StarIcon } from '@heroicons/react/24/solid';
 import { toast } from "sonner";
 import { useTranslations } from "next-intl"; // ✅ Importa el hook
+import { useRouter } from 'next/navigation';
 
 interface ReviewFormProps {
   targetUserId: string;
@@ -20,6 +21,8 @@ export default function ReviewForm({
   const [rating, setRating] = useState<number | null>(null);
   const [comment, setComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,6 +56,7 @@ export default function ReviewForm({
       onReviewSubmitted?.(); // Recarga perfil u órdenes
       setRating(null);
       setComment('');
+      router.push(`/config/purchases`);
     } catch (error: unknown) {
         let errorMessage = t("sendingError");       
         

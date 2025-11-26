@@ -114,3 +114,37 @@ export type Category ={
   isActive: boolean;
 }
 
+export type SellerProfile = {
+  id: string;
+  name: string;
+  imageUrl?: string;
+  clerkId: string;
+  role: string;
+  reputation: number | null;
+  createdAt: string;
+  averageRating: number | null;
+  totalReviews: number;
+  toysForSale: ToysForSale[];
+  reviewsReceived: Review[];
+}
+
+export type Review = {
+  id: string;
+  rating: number;
+  comment: string | null;
+  createdAt: string;
+  reviewer: {
+    id: string;
+    name: string;
+    imageUrl?: string;
+  };
+  order: { id: string } | null;
+}
+
+export type ToysForSale = {
+   id: string;
+    title: string;
+    price: number;
+    category: { name: string };
+    primaryImageUrl: string | null;
+}

@@ -102,7 +102,7 @@ export default function ReviewPage() {
     <div className="max-w-2xl mx-auto p-4 md:p-6">
 
       <div className="py-3">
-        <Breadcrumbs productName={seller.name} />
+        <Breadcrumbs productName={seller.name} ignoreSegment="reviews"/>
       </div>
 
       <h1 className="text-2xl font-bold mb-6">
