@@ -1,4 +1,5 @@
 // app/cart/page.tsx
+"use client";
 import { useCartStore } from '@/store/cartStore';
 import Breadcrumbs from '@/components/shared/BreadCrumbs';
 import CartCard from '@/components/shared/cart/CartCard';

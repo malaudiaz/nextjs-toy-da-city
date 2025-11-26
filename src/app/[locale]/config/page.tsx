@@ -13,7 +13,6 @@ import {
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 import { useTranslations } from "next-intl";
 import { redirect, usePathname } from "next/navigation";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
