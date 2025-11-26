@@ -1,6 +1,6 @@
 // app/api/categories/[id]/route.ts
 import { NextResponse } from "next/server";
-import { NextRequest } from 'next/server';
+import { NextRequest } from "next/server";
 import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { UserSchema } from "@/lib/schemas/user";
@@ -20,54 +20,58 @@ export type UserData = {
   role: string; // Incluir el rol para la validación/información
   reputation: number;
   reviewsCount: number; // Cantidad total de reseñas recibidas
-}
+};
 
 // Obtener un usuario por su ID
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  { params }: { params: Promise<{ id: string }> }
+): Promise<
+  | NextResponse<{ success: boolean; error: string }>
+  | NextResponse<UserData>
+> {
   const g = await getTranslations("General");
-  
-  let { userId } = await auth();
-
-  if (!userId) {
-    userId = req.headers.get("X-User-ID");
-  }
-
-  if (userId) {
-    const user = await prisma.user.findUnique({ where: { clerkId: userId } });
-    if (!user) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: g("UserNotFound"),
-        },
-        { status: 404 }
-      );
-    }
-  }
-
-  const { id } = await params;
 
   try {
+    let { userId } = await auth();
+
+    if (!userId) {
+      userId = req.headers.get("X-User-ID");
+    }
+
+    // Si hay userId, verificar que existe en la base de datos
+    if (userId) {
+      const currentUser = await prisma.user.findUnique({ 
+        where: { clerkId: userId } 
+      });
+      if (!currentUser) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: g("UserNotFound"),
+          },
+          { status: 404 }
+        );
+      }
+    }
+
+    const { id } = await params;
+
     // 1. Buscar usuario en Prisma, obteniendo su clerkId, reputación y rol.
-    // También contamos directamente las reseñas recibidas.
     const user = await prisma.user.findUnique({
       where: { id: id },
       select: {
         id: true,
         clerkId: true,
         reputation: true,
-        role: true, // Necesitamos el rol para la validación
+        role: true,
         reviewsReceived: {
-          // Contar las reseñas recibidas
           select: { id: true },
         },
       },
     });
 
-    // 2. Validación de existencia y rol (CORREGIDO: Devuelve error en lugar de null).
+    // 2. Validación de existencia y rol
     if (!user) {
       console.warn(`Usuario con ID ${id} no encontrado en Prisma.`);
       return NextResponse.json(
@@ -76,20 +80,19 @@ export async function GET(
       );
     }
 
-    // El requisito es que "tenga el rol de seller". Si no lo es, devolvemos un error.
     if (user.role !== "seller") {
       console.warn(
         `Usuario ${id} tiene el rol "${user.role}" en lugar de "seller".`
       );
       return NextResponse.json(
         { success: false, error: "Access Denied: User is not a seller." },
-        { status: 403 } // 403 Forbidden o 404 para ocultar que el usuario existe pero no cumple el rol.
+        { status: 403 }
       );
     }
 
     // 3. Obtener datos de Clerk usando el clerkId.
     const { users } = await clerkClient();
-    const seller = await users.getUser(user!.clerkId);
+    const seller = await users.getUser(user.clerkId);
 
     // 4. Desestructuración y formateo de datos
     const {
@@ -104,23 +107,25 @@ export async function GET(
 
     // 5. Construir y devolver el objeto UserData
     const userData: UserData = {
-      id: user.id, 
+      id: user.id,
       fullName,
       imageUrl,
-      clerkId: clerkId, 
-      // Se asume que siempre hay al menos una dirección de correo/teléfono o se usa un string vacío
+      clerkId: clerkId,
       email: emailAddresses[0]?.emailAddress || "",
       phone: phoneNumbers[0]?.phoneNumber || "",
-      role: user.role, 
-      reputation: user.reputation ?? 0, 
-      reviewsCount: user.reviewsReceived.length, 
+      role: user.role,
+      reputation: user.reputation ?? 0,
+      reviewsCount: user.reviewsReceived.length,
     };
 
-    // 7. Devolver el objeto UserData con un status 200 (CORREGIDO: Usa NextResponse.json)
     return NextResponse.json(userData, { status: 200 });
+    
   } catch (error) {
     console.error("Error al obtener usuario", error);
-    return null;
+    return NextResponse.json(
+      { success: false, error: g("InternalServerError") },
+      { status: 500 }
+    );
   }
 }
 
@@ -130,7 +135,7 @@ export async function PUT(
 ) {
   const t = await getTranslations("User");
   const g = await getTranslations("General");
-  
+
   const { userId } = await auth();
 
   if (!userId) {
@@ -142,10 +147,7 @@ export async function PUT(
   try {
     // Validar ID
     if (!id) {
-      return NextResponse.json(
-        { error: t("InvaliduserID") },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: t("InvaliduserID") }, { status: 400 });
     }
 
     // Obtener y validar cuerpo
@@ -188,7 +190,7 @@ export async function DELETE(
 ) {
   const t = await getTranslations("User");
   const g = await getTranslations("General");
-  
+
   const { userId } = await auth();
 
   if (!userId) {
@@ -199,10 +201,7 @@ export async function DELETE(
 
   try {
     if (!id) {
-      return NextResponse.json(
-        { error: t("InvaliduserID") },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: t("InvaliduserID") }, { status: 400 });
     }
 
     await prisma.user.deleteMany({
@@ -232,7 +231,7 @@ export async function PATCH(
 ) {
   const t = await getTranslations("User");
   const g = await getTranslations("General");
-  
+
   const { userId } = await auth();
 
   if (!userId) {
@@ -242,10 +241,7 @@ export async function PATCH(
   const { id } = await params; // Safe to use
 
   if (!id) {
-    return NextResponse.json(
-      { error: t("InvaliduserID") },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: t("InvaliduserID") }, { status: 400 });
   }
 
   try {
@@ -276,16 +272,10 @@ export async function PATCH(
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2025") {
-        return NextResponse.json(
-          { error: g("UserNotFound") },
-          { status: 404 }
-        );
+        return NextResponse.json({ error: g("UserNotFound") }, { status: 404 });
       }
     }
 
-    return NextResponse.json(
-      { error: g("ServerError") },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: g("ServerError") }, { status: 500 });
   }
 }

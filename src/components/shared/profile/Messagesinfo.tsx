@@ -20,11 +20,15 @@ type Media = {
 };
 
 type MessageSender = {
-  id: string;
-  clerkId: string;
-  imageUrl: string;
+  id: string; // ID de Prisma (id de la tabla 'users')
   fullName: string;
+  imageUrl: string;
+  clerkId: string;
   email: string;
+  phone: string;
+  role: string; // Incluir el rol para la validación/información
+  reputation: number;
+  reviewsCount: number; // Cantidad total de reseñas recibidas
 };
 
 type Messages = {
@@ -57,7 +61,7 @@ type MessagesProps = {
 };
 
 const MessagesInfo = ({ messages }: MessagesProps) => {
-  const t = useTranslations("messages"); 
+  const t = useTranslations("messages");
 
   return (
     <div className="min-h-screen p-4 md:p-6">
@@ -65,7 +69,7 @@ const MessagesInfo = ({ messages }: MessagesProps) => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            {t('title')}
+            {t("title")}
           </h1>
         </div>
 
@@ -73,7 +77,7 @@ const MessagesInfo = ({ messages }: MessagesProps) => {
           {messages.length === 0 ? (
             <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
               <CardContent className="p-8 text-center">
-                <Empty title={t('title')} subtitle={t('emptyMsg')} />
+                <Empty title={t("title")} subtitle={t("emptyMsg")} />
               </CardContent>
             </Card>
           ) : (
@@ -105,7 +109,7 @@ const MessagesInfo = ({ messages }: MessagesProps) => {
                           <div className="text-2xl font-bold text-green-700">
                             {msg.price === 0 ? (
                               <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm">
-                                {t('free')}
+                                {t("free")}
                               </span>
                             ) : (
                               `$${msg.price.toFixed(2)}`
@@ -133,7 +137,7 @@ const MessagesInfo = ({ messages }: MessagesProps) => {
                                 <div className="flex items-center gap-2 text-sm text-gray-600">
                                   <User className="h-4 w-4" />
                                   <span>
-                                    {t('buyer')}:{" "}
+                                    {t("buyer")}:{" "}
                                     <Link href={`/seller/${sender.id}`}>
                                       {sender.fullName}
                                     </Link>
