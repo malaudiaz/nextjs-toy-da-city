@@ -76,7 +76,7 @@ export function UserAvatar({
       <div className="flex flex-row h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 border-red">
         <Image
           src={src || "/no-image.png"}
-          alt={alt}
+          alt={alt || ""}
           width={40}
           height={40}
           className="h-full w-full object-cover"

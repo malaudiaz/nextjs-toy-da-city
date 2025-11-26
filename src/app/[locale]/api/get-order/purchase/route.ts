@@ -73,7 +73,7 @@ export async function GET(req: Request) {
     const sellersWithConfirmedOrders = new Set<string>();
 
     orders.forEach((order) => {
-      if (order.status === "CONFIRMED") {
+      if (order.status === "CONFIRMED" || order.status === "TRANSFERRED") {
         order.items.forEach((item) => {
           sellersWithConfirmedOrders.add(item.toy.seller.id);
         });
@@ -81,8 +81,6 @@ export async function GET(req: Request) {
     });
 
     // B. Consultar si el comprador YA ha reseñado a estos vendedores (NUEVO)
-    // NOTA: Asumo que tu modelo se llama 'review' y tiene campos 'authorId' y 'sellerId'.
-    // Ajusta los nombres de los campos según tu schema.prisma real.
     const reviewedSellerIds = new Set<string>();
 
     if (sellersWithConfirmedOrders.size > 0) {
