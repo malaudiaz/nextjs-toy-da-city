@@ -16,7 +16,7 @@
     "contactSupport": "Contactar Soporte",
     "contactSupportMessage": "Si el problema persiste, por favor contacta a nuestro equipo de soporte.",
     "loadig": "Cargando..."
-  },  
+  },
   "seo": {
     "homeTitle": "Toydacity - Juguetes, intercambio y regalos",
     "homeDescription": "Descubre, compra, intercambia y regala juguetes en Toydacity. Encuentra las mejores ofertas y conecta con otros padres."
@@ -32,7 +32,7 @@
     "emptyMsg": "Aún no se han publicado juguetes."
   },
   "User": {
-    "AuthenticationFailed": "Autenticación fallida", 
+    "AuthenticationFailed": "Autenticación fallida",
     "NotFound": "Usuario no encontrada",
     "UpdateError": "Error actualizando usuario",
     "DeleteError": "Error eliminando usuario",
@@ -447,7 +447,7 @@
     "YourReputation": "Tu Reputación",
     "Toys": "Juguetes",
     "Chat": "Chat",
-     "Delete": "Eliminar",
+    "Delete": "Eliminar",
     "DeleteQuestion": "¿Estás seguro de que deseas eliminar este juguete?",
     "DeleteDescription": " Esta acción no se puede deshacer. Esto eliminará permanentemente tu juguete y eliminará tus datos de nuestros servidores.",
     "Cancel": "Cancelar",
@@ -529,7 +529,7 @@
     "Contact": "Contacto",
     "Mission": "Nuestra Misión",
     "Reviews": "Reseñas",
-        "Toys": "Mis Juguetes"
+    "Toys": "Mis Juguetes"
   },
   "expandableText": {
     "ShowMore": "Ver más",
@@ -574,7 +574,7 @@
     "openBox": "Caja abierta",
     "acceptable": "Aceptable",
     "likeNew": "Como nuevo",
-    "good": "Bueno" ,
+    "good": "Bueno",
     "toRepair": "Para Reparar",
     "status": "Estado"
   },
@@ -608,7 +608,7 @@
     "REEMBURSED": "Reembolsado",
     "orderNumber": "Número de Orden",
     "itemsTitle": "Elementos",
-    "reviewSellerLinkText": "Reseñar vendedor"    
+    "reviewSellerLinkText": "Reseñar vendedor"
   },
   "sales": {
     "title": "Mis Ventas",
@@ -727,7 +727,7 @@
     "confirmEmail": "Confirmar por correo electrónico",
     "manualRequest": "Solicitud manual:",
     "floridaSpecific": "Notas específicas de Florida:",
-    "fullDocumentLink": "Enlace al documento completo", 
+    "fullDocumentLink": "Enlace al documento completo",
     "email": "Email privacy@toydacity.com with:",
     "subject": "Solicitud de eliminación de datos.",
     "body": "Especifique si desea eliminar todos los datos o listados específicos.",
@@ -769,7 +769,7 @@
     "review": "Deja una Reseña al vendedor",
     "cartCleared": "Carrito vaciado después de la compra"
   },
-  "confirmOrderDialog": { 
+  "confirmOrderDialog": {
     "title": "Confirmar Orden",
     "subtitle": "¿Está seguro de que desea confirmar este pedido? Esta acción no se puede deshacer.",
     "btnConfirm": "Confirmar",
@@ -779,7 +779,7 @@
     "title": "Cancelar Pedido",
     "subtitle": "¿Seguro que desea cancelar este pedido? Esta acción no se puede deshacer.",
     "btnConfirm": "Confirmar",
-    "btnCancel": "Cancelar" 
+    "btnCancel": "Cancelar"
   },
   "reviewPage": {
     "cantReview": "No puedes reseñar a este vendedor.",
@@ -792,7 +792,7 @@
   "profile": {
     "unavailable": "Vendedor no disponible"
   },
-  "cartCard": { 
+  "cartCard": {
     "seller": "Vendedor",
     "delete": "Eliminar del carrito",
     "error": "Error al cargar"
@@ -820,7 +820,10 @@
     "submit": "Enviar reseña",
     "success": "¡Reseña enviada exitosamente!",
     "error": "Seleccione una calificación.",
-    "sendingError": "Error al enviar la reseña"
+    "sendingError": "Error al enviar la reseña",
+    "thank": "Gracias por tu reseña!",
+    "review": "Reseñar a  ",
+    "eligible": "Solo los compradores que han realizado una compra confirmada pueden dejar reseñas."
   },
   "sendMail": {
     "paymentSuccessSubject": "Payment successful - Your purchase has been processed",
@@ -896,7 +899,7 @@
   },
   "FeaturesProduct": {
     "title": "Puedes ver también",
-    "free": "GRATIS"  
+    "free": "GRATIS"
   },
   "Raiting": {
     "review": "reseña"

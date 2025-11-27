@@ -148,3 +148,9 @@ export type ToysForSale = {
     category: { name: string };
     primaryImageUrl: string | null;
 }
+
+export type ReviewEligibility ={
+  canReview: boolean;
+  orderId: string | null;
+  message?: string;
+}

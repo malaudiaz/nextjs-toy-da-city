@@ -827,7 +827,10 @@
     "success": "Review sent successfully!",
     "error": "Please select a rating.",
     "sendingError": "Error submitting review",
-    "back": "Back to home"
+    "back": "Back to home",
+    "thank": "Thanks for your review!",
+    "review": "Review to ",
+    "eligible": "Only buyers who have completed a confirmed purchase can leave reviews."
   },
   "sendMail": {
     "paymentSuccessSubject": "Pago exitoso - Tu compra ha sido procesada",
@@ -931,6 +934,7 @@
     "btnNo": "No, continue",
     "note": "You can add your phone later from your account settings."
   },
+
   "Reviews": {
     "NoConfirmedOrderFound": "Order not yet confirmed",
     "AlreadyReviewedSeller": "The seller has already been reviewed by you",
