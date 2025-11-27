@@ -1,30 +1,12 @@
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import ReviewClient from "@/components/shared/reviews/ReviewClient";
-import SellerInfo from "@/components/shared/reviews/SellerInfo";
 import { getReviewsEligible, getSellerProfile } from "@/lib/actions/sellertActions";
 
-// Tipos
-interface UserProfile {
-  id: string;
-  name: string;
-  imageUrl?: string;
-  clerkId: string;
-  createdAt: string;
-  averageRating: number | null;
-  totalReviews: number;
-}
-
-
-
-export default async function ReviewPage({ params }: { params: { sellerId: string} }) {
-  
-  const { sellerId } = await params
+export default async function ReviewPage({ params }: { params: Promise<{ sellerId: string }>; }) {
+  const { sellerId } = await params;
 
   const seller = await getSellerProfile(sellerId);
   const reviewsEligible = await getReviewsEligible(sellerId);
-
-
-
 
   return (
     <div className="max-w-2xl mx-auto p-4 md:p-6">
