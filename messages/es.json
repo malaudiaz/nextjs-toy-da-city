@@ -69,7 +69,12 @@
     "LatitudeLongitudeRequired": "Latitud y longitud son requidas",
     "LocationNotFound": "Location not found",
     "LocationNotDisponsible": "Ubicación no disponible",
-    "ErrorFetchingLocationData": "Error obteniendo datos de ubicación"
+    "ErrorFetchingLocationData": "Error obteniendo datos de ubicación",
+    "ToyNotGift": "El juguete no es para regalar",
+    "StatusIncorrect": "Estado del juguete o solicitud incorrecto",
+    "GiftRequestNotFound": "Solicitud no existe ",
+    "GiftRequestNotGift": "Solicitud no es para regalar o intercambiar"
+
   },
   "Comments": {
     "NotFound": "Comentario no encontrado",
@@ -112,7 +117,8 @@
     "NoPushSubscriptionsFound": "No se encontraron suscripciones push",
     "WebhookNotConfigure": "Secreto de webhook no configurado",
     "WebhookSignInvalid": "Firma de webhook inválida",
-    "MissingHeadersSvix": "Faltan headers svix"
+    "MissingHeadersSvix": "Faltan headers svix",
+    "OperationOk": "Operación satisfactoria"
   },
   "Payments": {
     "card_declined": "La tarjeta fue rechazada. Use otra tarjeta.",

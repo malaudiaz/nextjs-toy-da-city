@@ -38,6 +38,8 @@ model User {
   receivedMessages  Message[]          @relation("MessageReceiver")
   pushSubscriptions PushSubscription[]
 
+  giftrequests          GiftRequest[]
+
   @@map("users")
 }
 
@@ -93,6 +95,7 @@ model Status {
   updatedAt    DateTime      @updatedAt
   translations Translation[]
   toys         Toy[]
+  giftrequests    GiftRequest[]
   //transactions Transaction[]
 
   @@map("statuses")
@@ -136,7 +139,10 @@ model Toy {
   media       Media[]
   favorites   FavoriteToy[]
   orderItems  OrderItem[] // Relación inversa
-  Message     Message[]     @relation("MessageToy")
+  Message     Message[]      @relation("MessageToy")
+
+  giftrequests      GiftRequest[]      // Solicitudes donde este juguete es el deseado
+  exchangerequested GiftRequest[]    @relation("exchange_toy") // Solicitudes donde este juguete se ofrece en intercambio
 
   @@map("toys")
 }
@@ -304,4 +310,32 @@ model WebhookError {
 
   @@index([clerkId])
   @@index([createdAt])
+}
+
+
+model GiftRequest {
+  id          String   @id @default(uuid())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  toyId     String
+  toy       Toy      @relation(fields: [toyId], references: [id])
+  
+  forGifts    Boolean       @default(true)
+  forChanges  Boolean       @default(true)
+
+  statusId    Int
+  status      Status        @relation(fields: [statusId], references: [id])
+
+  // Fechas
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  exchangeToyId String?  // Opcional porque solo aplica para intercambios
+  exchangeToy   Toy?     @relation(fields: [exchangeToyId], references: [id], name: "exchange_toy")
+  
+  // Garantizar una solicitud por usuario por regalo
+  @@unique([toyId, userId], name: "unique_toy_request")
+  @@map("gift_requests")
+
 }

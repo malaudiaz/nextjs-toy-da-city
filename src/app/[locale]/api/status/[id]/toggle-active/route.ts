@@ -42,7 +42,7 @@ export async function PATCH(
     return NextResponse.json({
       success: true,
       data: updatedStatus,
-      message: `Estado ${updatedStatus.isActive ? 'activado' : 'desactivado'} correctamente`
+      message: g('OperationOk')
     })
 
   } catch {

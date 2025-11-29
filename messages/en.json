@@ -69,7 +69,11 @@
     "LatitudeLongitudeRequired": "Latitude and longitude are required",
     "LocationNotFound": "Locación no encontrada",
     "LocationNotDisponsible": "Location Not Disponsible",
-    "ErrorFetchingLocationData": "Error fetching location data"
+    "ErrorFetchingLocationData": "Error fetching location data",
+    "ToyNotGift": "The toy is not to give",
+    "StatusIncorrect": "Status Incorrect",
+    "GiftRequestNotFound": "Request Not Exist",
+    "GiftRequestNotGift": "Solicited, not for free or exchange"
   },
   "Comments": {
     "NotFound": "Comments not found",
@@ -112,7 +116,8 @@
     "NoPushSubscriptionsFound": "No push subscriptions found",
     "WebhookNotConfigure": "Webhook secret not configured",
     "WebhookSignInvalid": "Webhook Sign Invalid",
-    "MissingHeadersSvix": "Svix headers are missing"
+    "MissingHeadersSvix": "Svix headers are missing",
+    "OperationOk": "Satisfactory operation"
   },
   "Payments": {
     "card_declined": "Your card was declined. Please use another card.",
