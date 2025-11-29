@@ -60,16 +60,16 @@ export async function PATCH(
     const statuses = await prisma.status.findMany({
       where: {
         name: {
-          in: ["reserved", "cancelled", "sold"],
+          in: ["confirmed", "rejected", "sold"],
         },
       },
     });
 
-    const reservedStatus = statuses.find(s => s.name === "reserved");
-    const cancelledStatus = statuses.find(s => s.name === "cancelled");
+    const confirmedStatus = statuses.find(s => s.name === "confirmed");
+    const rejectedStatus = statuses.find(s => s.name === "rejected");
     const soldStatus = statuses.find(s => s.name === "sold");
     
-    if (!reservedStatus || !cancelledStatus || !soldStatus ) {
+    if (!confirmedStatus || !rejectedStatus || !soldStatus ) {
       return NextResponse.json({ error: g("ServerError") }, { status: 404 });
     }
 
@@ -78,7 +78,7 @@ export async function PATCH(
       // 1. Confirmar la solicitud seleccionada
       const updatedRequest = await tx.giftRequest.update({
         where: { id: requestId },
-        data: { statusId: reservedStatus.id },
+        data: { statusId: confirmedStatus.id },
         include: {
           status: true,
         },
@@ -95,7 +95,7 @@ export async function PATCH(
             },
           },
         },
-        data: { statusId: cancelledStatus.id },
+        data: { statusId: rejectedStatus.id },
       });
 
       // 3. Marcar el juguete como completado/asignado

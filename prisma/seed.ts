@@ -13,28 +13,30 @@ export type TransactionClient = Omit<PrismaClient, '$connect' | '$disconnect' | 
 console.log(process.env.NODE_ENV);
 
 async function main() {
-  await prisma.$transaction(async () => {
+  // await prisma.$transaction(async () => {
     // === LIMPIEZA ===
     // Eliminar en orden inverso por relaciones
 
-    await prisma.refund.deleteMany();
-    await prisma.transfer.deleteMany();
-    await prisma.orderItem.deleteMany();
-    await prisma.order.deleteMany();
-    await prisma.review.deleteMany();
-    await prisma.message.deleteMany();
-    await prisma.pushSubscription.deleteMany();
-    await prisma.favoriteToy.deleteMany();
+    // await prisma.refund.deleteMany();
+    // await prisma.transfer.deleteMany();
+    // await prisma.orderItem.deleteMany();
+    // await prisma.order.deleteMany();
+    // await prisma.review.deleteMany();
+    // await prisma.message.deleteMany();
+    // await prisma.pushSubscription.deleteMany();
+    // await prisma.favoriteToy.deleteMany();
+    // await prisma.giftRequest.deleteMany();
 
-    await prisma.media.deleteMany();
-    await prisma.toy.deleteMany();
-    await prisma.translation.deleteMany();
-    await prisma.language.deleteMany();
-    await prisma.category.deleteMany();
-    await prisma.condition.deleteMany();
-    await prisma.status.deleteMany();
-    await prisma.user.deleteMany();
-  });
+
+    // await prisma.media.deleteMany();
+    // await prisma.toy.deleteMany();
+    // await prisma.translation.deleteMany();
+    // await prisma.language.deleteMany();
+    // await prisma.category.deleteMany();
+    // await prisma.condition.deleteMany();
+    // await prisma.status.deleteMany();
+    // await prisma.user.deleteMany();
+  // });
 
   await prisma.$transaction(async (tx: TransactionClient) => {
     // === IDIOMAS ===
@@ -62,107 +64,152 @@ async function main() {
     });
 
     // === CONDICIONES ===
-    await tx.condition.create({
-      data: {
-        id: 1,
-        name: "new_sealed",
-        description: "New sealed",
-        userId: "550e8400-e29b-41d4-a716-446655440000",
-        translations: {
-          create: [
-            { key: "name", value: "New sealed", languageId: "en" },
-            { key: "name", value: "Nuevo - sellado", languageId: "es" },
-          ],
-        },
-      },
-    });
+    // await tx.condition.create({
+    //   data: {
+    //     id: 1,
+    //     name: "new_sealed",
+    //     description: "New sealed",
+    //     userId: "550e8400-e29b-41d4-a716-446655440000",
+    //     translations: {
+    //       create: [
+    //         { key: "name", value: "New sealed", languageId: "en" },
+    //         { key: "name", value: "Nuevo - sellado", languageId: "es" },
+    //       ],
+    //     },
+    //   },
+    // });
 
-    await tx.condition.create({
-      data: {
-        id: 2,
-        name: "new_open_box",
-        description: "New open box",
-        userId: "550e8400-e29b-41d4-a716-446655440000",
-        translations: {
-          create: [
-            { key: "name", value: "New open box", languageId: "en" },
-            { key: "name", value: "Nuevo - Caja abierta", languageId: "es" },
-          ],
-        },
-      },
-    });
+    // await tx.condition.create({
+    //   data: {
+    //     id: 2,
+    //     name: "new_open_box",
+    //     description: "New open box",
+    //     userId: "550e8400-e29b-41d4-a716-446655440000",
+    //     translations: {
+    //       create: [
+    //         { key: "name", value: "New open box", languageId: "en" },
+    //         { key: "name", value: "Nuevo - Caja abierta", languageId: "es" },
+    //       ],
+    //     },
+    //   },
+    // });
 
-    await tx.condition.create({
-      data: {
-        id: 3,
-        name: "like_new",
-        description: "Like new",
-        userId: "550e8400-e29b-41d4-a716-446655440000",
-        translations: {
-          create: [
-            { key: "name", value: "Like New", languageId: "en" },
-            { key: "name", value: "Como nuevo", languageId: "es" },
-          ],
-        },
-      },
-    });
+    // await tx.condition.create({
+    //   data: {
+    //     id: 3,
+    //     name: "like_new",
+    //     description: "Like new",
+    //     userId: "550e8400-e29b-41d4-a716-446655440000",
+    //     translations: {
+    //       create: [
+    //         { key: "name", value: "Like New", languageId: "en" },
+    //         { key: "name", value: "Como nuevo", languageId: "es" },
+    //       ],
+    //     },
+    //   },
+    // });
 
-    await tx.condition.create({
-      data: {
-        id: 4,
-        name: "acceptable",
-        description: "Acceptable",
-        userId: "550e8400-e29b-41d4-a716-446655440000",
-        translations: {
-          create: [
-            { key: "name", value: "Acceptable", languageId: "en" },
-            { key: "name", value: "Aceptable", languageId: "es" },
-          ],
-        },
-      },
-    });
+    // await tx.condition.create({
+    //   data: {
+    //     id: 4,
+    //     name: "acceptable",
+    //     description: "Acceptable",
+    //     userId: "550e8400-e29b-41d4-a716-446655440000",
+    //     translations: {
+    //       create: [
+    //         { key: "name", value: "Acceptable", languageId: "en" },
+    //         { key: "name", value: "Aceptable", languageId: "es" },
+    //       ],
+    //     },
+    //   },
+    // });
 
-    await tx.condition.create({
-      data: {
-        id: 5,
-        name: "good",
-        description: "Good",
-        userId: "550e8400-e29b-41d4-a716-446655440000",
-        translations: {
-          create: [
-            { key: "name", value: "Good", languageId: "en" },
-            { key: "name", value: "Bueno", languageId: "es" },
-          ],
-        },
-      },
-    });
+    // await tx.condition.create({
+    //   data: {
+    //     id: 5,
+    //     name: "good",
+    //     description: "Good",
+    //     userId: "550e8400-e29b-41d4-a716-446655440000",
+    //     translations: {
+    //       create: [
+    //         { key: "name", value: "Good", languageId: "en" },
+    //         { key: "name", value: "Bueno", languageId: "es" },
+    //       ],
+    //     },
+    //   },
+    // });
 
-    await tx.condition.create({
-      data: {
-        id: 6,
-        name: "to_repair",
-        description: "To repair",
-        userId: "550e8400-e29b-41d4-a716-446655440000",
-        translations: {
-          create: [
-            { key: "name", value: "To repair", languageId: "en" },
-            { key: "name", value: "Para reparar", languageId: "es" },
-          ],
-        },
-      },
-    });
+    // await tx.condition.create({
+    //   data: {
+    //     id: 6,
+    //     name: "to_repair",
+    //     description: "To repair",
+    //     userId: "550e8400-e29b-41d4-a716-446655440000",
+    //     translations: {
+    //       create: [
+    //         { key: "name", value: "To repair", languageId: "en" },
+    //         { key: "name", value: "Para reparar", languageId: "es" },
+    //       ],
+    //     },
+    //   },
+    // });
 
     // === ESTADOS ===
+    // await tx.status.create({
+    //   data: {
+    //     id: 1,
+    //     name: "available",
+    //     description: "available",
+    //     userId: "550e8400-e29b-41d4-a716-446655440000",
+    //     translations: {
+    //       create: [
+    //         { key: "name", value: "Available", languageId: "en" },
+    //         { key: "name", value: "Disponible", languageId: "es" },
+    //       ],
+    //     },
+    //   },
+    // });
+
+    // await tx.status.create({
+    //   data: {
+    //     id: 2,
+    //     name: "reserved",
+    //     description: "Reserved",
+    //     userId: "550e8400-e29b-41d4-a716-446655440000",
+    //     translations: {
+    //       create: [
+    //         { key: "name", value: "Reserved", languageId: "en" },
+    //         { key: "name", value: "Reservado", languageId: "es" },
+    //       ],
+    //     },
+    //   },
+    // });
+
+    // await tx.status.create({
+    //   data: {
+    //     id: 3,
+    //     name: "sold",
+    //     description: "Sold",
+    //     userId: "550e8400-e29b-41d4-a716-446655440000",
+    //     translations: {
+    //       create: [
+    //         { key: "name", value: "Sold", languageId: "en" },
+    //         { key: "name", value: "Vendido", languageId: "es" },
+    //       ],
+    //     },
+    //   },
+    // });
+
     await tx.status.create({
       data: {
-        id: 1,
-        name: "available",
-        description: "available",
+        id: 5,
+        name: "confirmed",
+        description: "Confirmed",
         userId: "550e8400-e29b-41d4-a716-446655440000",
         translations: {
           create: [
-            { key: "name", value: "Available", languageId: "en" },
-            { key: "name", value: "Disponible", languageId: "es" },
+            { key: "name", value: "Confirmed", languageId: "en" },
+            { key: "name", value: "Confirmado", languageId: "es" },
           ],
         },
       },
@@ -170,101 +217,87 @@ async function main() {
 
     await tx.status.create({
       data: {
-        id: 2,
-        name: "reserved",
-        description: "Reserved",
+        id: 6,
+        name: "rejected",
+        description: "Rejected",
         userId: "550e8400-e29b-41d4-a716-446655440000",
         translations: {
           create: [
-            { key: "name", value: "Reserved", languageId: "en" },
-            { key: "name", value: "Reservado", languageId: "es" },
+            { key: "name", value: "Rejected", languageId: "en" },
+            { key: "name", value: "Rechazado", languageId: "es" },
           ],
         },
       },
     });
 
-    await tx.status.create({
-      data: {
-        id: 3,
-        name: "sold",
-        description: "Sold",
-        userId: "550e8400-e29b-41d4-a716-446655440000",
-        translations: {
-          create: [
-            { key: "name", value: "Sold", languageId: "en" },
-            { key: "name", value: "Vendido", languageId: "es" },
-          ],
-        },
-      },
-    });
 
-    await tx.status.create({
-      data: {
-        id: 4,
-        name: "canceled",
-        description: "Canceled",
-        userId: "550e8400-e29b-41d4-a716-446655440000",
-        translations: {
-          create: [
-            { key: "name", value: "Canceled", languageId: "en" },
-            { key: "name", value: "Cancelado", languageId: "es" },
-          ],
-        },
-      },
-    });
+    // await tx.status.create({
+    //   data: {
+    //     id: 4,
+    //     name: "canceled",
+    //     description: "Canceled",
+    //     userId: "550e8400-e29b-41d4-a716-446655440000",
+    //     translations: {
+    //       create: [
+    //         { key: "name", value: "Canceled", languageId: "en" },
+    //         { key: "name", value: "Cancelado", languageId: "es" },
+    //       ],
+    //     },
+    //   },
+    // });
 
     // === CATEGORÍAS ===
-    const categories = [
-      "educational",
-      "electronic",
-      "board_games",
-      "mobility",
-      "for_babies",
-      "stuffed_animals",
-      "rare_toys",
-      "action_figures",
-      "vintage",
-    ];
+  //   const categories = [
+  //     "educational",
+  //     "electronic",
+  //     "board_games",
+  //     "mobility",
+  //     "for_babies",
+  //     "stuffed_animals",
+  //     "rare_toys",
+  //     "action_figures",
+  //     "vintage",
+  //   ];
 
-    for (const [index, name] of categories.entries()) {
-      await tx.category.create({
-        data: {
-          id: index + 1,
-          name,
-          description: name,
-          userId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
-          translations: {
-            create: [
-              { key: "name", value: name.replace("_", " "), languageId: "en" },
-              {
-                key: "name",
-                value:
-                  name === "educational"
-                    ? "Educacional"
-                    : name === "electronic"
-                    ? "Electrónicos"
-                    : name === "board_games"
-                    ? "Juegos de mesa"
-                    : name === "mobility"
-                    ? "Movilidad"
-                    : name === "for_babies"
-                    ? "Para Bebes"
-                    : name === "stuffed_animals"
-                    ? "Peluches"
-                    : name === "rare_toys"
-                    ? "Juguetes Raros"
-                    : name === "action_figures"
-                    ? "Figuras de acción"
-                    : name === "vintage"
-                    ? "Antigua"
-                    : name,
-                languageId: "es",
-              },
-            ],
-          },
-        },
-      });
-    }
+  //   for (const [index, name] of categories.entries()) {
+  //     await tx.category.create({
+  //       data: {
+  //         id: index + 1,
+  //         name,
+  //         description: name,
+  //         userId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+  //         translations: {
+  //           create: [
+  //             { key: "name", value: name.replace("_", " "), languageId: "en" },
+  //             {
+  //               key: "name",
+  //               value:
+  //                 name === "educational"
+  //                   ? "Educacional"
+  //                   : name === "electronic"
+  //                   ? "Electrónicos"
+  //                   : name === "board_games"
+  //                   ? "Juegos de mesa"
+  //                   : name === "mobility"
+  //                   ? "Movilidad"
+  //                   : name === "for_babies"
+  //                   ? "Para Bebes"
+  //                   : name === "stuffed_animals"
+  //                   ? "Peluches"
+  //                   : name === "rare_toys"
+  //                   ? "Juguetes Raros"
+  //                   : name === "action_figures"
+  //                   ? "Figuras de acción"
+  //                   : name === "vintage"
+  //                   ? "Antigua"
+  //                   : name,
+  //               languageId: "es",
+  //             },
+  //           ],
+  //         },
+  //       },
+  //     });
+  //   }
   });
 
 /*   if (process.env.NODE_ENV !== "production") {
@@ -292,10 +325,58 @@ async function main() {
           title: "Loftus Surprise Hand Buzzer",
           description: "",
           price: 7.99,
-          categoryId: 2,
-          statusId: 1,
-          conditionId: 1,
-          location: "",
+          categoryId: 2,const categories = [
+  //     "educational",
+  //     "electronic",
+  //     "board_games",
+  //     "mobility",
+  //     "for_babies",
+  //     "stuffed_animals",
+  //     "rare_toys",
+  //     "action_figures",
+  //     "vintage",
+  //   ];
+
+  //   for (const [index, name] of categories.entries()) {
+  //     await tx.category.create({
+  //       data: {
+  //         id: index + 1,
+  //         name,
+  //         description: name,
+  //         userId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+  //         translations: {
+  //           create: [
+  //             { key: "name", value: name.replace("_", " "), languageId: "en" },
+  //             {
+  //               key: "name",
+  //               value:
+  //                 name === "educational"
+  //                   ? "Educacional"
+  //                   : name === "electronic"
+  //                   ? "Electrónicos"
+  //                   : name === "board_games"
+  //                   ? "Juegos de mesa"
+  //                   : name === "mobility"
+  //                   ? "Movilidad"
+  //                   : name === "for_babies"
+  //                   ? "Para Bebes"
+  //                   : name === "stuffed_animals"
+  //                   ? "Peluches"
+  //                   : name === "rare_toys"
+  //                   ? "Juguetes Raros"
+  //                   : name === "action_figures"
+  //                   ? "Figuras de acción"
+  //                   : name === "vintage"
+  //                   ? "Antigua"
+  //                   : name,
+  //               languageId: "es",
+  //             },
+  //           ],
+  //         },
+  //       },
+  //     });
+  //   }
+  // })
           sellerId: "a9ec0216-b521-4070-ae9b-de8ee95edd25",
           forSell: true,
           forGifts: false,
@@ -535,7 +616,58 @@ async function main() {
           toyId: "toy_006",
         },
         {
-          id: "media_017",
+          id: "medconst categories = [
+  //     "educational",
+  //     "electronic",
+  //     "board_games",
+  //     "mobility",
+  //     "for_babies",
+  //     "stuffed_animals",
+  //     "rare_toys",
+  //     "action_figures",
+  //     "vintage",
+  //   ];
+
+  //   for (const [index, name] of categories.entries()) {
+  //     await tx.category.create({
+  //       data: {
+  //         id: index + 1,
+  //         name,
+  //         description: name,
+  //         userId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+  //         translations: {
+  //           create: [
+  //             { key: "name", value: name.replace("_", " "), languageId: "en" },
+  //             {
+  //               key: "name",
+  //               value:
+  //                 name === "educational"
+  //                   ? "Educacional"
+  //                   : name === "electronic"
+  //                   ? "Electrónicos"
+  //                   : name === "board_games"
+  //                   ? "Juegos de mesa"
+  //                   : name === "mobility"
+  //                   ? "Movilidad"
+  //                   : name === "for_babies"
+  //                   ? "Para Bebes"
+  //                   : name === "stuffed_animals"
+  //                   ? "Peluches"
+  //                   : name === "rare_toys"
+  //                   ? "Juguetes Raros"
+  //                   : name === "action_figures"
+  //                   ? "Figuras de acción"
+  //                   : name === "vintage"
+  //                   ? "Antigua"
+  //                   : name,
+  //               languageId: "es",
+  //             },
+  //           ],
+  //         },
+  //       },
+  //     });
+  //   }
+  // })ia_017",
           fileUrl: "/images/f6-3.webp",
           type: FileType.IMAGE,
           toyId: "toy_006",
@@ -588,18 +720,58 @@ async function main() {
           type: FileType.IMAGE,
           toyId: "toy_008",
         },
-        {
-          id: "media_026",
-          fileUrl: "/images/f8-4.webp",
-          type: FileType.IMAGE,
-          toyId: "toy_008",
-        },
-        {
-          id: "media_027",
-          fileUrl: "/images/f9.webp",
-          type: FileType.IMAGE,
-          toyId: "toy_009",
-        },
+        {const categories = [
+  //     "educational",
+  //     "electronic",
+  //     "board_games",
+  //     "mobility",
+  //     "for_babies",
+  //     "stuffed_animals",
+  //     "rare_toys",
+  //     "action_figures",
+  //     "vintage",
+  //   ];
+
+  //   for (const [index, name] of categories.entries()) {
+  //     await tx.category.create({
+  //       data: {
+  //         id: index + 1,
+  //         name,
+  //         description: name,
+  //         userId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+  //         translations: {
+  //           create: [
+  //             { key: "name", value: name.replace("_", " "), languageId: "en" },
+  //             {
+  //               key: "name",
+  //               value:
+  //                 name === "educational"
+  //                   ? "Educacional"
+  //                   : name === "electronic"
+  //                   ? "Electrónicos"
+  //                   : name === "board_games"
+  //                   ? "Juegos de mesa"
+  //                   : name === "mobility"
+  //                   ? "Movilidad"
+  //                   : name === "for_babies"
+  //                   ? "Para Bebes"
+  //                   : name === "stuffed_animals"
+  //                   ? "Peluches"
+  //                   : name === "rare_toys"
+  //                   ? "Juguetes Raros"
+  //                   : name === "action_figures"
+  //                   ? "Figuras de acción"
+  //                   : name === "vintage"
+  //                   ? "Antigua"
+  //                   : name,
+  //               languageId: "es",
+  //             },
+  //           ],
+  //         },
+  //       },
+  //     });
+  //   }
+  // })
         {
           id: "media_028",
           fileUrl: "/images/f9-2.webp",
@@ -627,10 +799,58 @@ async function main() {
         {
           id: "media_032",
           fileUrl: "/images/f10-3.webp",
-          type: FileType.IMAGE,
-          toyId: "toy_010",
-        },
-        {
+          type: FileTyconst categories = [
+  //     "educational",
+  //     "electronic",
+  //     "board_games",
+  //     "mobility",
+  //     "for_babies",
+  //     "stuffed_animals",
+  //     "rare_toys",
+  //     "action_figures",
+  //     "vintage",
+  //   ];
+
+  //   for (const [index, name] of categories.entries()) {
+  //     await tx.category.create({
+  //       data: {
+  //         id: index + 1,
+  //         name,
+  //         description: name,
+  //         userId: "user_2xMoqaxDWhsUmKjITZbWHRJMo8Z",
+  //         translations: {
+  //           create: [
+  //             { key: "name", value: name.replace("_", " "), languageId: "en" },
+  //             {
+  //               key: "name",
+  //               value:
+  //                 name === "educational"
+  //                   ? "Educacional"
+  //                   : name === "electronic"
+  //                   ? "Electrónicos"
+  //                   : name === "board_games"
+  //                   ? "Juegos de mesa"
+  //                   : name === "mobility"
+  //                   ? "Movilidad"
+  //                   : name === "for_babies"
+  //                   ? "Para Bebes"
+  //                   : name === "stuffed_animals"
+  //                   ? "Peluches"
+  //                   : name === "rare_toys"
+  //                   ? "Juguetes Raros"
+  //                   : name === "action_figures"
+  //                   ? "Figuras de acción"
+  //                   : name === "vintage"
+  //                   ? "Antigua"
+  //                   : name,
+  //               languageId: "es",
+  //             },
+  //           ],
+  //         },
+  //       },
+  //     });
+  //   }
+  // })
           id: "media_033",
           fileUrl: "/images/f10-4.webp",
           type: FileType.IMAGE,

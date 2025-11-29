@@ -20,10 +20,9 @@ export async function GET(
     const t = await getTranslations("Toy");
 
     const { userId } = await auth();
-    
-      if (!userId) {
-        return NextResponse.json({ error: t("ToyIdRequired") }, { status: 401 });
-      }
+    if (!userId) {
+      return NextResponse.json({ error: t("ToyIdRequired") }, { status: 401 });
+    }
       
     const userLanguageCode = locale;
 
@@ -43,7 +42,7 @@ export async function GET(
 
       // Buscar el juguete con todas sus GiftRequests
       const toyWithRequests = await prisma.toy.findUnique({
-      where: { id },
+      where: { id: id },
       include: {
         // Incluir las solicitudes donde este juguete es el objetivo
         giftrequests: {
@@ -101,92 +100,92 @@ export async function GET(
   }
 
 
-  export async function POST(req: NextRequest) {
-    let { userId } = await auth();
-  
-    const t = await getTranslations("Toy");
-    const g = await getTranslations("General");
-    const s = await getTranslations("Status");
+export async function POST(req: NextRequest) {
+  let { userId } = await auth();
 
+  const t = await getTranslations("Toy");
+  const g = await getTranslations("General");
+  const s = await getTranslations("Status");
+
+  if (!userId) {
+    userId = req.headers.get("X-User-ID");
     if (!userId) {
-      userId = req.headers.get("X-User-ID");
-      if (!userId) {
-        return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
-      }
+      return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
     }
-  
-    const user = await prisma.user.findUnique({ where: { clerkId: userId } });
-    if (!user) {
-      return NextResponse.json({ error: g("UserNotFound") }, { status: 404 });
-    }
-  
-    const { id } = await req.json(); // id del juguete
-  
-    const toy = await prisma.toy.findUnique({
-      where: { id: id }
-    });
-  
-    if (!toy) {
-      return NextResponse.json(
-        { success: false, error: t("NotFound") },
-        { status: 404 }
-      );
-    }
-  
-    if (toy.sellerId == user.id) {
-      return NextResponse.json(
-        { success: false, error: g("Unauthorized") },
-        { status: 403 }
-      );
-    }
-
-    if (!toy.forGifts) {
-      return NextResponse.json(
-        { success: false, error: t("ToyNotGift") },
-        { status: 404 }
-      );
-    }
-  
-    const statusAvailable = await prisma.status.findUnique({
-      where: { name: "available" },
-    });
-    if (!statusAvailable) {
-      return NextResponse.json(
-        { success: false, error: s("NotFound")},
-        { status: 400 }
-      );
-    }
-
-    if (toy.statusId != statusAvailable.id) {
-      return NextResponse.json(
-        { success: false, error: t("StatusIncorrect") },
-        { status: 400 }
-      );
-    }
-  
-    try {
-  
-      // crear la solicitud, asociada a ese juguete
-      const giftrequests = await prisma.giftRequest.create({
-        data: {
-          userId: userId,
-          toyId: toy.id,
-          forGifts: true,
-          forChanges: false,
-          statusId: statusAvailable.id,
-          exchangeToyId: null
-        }
-      })
-
-      return NextResponse.json(
-        { data: giftrequests },
-        { status: 201 }
-      );
-
-    } catch (error) {
-        return NextResponse.json(
-          { error: g("ServerError") },
-          { status: 500 }
-        );
-      }
   }
+
+  const user = await prisma.user.findUnique({ where: { clerkId: userId } });
+  if (!user) {
+    return NextResponse.json({ error: g("UserNotFound") }, { status: 404 });
+  }
+
+  const { id } = await req.json(); // id del juguete
+
+  const toy = await prisma.toy.findUnique({
+    where: { id: id }
+  });
+
+  if (!toy) {
+    return NextResponse.json(
+      { success: false, error: t("NotFound") },
+      { status: 404 }
+    );
+  }
+
+  if (toy.sellerId == user.id) {
+    return NextResponse.json(
+      { success: false, error: g("Unauthorized") },
+      { status: 403 }
+    );
+  }
+
+  if (!toy.forGifts) {
+    return NextResponse.json(
+      { success: false, error: t("ToyNotGift") },
+      { status: 404 }
+    );
+  }
+
+  const statusAvailable = await prisma.status.findUnique({
+    where: { name: "available" },
+  });
+  if (!statusAvailable) {
+    return NextResponse.json(
+      { success: false, error: s("NotFound")},
+      { status: 400 }
+    );
+  }
+
+  if (toy.statusId != statusAvailable.id) {
+    return NextResponse.json(
+      { success: false, error: t("StatusIncorrect") },
+      { status: 400 }
+    );
+  }
+
+  try {
+
+    // crear la solicitud, asociada a ese juguete
+    const giftrequests = await prisma.giftRequest.create({
+      data: {
+        userId: userId,
+        toyId: toy.id,
+        forGifts: true,
+        forChanges: false,
+        statusId: statusAvailable.id,
+        exchangeToyId: null
+      }
+    })
+
+    return NextResponse.json(
+      { data: giftrequests },
+      { status: 201 }
+    );
+
+  } catch (error) {
+      return NextResponse.json(
+        { error: g("ServerError") },
+        { status: 500 }
+      );
+    }
+}
