@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { getTranslations } from "next-intl/server";
 import { auth } from "@clerk/nextjs/server";
+import { GiftRequestSchema } from "@/lib/schemas/request";
 
 export async function GET(
     req: NextRequest,
@@ -119,7 +120,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: g("UserNotFound") }, { status: 404 });
   }
 
-  const { id } = await req.json(); // id del juguete
+  const { id, forGifts } = await req.json(); // id del juguete y un boolean que indica que es paar regalo
+
+  const body = await req.json();
+  
+  const validatedData = GiftRequestSchema.parse(body);
 
   const toy = await prisma.toy.findUnique({
     where: { id: id }
@@ -170,8 +175,8 @@ export async function POST(req: NextRequest) {
       data: {
         userId: userId,
         toyId: toy.id,
-        forGifts: true,
-        forChanges: false,
+        forGifts: validatedData.forGifts,
+        forChanges: validatedData.forChanges,
         statusId: statusAvailable.id,
         exchangeToyId: null
       }

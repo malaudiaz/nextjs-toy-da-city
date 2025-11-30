@@ -1,7 +1,14 @@
 import { z } from 'zod';
 
 export const GiftRequestSchema = z.object({
-  toyId: z.string().uuid("Invalid toy ID")  
+  toyId: z.string().uuid("Invalid toy ID") ,
+  forGifts: z
+    .union([z.boolean(), z.string().transform((val) => val === "true")])
+    .default(true),
+  forChanges: z
+    .union([z.boolean(), z.string().transform((val) => val === "true")])
+    .default(false),
+  
 });
 
 // Esquema para paginación
