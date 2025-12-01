@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import BackButtonClient from "@/components/shared/BackButtonClient";
+import BackButtonSimple from "@/components/shared/BackButtonSimple";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,25 +9,38 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-60 h-48 bg-gray-200 rounded-lg flex flex-col items-center justify-center p-3 shadow-md gap-1">
-        {/* Icono 404 muy pequeño */}
-        <div className="w-8 h-8 flex items-center justify-center rounded-full bg-red-50">
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" role="img" aria-label="404">
-            <text x="12" y="14" dominantBaseline="middle" textAnchor="middle" fontSize="4" fill="#DC2626" fontWeight="bold">404</text>
+    <div className="not-found-container">
+      <div className="not-found-card">
+        <div className="notfound-icon" aria-hidden>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-label="404">
+            <text x="12" y="14" dominantBaseline="middle" textAnchor="middle" fontSize="24" fill="#DC2626" fontWeight="bold">404</text>
           </svg>
         </div>
 
-        <h2 className="text-sm font-semibold text-gray-900 text-center">No Encontrada</h2>
-        <p className="text-xs text-gray-600 text-center">La página no existe</p>
+        <h2 className="notfound-title">No Encontrada</h2>
+        <p className="notfound-desc">La página no existe</p>
 
-        <div className="mt-2 flex flex-col gap-1 w-full">
-          <BackButtonClient />
-          <Link href="/" className="px-2 py-1 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-300 text-center w-full block">
-            Inicio
-          </Link>
+        <div className="notfound-actions">
+          <BackButtonSimple className="btn btn-back">Volver</BackButtonSimple>
+          <Link href="/" className="btn-link">Inicio</Link>
         </div>
       </div>
+
+      <style>{`
+        .not-found-container{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f3f4f6;margin:0}
+        .not-found-card{width:250px;height:200px;background:#e5e7eb;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;box-shadow:0 6px 18px rgba(15,23,42,0.06);box-sizing:border-box;gap:6px}
+        .notfound-icon{width:86px;height:86px;border-radius:50%;background:#fee2e2;display:flex;align-items:center;justify-content:center}
+        .notfound-icon svg{width:80px;height:80px}
+        .notfound-title{font-size:14px;font-weight:600;color:#111827;margin:0}
+        .notfound-desc{font-size:12px;color:#4b5563;margin:0}
+        .notfound-actions{margin-top:8px;width:100%;display:flex;flex-direction:column;gap:6px}
+        .btn{width:100%;padding:6px 8px;font-size:12px;border-radius:6px;border:none;cursor:pointer}
+        .btn-back{background:#16a34a;color:#fff}
+        .btn-back:hover{background:#15803d}
+        .btn-link{display:inline-block;text-align:center;padding:6px 8px;font-size:12px;border-radius:6px;border:1px solid #d1d5db;color:#374151;text-decoration:none}
+        .btn-link:hover{background:#e5e7eb}
+        @media (max-height:240px){.not-found-card{height:180px;padding:8px}}
+      `}</style>
     </div>
   );
 }

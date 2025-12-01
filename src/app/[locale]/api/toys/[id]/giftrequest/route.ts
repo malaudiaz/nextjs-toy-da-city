@@ -171,7 +171,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     // crear la solicitud, asociada a ese juguete
     const giftrequests = await prisma.giftRequest.create({
       data: {
-        userId: userId,
+        userId: user.id,
         toyId: toy.id,
         forGifts: toy.forGifts,
         forChanges: toy.forChanges,
@@ -181,7 +181,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     });
 
     return NextResponse.json({ data: giftrequests }, { status: 200 });
-  } catch {
+  } catch (error) {
+    console.log(error);
     return NextResponse.json({ error: g("ServerError") }, { status: 500 });
   }
 }

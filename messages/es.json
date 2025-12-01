@@ -936,5 +936,18 @@
     "NoConfirmedOrderFound": "Orden sin confirmar",
     "AlreadyReviewedSeller": "El vendedor ya fue reseñado por usted",
     "EligibleForReview": "El vendedor es elegible para reseñar"
+  },
+  "ProductDetails": {
+    "requestSuccess": "Solicitud enviada con éxito",
+    "requestError": "Error al enviar solicitud",
+    "free": "GRATIS",
+    "forChange": "Para Intercambiar",
+    "forGifts": "Para Regalar",
+    "condition": "Condición",
+    "status": "Estado",
+    "itemAdded": "Juguete agregado al carrito",
+    "itemExist": "Juguete ya está en el carrito",
+    "addToCart": "Adicionar al carrito",
+    "request": "Solicitar"
   }
 }

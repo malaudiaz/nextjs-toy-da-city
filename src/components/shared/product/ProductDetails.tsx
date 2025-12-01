@@ -3,7 +3,6 @@
 import { Toy } from "@/types/toy";
 import React, { useState } from "react";
 import { Heart, ShoppingCart, ChevronLeft, ChevronRight, Send } from "lucide-react";
-import { NumberToCategory } from "@/lib/utils";
 import Image from "next/image";
 import ExpandableText from "../ExpandableText";
 import dynamic from "next/dynamic";
@@ -59,7 +58,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
   const { isSignedIn } = useAuth();
 
   //const { data, error } = useSWR("getFavoriteById", getFavoriteById);
-  const t = useTranslations("cartStore");
+  const t = useTranslations("ProductDetails");
   const nextImage = () => {
     setSelectedImage((prev) => (prev + 1) % toy.media.length);
   };
@@ -103,7 +102,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
       }
     } catch (error) {
       console.log(error);
-      toast.error("Failed to request toy");
+      toast.error(("requestError"));
     }
   };
 
@@ -112,7 +111,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
       <h1 className="text-3xl font-bold text-gray-900 mb-3">{toy.title}</h1>
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">
-          {NumberToCategory(toy.categoryId, t)}
+          {toy.categoryDescription}
         </span>
       </div>
 
@@ -179,7 +178,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
           <div>
             <div className="flex items-center justify-between mb-6">
               <span className="text-3xl font-bold text-green-700">
-                {toy.forSell ? "$" + toy.price.toFixed(2) : t("free") + toy.forChanges ? "Para Cambios" : "Para Regalo"}
+                {toy.forSell ? "$" + toy.price.toFixed(2) : t("free") + toy.forChanges ? t("forChange") : t("forGifts")}
               </span>
 
               {isSignedIn && !isCurrentUser && toy.isActive && (
@@ -258,7 +257,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
                   className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 px-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 w-full"
                 >
                     <Send className="w-5 h-5" />
-                    <span>Solicitar</span>
+                    <span>{t("request")}</span>
                 </button>                  
               )}
             </div>

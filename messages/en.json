@@ -939,11 +939,23 @@
     "btnNo": "No, continue",
     "note": "You can add your phone later from your account settings."
   },
-
   "Reviews": {
     "NoConfirmedOrderFound": "Order not yet confirmed",
     "AlreadyReviewedSeller": "The seller has already been reviewed by you",
     "EligibleForReview": "The seller is eligible for review"
+  }, 
+  "ProductDetails": {
+    "requestSuccess": "Request submitted successfully",
+    "requestError": "Error submitting request",
+    "free": "FREE",
+    "forChange": "Swap",
+    "forGifts": "Free",
+    "condition": "Condition",
+    "status": "Status",
+    "itemAdded": "Item added to cart",
+    "itemExist": "Item already in cart",
+    "addToCart": "Add to Cart",
+    "request": "Request"
   }
 } 
 

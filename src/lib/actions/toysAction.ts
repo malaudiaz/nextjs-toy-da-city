@@ -418,8 +418,7 @@ export async function requestToy(toyId: string) {
   try {
     const response = await fetch(`${BACKEND_URL}/${locale}/api/toys/${toyId}/giftrequest`, {
       method: "POST",
-      headers: headers,
-      body: JSON.stringify({ toyId }),
+      headers: headers
     });
     const result = await response.json();
     
