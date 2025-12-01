@@ -192,7 +192,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       },
     });
 
-    return NextResponse.json({ data: giftrequests }, { status: 201 });
+    return NextResponse.json({ data: giftrequests }, { status: 200 });
   } catch {
     return NextResponse.json({ error: g("ServerError") }, { status: 500 });
   }
