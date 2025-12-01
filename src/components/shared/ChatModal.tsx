@@ -38,6 +38,12 @@ interface Message {
   sender: {
     clerkId: string;
     name: string | null;
+    imageUrl?: string | null;
+  };
+  receiver: {
+    clerkId: string;
+    name: string | null;
+    imageUrl?: string | null;
   };
   toyId: string;
 }
@@ -153,19 +159,25 @@ export default function ChatModal({
 
   // Enviar mensaje
   const sendMessage = async (content: string) => {
-    if (!content.trim()) return;
+    if (!content.trim() || !user || !currentUserId) return;
 
     const outgoingMessage: Message = {
       id: `temp-${Date.now()}`,
       content,
-      senderId: currentUserId!,
+      senderId: currentUserId,
       receiverId: seller.clerkId,
-      createdAt: new Date(),
+      createdAt: new Date().toISOString(), // Mejor usar ISO string para consistencia
       sender: {
-        clerkId: seller.clerkId!,
-        name: user?.firstName ?? user?.lastName ?? "Usuario",
+        clerkId: currentUserId,
+        name: user.fullName || user.firstName || "Yo", // Tu nombre        
+        imageUrl: user.imageUrl,
       },
-      toyId: toy.id,
+      receiver: {
+        clerkId: seller.clerkId,
+        name: "Usuario",
+        imageUrl: null
+      },
+      toyId: ""
     };
 
     setMessages((prev) => [...prev, outgoingMessage]);

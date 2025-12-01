@@ -1,0 +1,7 @@
+{
+  "prisma.prismaFmtBinPath": "./node_modules/.prisma/prisma-fmt",
+  "prisma.engine": "./node_modules/.prisma/client",
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+}

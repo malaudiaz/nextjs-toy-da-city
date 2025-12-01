@@ -1,12 +1,12 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import useSWR from "swr"; // 1. Importamos useSWR
 import { MessageInput } from "@/components/shared/MessageInput";
 import { MessageList } from "@/components/shared/MessageList";
 import Pusher from "pusher-js";
-import { useTranslations } from 'next-intl'; // ✅ Importa el hook
+import { useTranslations } from 'next-intl';
 
 // Tipos
 interface Message {
@@ -18,73 +18,63 @@ interface Message {
   sender: {
     clerkId: string;
     name: string | null;
+    imageUrl?: string | null;
+  };
+  receiver: {
+    clerkId: string;
+    name: string | null;
+    imageUrl?: string | null;
   };
   toyId: string;
 }
-
-/* interface ChatUser {
-  id: string;
-  name: string;
-  email?: string | null;
-  imageUrl?: string | null;
-}
- */
 
 type PusherMessageEvent = {
   message: Message;
 };
 
-type PusherSubscriptionError = {
-  type: string
-  error?: string
-  status?: number
-  body?: string
-}
+// 2. Definimos el fetcher
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch messages");
+  return res.json();
+};
 
 export default function ChatPage({
   params,
 }: {
   params: Promise<{ userId: string }>;
 }) {
-  const t = useTranslations('reputation'); // ✅ Usa el hook
-
-  // ✅ Desempaqueta params
+  const t = useTranslations('reputation');
   const { userId: otherUserId } = React.use(params);
-
-  // ✅ Obtiene el ID del usuario autenticado
   const { user } = useUser();
   const currentUserId = user?.id;
 
-  const [messages, setMessages] = useState<Message[]>([]);
-  //const [otherUser, setOtherUser] = useState<ChatUser | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false); // ✅ Evita renderizar antes de estar listo
+  console.log("usuario clerk: ", user);
+  alert("ID usuario actual: " + currentUserId);
 
-  // ✅ Cargar historial cuando otherUserId esté disponible
-  useEffect(() => {
-    if (!currentUserId || !otherUserId) return;
+  // 3. Reemplazamos el useState y useEffect de carga por useSWR
+  // La key depende de currentUserId y otherUserId. Si faltan, es null (pausa).
+  const swrKey = currentUserId && otherUserId 
+    ? `/api/chat/messages?with=${otherUserId}` 
+    : null;
 
-    const loadChat = async () => {
-      try {
-        // 1. Cargar mensajes
-        const res = await fetch(`/api/chat/messages?with=${otherUserId}`);
-        const { messages } = await res.json();
-        setMessages(messages);
+  const { data, isLoading, mutate } = useSWR<{ messages: Message[] }>(
+    swrKey,
+    fetcher,
+    {
+      revalidateOnFocus: false, // Opcional: evita recargas constantes al cambiar de pestaña
+      fallbackData: { messages: [] } // Estado inicial seguro
+    }
+  );
 
-      } catch (error) {
-        console.error("Error loading chat:", error);
-      } finally {
-        setIsLoaded(true); // ✅ Indica que todo está cargado
-      }
-    };
-
-    loadChat();
-  }, [currentUserId, otherUserId]); // ✅ Se ejecuta cuando cambia el chat
+  // Extraemos los mensajes de la data de SWR
+  const messages = data?.messages || [];
 
   // ✅ Escuchar nuevos mensajes con Pusher
+  // Mantenemos este useEffect porque es una suscripción (WebSocket), no un fetch.
+  // Pero ahora actualizamos la caché de SWR con `mutate`.
   useEffect(() => {
     if (!currentUserId || !otherUserId) return;
-
-    //console.log("👤 currentUserId:", currentUserId); // ✅ ¿Es el ID correcto, es el id de clerk?
 
     const pusherKey = process.env.NEXT_PUBLIC_PUSHER_KEY;
     const pusherCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
@@ -103,72 +93,99 @@ export default function ChatPage({
     const channelName = `private-chat-${currentUserId}`;
     const channel = pusher.subscribe(channelName);
 
-    //console.log("🎧 Intentando suscribirse a:", channelName);
-
     channel.bind("pusher:subscription_succeeded", () => {
       console.log("✅ Suscripción exitosa al canal:", channelName);
     });
 
-    channel.bind("pusher:subscription_error", (err: PusherSubscriptionError) => {
-      console.error("❌ Error de suscripción:", err);
-    });
-
-    channel.bind("new-message", (data: PusherMessageEvent) => {
-      console.log("📩 Mensaje recibido:", data.message); // ✅ Depuración
-
-      setMessages((prev) => {
-        // ✅ Evita duplicados
-        if (prev.some((m) => m.id === data.message.id)) {
-          return prev;
-        }
-        return [...prev, data.message];
-      });
+    channel.bind("new-message", (incoming: PusherMessageEvent) => {
+      console.log("📩 Mensaje recibido:", incoming.message);
+      
+      // 4. Actualizamos SWR con el nuevo mensaje (sin revalidar con la API)
+      mutate(
+        (currentData) => {
+          if (!currentData) return { messages: [incoming.message] };
+          // Evitar duplicados
+          if (currentData.messages.some(m => m.id === incoming.message.id)) {
+            return currentData;
+          }
+          return {
+            ...currentData,
+            messages: [...currentData.messages, incoming.message],
+          };
+        },
+        false // false = No hacer fetch a la API, confiamos en Pusher
+      );
     });
 
     return () => {
       console.log("🧹 Desuscribiendo de:", channelName);
       channel.unsubscribe();
     };
-  }, [currentUserId, otherUserId]); // ✅ Ahora incluye ambos
+  }, [currentUserId, otherUserId, mutate]); // Agregamos mutate a dependencias
 
-  // ✅ Enviar mensaje (optimistic)
+  // ✅ Enviar mensaje (optimistic update con SWR)
   const sendMessage = async (content: string) => {
-    if (!content.trim()) return;
+    if (!content.trim() || !user || !currentUserId) return;
 
     const outgoingMessage: Message = {
       id: `temp-${Date.now()}`,
       content,
-      senderId: currentUserId!,
+      senderId: currentUserId,
       receiverId: otherUserId,
-      createdAt: new Date(),
+      createdAt: new Date().toISOString(), // Mejor usar ISO string para consistencia
       sender: {
-        clerkId: otherUserId,
-        name: user?.firstName ?? user?.lastName ?? "Usuario",
+        clerkId: currentUserId,
+        name: user.fullName || user.firstName || "Yo", // Tu nombre        
+        imageUrl: user.imageUrl,
       },
-      toyId: "toy_002"
+      receiver: {
+        clerkId: otherUserId,
+        name: "Usuario",
+        imageUrl: null
+      },
+      toyId: ""
     };
 
-    setMessages((prev) => [...prev, outgoingMessage]);
+    // 5. Mutación optimista: actualizamos la UI inmediatamente
+    mutate(
+      (currentData) => ({
+        messages: [...(currentData?.messages || []), outgoingMessage],
+      }),
+      false // No revalidar todavía
+    );
 
     try {
       const res = await fetch("/api/chat/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ receiverId: otherUserId, content, toyId: "toy_002" }),
+        body: JSON.stringify({ receiverId: otherUserId, content, toyId: "" }),
       });
 
       if (!res.ok) throw new Error("Error en la red");
 
-      // ✅ Éxito: el mensaje ya está en el estado
+      // Opcional: Podrías hacer mutate() sin argumentos aquí para
+      // sincronizar con el servidor y obtener el ID real, 
+      // pero si Pusher te envía tu propio mensaje de vuelta, 
+      // la lógica del useEffect lo manejará.
+      
     } catch (error) {
       console.error("Error al enviar:", error);
-      setMessages((prev) => prev.filter((m) => m.id !== outgoingMessage.id));
       alert(t('sendError'));
+      
+      // Revertir cambios en caso de error (borrar el mensaje temporal)
+      mutate(
+        (currentData) => ({
+          messages: (currentData?.messages || []).filter(m => m.id !== outgoingMessage.id)
+        }),
+        false
+      );
     }
   };
 
-  // ✅ Evita renderizar antes de tener datos
-  if (!isLoaded) {
+  // ✅ Loading state manejado por SWR
+  // Nota: Si usas fallbackData, isLoading podría ser false desde el inicio,
+  // pero si swrKey es null (no user), no cargará nada.
+  if (isLoading && !data) {
     return <div>{t('loading')}</div>;
   }
 
