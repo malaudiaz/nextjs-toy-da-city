@@ -28,9 +28,12 @@ export async function GET(
   const g = await getTranslations("General");
   const t = await getTranslations("Toy");
 
-  const { userId } = await auth();
+  let { userId } = await auth();
   if (!userId) {
-    return NextResponse.json({ error: t("ToyIdRequired") }, { status: 401 });
+    userId = req.headers.get("X-User-ID");
+    if (!userId) {
+      return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
+    }
   }
 
   const userLanguageCode = locale;

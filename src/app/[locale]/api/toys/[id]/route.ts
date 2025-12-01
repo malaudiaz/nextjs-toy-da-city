@@ -71,6 +71,7 @@ export async function GET(
       where: { id: id },
       include: {
         media: true,
+        giftrequests: true,
         category: {
           include: {
             translations: {
@@ -115,6 +116,8 @@ export async function GET(
       });
     }
 
+    const allowRequest = toy.giftrequests.length === 0;    
+
     const { category, condition, status, ...toyData } = toy;
     // Formateamos el resultado final
     const toyWithLikeStatus = {
@@ -126,6 +129,7 @@ export async function GET(
       statusName: status.name,
       statusDescription: status.translations[0]?.value || status.name,
       isFavorite: !!favorite, // true si existe, false si no
+      allowRequest: allowRequest,
       likes: undefined, // Eliminamos el array de likes (no necesario en la respuesta)
     };
 

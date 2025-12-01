@@ -53,6 +53,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
   const { user } = useUser();
   const isCurrentUser = user?.id === seller?.id;
 
+  const [submitting, setSubmitting] = useState(false)
   const [selectedImage, setSelectedImage] = useState(0);
   const [favorite, setFavorite] = useState(toy.isFavorite);
   const { isSignedIn } = useAuth();
@@ -92,6 +93,8 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
   const coordinates = toy.location ? toy.location.split(",").map(Number) : [];
 
   const handleRequest = async () => {   
+    setSubmitting(true);
+
     try {
       const res = await requestToy(toy.id);
 
@@ -99,10 +102,12 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
         toast.success(t("requestSuccess"));
       } else {
         toast.error(t("requestError"));
+        setSubmitting(false);
       }
     } catch (error) {
       console.log(error);
       toast.error(("requestError"));
+      setSubmitting(false);
     }
   };
 
@@ -229,7 +234,10 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
             <div className="flex items-center">
               {toy.forSell && toy.isActive && isSignedIn && !isCurrentUser && (
                 <button
-                  onClick={() => {
+                  onClick={(e: React.FormEvent) => {
+                    e.preventDefault();                   
+                    setSubmitting(true);
+
                     const added = addToCart({
                       id: toy.id,
                       title: toy.title,
@@ -241,9 +249,11 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
                       toast.success(t("itemAdded")); // ✅ Traducido: "Item added to cart"
                     } else {
                       toast.error(t("itemExist")); // ✅ Traducido: "Item already in cart"
+                      setSubmitting(false);
                     }
                   }}
                   className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 px-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 w-full"
+                  disabled={submitting}                  
                 >
                   <ShoppingCart className="w-5 h-5" />
                   <span>{t("addToCart")}</span>
@@ -251,10 +261,12 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
               )}
               {!toy.forSell && toy.isActive && isSignedIn && !isCurrentUser && (
                 <button
-                  onClick={() => {
+                  onClick={(e: React.FormEvent) => {
+                    e.preventDefault();                   
                     handleRequest()
                   }}
                   className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 px-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 w-full"
+                  disabled={submitting}
                 >
                     <Send className="w-5 h-5" />
                     <span>{t("request")}</span>
