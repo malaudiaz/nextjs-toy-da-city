@@ -2,7 +2,13 @@
 
 import { Toy } from "@/types/toy";
 import React, { useState } from "react";
-import { Heart, ShoppingCart, ChevronLeft, ChevronRight, Send } from "lucide-react";
+import {
+  Heart,
+  ShoppingCart,
+  ChevronLeft,
+  ChevronRight,
+  Send,
+} from "lucide-react";
 import Image from "next/image";
 import ExpandableText from "../ExpandableText";
 import dynamic from "next/dynamic";
@@ -53,7 +59,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
   const { user } = useUser();
   const isCurrentUser = user?.id === seller?.id;
 
-  const [submitting, setSubmitting] = useState(false)
+  const [submitting, setSubmitting] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
   const [favorite, setFavorite] = useState(toy.isFavorite);
   const { isSignedIn } = useAuth();
@@ -92,7 +98,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
   const addToCart = useCartStore((state) => state.addToCart);
   const coordinates = toy.location ? toy.location.split(",").map(Number) : [];
 
-  const handleRequest = async () => {   
+  const handleRequest = async () => {
     setSubmitting(true);
 
     try {
@@ -106,7 +112,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(("requestError"));
+      toast.error("requestError");
       setSubmitting(false);
     }
   };
@@ -183,7 +189,11 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
           <div>
             <div className="flex items-center justify-between mb-6">
               <span className="text-3xl font-bold text-green-700">
-                {toy.forSell ? "$" + toy.price.toFixed(2) : t("free") + toy.forChanges ? t("forChange") : t("forGifts")}
+                {toy.forSell
+                  ? "$" + toy.price.toFixed(2)
+                  : (toy.forChanges
+                    ? t("forChange")
+                    : t("forGifts"))}
               </span>
 
               {isSignedIn && !isCurrentUser && toy.isActive && (
@@ -204,12 +214,23 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
             </div>
             <div className="flex flex-col gap-2 space-x-2 justify-between">
               <h2 className="inline-block text-sm font-medium px-2 py-1 rounded-lg">
-                <span>{t("condition")}:</span> <span className="text-green-600 font-bold">{toy.conditionDescription}</span>
+                <span>{t("condition")}:</span>{" "}
+                <span className="text-green-600 font-bold">
+                  {toy.conditionDescription}
+                </span>
               </h2>
               <h2 className="inline-block text-sm font-medium px-2 py-1 rounded-lg">
-                <span>{t("status")}:</span> <span className={toy.isActive ? "text-green-600 font-bold" : "text-red-700 font-bold"}>{toy.statusDescription}</span>
+                <span>{t("status")}:</span>{" "}
+                <span
+                  className={
+                    toy.isActive
+                      ? "text-green-600 font-bold"
+                      : "text-red-700 font-bold"
+                  }
+                >
+                  {toy.statusDescription}
+                </span>
               </h2>
-
             </div>
           </div>
 
@@ -235,7 +256,7 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
               {toy.forSell && toy.isActive && isSignedIn && !isCurrentUser && (
                 <button
                   onClick={(e: React.FormEvent) => {
-                    e.preventDefault();                   
+                    e.preventDefault();
                     setSubmitting(true);
 
                     const added = addToCart({
@@ -253,25 +274,37 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
                     }
                   }}
                   className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 px-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 w-full"
-                  disabled={submitting}                  
+                  disabled={submitting}
                 >
                   <ShoppingCart className="w-5 h-5" />
                   <span>{t("addToCart")}</span>
                 </button>
               )}
-              {!toy.forSell && toy.isActive && isSignedIn && !isCurrentUser && (
-                <button
-                  onClick={(e: React.FormEvent) => {
-                    e.preventDefault();                   
-                    handleRequest()
-                  }}
-                  className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 px-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 w-full"
-                  disabled={submitting}
-                >
+              {!toy.forSell &&
+                toy.isActive &&
+                isSignedIn &&
+                !isCurrentUser &&
+                (toy.allowRequest ? (
+                  <button
+                    onClick={(e: React.FormEvent) => {
+                      e.preventDefault();
+                      handleRequest();
+                    }}
+                    className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 px-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 w-full"
+                    disabled={submitting}
+                  >
                     <Send className="w-5 h-5" />
                     <span>{t("request")}</span>
-                </button>                  
-              )}
+                  </button>
+                ) : (
+                  <button
+                    disabled={true}
+                    className="bg-gradient-to-r from-green-400 to-green-500 text-green-100 cursor-not-allowed opacity-70 py-4 px-4 rounded-xl font-semiboldtransition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 w-full"
+                  >
+                    <Send className="w-5 h-5" />
+                    <span>{t("request")}</span>
+                  </button>
+                ))}
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
@@ -283,13 +316,16 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
                     <ChatButton toy={toy} seller={seller} />
                   )}
 
-                  {seller?.phone && isSignedIn && !isCurrentUser && toy.isActive && (
-                    <WhatsAppContact
-                      phoneNumber={seller.phone}
-                      size="small"
-                      iconOnly={true}
-                    />
-                  )}
+                  {seller?.phone &&
+                    isSignedIn &&
+                    !isCurrentUser &&
+                    toy.isActive && (
+                      <WhatsAppContact
+                        phoneNumber={seller.phone}
+                        size="small"
+                        iconOnly={true}
+                      />
+                    )}
                 </div>
               </div>
             </div>

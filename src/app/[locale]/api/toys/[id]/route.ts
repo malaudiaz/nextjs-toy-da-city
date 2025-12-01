@@ -71,7 +71,6 @@ export async function GET(
       where: { id: id },
       include: {
         media: true,
-        giftrequests: true,
         category: {
           include: {
             translations: {
@@ -105,6 +104,7 @@ export async function GET(
 
     // Verificar si el usuario actual tiene este toy como favorito
     let favorite;
+    let existingGiftRequest;
 
     if (userId) {
       favorite = await prisma.favoriteToy.findFirst({
@@ -114,9 +114,16 @@ export async function GET(
           isActive: true,
         },
       });
+
+      existingGiftRequest = await prisma.giftRequest.findFirst({
+          where: {
+            userId: userId,
+            toyId: id,
+          },
+        });
     }
 
-    const allowRequest = toy.giftrequests.length === 0;    
+    const allowRequest = !existingGiftRequest;
 
     const { category, condition, status, ...toyData } = toy;
     // Formateamos el resultado final
