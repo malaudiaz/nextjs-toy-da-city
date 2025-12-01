@@ -133,10 +133,6 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
   const { id } = await params; // Safe to use
 
-  const body = await req.json();
-
-  const validatedData = GiftRequestSchema.parse(body);
-
   const toy = await prisma.toy.findUnique({
     where: { id: id },
   });
@@ -152,13 +148,6 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     return NextResponse.json(
       { success: false, error: g("Unauthorized") },
       { status: 403 }
-    );
-  }
-
-  if (!toy.forGifts) {
-    return NextResponse.json(
-      { success: false, error: t("ToyNotGift") },
-      { status: 404 }
     );
   }
 
@@ -185,8 +174,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       data: {
         userId: userId,
         toyId: toy.id,
-        forGifts: validatedData.forGifts,
-        forChanges: validatedData.forChanges,
+        forGifts: toy.forGifts,
+        forChanges: toy.forChanges,
         statusId: statusAvailable.id,
         exchangeToyId: null,
       },
