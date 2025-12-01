@@ -4,6 +4,26 @@ import { NextRequest, NextResponse } from "next/server";
 import { getTranslations } from "next-intl/server";
 import { auth } from "@clerk/nextjs/server";
 
+async function getClerkUserById(clerkId: string) {
+  try {
+    const response = await fetch(`https://api.clerk.com/v1/users/${clerkId}`, {
+      headers: {
+        Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Clerk API error: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching Clerk user:", error);
+    return null;
+  }
+}
+
 export async function GET(
   req: NextRequest,
   {
@@ -61,8 +81,24 @@ export async function GET(
             user: {
               select: {
                 id: true,
+                clerkId: true,
                 name: true,
                 email: true,
+                // *** Incluir los juguetes del usuario que solicita ***
+                toysForSale: {
+                  select: {
+                    id: true,
+                    title: true,
+                    price: true,
+                    // *** Incluir la media (imágenes) de los juguetes ***
+                    media: {
+                      select: {
+                        fileUrl: true,
+                      },
+                      take: 1, // Puedes limitar a solo una imagen por eficiencia
+                    },
+                  },
+                },
               },
             },
           },
@@ -75,19 +111,36 @@ export async function GET(
       return NextResponse.json({ error: t("NotFound") }, { status: 401 });
     }
 
-    // Estructurar la respuesta
+    const giftRequests = toyWithRequests.giftrequests;
+
+    // 1. Crear un array de promesas para obtener la información del usuario de Clerk
+    const clerkUserPromises = giftRequests.map(async (request) => {
+      // El 'id' de tu modelo 'user' es el 'clerkId'
+      const clerkUser = await getClerkUserById(request.user.clerkId);
+      // Si la llamada es exitosa, devolver el 'imageUrl', si no, devolver 'null' o un valor predeterminado
+      return clerkUser?.image_url || null;
+    });
+
+    // 2. Ejecutar todas las promesas en paralelo para mayor eficiencia
+    const clerkImageUrls = await Promise.all(clerkUserPromises);
+
+// Estructurar la respuesta
     const giftRequestsData = {
       id: toyWithRequests.id,
       name: toyWithRequests.title,
       description: toyWithRequests.description,
 
-      giftRequests: toyWithRequests.giftrequests.map((giftrequests) => {
+      giftRequests: toyWithRequests.giftrequests.map((giftrequests, index) => {
+        // 3. Incluir el imageUrl obtenido
+        const imageUrl = clerkImageUrls[index]; 
+
         return {
           id: giftrequests.id,
           user: {
             id: giftrequests.user.id,
             name: giftrequests.user.name,
             email: giftrequests.user.email,
+            imageUrl: imageUrl // ¡Aquí está el avatar!
           },
         };
       }),
@@ -114,7 +167,10 @@ export async function GET(
   }
 }
 
-export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   let { userId } = await auth();
 
   const t = await getTranslations("Toy");
