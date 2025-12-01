@@ -3,7 +3,6 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { getTranslations } from "next-intl/server";
 import { auth } from "@clerk/nextjs/server";
-import { GiftRequestSchema } from "@/lib/schemas/request";
 
 export async function GET(
   req: NextRequest,
