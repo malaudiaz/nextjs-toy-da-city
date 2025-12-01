@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { Sale } from "@/types/modelTypes";
 import { useTranslations } from "next-intl"; // ✅ Importa el hook
 import Empty from "../Empty";
+import ToyRequest from "./ToyRequest";
 
 type SwapProps = {
   swaps: Sale[];
@@ -72,6 +73,7 @@ const SwapInfo = ({ swaps }: SwapProps) => {
                           <p className="text-gray-600 text-md">
                             {t("condition")}: {swap.condition.description}
                           </p>
+                           <ToyRequest id={swap.id} />
                         </div>
                       </div>
                     </div>

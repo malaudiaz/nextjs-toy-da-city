@@ -18,7 +18,7 @@ export type Filters = {
     lng: number;
     radius: number;
   };
-  conditionId?: number
+  conditionId?: number;
   locale?: string;
   forSell?: boolean;
   forGifts?: boolean;
@@ -63,11 +63,11 @@ export async function getToys(
     url.searchParams.set("lng", String(filters.locationRadius.lng));
     url.searchParams.set("radius", String(filters.locationRadius.radius));
   }
-  if(filters.conditionId){
+  if (filters.conditionId) {
     url.searchParams.set("conditionId", String(filters.conditionId));
   }
 
-if (filters.forSell !== undefined) {
+  if (filters.forSell !== undefined) {
     url.searchParams.set("forSell", String(filters.forSell));
   }
   if (filters.forGifts !== undefined) {
@@ -125,7 +125,7 @@ export async function getToy(id: string) {
   });
 
   let toy = null;
-  if (response.status === 200 ) {
+  if (response.status === 200) {
     toy = await response.json();
   }
 
@@ -309,6 +309,33 @@ export async function getSwaps() {
   return swaps;
 }
 
+export async function getRequest(id: string) {
+  const locale = await getLocale();
+  const { getToken, userId } = await auth();
+
+  const sessionToken = await getToken();
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${sessionToken}`,
+    "X-User-ID": "",
+  };
+
+  if (userId) {
+    headers["X-User-ID"] = userId;
+  }
+
+  const response = await fetch(
+    `${BACKEND_URL}/${locale}/api/toys/${id}/giftrequest`,
+    {
+      method: "GET",
+      headers: headers,
+    }
+  );
+
+  const requests = await response.json();
+  return requests;
+}
+
 export async function getMessages() {
   const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
@@ -416,18 +443,21 @@ export async function requestToy(toyId: string) {
   }
 
   try {
-    const response = await fetch(`${BACKEND_URL}/${locale}/api/toys/${toyId}/giftrequest`, {
-      method: "POST",
-      headers: headers
-    });
+    const response = await fetch(
+      `${BACKEND_URL}/${locale}/api/toys/${toyId}/giftrequest`,
+      {
+        method: "POST",
+        headers: headers,
+      }
+    );
     const result = await response.json();
-    
+
     // Solo revalida si la respuesta fue exitosa
     if (response.ok) {
       revalidatePath(`/${locale}/toys/${toyId}`);
     }
-    
-    return result;    
+
+    return result;
   } catch (error) {
     console.error(error);
     return { success: false, error: "Error canceling order" };

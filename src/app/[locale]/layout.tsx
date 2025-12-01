@@ -19,6 +19,7 @@ import { Toaster } from "sonner";
 import { OnlineTracker } from "@/components/shared/OlineTracker";
 import { getMessages } from "next-intl/server"; // 👈 Importa getMessages
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import Providers from "@/lib/actions/providers";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -114,15 +115,17 @@ export default async function RootLayout({
         signUpForceRedirectUrl={`/${validLocale}/auth-callback?from=registration`}
       >
         <body className={`min-h-screen flex flex-col antialiased font-inter`}>
-          <NextIntlClientProvider locale={validLocale} messages={messages}>
-            <Navbar locale={validLocale} />
-            <NuqsAdapter>{children}</NuqsAdapter>
-            <ScrollToTop />
-            <Footer />
-          </NextIntlClientProvider>
-          <Toaster />
-          <PushNotifier />
-          <OnlineTracker />
+          <Providers>
+            <NextIntlClientProvider locale={validLocale} messages={messages}>
+              <Navbar locale={validLocale} />
+              <NuqsAdapter>{children}</NuqsAdapter>
+              <ScrollToTop />
+              <Footer />
+            </NextIntlClientProvider>
+            <Toaster />
+            <PushNotifier />
+            <OnlineTracker />
+          </Providers>
         </body>
       </ClerkProvider>
     </html>
