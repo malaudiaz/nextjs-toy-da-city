@@ -117,7 +117,12 @@
     "WebhookNotConfigure": "Webhook secret not configured",
     "WebhookSignInvalid": "Webhook Sign Invalid",
     "MissingHeadersSvix": "Svix headers are missing",
-    "OperationOk": "Satisfactory operation"
+    "OperationOk": "Satisfactory operation",
+    "GiftSubject": "Gift or exchange request approved",
+    "giftRequestApprovedTitle": "Gift or exchange approved",
+    "giftGreeting": "Hello",
+    "giftRequestApprovedMessage": "Your gift request has been successfully approved. Here are the details:",
+    "approvedGift": "Gift details"
   },
   "Payments": {
     "card_declined": "Your card was declined. Please use another card.",

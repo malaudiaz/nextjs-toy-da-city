@@ -3,6 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
 import { getTranslations } from "next-intl/server";
 import { auth } from "@clerk/nextjs/server";
+import { sendEmail } from "@/lib/nodemailer";
 
 // confirma la solicitud indicada y el resto la rechaza
 export async function PATCH(
@@ -11,19 +12,28 @@ export async function PATCH(
 ) {
   const g = await getTranslations("General");
   const t = await getTranslations("Toy");
+  const s = await getTranslations("sendMail");
 
-  const { userId } = await auth();
+  let { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
+    userId = request.headers.get("X-User-ID");
+    if (!userId) {
+      return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
+    }
   }
 
-  const { id: requestId } = await params;
+  const user = await prisma.user.findUnique({ where: { clerkId: userId } });
+  if (!user) {
+    return NextResponse.json({ error: g("UserNotFound") }, { status: 404 });
+  }
+
+  const { id: id } = await params;
 
   try {
     // Validar que la solicitud existe y obtener información completa
     const giftRequest = await prisma.giftRequest.findUnique({
-      where: { id: requestId },
+      where: { id: id },
       include: {
         toy: {
           include: {
@@ -42,12 +52,8 @@ export async function PATCH(
     }
 
     // Validaciones de negocio
-    if (giftRequest.toy.sellerId !== userId) {
+    if (giftRequest.toy.sellerId !== user.id) {
       return NextResponse.json({ error: g("Unauthorized") }, { status: 404 });
-    }
-
-    if (!giftRequest.toy.forGifts) {
-      return NextResponse.json({ error: t("GiftRequestNotGift") }, { status: 404 });
     }
 
     if (giftRequest.status.name === "cancelled" || giftRequest.status.name === "reserved") {
@@ -75,7 +81,7 @@ export async function PATCH(
     const result = await prisma.$transaction(async (tx) => {
       // 1. Confirmar la solicitud seleccionada
       const updatedRequest = await tx.giftRequest.update({
-        where: { id: requestId },
+        where: { id: id },
         data: { statusId: confirmedStatus.id },
         include: {
           status: true,
@@ -86,7 +92,7 @@ export async function PATCH(
       const cancelledResult = await tx.giftRequest.updateMany({
         where: {
           toyId: giftRequest.toyId,
-          id: { not: requestId },
+          id: { not: id },
           status: {
             name: {
               in: ["available"],
@@ -107,24 +113,32 @@ export async function PATCH(
         },
       });
 
-      return {
-        confirmedRequest: updatedRequest,
-        cancelledCount: cancelledResult.count,
-      };
+      // enviar mensaje  al destinatario
+      if (user.email) {
+        await sendEmail({
+          to: user.email,
+          subject: g("GiftSubject"),
+          html: `
+          <div style="max-width:480px;margin:auto;background:#f8f8f8;border-radius:12px;padding:32px 24px;font-family:sans-serif;color:#222;box-shadow:0 2px 8px #0001;">
+            <h2 style="color:#4c754b;margin-bottom:8px;">${g("giftRequestApprovedTitle")}</h2>
+            <p style="font-size:1.1em;margin-bottom:16px;">${g("giftGreeting")} <strong>${user.name}</strong>,</p>
+            <p style="margin-bottom:18px;">${g("giftRequestApprovedMessage")}</p>
+            <h3 style="margin-bottom:8px;color:#4c754b;">${g("approvedGift")}</h3>
+            <div style="margin-bottom:18px;">
+              <p style="margin-bottom:4px;"><strong>${giftRequest.toy.title}</strong></p>
+            </div>
+            <a href="mailto:soporte@toydacity.com" style="display:inline-block;background:#4c754b;color:#fff;padding:10px 22px;border-radius:6px;text-decoration:none;font-weight:500;margin-bottom:18px;">${s("contactSupport") ?? "Contactar soporte"}</a>
+            <p style="margin-top:24px;font-size:1.05em;">${t("farewell")}</p>
+        </div>
+        `,
+        });
+      }
+
+      return NextResponse.json({ success: true });
+
     });
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        confirmedRequest: {
-          id: result.confirmedRequest.id,
-          status: result.confirmedRequest.status.name,
-          cancelledOtherRequests: result.cancelledCount,
-        },
-        message: g('OperationOk'),
-      },
-    });
-
+    
   } catch (error) {
     console.log(error);
     return NextResponse.json(

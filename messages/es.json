@@ -118,7 +118,12 @@
     "WebhookNotConfigure": "Secreto de webhook no configurado",
     "WebhookSignInvalid": "Firma de webhook inválida",
     "MissingHeadersSvix": "Faltan headers svix",
-    "OperationOk": "Operación satisfactoria"
+    "OperationOk": "Operación satisfactoria",
+    "GiftSubject": "¡Solicitud de regalo o intercambio aprobada.!",
+    "giftRequestApprovedTitle": "Regalo aprobado",
+    "giftGreeting": "Saludos",
+    "giftRequestApprovedMessage": "Tu solicitud de regalo ha sido aprobada exitosamente. Aquí tienes los detalles:",
+    "approvedGift": "Detalles del regalo"
   },
   "Payments": {
     "card_declined": "La tarjeta fue rechazada. Use otra tarjeta.",
