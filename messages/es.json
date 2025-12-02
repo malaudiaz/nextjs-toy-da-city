@@ -636,7 +636,7 @@
     "order": "Orden"
   },
   "gifts": {
-    "title": "Juguetes Gratis",
+    "title": "Juguetes para Regalar",
     "emptyMsg": "No se encontraron juguetes con los filtros seleccionados",
     "free": "Gratis",
     "category": "Categoría",

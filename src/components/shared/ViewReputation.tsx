@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { format } from "date-fns";
 import { Toaster } from "sonner";
+import { useUser } from "@clerk/nextjs";
 
 // Tipado
 interface Review {
@@ -38,6 +39,7 @@ interface MyReviewsData {
 const ViewReputation = () => {
   const locale = useLocale(); // ✅ Siempre actualizado
   const t = useTranslations("reputation"); // ✅ Usa el hook
+  const { user: clerkUser } = useUser();
 
   const { data, error, isLoading, mutate } = useSWR<MyReviewsData>(
     `/${locale}/api/profiles/my-reviews`,
@@ -56,6 +58,15 @@ const ViewReputation = () => {
     window.addEventListener("newReview", handleNewReview);
     return () => window.removeEventListener("newReview", handleNewReview);
   }, [mutate]);
+
+  if (!clerkUser) {
+    return (
+      <div className="max-w-3xl mx-auto p-6 text-center">
+        <h2 className="text-2xl font-bold">{}</h2>
+        <p className="mt-2 text-gray-600">{}</p>
+      </div>
+    );
+  } 
 
   if (isLoading) {
     return (
