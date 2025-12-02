@@ -30,7 +30,7 @@ export interface Toy {
   categoryDescription: string
   conditionDescription: string
   statusDescription: string
-  allowRequest: boolean
+  allowRequest?: boolean
 }
 
 

@@ -10,29 +10,48 @@ import { getRequest } from "@/lib/actions/toysAction";
 import { useQuery } from "@tanstack/react-query";
 import { UserAvatar } from "../UserAvatar";
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+
+// ✅ Define types
+interface User {
+  id: string;
+  name: string;
+  imageUrl: string;
+}
+
+interface GiftRequest {
+  id: string;
+  user: User;
+}
+
+interface ToyRequestResponse {
+  data: {
+    giftRequests: GiftRequest[];
+  };
+}
 
 const ToyRequest = ({ id }: { id: string }) => {
-  const { data : requests } = useQuery({
+  const { data: requests, isLoading } = useQuery<ToyRequestResponse>({
     queryKey: ["toyRequest", id],
     queryFn: () => getRequest(id),
   });
 
+  if (isLoading) {
+    return <div>Loading requests...</div>;
+  }
+
+  if (!requests?.data?.giftRequests) {
+    return <div>No requests found.</div>;
+  }
+
   return (
-    <Accordion
-      type="single"
-      collapsible
-      className="w-full"
-      defaultValue="item-1"
-    >
+    <Accordion type="single" collapsible className="w-full" defaultValue="item-1">
       <AccordionItem value="item-1">
-        <AccordionTrigger>Requests {requests.data.giftRequests.length}</AccordionTrigger>
+        <AccordionTrigger>
+          Requests ({requests.data.giftRequests.length})
+        </AccordionTrigger>
         <AccordionContent className="flex flex-col gap-4 text-balance">
-          {requests.data.giftRequests.map((request: any) => (
-            <div
-              key={request.id}
-              className="flex items-center justify-between gap-2"
-            >
+          {requests.data.giftRequests.map((request) => (
+            <div key={request.id} className="flex items-center justify-between gap-2">
               <div className="flex flex-row items-center gap-2">
                 <UserAvatar
                   userId={request.user.id}
@@ -42,7 +61,7 @@ const ToyRequest = ({ id }: { id: string }) => {
                 />
                 <p>{request.user.name}</p>
               </div>
-              <Button className="bg-green-600 hover:bg-green-700"> Select </Button>
+              <Button className="bg-green-600 hover:bg-green-700">Select</Button>
             </div>
           ))}
         </AccordionContent>

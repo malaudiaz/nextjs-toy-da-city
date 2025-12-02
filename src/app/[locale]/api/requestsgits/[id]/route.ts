@@ -2,9 +2,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
 import { getTranslations } from "next-intl/server";
-import { Prisma } from "@prisma/client";
 import { auth } from "@clerk/nextjs/server";
-import { clerkClient } from "@clerk/nextjs/server";
 
 // confirma la solicitud indicada y el resto la rechaza
 export async function PATCH(
@@ -20,7 +18,7 @@ export async function PATCH(
     return NextResponse.json({ error: g("Unauthorized") }, { status: 401 });
   }
 
-  const { id: requestId, locale } = await params;
+  const { id: requestId } = await params;
 
   try {
     // Validar que la solicitud existe y obtener información completa
@@ -128,6 +126,7 @@ export async function PATCH(
     });
 
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { success: false, error: "Error interno del servidor" },
       { status: 500 }
