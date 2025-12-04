@@ -50,7 +50,10 @@ export async function PATCH(
     });
 
     if (!giftRequest) {
-      return NextResponse.json({ error: g("GiftRequestNotFound") }, { status: 404 });
+      return NextResponse.json(
+        { error: g("GiftRequestNotFound") },
+        { status: 404 }
+      );
     }
 
     // Validaciones de negocio
@@ -58,8 +61,14 @@ export async function PATCH(
       return NextResponse.json({ error: g("Unauthorized") }, { status: 404 });
     }
 
-    if (giftRequest.status.name === "cancelled" || giftRequest.status.name === "reserved") {
-      return NextResponse.json({ error: t("StatusIncorrect") }, { status: 404 });
+    if (
+      giftRequest.status.name === "cancelled" ||
+      giftRequest.status.name === "reserved"
+    ) {
+      return NextResponse.json(
+        { error: t("StatusIncorrect") },
+        { status: 404 }
+      );
     }
 
     // Buscar estados necesarios
@@ -71,11 +80,11 @@ export async function PATCH(
       },
     });
 
-    const confirmedStatus = statuses.find(s => s.name === "confirmed");
-    const rejectedStatus = statuses.find(s => s.name === "rejected");
-    const soldStatus = statuses.find(s => s.name === "sold");
-    
-    if (!confirmedStatus || !rejectedStatus || !soldStatus ) {
+    const confirmedStatus = statuses.find((s) => s.name === "confirmed");
+    const rejectedStatus = statuses.find((s) => s.name === "rejected");
+    const soldStatus = statuses.find((s) => s.name === "sold");
+
+    if (!confirmedStatus || !rejectedStatus || !soldStatus) {
       return NextResponse.json({ error: g("ServerError") }, { status: 404 });
     }
 
@@ -115,33 +124,35 @@ export async function PATCH(
         },
       });
 
-      // enviar mensaje  al destinatario
-      // if (user.email) {
-      //   await sendEmail({
-      //     to: user.email,
-      //     subject: g("GiftSubject"),
-      //     html: `
-      //     <div style="max-width:480px;margin:auto;background:#f8f8f8;border-radius:12px;padding:32px 24px;font-family:sans-serif;color:#222;box-shadow:0 2px 8px #0001;">
-      //       <h2 style="color:#4c754b;margin-bottom:8px;">${g("giftRequestApprovedTitle")}</h2>
-      //       <p style="font-size:1.1em;margin-bottom:16px;">${g("giftGreeting")} <strong>${user.name}</strong>,</p>
-      //       <p style="margin-bottom:18px;">${g("giftRequestApprovedMessage")}</p>
-      //       <h3 style="margin-bottom:8px;color:#4c754b;">${g("approvedGift")}</h3>
-      //       <div style="margin-bottom:18px;">
-      //         <p style="margin-bottom:4px;"><strong>${giftRequest.toy.title}</strong></p>
-      //       </div>
-      //       <a href="mailto:soporte@toydacity.com" style="display:inline-block;background:#4c754b;color:#fff;padding:10px 22px;border-radius:6px;text-decoration:none;font-weight:500;margin-bottom:18px;">${s("contactSupport") ?? "Contactar soporte"}</a>
-      //       <p style="margin-top:24px;font-size:1.05em;">${s("farewell")}</p>
-      //   </div>
-      //   `,
-      //   });
-      // }
+      // Buscar el usuario que hizo la solicitud
+      const userRequest = await tx.user.findUnique({
+        where: { id: giftRequest.userId },
+        select: { email: true, name: true },
+      });
 
+      if (userRequest?.email) {
+        await sendEmail({
+          to: userRequest.email,
+          subject: g("GiftSubject"),
+          html: `
+           <div style="max-width:480px;margin:auto;background:#f8f8f8;border-radius:12px;padding:32px 24px;font-family:sans-serif;color:#222;box-shadow:0 2px 8px #0001;">
+             <h2 style="color:#4c754b;margin-bottom:8px;">${g("giftRequestApprovedTitle")}</h2>
+             <p style="font-size:1.1em;margin-bottom:16px;">${g("giftGreeting")} <strong>${userRequest.name}</strong>,</p>
+             <p style="margin-bottom:18px;">${g("giftRequestApprovedMessage")}</p>
+             <h3 style="margin-bottom:8px;color:#4c754b;">${g("approvedGift")}</h3>
+             <div style="margin-bottom:18px;">
+               <p style="margin-bottom:4px;"><strong>${giftRequest.toy.title}</strong></p>
+             </div>
+             <a href="mailto:soporte@toydacity.com" style="display:inline-block;background:#4c754b;color:#fff;padding:10px 22px;border-radius:6px;text-decoration:none;font-weight:500;margin-bottom:18px;">${s("contactSupport") ?? "Contactar soporte"}</a>
+             <p style="margin-top:24px;font-size:1.05em;">${s("farewell")}</p>
+         </div>
+         `,
+        });
+      }
     });
 
     return NextResponse.json({ success: true });
-
-  } 
-  catch (error) {
+  } catch (error) {
     console.log(error);
     return NextResponse.json({ error: g("ServerError") }, { status: 500 });
   }
