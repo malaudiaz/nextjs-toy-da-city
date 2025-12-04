@@ -16,6 +16,8 @@ export async function PATCH(
 
   let { userId } = await auth();
 
+  // let userId = "user_35cncVrYiQ8dVsoTrY512Q2BXlW"
+
   if (!userId) {
     userId = request.headers.get("X-User-ID");
     if (!userId) {
@@ -78,9 +80,9 @@ export async function PATCH(
     }
 
     // Ejecutar transacción
-    const result = await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx) => {
       // 1. Confirmar la solicitud seleccionada
-      const updatedRequest = await tx.giftRequest.update({
+      await tx.giftRequest.update({
         where: { id: id },
         data: { statusId: confirmedStatus.id },
         include: {
@@ -89,7 +91,7 @@ export async function PATCH(
       });
 
       // 2. Cancelar otras solicitudes activas para el mismo juguete
-      const cancelledResult = await tx.giftRequest.updateMany({
+      await tx.giftRequest.updateMany({
         where: {
           toyId: giftRequest.toyId,
           id: { not: id },
@@ -114,36 +116,33 @@ export async function PATCH(
       });
 
       // enviar mensaje  al destinatario
-      if (user.email) {
-        await sendEmail({
-          to: user.email,
-          subject: g("GiftSubject"),
-          html: `
-          <div style="max-width:480px;margin:auto;background:#f8f8f8;border-radius:12px;padding:32px 24px;font-family:sans-serif;color:#222;box-shadow:0 2px 8px #0001;">
-            <h2 style="color:#4c754b;margin-bottom:8px;">${g("giftRequestApprovedTitle")}</h2>
-            <p style="font-size:1.1em;margin-bottom:16px;">${g("giftGreeting")} <strong>${user.name}</strong>,</p>
-            <p style="margin-bottom:18px;">${g("giftRequestApprovedMessage")}</p>
-            <h3 style="margin-bottom:8px;color:#4c754b;">${g("approvedGift")}</h3>
-            <div style="margin-bottom:18px;">
-              <p style="margin-bottom:4px;"><strong>${giftRequest.toy.title}</strong></p>
-            </div>
-            <a href="mailto:soporte@toydacity.com" style="display:inline-block;background:#4c754b;color:#fff;padding:10px 22px;border-radius:6px;text-decoration:none;font-weight:500;margin-bottom:18px;">${s("contactSupport") ?? "Contactar soporte"}</a>
-            <p style="margin-top:24px;font-size:1.05em;">${t("farewell")}</p>
-        </div>
-        `,
-        });
-      }
-
-      return NextResponse.json({ success: true });
+      // if (user.email) {
+      //   await sendEmail({
+      //     to: user.email,
+      //     subject: g("GiftSubject"),
+      //     html: `
+      //     <div style="max-width:480px;margin:auto;background:#f8f8f8;border-radius:12px;padding:32px 24px;font-family:sans-serif;color:#222;box-shadow:0 2px 8px #0001;">
+      //       <h2 style="color:#4c754b;margin-bottom:8px;">${g("giftRequestApprovedTitle")}</h2>
+      //       <p style="font-size:1.1em;margin-bottom:16px;">${g("giftGreeting")} <strong>${user.name}</strong>,</p>
+      //       <p style="margin-bottom:18px;">${g("giftRequestApprovedMessage")}</p>
+      //       <h3 style="margin-bottom:8px;color:#4c754b;">${g("approvedGift")}</h3>
+      //       <div style="margin-bottom:18px;">
+      //         <p style="margin-bottom:4px;"><strong>${giftRequest.toy.title}</strong></p>
+      //       </div>
+      //       <a href="mailto:soporte@toydacity.com" style="display:inline-block;background:#4c754b;color:#fff;padding:10px 22px;border-radius:6px;text-decoration:none;font-weight:500;margin-bottom:18px;">${s("contactSupport") ?? "Contactar soporte"}</a>
+      //       <p style="margin-top:24px;font-size:1.05em;">${s("farewell")}</p>
+      //   </div>
+      //   `,
+      //   });
+      // }
 
     });
 
-    
-  } catch (error) {
+    return NextResponse.json({ success: true });
+
+  } 
+  catch (error) {
     console.log(error);
-    return NextResponse.json(
-      { success: false, error: "Error interno del servidor" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: g("ServerError") }, { status: 500 });
   }
 }
