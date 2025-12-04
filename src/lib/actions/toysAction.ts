@@ -336,6 +336,33 @@ export async function getRequest(id: string) {
   return requests;
 }
 
+export async function confirmRequest(id: string) {
+  const locale = await getLocale();
+  const { getToken, userId } = await auth();
+
+  const sessionToken = await getToken();
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${sessionToken}`,
+    "X-User-ID": "",
+  };
+
+  if (userId) {
+    headers["X-User-ID"] = userId;
+  }
+
+  const response = await fetch(
+    `${BACKEND_URL}/${locale}/api/requestsgits/${id}`,
+    {
+      method: "PATCH",
+      headers: headers,
+    }
+  );
+
+  const requests = await response.json();
+  return requests;
+}
+
 export async function getMessages() {
   const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();

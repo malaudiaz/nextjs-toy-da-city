@@ -9,7 +9,7 @@ import {
 import { getRequest } from "@/lib/actions/toysAction";
 import { useQuery } from "@tanstack/react-query";
 import { UserAvatar } from "../UserAvatar";
-import { Button } from "@/components/ui/button";
+import { AcceptRequest } from "./AcceptRequest";
 
 // ✅ Define types
 interface User {
@@ -61,7 +61,7 @@ const ToyRequest = ({ id }: { id: string }) => {
                 />
                 <p>{request.user.name}</p>
               </div>
-              <Button className="bg-green-600 hover:bg-green-700">Select</Button>
+              <AcceptRequest id={request.id}/>
             </div>
           ))}
         </AccordionContent>
