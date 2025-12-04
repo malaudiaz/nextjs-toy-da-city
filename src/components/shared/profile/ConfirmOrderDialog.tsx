@@ -39,7 +39,6 @@ export function ConfirmOrderDialog({ orderId, btnText, msgsuccess, msgerror }: P
 
     } catch (error) {
       toast.error(msgerror);
-      console.error(error);
     }
   };
 

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Sale } from "@/types/modelTypes";
 import { useTranslations } from "next-intl"; // ✅ Importa el hook
 import Empty from "../Empty";
+import ToyRequest from "./ToyRequest";
 
 type FreeProps = {
   free: Sale[];
@@ -83,6 +84,7 @@ const FreeInfo = ({ free }: FreeProps) => {
                           <p className="text-gray-600 text-md">
                             {t("condition")}: {gift.condition.name}
                           </p>
+                          <ToyRequest id={gift.id} />
                         </div>
                       </div>
                     </div>
