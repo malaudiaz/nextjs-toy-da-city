@@ -10,6 +10,7 @@ import { getRequest } from "@/lib/actions/toysAction";
 import { useQuery } from "@tanstack/react-query";
 import { UserAvatar } from "../UserAvatar";
 import { AcceptRequest } from "./AcceptRequest";
+import { useTranslations } from "next-intl"; // ✅ Importa el hook
 
 // ✅ Define types
 interface User {
@@ -29,25 +30,26 @@ interface ToyRequestResponse {
   };
 }
 
-const ToyRequest = ({ id }: { id: string }) => {
+const ToyRequest = ({ id, source }: { id: string, source: string }) => {
+  const t = useTranslations(source); // o el namespace que uses
   const { data: requests, isLoading } = useQuery<ToyRequestResponse>({
     queryKey: ["toyRequest", id],
     queryFn: () => getRequest(id),
   });
 
   if (isLoading) {
-    return <div>Loading requests...</div>;
+    return <div>{t("loading")}</div>;
   }
 
   if (!requests?.data?.giftRequests) {
-    return <div>No requests found.</div>;
+    return <div>{t("notFound")}</div>;
   }
 
   return (
     <Accordion type="single" collapsible className="w-full" defaultValue="item-1">
       <AccordionItem value="item-1">
         <AccordionTrigger>
-          Requests ({requests.data.giftRequests.length})
+          {t("request")} ({requests.data.giftRequests.length})
         </AccordionTrigger>
         <AccordionContent className="flex flex-col gap-4 text-balance">
           {requests.data.giftRequests.map((request) => (
@@ -61,7 +63,7 @@ const ToyRequest = ({ id }: { id: string }) => {
                 />
                 <p>{request.user.name}</p>
               </div>
-              <AcceptRequest id={request.id}/>
+              <AcceptRequest id={request.id} source={source}/>
             </div>
           ))}
         </AccordionContent>

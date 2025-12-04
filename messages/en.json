@@ -646,14 +646,34 @@
     "emptyMsg": "No toys were found with the selected filters.",
     "free": "Free",
     "category": "Category",
-    "condition": "Condition"
+    "condition": "Condition",
+    "loading": "Loading requests...",
+    "notFound": "No requests found.",
+    "request": "Requests",
+    "select": "Select",
+    "acceptRequest": "Accept request",
+    "questionAcceptRequest": "Are you sure you want to accept this free request?",
+    "cancelBtn": "Cancel request",
+    "acceptBtn": "Accept",
+    "confirmSuccess": "Free request accepted successfully",
+    "errorMessage": "Free request canceled successfully"
   },
   "swap": {
     "title": "Swap Toys",
     "emptyMsg": "No toys were found with the selected filters.",
     "free": "Free",
     "category": "Category",
-    "condition": "Condition"
+    "condition": "Condition",
+    "loading": "Loading requests...",
+    "notFound": "No requests found.",
+    "request": "Requests",
+    "select": "Select",
+    "acceptRequest": "Accept request",
+    "questionAcceptRequest": "Are you sure you want to accept this swap request?",
+    "cancelBtn": "Cancel request",
+    "acceptBtn": "Accept",
+    "confirmSuccess": "Swap request accepted successfully",
+    "errorMessage": "Swap request canceled successfully"
   },
   "favorites": {
     "title": "My Favorites",

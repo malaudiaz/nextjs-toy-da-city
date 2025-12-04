@@ -68,12 +68,12 @@ const SwapInfo = ({ swaps }: SwapProps) => {
                         </p>
                         <div className="flex flex-col gap-2">
                           <p className="text-gray-600 text-md">
-                            {t("category")}: {swap.category.description}
+                            {t("category")}: {swap.categoryDescription}
                           </p>
                           <p className="text-gray-600 text-md">
-                            {t("condition")}: {swap.condition.description}
+                            {t("condition")}: {swap.conditionDescription}
                           </p>
-                           <ToyRequest id={swap.id} />
+                           <ToyRequest id={swap.id} source="swap" />
                         </div>
                       </div>
                     </div>

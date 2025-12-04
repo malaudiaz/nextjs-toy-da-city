@@ -640,14 +640,34 @@
     "emptyMsg": "No se encontraron juguetes con los filtros seleccionados",
     "free": "Gratis",
     "category": "Categoría",
-    "condition": "Condición"
+    "condition": "Condición",
+    "loading": "Cargando solicitudes...",
+    "notFound": "No se encontraron solicitudes.",
+    "request": "Solicitudes",
+    "select": "Seleccionar",
+    "acceptRequest": "Aceptar solicitud",
+    "questionAcceptRequest": "¿Estás seguro de que deseas aceptar esta solicitud de regalo?",
+    "cancelBtn": "Cancelar solicitud",
+    "acceptBtn": "Aceptar",
+    "confirmSuccess": "Solicitud de regalo aceptada con éxito",
+    "errorMessage": "Error al aceptar la solicitud de regalo"
   },
   "swap": {
     "title": "Juguetes para Intercambios",
     "emptyMsg": "No se encontraron juguetes con los filtros seleccionados",
     "free": "Gratis",
     "category": "Categoría",
-    "condition": "Condición"
+    "condition": "Condición",
+    "loading": "Cargando solicitudes...",
+    "notFound": "No se encontraron solicitudes.",
+    "request": "Solicitudes",
+    "select": "Seleccionar",
+    "acceptRequest": "Aceptar solicitud",
+    "questionAcceptRequest": "¿Estás seguro de que deseas aceptar esta solicitud de intercambio?",
+    "cancelBtn": "Cancelar solicitud",
+    "acceptBtn": "Aceptar",
+    "confirmSuccess": "Solicitud de intercambio aceptada con éxito",
+    "errorMessage": "Error al aceptar la solicitud de intercambio"
   },
   "favorites": {
     "title": "Mis Favoritos",

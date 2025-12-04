@@ -79,12 +79,12 @@ const FreeInfo = ({ free }: FreeProps) => {
                         </p>
                         <div className="flex flex-col gap-2">
                           <p className="text-gray-600 text-md">
-                            {t("category")}: {gift.category.name}
+                            {t("category")}: {gift.categoryDescription}
                           </p>
                           <p className="text-gray-600 text-md">
-                            {t("condition")}: {gift.condition.name}
+                            {t("condition")}: {gift.conditionDescription}
                           </p>
-                          <ToyRequest id={gift.id} />
+                          <ToyRequest id={gift.id} source="gifts" />
                         </div>
                       </div>
                     </div>

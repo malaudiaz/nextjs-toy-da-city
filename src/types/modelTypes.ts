@@ -97,6 +97,9 @@ export type Sale = {
   category: Category;
   condition: Condition;
   status : Status;
+  categoryDescription?: string;
+  conditionDescription?: string;
+  statusDescription?: string;
 }
 export type Status = {
   id: number;

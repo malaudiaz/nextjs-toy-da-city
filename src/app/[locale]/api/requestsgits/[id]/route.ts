@@ -118,8 +118,7 @@ export async function PATCH(
         where: { id: giftRequest.toyId },
         data: {
           statusId: soldStatus.id,
-          forGifts: true,
-          forChanges: false,
+          isActive: false,
           updatedAt: new Date(),
         },
       });

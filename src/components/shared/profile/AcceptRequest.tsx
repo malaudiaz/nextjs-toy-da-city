@@ -15,12 +15,15 @@ import { confirmRequest } from "@/lib/actions/toysAction"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"; // ✅ Importa el hook
 
 type Props = {
-    id: string
+    id: string,
+    source: string
 }
 
-export function AcceptRequest({ id }: Props) {
+export function AcceptRequest({ id, source }: Props) {
+  const t = useTranslations(source); // o el namespace que uses
   const [open, setOpen] = useState(false)
   const router = useRouter()
 
@@ -30,32 +33,32 @@ export function AcceptRequest({ id }: Props) {
             if (result.error) {
                 toast.error(result.error)
             } else {
-                toast.success("Request accepted")
+                toast.success(t("confirmSuccess"))
                 setOpen(false)
                 router.refresh()
             }
-        } catch (error) {
-            toast.error("Error accepting request")
+        } catch {
+            toast.error(t("errorMessage"))
         }
     }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button className="bg-green-600 hover:bg-green-700">Select</Button>
+          <Button className="bg-green-600 hover:bg-green-700">{t("select")}</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Accept request</DialogTitle>
+            <DialogTitle>{t("acceptRequest")}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to accept this request?
+              {t("questionAcceptRequest")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t("cancelBtn")}</Button>
             </DialogClose>
-            <Button type="submit" onClick={handleAccept}>Accept</Button>
+            <Button type="submit" onClick={handleAccept}>{t("acceptBtn")}</Button>
           </DialogFooter>
         </DialogContent>
     </Dialog>

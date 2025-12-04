@@ -4,7 +4,42 @@ import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 
+type Media = {
+  id: string
+  fileUrl: string
+  type: 'IMAGE' | 'VIDEO'
+  toyId: string
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+type Toy = {
+  id: string
+  title: string
+  description: string
+  price: number
+  conditionId: number
+  categoryId: number
+  forSell: boolean
+  forGifts: boolean
+  forChanges: boolean
+  createdAt?: Date
+  updatedAt?: Date
+  sellerId: string
+  media: Media[]
+  categoryDescription?: string
+  conditionDescription?: string
+  statusDescription?: string
+};
+
 export async function GET(req: Request) {
+  // 0. Obtener el lenguaje de la URL
+  const { pathname } = new URL(req.url);
+  // Ejemplo: /es/config/swap
+  const pathSegments = pathname.split("/");
+  // pathSegments: ["", "es", "config", "swap"]
+  const locale = pathSegments[1]; // "es"
+
   // --- 1. Autenticación ---
   let { userId } = await auth();
   const g = await getTranslations("General");
@@ -51,6 +86,7 @@ export async function GET(req: Request) {
     const where: Prisma.ToyWhereInput = {
       sellerId: user.id,
       forGifts: true,
+      isActive: true
     };
 
     // Solo agregar statusId si se proporcionó un statusName válido
@@ -63,17 +99,49 @@ export async function GET(req: Request) {
       where,
       include: {
         media: true,
-        category: true,
-        condition: true,
-        status: true, // Incluye el objeto status en la respuesta
+        category: {
+          include: {
+            translations: {
+              where: { languageId: locale, key: "name" },
+              select: { value: true },
+            },
+          },
+        },
+        condition: {
+          include: {
+            translations: {
+              where: { languageId: locale, key: "name" },
+              select: { value: true },
+            },
+          },
+        },
+        status: {
+          include: {
+            translations: {
+              where: { languageId: locale, key: "name" },
+              select: { value: true },
+            },
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",
       },
     });
 
+    const toysForFree: Toy[] = [];  
+
+    toys.map((toy) => {
+      toysForFree.push({
+        ...toy,
+        categoryDescription: toy.category.translations[0]?.value || "",
+        conditionDescription: toy.condition.translations[0]?.value || "",
+        statusDescription: toy.status.translations[0]?.value || "",
+      });
+    });
+
     // --- 6. Respuesta ---
-    return NextResponse.json(toys, { status: 200 });
+    return NextResponse.json(toysForFree, { status: 200 });
   } catch (error) {
     console.error("Error fetching toys for gifts:", error); // ← Ajusté el mensaje de log para reflejar gifts
     return NextResponse.json(
