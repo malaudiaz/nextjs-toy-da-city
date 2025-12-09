@@ -3,8 +3,8 @@ import { auth } from '@clerk/nextjs/server'
 import prisma from '@/lib/prisma'
 import { pusher } from '@/lib/pusher'
 import webPush from '@/lib/webpush'
+import { getClerkUserById } from '@/lib/clerk'
 import { getTranslations } from "next-intl/server";
-
 
 export async function POST(req: NextRequest) {
   const { userId } = await auth()
@@ -42,12 +42,34 @@ export async function POST(req: NextRequest) {
       receiverId,
       toyId
     },
-    include: { sender: true },
-  })
+    include: { 
+      sender: true,
+      receiver: true 
+    },
+  });
+
+  // Obtener usuarios de Clerk para enriquecer el mensaje
+  const [currentUser, otherUser] = await Promise.all([
+    getClerkUserById(userId),
+    getClerkUserById(receiverId)
+  ]);  
+
+  // Enriquecer el mensaje con las imágenes de perfil de Clerk
+  const enrichedMessage = {
+    ...message,
+    sender: {
+      ...message.sender,
+      imageUrl: currentUser?.image_url
+    },
+    receiver: {
+      ...message.receiver,
+      imageUrl: otherUser?.image_url
+    }
+  };  
 
   // Enviar vía Pusher al receptor (en tiempo real)
   await pusher.trigger(`private-chat-${receiverId}`, 'new-message', {
-    message,
+    message: enrichedMessage,
   })
 
   // Enviar notificación push (si está offline)

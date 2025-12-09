@@ -174,7 +174,7 @@ export default function ChatModal({
       },
       receiver: {
         clerkId: seller.clerkId,
-        name: "Usuario",
+        name: seller.fullName || "Usuario",
         imageUrl: seller.imageUrl
       },
       toyId: ""
