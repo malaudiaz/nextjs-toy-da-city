@@ -29,7 +29,7 @@ const SalesContent = async ({
   const filter = resolvedSearchParams || {};
 
   // Aquí se realiza la llamada a la base de datos
-  const sales = await getSales(filter.status); // ✅ Tipado correcto
+  const sales = await getSales(filter.status || "sold"); // ✅ Tipado correcto
 
   return <SaleInfo sales={sales} />;
 };

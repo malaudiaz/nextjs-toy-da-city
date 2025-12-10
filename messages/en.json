@@ -656,7 +656,8 @@
     "cancelBtn": "Cancel request",
     "acceptBtn": "Accept",
     "confirmSuccess": "Free request accepted successfully",
-    "errorMessage": "Free request canceled successfully"
+    "errorMessage": "Free request canceled successfully",
+    "processing": "Processing..."
   },
   "swap": {
     "title": "Swap Toys",
@@ -673,7 +674,8 @@
     "cancelBtn": "Cancel request",
     "acceptBtn": "Accept",
     "confirmSuccess": "Swap request accepted successfully",
-    "errorMessage": "Swap request canceled successfully"
+    "errorMessage": "Swap request canceled successfully",
+    "processing": "Processing..."
   },
   "favorites": {
     "title": "My Favorites",

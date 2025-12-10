@@ -27,19 +27,24 @@ export function AcceptRequest({ id, source }: Props) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
 
+    const [isProcessing, setIsProcessing] = useState(false)
+
     const handleAccept = async () => {
-        try {
-            const result = await confirmRequest(id)
-            if (result.error) {
-                toast.error(result.error)
-            } else {
-                toast.success(t("confirmSuccess"))
-                setOpen(false)
-                router.refresh()
-            }
-        } catch {
-            toast.error(t("errorMessage"))
+      setIsProcessing(true)
+      try {
+        const result = await confirmRequest(id)
+        if (result.error) {
+          toast.error(result.error)
+        } else {
+          toast.success(t("confirmSuccess"))
+          setOpen(false)
+          router.refresh()
         }
+      } catch {
+        toast.error(t("errorMessage"))
+      } finally {
+        setIsProcessing(false)
+      }
     }
 
   return (
@@ -58,7 +63,25 @@ export function AcceptRequest({ id, source }: Props) {
             <DialogClose asChild>
               <Button variant="outline">{t("cancelBtn")}</Button>
             </DialogClose>
-            <Button type="submit" onClick={handleAccept}>{t("acceptBtn")}</Button>
+            <Button type="submit" onClick={handleAccept} disabled={isProcessing}>
+              {isProcessing ? (
+                <>
+                  <svg
+                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                  </svg>
+                  {t("processing")}
+                </>
+              ) : (
+                t("acceptBtn")
+              )}
+            </Button>
           </DialogFooter>
         </DialogContent>
     </Dialog>

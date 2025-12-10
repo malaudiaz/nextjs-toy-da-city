@@ -16,8 +16,6 @@ export async function PATCH(
 
   let { userId } = await auth();
 
-  // let userId = "user_35cncVrYiQ8dVsoTrY512Q2BXlW"
-
   if (!userId) {
     userId = request.headers.get("X-User-ID");
     if (!userId) {
@@ -30,12 +28,12 @@ export async function PATCH(
     return NextResponse.json({ error: g("UserNotFound") }, { status: 404 });
   }
 
-  const { id: id } = await params;
+  const { id: requestId } = await params; // Cambié el nombre para evitar conflicto
 
   try {
-    // Validar que la solicitud existe y obtener información completa
+    // OPCION 1: Obtener toda la información necesaria ANTES de la transacción
     const giftRequest = await prisma.giftRequest.findUnique({
-      where: { id: id },
+      where: { id: requestId },
       include: {
         toy: {
           include: {
@@ -43,7 +41,7 @@ export async function PATCH(
           },
         },
         status: true,
-        user: {
+        user: { // Ya obtenemos el usuario aquí
           select: { id: true, name: true, email: true },
         },
       },
@@ -58,7 +56,7 @@ export async function PATCH(
 
     // Validaciones de negocio
     if (giftRequest.toy.sellerId !== user.id) {
-      return NextResponse.json({ error: g("Unauthorized") }, { status: 404 });
+      return NextResponse.json({ error: g("Unauthorized") }, { status: 403 });
     }
 
     if (
@@ -67,7 +65,7 @@ export async function PATCH(
     ) {
       return NextResponse.json(
         { error: t("StatusIncorrect") },
-        { status: 404 }
+        { status: 400 }
       );
     }
 
@@ -85,31 +83,37 @@ export async function PATCH(
     const soldStatus = statuses.find((s) => s.name === "sold");
 
     if (!confirmedStatus || !rejectedStatus || !soldStatus) {
-      return NextResponse.json({ error: g("ServerError") }, { status: 404 });
+      return NextResponse.json({ error: g("ServerError") }, { status: 500 });
     }
 
+    // OPCION 2: Obtener el ID del estado "available" para giftRequest si lo necesitas
+    const availableStatus = await prisma.status.findFirst({
+      where: { name: "available" }, // o el nombre correcto para solicitudes disponibles
+    });
+
     // Ejecutar transacción
-    await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx) => {
       // 1. Confirmar la solicitud seleccionada
       await tx.giftRequest.update({
-        where: { id: id },
+        where: { id: requestId },
         data: { statusId: confirmedStatus.id },
-        include: {
-          status: true,
-        },
       });
 
       // 2. Cancelar otras solicitudes activas para el mismo juguete
+      // Opciones para el where:
+      const whereCondition = {
+        toyId: giftRequest.toyId,
+        id: { not: requestId },
+        // Opción A: Filtrar por estado específico (si tienes estado "available" para giftRequest)
+        ...(availableStatus && { statusId: availableStatus.id }),
+        // Opción B: Filtrar por el mismo estado que tenía la solicitud confirmada
+        // statusId: giftRequest.statusId,
+        // Opción C: Filtrar por estados que NO sean "confirmed" o "rejected"
+        // statusId: { notIn: [confirmedStatus.id, rejectedStatus.id] }
+      };
+
       await tx.giftRequest.updateMany({
-        where: {
-          toyId: giftRequest.toyId,
-          id: { not: id },
-          status: {
-            name: {
-              in: ["available"],
-            },
-          },
-        },
+        where: whereCondition,
         data: { statusId: rejectedStatus.id },
       });
 
@@ -123,20 +127,20 @@ export async function PATCH(
         },
       });
 
-      // Buscar el usuario que hizo la solicitud
-      const userRequest = await tx.user.findUnique({
-        where: { id: giftRequest.userId },
-        select: { email: true, name: true },
-      });
+      // Retornar el resultado que necesites
+      return { success: true };
+    });
 
-      if (userRequest?.email) {
+    // OPCION 3: Enviar email FUERA de la transacción (recomendado)
+    if (result && giftRequest.user?.email) {
+      try {
         await sendEmail({
-          to: userRequest.email,
+          to: giftRequest.user.email,
           subject: g("GiftSubject"),
           html: `
            <div style="max-width:480px;margin:auto;background:#f8f8f8;border-radius:12px;padding:32px 24px;font-family:sans-serif;color:#222;box-shadow:0 2px 8px #0001;">
              <h2 style="color:#4c754b;margin-bottom:8px;">${g("giftRequestApprovedTitle")}</h2>
-             <p style="font-size:1.1em;margin-bottom:16px;">${g("giftGreeting")} <strong>${userRequest.name}</strong>,</p>
+             <p style="font-size:1.1em;margin-bottom:16px;">${g("giftGreeting")} <strong>${giftRequest.user.name}</strong>,</p>
              <p style="margin-bottom:18px;">${g("giftRequestApprovedMessage")}</p>
              <h3 style="margin-bottom:8px;color:#4c754b;">${g("approvedGift")}</h3>
              <div style="margin-bottom:18px;">
@@ -147,12 +151,35 @@ export async function PATCH(
          </div>
          `,
         });
+      } catch (emailError) {
+        console.error("Error enviando email:", emailError);
+        // No falla la operación principal si el email falla
       }
+    }
+
+    // OPCION 4: Obtener la solicitud actualizada después de la transacción
+    const updatedRequest = await prisma.giftRequest.findUnique({
+      where: { id: requestId },
+      include: {
+        status: true,
+        toy: true,
+        user: { select: { name: true, email: true } },
+      },
     });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ 
+      success: true, 
+      data: updatedRequest 
+    });
+
   } catch (error) {
-    console.log(error);
-    return NextResponse.json({ error: g("ServerError") }, { status: 500 });
+    console.error("Error en PATCH /api/requestsgits/[id]:", error);
+    return NextResponse.json(
+      { 
+        error: g("ServerError"), 
+        details: error instanceof Error ? error.message : "Unknown error" 
+      },
+      { status: 500 }
+    );
   }
 }

@@ -650,7 +650,8 @@
     "cancelBtn": "Cancelar solicitud",
     "acceptBtn": "Aceptar",
     "confirmSuccess": "Solicitud de regalo aceptada con éxito",
-    "errorMessage": "Error al aceptar la solicitud de regalo"
+    "errorMessage": "Error al aceptar la solicitud de regalo",
+    "processing": "Procesando..."
   },
   "swap": {
     "title": "Juguetes para Intercambios",
@@ -667,7 +668,8 @@
     "cancelBtn": "Cancelar solicitud",
     "acceptBtn": "Aceptar",
     "confirmSuccess": "Solicitud de intercambio aceptada con éxito",
-    "errorMessage": "Error al aceptar la solicitud de intercambio"
+    "errorMessage": "Error al aceptar la solicitud de intercambio",
+    "processing": "Procesando..."
   },
   "favorites": {
     "title": "Mis Favoritos",

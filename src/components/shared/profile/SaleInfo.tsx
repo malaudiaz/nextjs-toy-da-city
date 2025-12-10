@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import { SelectFilter } from "./SelectFIlter";
+// import { SelectFilter } from "./SelectFIlter";
 import { useTranslations } from "next-intl"; // ✅ Importa el hook
 import { Calendar, User } from "lucide-react";
 import { Prisma } from '@prisma/client'
@@ -43,13 +43,13 @@ const formatDate = (dateString: string) => {
 const SaleInfo = ({ sales }: SalesProps) => {
   const t = useTranslations("sales");
 
-  const options = [
+  {/* const options = [
     { id: "ALL", name: t("all") },
     { id: "available", name: t("available") },
     { id: "reserved", name: t("reserved") },
     { id: "sold", name: t("sold") },
     { id: "canceled", name: t("canceled") },
-  ];
+  ]; */}
 
   return (
     <div className="min-h-screen p-4 md:p-6">
@@ -59,7 +59,7 @@ const SaleInfo = ({ sales }: SalesProps) => {
           <h1 className="text-xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
             {t("title")}
           </h1>
-          <SelectFilter options={options} route="sales" />
+          {/* <SelectFilter options={options} route="sales" />  */}
         </div>
 
         {/* Stats Cards */}
