@@ -7,6 +7,7 @@ export default async function ReviewPage({ params }: { params: Promise<{ sellerI
 
   const seller = await getSellerProfile(sellerId);
   const reviewsEligible = await getReviewsEligible(sellerId);
+  console.log(reviewsEligible);
 
   return (
     <div className="max-w-2xl mx-auto p-4 md:p-6">

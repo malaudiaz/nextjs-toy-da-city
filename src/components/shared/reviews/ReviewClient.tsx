@@ -39,7 +39,7 @@ const ReviewClient = ({ seller, reviewsEligible }: Props) => {
           <p>{t("eligible")}</p>
         </div>
       ) : (
- <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-6">
           <ReviewForm
             targetUserId={seller.id}
             orderId={reviewsEligible.orderId || undefined}

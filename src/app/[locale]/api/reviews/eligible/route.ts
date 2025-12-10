@@ -45,9 +45,8 @@ export async function GET(request: Request) {
             toy: {
                 sellerId: sellerId,
             },
-            // La orden asociada debe estar CONFIRMED y pertenecer a este comprador
+            // La orden asociada debe estar CONFIRMED
             order: {
-                buyerId: buyerId,
                 status: 'CONFIRMED',
             }
         },
