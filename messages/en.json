@@ -812,13 +812,15 @@
     "title": "Confirm Order",
     "subtitle": "Are you sure you want to confirm this order? This action cannot be undone.",
     "btnConfirm": "Confirm",
-    "btnCancel": "Cancel"
+    "btnCancel": "Cancel",
+    "processing": "Processing..."
   },
   "cancelOrderDialog": {
     "title": "Cancel Order",
     "subtitle": "Are you sure you want to cancel this order? This action cannot be undone.",
     "btnConfirm": "Confirm",
-    "btnCancel": "Cancel" 
+    "btnCancel": "Cancel",
+    "processing": "Processing..."
   },
   "reviewPage": {
     "cantReview": "You can't review this seller",

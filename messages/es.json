@@ -806,13 +806,15 @@
     "title": "Confirmar Orden",
     "subtitle": "¿Está seguro de que desea confirmar este pedido? Esta acción no se puede deshacer.",
     "btnConfirm": "Confirmar",
-    "btnCancel": "Cancelar"
+    "btnCancel": "Cancelar",
+    "processing": "Procesando..."
   },
   "cancelOrderDialog": {
     "title": "Cancelar Pedido",
     "subtitle": "¿Seguro que desea cancelar este pedido? Esta acción no se puede deshacer.",
     "btnConfirm": "Confirmar",
-    "btnCancel": "Cancelar"
+    "btnCancel": "Cancelar",
+    "processing": "Procesando..."
   },
   "reviewPage": {
     "cantReview": "No puedes reseñar a este vendedor.",
