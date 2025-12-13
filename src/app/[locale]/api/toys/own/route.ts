@@ -89,6 +89,9 @@ export async function GET(
           },
         },
       },
+      orderBy: {
+        createdAt: "desc" as const, // El "as const" ayuda con la inferencia de tipos
+      },
       skip: (pagination.page - 1) * pagination.limit,
       take: pagination.limit
     };

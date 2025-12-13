@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
+import { PaginationSchema} from "@/lib/schemas/toy";
 
 type Media = {
   id: string
@@ -43,7 +44,6 @@ export async function GET(req: Request) {
   // --- 1. Autenticación ---
   let { userId } = await auth();
   const g = await getTranslations("General");
-  
 
   if (!userId) {
     userId = req.headers.get("X-User-ID");
@@ -82,6 +82,11 @@ export async function GET(req: Request) {
     statusId = existingStatus.id;
   }
 
+  const pagination = PaginationSchema.parse({
+    page: parseInt(searchParams.get('page') || "1"),
+    limit: parseInt(searchParams.get('limit') || "4")
+  });
+
   try {
     // --- 4. Construir filtro dinámico ---
     const where: Prisma.ToyWhereInput = {
@@ -96,8 +101,8 @@ export async function GET(req: Request) {
     }
 
     // --- 5. Consultar juguetes ---
-    const toys = await prisma.toy.findMany({
-      where,
+    const query = {
+      where: where,
       include: {
         media: true,
         category: {
@@ -126,9 +131,17 @@ export async function GET(req: Request) {
         },
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: "desc" as const, // El "as const" ayuda con la inferencia de tipos
       },
-    });
+      skip: (pagination.page - 1) * pagination.limit,
+      take: pagination.limit,
+    };
+
+    const [toys, totalCount] = await Promise.all([
+      prisma.toy.findMany(query),
+      prisma.toy.count({ where })
+    ])
+    
 
     const toysForSwap: Toy[] = [];  
 
@@ -142,7 +155,18 @@ export async function GET(req: Request) {
     });
 
     // --- 6. Respuesta ---
-    return NextResponse.json(toysForSwap, { status: 200 });
+    return NextResponse.json({
+      success: true,
+      data: toysForSwap, 
+      pagination: {
+        total: totalCount,
+        totalPages: Math.ceil(totalCount / pagination.limit),
+        currentPage: pagination.page,
+        perPage: pagination.limit
+      }
+    })
+
+    //return NextResponse.json(toysForSwap, { status: 200 });
   } catch (error) {
     console.error("Error fetching toys for changes:", error); // ← Mensaje corregido para reflejar "changes"
     return NextResponse.json(
