@@ -45,21 +45,19 @@ export async function GET(req: Request) {
     //   },
     // });
 
+    const whereCondition = { userId: user.id };
+
     const query = {
-      where: {userId: user.id},
+      where: whereCondition,
       select: {toyId: true},
       skip: (pagination.page - 1) * pagination.limit,
       take: pagination.limit
     };
 
-    const countQuery = {
-      where: { userId: user.id }
-    };
-
     // Ejecutar consulta
     const [favoriteToys, totalCount] = await Promise.all([
       prisma.favoriteToy.findMany(query),
-      prisma.favoriteToy.count(countQuery)
+      prisma.favoriteToy.count({where: whereCondition})
     ])
     
     const favoriteToyIds = favoriteToys.map(f => f.toyId);
