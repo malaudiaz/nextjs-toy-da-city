@@ -55,6 +55,7 @@ export const ToyFilterSchema = z.object({
   categoryId: z.number().optional(),
   conditionId: z.number().optional(),
   conditions: z.string().optional(),
+  statusId: z.number().optional(),
   locationRadius: z
     .object({
       lat: z.number(),
