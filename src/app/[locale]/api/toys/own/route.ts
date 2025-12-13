@@ -117,7 +117,7 @@ export async function GET(
         translations: undefined,
         createdAt: undefined,
         updatedAt: undefined,
-        isActive: undefined,
+        isActive: toyData.isActive,
         userId: undefined
       }})
 

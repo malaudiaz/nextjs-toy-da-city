@@ -22,9 +22,7 @@ function isValidOrderStatus(status: string): status is OrderStatusFilter {
   return VALID_ORDER_STATUSES.includes(status as OrderStatusFilter);
 }
 
-export async function GET(req: Request,
-  { params }: { params: Promise<{ locale: string }> }
-) {
+export async function GET(req: Request,) {
   // --- 1. Autenticación ---
   let { userId } = await auth();
   const g = await getTranslations("General");
@@ -46,8 +44,6 @@ export async function GET(req: Request,
   }
 
   // --- 2. Obtener y validar parámetro `status` ---
-  const { locale } = await params;
-  const userLanguageCode = locale;
   
   const { searchParams } = new URL(req.url);
   const statusParam = searchParams.get("status");
@@ -87,7 +83,6 @@ export async function GET(req: Request,
     ])
 
     // --- 5. Lógica de Elegibilidad de Reseña ---
-
     // A. Identificar Vendedores con órdenes CONFIRMED (Lógica existente)
     const sellersWithConfirmedOrders = new Set<string>();
 

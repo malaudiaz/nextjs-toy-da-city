@@ -1,5 +1,3 @@
-
-
 export type Condition = {
   id: number;
   name: string;
@@ -9,48 +7,48 @@ export type Condition = {
 };
 
 export type User = {
-   id: string;
-   name: string;
-   email: string;
-   phone: string;
-   clerkId: string;
-   role: string;
-   stripeAccountId: string;
-   onboardingUrl: string;
-   reputation: number;
-   isActive: boolean;
-}
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  clerkId: string;
+  role: string;
+  stripeAccountId: string;
+  onboardingUrl: string;
+  reputation: number;
+  isActive: boolean;
+};
 
 export type Toy = {
-   id: string
-    title: string
-    description: string
-    price: number
-    location: string
-    conditionId: number
-    categoryId: number
-    forSell: boolean
-    forGifts: boolean
-    forChanges: boolean
-    createdAt?: Date
-    updatedAt?: Date
-    sellerId: string
-    isActive: boolean
-    isFavorite: boolean
-    media: Media[]
-    categoryDescription: string
-    conditionDescription: string
-    statusDescription: string
-}
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  location: string;
+  conditionId: number;
+  categoryId: number;
+  forSell: boolean;
+  forGifts: boolean;
+  forChanges: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+  sellerId: string;
+  isActive: boolean;
+  isFavorite: boolean;
+  media: Media[];
+  categoryDescription: string;
+  conditionDescription: string;
+  statusDescription: string;
+};
 
 export type Media = {
-    id: string
-  fileUrl: string
-  type: 'IMAGE' | 'VIDEO'
-  toyId: string
-  createdAt?: Date
-  updatedAt?: Date
-}
+  id: string;
+  fileUrl: string;
+  type: "IMAGE" | "VIDEO";
+  toyId: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
 
 export type Order = {
   id: string;
@@ -65,21 +63,49 @@ export type Order = {
   items: OrderItem[];
   buyer: Negotiator;
   seller: Negotiator;
-}
+};
 
 export type OrderItem = {
   id: string;
   orderId: string;
   toyId: string;
   priceAtPurchase: number;
-  toy: Toy;
-}
+  toy: ToyWithSeller;
+};
+
+export type ToyWithSeller = {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  location: string;
+  conditionId: number;
+  categoryId: number;
+  forSell: boolean;
+  forGifts: boolean;
+  forChanges: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+  sellerId: string;
+  isActive: boolean;
+  isFavorite: boolean;
+  media: Media[];
+  categoryDescription: string;
+  conditionDescription: string;
+  statusDescription: string;
+  seller: {
+    id: string;
+    name: string;
+    email: string;
+    isEligibleForReview: boolean;
+  };
+};
 
 export type Negotiator = {
   id: string;
   name: string;
   email: string;
-}
+};
 
 export type Sale = {
   id: string;
@@ -96,26 +122,27 @@ export type Sale = {
   media: Media[];
   category: Category;
   condition: Condition;
-  status : Status;
+  status: Status;
   categoryDescription?: string;
   conditionDescription?: string;
   statusDescription?: string;
-}
+  orderItems: SaleOrderItems[];
+};
 export type Status = {
   id: number;
   name: string;
   description: string;
   userId: string;
   isActive: boolean;
-}
+};
 
-export type Category ={
+export type Category = {
   id: number;
   name: string;
   description: string;
   userId: string;
   isActive: boolean;
-}
+};
 
 export type SellerProfile = {
   id: string;
@@ -129,7 +156,7 @@ export type SellerProfile = {
   totalReviews: number;
   toysForSale: ToysForSale[];
   reviewsReceived: Review[];
-}
+};
 
 export type Review = {
   id: string;
@@ -142,18 +169,45 @@ export type Review = {
     imageUrl?: string;
   };
   order: { id: string } | null;
-}
+};
 
 export type ToysForSale = {
-   id: string;
-    title: string;
-    price: number;
-    category: { name: string };
-    primaryImageUrl: string | null;
-}
+  id: string;
+  title: string;
+  price: number;
+  category: { name: string };
+  primaryImageUrl: string | null;
+};
 
-export type ReviewEligibility ={
+export type ReviewEligibility = {
   canReview: boolean;
   orderId: string | null;
   message?: string;
-}
+};
+
+export type SaleOrderItems = {
+  id: string;
+  orderId: string;
+  toyId: string;
+  priceAtPurchase: number;
+  order: {
+    id: string;
+    cartId: string;
+    paymentIntentId: string;
+    chargeId: null;
+    buyerId: string;
+    sellerId: string;
+    totalAmount: number;
+    status: string;
+    createdAt: Date;
+    confirmedAt: Date;
+    canceledAt: Date;
+    transferredAt: Date;
+    reembursedAt: Date;
+    buyer: {
+      id: string;
+      name: string;
+      email: string;
+    };
+  };
+};

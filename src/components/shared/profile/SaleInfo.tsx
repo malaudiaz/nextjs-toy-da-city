@@ -3,30 +3,11 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-// import { SelectFilter } from "./SelectFIlter";
 import { useTranslations } from "next-intl"; // ✅ Importa el hook
 import { Calendar, User } from "lucide-react";
-import { Prisma } from '@prisma/client'
 import Empty from "../Empty";
+import { Sale } from "@/types/modelTypes";
 
-type Sale = Prisma.ToyGetPayload<{
-  include: {
-    media: true
-    category: true
-    condition: true
-    status: true
-    seller: { select: { id: true; name: true; email: true } }
-    orderItems: { 
-      include: { 
-        order: { 
-          include: { 
-            buyer: { select: { id: true; name: true; email: true } } 
-          } 
-        } 
-      } 
-    }
-  }
-}>
 
 type SalesProps = {
   sales: Sale[]

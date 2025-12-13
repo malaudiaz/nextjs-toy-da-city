@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl";
 import { CancelOrderDialog } from "./CancelOrderDialog";
 import { ConfirmOrderDialog } from "./ConfirmOrderDialog";
 import Empty from "../Empty";
-import type { ClientOrderWithItems } from "@/types/prisma-types"; // Usamos el tipo DTO
+import { Order } from "@/types/modelTypes";
 
 // ... (formatDate, PurchaseProps, fromCents se mantienen igual) ...
 const formatDate = (dateString: string) => {
@@ -22,7 +22,7 @@ const formatDate = (dateString: string) => {
 };
 
 type PurchaseProps = {
-  orders: ClientOrderWithItems[];
+  orders: Order[];
 };
 
 const fromCents = (cents: number) => cents / 100;
@@ -139,10 +139,10 @@ const PurchasesInfo = ({ orders }: PurchaseProps) => {
                             <span>
                               {t("seller")}:{" "}
                               <Link
-                                href={`/seller/${item.toy.seller.id}`}
+                                href={`/seller/${item.toy.sellerId}`}
                                 className="font-medium hover:underline"
                               >
-                                {item.toy.seller.name}
+                                {item.toy.seller?.name}
                               </Link>
                             </span>
 
@@ -156,7 +156,7 @@ const PurchasesInfo = ({ orders }: PurchaseProps) => {
 
                                 {/* Enlace para Reseñar al Vendedor */}
                                 <Link
-                                  href={`/reviews/${item.toy.seller.id}`} // URL solicitada
+                                  href={`/reviews/${item.toy.sellerId}`} // URL solicitada
                                   className="text-xs font-semibold text-emerald-600 hover:text-emerald-800 hover:underline"
                                 >
                                   (

@@ -1,41 +1,54 @@
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import SaleInfo from "@/components/shared/profile/SaleInfo";
 import SaleInfoSkeleton from "@/components/shared/profile/SaleInfoSkeleton"; // 1. Importa el Skeleton
+import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import { getSales } from "@/lib/actions/toysAction";
 import React, { Suspense } from "react"; // 2. Importa Suspense
 
 type SalesStatus = "available" | "reserved" | "sold" | "canceled";
 
-// Tipos para los parámetros de la página
-interface PageProps {
-  params: Promise<{
-    locale: string;
-    id: string;
-  }>;
-  searchParams: Promise<{
-    status?: SalesStatus;
-  }>;
-}
+type Props = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
 // 3. Componente async que realiza el fetching (la parte lenta)
-const SalesContent = async ({
-    searchParams
-}: {
-  searchParams: Promise<{ status?: SalesStatus }>;
-}) => {
-
+const SalesContent = async ({ searchParams }: Props) => {
   // Resolvemos la promesa de searchParams
   const resolvedSearchParams = await searchParams;
-  const filter = resolvedSearchParams || {};
+  const currentPage = parseInt((resolvedSearchParams.page as string) || "1");
+  const postsPerPage = parseInt(
+    (resolvedSearchParams.pageSize as string) ||
+      process.env.NEXT_TOYS_PER_PAGE ||
+      "8"
+  );
+  const filter = resolvedSearchParams.status
+    ? { status: resolvedSearchParams.status as SalesStatus }
+    : {};
 
-  // Aquí se realiza la llamada a la base de datos
-  const sales = await getSales(filter.status || "sold"); // ✅ Tipado correcto
+  const { sales, totalPages, totalPosts } = await getSales(
+    currentPage,
+    postsPerPage,
+    filter.status || "sold"
+  );
 
-  return <SaleInfo sales={sales} />;
+  return (
+    <>
+      <SaleInfo sales={sales} />
+      {totalPages > 1 && (
+        <div className="pb-4">
+          <PaginationWithLinks
+            page={currentPage}
+            pageSize={postsPerPage}
+            totalCount={totalPosts}
+          />
+        </div>
+      )}
+    </>
+  );
 };
 
 // 4. El Page Component se convierte en el contenedor de Suspense
-const SalesPage = async ({ searchParams }: PageProps) => {
+const SalesPage = async ({ searchParams }: Props) => {
   return (
     <div className="max-w-7xl mx-auto min-h-screen bg-background">
       <div className="px-5 py-3">

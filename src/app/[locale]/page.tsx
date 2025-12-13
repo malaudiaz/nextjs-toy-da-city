@@ -9,8 +9,6 @@ import { Suspense } from "react";
 import { Metadata } from "next";
 import Empty from "@/components/shared/Empty";
 import { FiltersAction } from "@/components/shared/home/Filters";
-import { getReviewsEligible } from "@/lib/actions/sellertActions";
-
 
 // SEO: metadatos dinámicos
 export async function generateMetadata({
@@ -170,9 +168,6 @@ export default async function Home({ searchParams, params }: Props) {
     forChanges: resolvedSearchParams.forChanges === 'true' ? true : undefined, // Usamos 'forChanges' para Intercambio
     conditions: resolvedSearchParams.conditions || undefined, // ¡Añadir condiciones!        
   };
-
-  const sellerIsEligible = await getReviewsEligible("fb865d8f-a580-4034-a159-cc940e179741");
-  console.log(sellerIsEligible);
 
   const { totalPosts } = await getToys(
     currentPage,

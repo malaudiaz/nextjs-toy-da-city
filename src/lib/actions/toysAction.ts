@@ -5,9 +5,9 @@ import { BACKEND_URL } from "../utils";
 import { auth } from "@clerk/nextjs/server";
 import * as fs from "fs";
 import * as path from "path";
-import { Prisma } from "@prisma/client";
 import { getLocale } from "next-intl/server";
 import { revalidatePath } from "next/cache";
+import { Sale } from "@/types/modelTypes";
 
 export type Filters = {
   search?: string | null;
@@ -158,9 +158,15 @@ export async function getRelatedToys(id: string) {
   return { toys: toys.data as Toy[] };
 }
 
-export async function getOwnToys() {
+export async function getOwnToys(page: number, perPage: number) {
   const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
+
+  const start = page - 1 + 1 || 1;
+
+  const url = new URL(`${BACKEND_URL}/${locale}/api/toys/own`);
+  url.searchParams.set("page", String(start));
+  url.searchParams.set("limit", String(perPage));
 
   const headers = {
     "Content-Type": "application/json",
@@ -171,54 +177,58 @@ export async function getOwnToys() {
     headers["X-User-ID"] = userId;
   }
 
-  const response = await fetch(`${BACKEND_URL}/${locale}/api/toys/own`, {
+  const response = await fetch(url.toString(), {
     method: "GET",
     headers: headers,
   });
 
-  console.log("Response", response);
-
-  const toys = await response.json();
-  return toys as Toy[];
+  const res = await response.json();
+  return { toys: res.data as Toy[], totalPosts: res.pagination.total as number | 0, totalPages: res.pagination.totalPages as number};
 }
 
 export type SalesStatus = "available" | "reserved" | "sold" | "canceled";
 
 // Actualiza el tipo Sale para que coincida exactamente con tu consulta
-export type Sale = Prisma.ToyGetPayload<{
-  include: {
-    media: true;
-    category: true;
-    condition: true;
-    status: true;
-    seller: {
-      select: {
-        id: true;
-        name: true;
-        email: true;
-      };
-    };
-    orderItems: {
-      include: {
-        order: {
-          include: {
-            buyer: {
-              select: {
-                id: true;
-                name: true;
-                email: true;
-              };
-            };
-          };
-        };
-      };
-    };
-  };
-}>;
+// export type Sale = Prisma.ToyGetPayload<{
+//   include: {
+//     media: true;
+//     category: true;
+//     condition: true;
+//     status: true;
+//     seller: {
+//       select: {
+//         id: true;
+//         name: true;
+//         email: true;
+//       };
+//     };
+//     orderItems: {
+//       include: {
+//         order: {
+//           include: {
+//             buyer: {
+//               select: {
+//                 id: true;
+//                 name: true;
+//                 email: true;
+//               };
+//             };
+//           };
+//         };
+//       };
+//     };
+//   };
+// }>;
 
-export async function getSales(status?: SalesStatus): Promise<Sale[]> {
+export async function getSales(page: number, perPage: number, status?: SalesStatus){
   const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
+
+ const start = page - 1 + 1 || 1;
+
+  const url = new URL(`${BACKEND_URL}/${locale}/api/toys/for-sale?status=${status}`);
+  url.searchParams.set("page", String(start));
+  url.searchParams.set("limit", String(perPage));
 
   const headers = {
     "Content-Type": "application/json",
@@ -230,22 +240,24 @@ export async function getSales(status?: SalesStatus): Promise<Sale[]> {
   }
 
   const response = await fetch(
-    `${BACKEND_URL}/${locale}/api/toys/for-sale?status=${status}`,
+    url.toString(),
     {
       method: "GET",
       headers: headers,
     }
   );
-  const sales = await response.json();
-  if (response.status === 200) {
-    return sales as Sale[];
-  }
-  return [];
+  const res = await response.json();
+  return { sales: res.data as Sale[], totalPosts: res.pagination.total as number | 0, totalPages: res.pagination.totalPages as number};
 }
 
-export async function getFree() {
+export async function getFree(page: number, perPage: number) {
   const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
+
+  const start = page - 1 + 1 || 1;
+  const url = new URL(`${BACKEND_URL}/${locale}/api/toys/for-free`);
+  url.searchParams.set("page", String(start));
+  url.searchParams.set("limit", String(perPage));
 
   const headers = {
     "Content-Type": "application/json",
@@ -256,13 +268,13 @@ export async function getFree() {
     headers["X-User-ID"] = userId;
   }
 
-  const response = await fetch(`${BACKEND_URL}/${locale}/api/toys/for-free`, {
+  const response = await fetch(`${url.toString()}`, {
     method: "GET",
     headers: headers,
   });
 
-  const free = await response.json();
-  return free;
+  const res = await response.json();
+  return {free:res.data , totalPosts: res.pagination.total as number | 0, totalPages: res.pagination.totalPages as number};
 }
 
 export async function getFavorites() {
@@ -287,9 +299,14 @@ export async function getFavorites() {
   return favorites;
 }
 
-export async function getSwaps() {
+export async function getSwaps(page: number, perPage: number) {
   const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
+
+  const start = page - 1 + 1 || 1;
+  const url = new URL(`${BACKEND_URL}/${locale}/api/toys/for-swap`);
+  url.searchParams.set("page", String(start));
+  url.searchParams.set("limit", String(perPage));
 
   const headers = {
     "Content-Type": "application/json",
@@ -300,13 +317,13 @@ export async function getSwaps() {
     headers["X-User-ID"] = userId;
   }
 
-  const response = await fetch(`${BACKEND_URL}/${locale}/api/toys/for-swap`, {
+  const response = await fetch(`${url.toString()}`, {
     method: "GET",
     headers: headers,
   });
 
-  const swaps = await response.json();
-  return swaps;
+  const res = await response.json();
+  return {swaps:res.data, totalPosts: res.pagination.total as number | 0, totalPages: res.pagination.totalPages as number};
 }
 
 export async function getRequest(id: string) {

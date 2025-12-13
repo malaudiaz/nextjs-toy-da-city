@@ -3,25 +3,32 @@ import FreeInfoSkeleton from "@/components/shared/profile/FreeInfoSkeleton"; // 
 import React, { Suspense } from "react"; // 2. Importa Suspense
 import { getFree } from "@/lib/actions/toysAction";
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
+import { Sale } from "@/types/modelTypes";
+import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 
-// 3. Componente async que realiza el fetching
-const FreeContent = async ({
-  freePromise,
-}: {
-  freePromise: ReturnType<typeof getFree>;
-}) => {
-  // Espera a que la promesa de datos se resuelva
-  const free = await freePromise;
-
+type ProductsProps = {
+  free: Sale[];
+};
+const FreeContent = async ({ free }: ProductsProps) => {
   return <FreeInfo free={free} />;
 };
 
-// 4. El Page Component se convierte en el contenedor de Suspense
-const FreePage = async () => {
-  // La función getFree() devuelve una Promesa.
-  const freePromise = getFree();
+type Props = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
-  // Ya no hacemos `await getFree()` aquí.
+const FreePage = async ({ searchParams }: Props) => {
+  const resolvedSearchParams = await searchParams;
+  const currentPage = parseInt((resolvedSearchParams.page as string) || "1");
+  const postsPerPage = parseInt(
+    (resolvedSearchParams.pageSize as string) ||
+      process.env.NEXT_TOYS_PER_PAGE ||
+      "8"
+  );
+  const { free, totalPosts, totalPages } = await getFree(
+    currentPage,
+    postsPerPage
+  );
 
   return (
     <div className="max-w-7xl mx-auto min-h-screen bg-background">
@@ -33,8 +40,15 @@ const FreePage = async () => {
       {/* 5. Envuelve el contenido lento con Suspense */}
       <Suspense fallback={<FreeInfoSkeleton />}>
         {/* Pasamos la Promesa al componente Content */}
-        <FreeContent freePromise={freePromise} />
+        <FreeContent free={free} />
       </Suspense>
+      {totalPages > 1 && (
+        <PaginationWithLinks
+          page={currentPage}
+          pageSize={postsPerPage}
+          totalCount={totalPosts}
+        />
+      )}
     </div>
   );
 };

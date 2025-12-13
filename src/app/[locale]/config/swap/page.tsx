@@ -1,25 +1,33 @@
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
 import SwapInfo from "@/components/shared/profile/SwapInfo";
 import SwapInfoSkeleton from "@/components/shared/profile/SwapInfoSkeleton"; // 1. Importa el Skeleton
+import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import { getSwaps } from "@/lib/actions/toysAction";
+import { Sale } from "@/types/modelTypes";
 import React, { Suspense } from "react"; // 2. Importa Suspense
 
-// 3. Componente async que realiza el fetching (la parte lenta)
-const SwapContent = async ({
-  swapsPromise,
-}: {
-  swapsPromise: ReturnType<typeof getSwaps>;
-}) => {
-  // Espera a que la promesa de datos se resuelva
-  const swaps = await swapsPromise;
+type ProductsProps = {
+  swaps: Sale[];
+}
+
+const SwapContent = async ({swaps}: ProductsProps) => {
 
   return <SwapInfo swaps={swaps} />;
 };
 
-// 4. El Page Component (ExchangesPage) se convierte en el contenedor de Suspense
-export default async function ExchangesPage() {
-  // La función getSwaps() devuelve una Promesa.
-  const swapsPromise = getSwaps();
+type Props = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export default async function ExchangesPage({ searchParams }: Props) {
+  const resolvedSearchParams = await searchParams;
+  const currentPage = parseInt((resolvedSearchParams.page as string) || "1");
+  const postsPerPage = parseInt(
+    (resolvedSearchParams.pageSize as string) ||
+      process.env.NEXT_TOYS_PER_PAGE ||
+      "8"
+  );
+  const {swaps, totalPosts, totalPages } = await getSwaps(currentPage, postsPerPage);
 
   return (
     <div className="max-w-7xl mx-auto min-h-screen bg-background">
@@ -31,8 +39,15 @@ export default async function ExchangesPage() {
       {/* 5. Envuelve el contenido lento con Suspense */}
       <Suspense fallback={<SwapInfoSkeleton />}>
         {/* Pasamos la Promesa al componente Content */}
-        <SwapContent swapsPromise={swapsPromise} />
+        <SwapContent swaps={swaps} />
       </Suspense>
+      { totalPages > 1 && (
+                <PaginationWithLinks
+                page={currentPage}
+                pageSize={postsPerPage}
+                totalCount={totalPosts}
+              />
+              )}
     </div>
   );
 }

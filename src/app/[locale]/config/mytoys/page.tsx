@@ -3,11 +3,22 @@ import ToyGridSkeleton from "@/components/config/ToyGridSkeleton"; // 1. Importa
 import React, { Suspense } from "react"; // 2. Importa Suspense
 import { getOwnToys } from "@/lib/actions/toysAction";
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
+import { Toy } from "@/types/modelTypes";
+import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 
+type Props = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
-const ToysPage = async () => {
-  // getOwnToys() es la promesa que "suspende" la renderización.
-  const toysPromise = getOwnToys(); 
+const ToysPage = async ({ searchParams }: Props) => {
+  const resolvedSearchParams = await searchParams;
+  const currentPage = parseInt((resolvedSearchParams.page as string) || "1");
+  const postsPerPage = parseInt(
+    (resolvedSearchParams.pageSize as string) ||
+      process.env.NEXT_TOYS_PER_PAGE ||
+      "8"
+  );
+  const { toys, totalPosts, totalPages } = await getOwnToys(currentPage, postsPerPage);
 
   return (
     <div className="min-h-screen bg-background">
@@ -17,9 +28,15 @@ const ToysPage = async () => {
         
         {/* 3. Envuelve ToyGrid con Suspense */}
         <Suspense fallback={<ToyGridSkeleton />}>
-          <ToysContent toysPromise={toysPromise} />
+          <ToysContent toys={toys} />
         </Suspense>
-
+        { totalPages > 1 && (
+          <PaginationWithLinks
+          page={currentPage}
+          pageSize={postsPerPage}
+          totalCount={totalPosts}
+        />
+        )}
       </div>
     </div>
   );
@@ -27,11 +44,11 @@ const ToysPage = async () => {
 
 export default ToysPage;
 
+type ProductsProps = {
+  toys: Toy[];
+}
 
-// 4. Crea un componente Wrapper para resolver la promesa
-// Este componente se suspenderá hasta que la promesa se resuelva.
-const ToysContent = async ({ toysPromise }: { toysPromise: ReturnType<typeof getOwnToys> }) => {
-    const toys = await toysPromise;
+const ToysContent = async ({toys}: ProductsProps) => {
 
     return <ToyGrid toys={toys} />;
 }

@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { BACKEND_URL } from "../utils";
 import { revalidatePath } from "next/cache";
 import { getLocale } from 'next-intl/server';
-import type { ClientOrderWithItems } from "@/types/prisma-types";
+import { Order } from "@/types/modelTypes";
 
 export type OrderStatus =
   | "AWAITING_CONFIRMATION"
@@ -13,9 +13,15 @@ export type OrderStatus =
   | "REEMBURSED";
 
 
-export async function getOrder(status?: OrderStatus): Promise<ClientOrderWithItems[]> {
+export async function getOrder(page:number, perPage:number, status?: OrderStatus) {
   const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
+
+  const start = page - 1 + 1 || 1;
+  const url = new URL(`${BACKEND_URL}/${locale}/api/get-order/purchase?page=${start}&limit=${perPage}`);
+  if (status) {
+    url.searchParams.append("status", status);
+  }
 
   const headers = {
     "Content-Type": "application/json",
@@ -27,14 +33,14 @@ export async function getOrder(status?: OrderStatus): Promise<ClientOrderWithIte
   }
 
   const response = await fetch(
-    `${BACKEND_URL}/${locale}/api/get-order/purchase?status=${status}`,
+    url.toString(),
     {
       method: "GET",
       headers: headers,
     }
   );
-  const order = await response.json();
-  return order as ClientOrderWithItems[];
+  const res = await response.json();
+  return {purchases:res.data as Order[] , totalPosts: res.pagination.total as number | 0, totalPages: res.pagination.totalPages as number};
 }
 
 export async function cancelOrder(orderId: string) {

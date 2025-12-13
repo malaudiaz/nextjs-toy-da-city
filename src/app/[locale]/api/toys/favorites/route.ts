@@ -1,7 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import { PaginationSchema} from "@/lib/schemas/toy";
 
