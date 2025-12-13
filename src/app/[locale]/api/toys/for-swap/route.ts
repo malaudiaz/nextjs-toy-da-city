@@ -164,7 +164,7 @@ export async function GET(req: Request) {
         currentPage: pagination.page,
         perPage: pagination.limit
       }
-    })
+    }, { status: 200 })
 
     //return NextResponse.json(toysForSwap, { status: 200 });
   } catch (error) {

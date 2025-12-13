@@ -1,7 +1,9 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
+import { PaginationSchema} from "@/lib/schemas/toy";
 
 export async function GET(req: Request) {
   // --- 1. Autenticación ---
@@ -25,17 +27,41 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: g("UserNotFound") }, { status: 404 });
   }
 
+  const { searchParams } = new URL(req.url!)
+  
+  const pagination = PaginationSchema.parse({
+    page: parseInt(searchParams.get('page') || "1"),
+    limit: parseInt(searchParams.get('limit') || "4")
+  });
+
   try {
     // --- 3. Obtener IDs de juguetes favoritos del usuario ---
-    const favoriteToys = await prisma.favoriteToy.findMany({
-      where: {
-        userId: user.id,
-      },
-      select: {
-        toyId: true,
-      },
-    });
+    // const favoriteToys = await prisma.favoriteToy.findMany({
+    //   where: {
+    //     userId: user.id,
+    //   },
+    //   select: {
+    //     toyId: true,
+    //   },
+    // });
 
+    const query = {
+      where: {userId: user.id},
+      select: {toyId: true},
+      skip: (pagination.page - 1) * pagination.limit,
+      take: pagination.limit
+    };
+
+    const countQuery = {
+      where: { userId: user.id }
+    };
+
+    // Ejecutar consulta
+    const [favoriteToys, totalCount] = await Promise.all([
+      prisma.favoriteToy.findMany(query),
+      prisma.favoriteToy.count(countQuery)
+    ])
+    
     const favoriteToyIds = favoriteToys.map(f => f.toyId);
 
     if (favoriteToyIds.length === 0) {
@@ -69,7 +95,17 @@ export async function GET(req: Request) {
     });
 
     // --- 5. Respuesta ---
-    return NextResponse.json(toys, { status: 200 });
+    return NextResponse.json({
+      success: true,
+      data: toys, 
+      pagination: {
+        total: totalCount,
+        totalPages: Math.ceil(totalCount / pagination.limit),
+        currentPage: pagination.page,
+        perPage: pagination.limit
+      }
+    })
+    // return NextResponse.json(toys, { status: 200 });
   } catch (error) {
     console.error("Error fetching favorite toys:", error);
     return NextResponse.json(
