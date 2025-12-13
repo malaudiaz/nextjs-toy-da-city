@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { getTranslations } from "next-intl/server";
 import { orderWithAllRelations } from "@/types/prisma-types";
+import { PaginationSchema} from "@/lib/schemas/toy";
 
 const prisma = new PrismaClient();
 
@@ -21,7 +22,9 @@ function isValidOrderStatus(status: string): status is OrderStatusFilter {
   return VALID_ORDER_STATUSES.includes(status as OrderStatusFilter);
 }
 
-export async function GET(req: Request) {
+export async function GET(req: Request,
+  { params }: { params: Promise<{ locale: string }> }
+) {
   // --- 1. Autenticación ---
   let { userId } = await auth();
   const g = await getTranslations("General");
@@ -43,9 +46,17 @@ export async function GET(req: Request) {
   }
 
   // --- 2. Obtener y validar parámetro `status` ---
+  const { locale } = await params;
+  const userLanguageCode = locale;
+  
   const { searchParams } = new URL(req.url);
   const statusParam = searchParams.get("status");
 
+  const pagination = PaginationSchema.parse({
+        page: parseInt(searchParams.get('page') || "1"),
+        limit: parseInt(searchParams.get('limit') || "4")
+      });
+  
   let statusFilter: OrderStatusFilter | null = null;
   if (statusParam && isValidOrderStatus(statusParam)) {
     statusFilter = statusParam;
@@ -59,13 +70,21 @@ export async function GET(req: Request) {
     };
 
     // --- 4. Consultar órdenes ---
-    const orders = await prisma.order.findMany({
+    const query = {
       where,
       include: orderWithAllRelations,
       orderBy: {
-        createdAt: "desc",
+        createdAt: "desc" as const, // El "as const" ayuda con la inferencia de tipos
       },
-    });
+      skip: (pagination.page - 1) * pagination.limit,
+      take: pagination.limit
+    };
+
+    // Ejecutar consulta
+    const [orders, totalCount] = await Promise.all([
+      prisma.order.findMany(query),
+      prisma.order.count({ where })
+    ])
 
     // --- 5. Lógica de Elegibilidad de Reseña ---
 
@@ -123,7 +142,18 @@ export async function GET(req: Request) {
       }),
     }));
 
-    return NextResponse.json(ordersWithEligibility, { status: 200 });
+    return NextResponse.json({
+      success: true,
+      data: ordersWithEligibility, 
+      pagination: {
+        total: totalCount,
+        totalPages: Math.ceil(totalCount / pagination.limit),
+        currentPage: pagination.page,
+        perPage: pagination.limit
+      }
+    })
+
+    // return NextResponse.json(ordersWithEligibility, { status: 200 });
 
   } catch (error) {
     console.error("Error fetching orders:", error);
