@@ -127,6 +127,7 @@ export type Sale = {
   conditionDescription?: string;
   statusDescription?: string;
   orderItems: SaleOrderItems[];
+  statusName: string;
 };
 export type Status = {
   id: number;

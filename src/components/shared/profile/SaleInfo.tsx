@@ -93,7 +93,7 @@ const SaleInfo = ({ sales }: SalesProps) => {
                           <p className="text-gray-600 text-md">
                             {t("status")}: 
                           </p>
-                          <p className="text-red-600 font-semibold">{t(sale.status.name)}</p>                          
+                          <p className="text-red-600 font-semibold">{t(sale.statusName)}</p>                          
                         </div>
                       </div>
 
