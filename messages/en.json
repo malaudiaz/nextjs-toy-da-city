@@ -122,7 +122,9 @@
     "giftRequestApprovedTitle": "Gift or exchange approved",
     "giftGreeting": "Hello",
     "giftRequestApprovedMessage": "Your gift request has been successfully approved. Here are the details:",
-    "approvedGift": "Gift details"
+    "approvedGift": "Gift details",
+    "seller": "Seller",
+    "buyer": "Buyer"
   },
   "Payments": {
     "card_declined": "Your card was declined. Please use another card.",

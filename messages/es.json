@@ -123,7 +123,9 @@
     "giftRequestApprovedTitle": "Regalo aprobado",
     "giftGreeting": "Saludos",
     "giftRequestApprovedMessage": "Tu solicitud de regalo ha sido aprobada exitosamente. Aquí tienes los detalles:",
-    "approvedGift": "Detalles del regalo"
+    "approvedGift": "Detalles del regalo",
+    "seller": "Vendedor",
+    "buyer": "Comprador"
   },
   "Payments": {
     "card_declined": "La tarjeta fue rechazada. Use otra tarjeta.",

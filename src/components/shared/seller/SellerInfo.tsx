@@ -3,8 +3,9 @@ import { SellerProfile } from "@/types/modelTypes";
 import React from "react";
 import { UserAvatar } from "../UserAvatar";
 import { StarIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { format } from "date-fns";
+import { es, enUS } from "date-fns/locale";
 
 type Props = {
   data: SellerProfile;
@@ -12,6 +13,8 @@ type Props = {
 
 const SellerInfo = ({ data }: Props) => {
   const t = useTranslations("sellerProfile");
+  const locale = useLocale();
+  const dfLocale = locale === "es" ? es : enUS;
   return (
     <div className="flex items-center space-x-6">
       {data.imageUrl ? (
@@ -51,7 +54,7 @@ const SellerInfo = ({ data }: Props) => {
           )}
         </div>
         <p className="text-sm text-gray-500 mt-2">
-          {t("memberSince")} {format(new Date(data.createdAt), "MMMM yyyy")}
+          {t("memberSince")} {format(new Date(data.createdAt), "MMMM yyyy", { locale: dfLocale })}
         </p>
         <p className="text-sm text-gray-700">
           Rol: <span className="font-medium capitalize">{data.role}</span>

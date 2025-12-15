@@ -115,6 +115,7 @@ export async function GET(request: Request) {
             imageUrl, // Avatar del usuario del perfil (vendedor)
             averageRating,
             totalReviews,
+            role: g(user.role),
             // Formatear la lista de juguetes para simplificar la respuesta
             toysForSale: user.toysForSale.map((toy) => ({
                 ...toy,
