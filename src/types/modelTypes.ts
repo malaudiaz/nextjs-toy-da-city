@@ -1,3 +1,5 @@
+import { FavoriteToy } from "@prisma/client";
+
 export type Condition = {
   id: number;
   name: string;
@@ -211,4 +213,41 @@ export type SaleOrderItems = {
       email: string;
     };
   };
+};
+
+export type MessageSender = {
+  id: string; // ID de Prisma (id de la tabla 'users')
+  fullName: string;
+  imageUrl: string;
+  clerkId: string;
+  email: string;
+  phone: string;
+  role: string; // Incluir el rol para la validación/información
+  reputation: number;
+  reviewsCount: number; // Cantidad total de reseñas recibidas
+};
+
+export type Messages = {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  location: string;
+  categoryId: number;
+  statusId: number;
+  conditionId: number;
+  sellerId: string;
+  forSell: boolean;
+  forGifts: boolean;
+  forChanges: boolean;
+  isFavorite: boolean;
+  favorites: FavoriteToy[];
+  createdAt: Date;
+  updatedAt: Date;
+  isActive: boolean;
+  media: Media[];
+  messageSenders: MessageSender[];
+  categoryDescription: string;
+  conditionDescription: string;
+  statusDescription: string;
 };

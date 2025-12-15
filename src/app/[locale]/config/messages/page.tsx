@@ -1,25 +1,28 @@
 import MessageInfo from "@/components/shared/profile/Messagesinfo";
-import MessageInfoSkeleton from "@/components/shared/profile/MessageInfoSkeleton"; // 1. Importa el Skeleton
-import React, { Suspense } from "react"; // 2. Importa Suspense
+import MessageInfoSkeleton from "@/components/shared/profile/MessageInfoSkeleton";
+import React, { Suspense } from "react";
 import { getMessages } from "@/lib/actions/toysAction";
 import Breadcrumbs from "@/components/shared/BreadCrumbs";
+import { Messages } from "@/types/modelTypes";
+import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 
-// 3. Componente async que realiza el fetching
-const MessagesContent = async ({
-  messagesPromise,
-}: {
-  messagesPromise: ReturnType<typeof getMessages>;
-}) => {
-  // Espera a que la promesa de datos se resuelva
-  const messages = await messagesPromise;
-
+const MessagesContent = async ({ messages }: { messages: Messages[] }) => {
   return <MessageInfo messages={messages} />;
 };
 
-// 4. El Page Component se convierte en el contenedor de Suspense
-const MessagesPage = async () => {
-  // La función getMessages() devuelve una Promesa.
-  const messagesPromise = getMessages();
+type Props = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+const MessagesPage = async ({ searchParams }: Props) => {
+  const resolvedSearchParams = await searchParams;
+  const currentPage = parseInt((resolvedSearchParams.page as string) || "1");
+  const postsPerPage = parseInt(
+    (resolvedSearchParams.pageSize as string) ||
+      process.env.NEXT_TOYS_PER_PAGE ||
+      "8"
+  );
+  const { messages, totalPosts, totalPages } = await getMessages(currentPage, postsPerPage);
 
   return (
     <div className="max-w-7xl mx-auto min-h-screen bg-background">
@@ -28,11 +31,16 @@ const MessagesPage = async () => {
         <Breadcrumbs className="md:hidden" />
       </div>
 
-      {/* 5. Envuelve el contenido lento con Suspense */}
       <Suspense fallback={<MessageInfoSkeleton />}>
-        {/* Pasamos la Promesa al componente Content */}
-        <MessagesContent messagesPromise={messagesPromise} />
+        <MessagesContent messages={messages} />
       </Suspense>
+      {totalPages > 1 && (
+        <PaginationWithLinks
+          page={currentPage}
+          pageSize={postsPerPage}
+          totalCount={totalPosts}
+        />
+      )}
     </div>
   );
 };

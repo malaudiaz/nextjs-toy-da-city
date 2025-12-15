@@ -6,55 +6,9 @@ import Image from "next/image";
 import { User } from "lucide-react";
 import Link from "next/link";
 import { ChatButton } from "../ChatButton";
-import { FavoriteToy } from "@prisma/client";
 import { useTranslations } from "next-intl"; // ✅ Importa el hook
 import Empty from "../Empty";
-
-type Media = {
-  id: string;
-  fileUrl: string;
-  type: "IMAGE" | "VIDEO";
-  toyId: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-};
-
-type MessageSender = {
-  id: string; // ID de Prisma (id de la tabla 'users')
-  fullName: string;
-  imageUrl: string;
-  clerkId: string;
-  email: string;
-  phone: string;
-  role: string; // Incluir el rol para la validación/información
-  reputation: number;
-  reviewsCount: number; // Cantidad total de reseñas recibidas
-};
-
-type Messages = {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  location: string;
-  categoryId: number;
-  statusId: number;
-  conditionId: number;
-  sellerId: string;
-  forSell: boolean;
-  forGifts: boolean;
-  forChanges: boolean;
-  isFavorite: boolean;
-  favorites: FavoriteToy[];
-  createdAt: Date;
-  updatedAt: Date;
-  isActive: boolean;
-  media: Media[];
-  messageSenders: MessageSender[];
-  categoryDescription: string;
-  conditionDescription: string;
-  statusDescription: string;
-};
+import { Messages } from "@/types/modelTypes";
 
 type MessagesProps = {
   messages: Messages[];

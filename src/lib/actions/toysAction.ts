@@ -7,7 +7,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { getLocale } from "next-intl/server";
 import { revalidatePath } from "next/cache";
-import { Sale } from "@/types/modelTypes";
+import { Messages, Sale } from "@/types/modelTypes";
 
 export type Filters = {
   search?: string | null;
@@ -380,9 +380,10 @@ export async function confirmRequest(id: string) {
   return requests;
 }
 
-export async function getMessages() {
+export async function getMessages(page: number, perPage: number) {
   const locale = await getLocale(); // ✅ Obtiene el locale actual
   const { userId } = await auth();
+  const start = page - 1 + 1 || 1;
 
   const headers = {
     "Content-Type": "application/json",
@@ -393,16 +394,20 @@ export async function getMessages() {
     headers["X-User-ID"] = userId;
   }
 
+  const url = new URL(`${BACKEND_URL}/${locale}/api/toys/with-messages`);
+  url.searchParams.set("page", String(start));
+  url.searchParams.set("limit", String(perPage));
+
   const response = await fetch(
-    `${BACKEND_URL}/${locale}/api/toys/with-messages`,
+    `${url.toString()}`,
     {
       method: "GET",
       headers: headers,
     }
   );
 
-  const messages = await response.json();
-  return messages;
+  const res = await response.json();
+  return { messages: res.data as Messages[], totalPosts: res.pagination.total as number | 0, totalPages: res.pagination.totalPages as number};
 }
 
 export type ToyWithMedia = {
