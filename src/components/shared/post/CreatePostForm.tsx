@@ -14,22 +14,22 @@ const MAX_FILES = 6;
 
 type Status = { // (Añade este tipo si no está en un archivo de tipos compartido)
   id: number;
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
   isActive: boolean;
 };
 
 type Category = {
   id: number;
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
   isActive: boolean;
 };
 
 type Condition = {
   id: number;
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
   isActive: boolean;
 };
 
@@ -43,6 +43,7 @@ type CreatePostFormProps = {
   statuses: { // ✨ NUEVO
     data: Status[];
   };
+  rolle?: string;
 };
 
 // Importación dinámica con exportación por defecto correcta
@@ -61,7 +62,8 @@ const MapComponent = dynamic(
 const CreatePostForm = ({
   categories,
   conditions,
-  statuses
+  statuses,
+  rolle
 }: CreatePostFormProps) => {
   const t = useTranslations("createPostForm");
   const [files, setFiles] = useState<File[]>([]);
@@ -76,6 +78,8 @@ const CreatePostForm = ({
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
     null
   );
+
+  const isDisabled = rolle !== "seller";  
 
   const { getToken } = useAuth();
 
@@ -100,11 +104,10 @@ const CreatePostForm = ({
     },
   });
 
-  // Observamos el valor de forSale para mostrar/ocultar el precio
-  const forSaleValue = useWatch({
-    control,
-    name: "forSale",
-  });
+  // Observamos los valores para mostrar/ocultar y para los checked
+  const forSaleValue = useWatch({ control, name: "forSale" });
+  const forGiftValue = useWatch({ control, name: "forGift" });
+  const forChangeValue = useWatch({ control, name: "forChange" });
 
   const getUserLocation = () => {
     setError(null);
@@ -296,9 +299,12 @@ const CreatePostForm = ({
             <input
               type="checkbox"
               id="forSale"
-              checked={useWatch({ control, name: "forSale" })}
+              disabled={isDisabled} // 👈 deshabilita si no es seller
+              checked={forSaleValue}
               onChange={() => handleCheckboxChange("forSale")}
-              className="w-5 h-5 accent-green-700"
+              className={`w-5 h-5 accent-green-700 ${
+                isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+              }`}              
             />
             <label htmlFor="forSale">{t("forSale")}</label>
           </div>
@@ -308,7 +314,7 @@ const CreatePostForm = ({
             <input
               type="checkbox"
               id="forGift"
-              checked={useWatch({ control, name: "forGift" })}
+              checked={forGiftValue}
               onChange={() => handleCheckboxChange("forGift")}
               className="w-5 h-5 accent-green-700"
             />
@@ -320,7 +326,7 @@ const CreatePostForm = ({
             <input
               type="checkbox"
               id="forChange"
-              checked={useWatch({ control, name: "forChange" })}
+              checked={forChangeValue}
               onChange={() => handleCheckboxChange("forChange")}
               className="w-5 h-5 accent-green-700"
             />

@@ -604,7 +604,8 @@
       "emptyMsg": "No toys posted yet",
       "free": "Free",
       "edit": "Edit",
-      "sold": "Sold"
+      "sold": "Sold",
+      "exchange": "Exchange"
     }
   },
   "purchases": {
@@ -986,7 +987,13 @@
     "itemAdded": "Item added to cart",
     "itemExist": "Item already in cart",
     "addToCart": "Add to Cart",
-    "request": "Request"
+    "request": "I want this toy."
+  },
+  "SellerPromptCard": {
+    "title": "You're not a seller yet!",
+    "subtitle": "To sell toys, you need to register as a seller on Toydacity.",
+    "btnYes": "Become a Seller",
+    "btnNo": "No, thanks"
   }
 } 
 

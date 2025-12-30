@@ -598,8 +598,9 @@
       "emptyMsg": "No existen juguetes posteados aún",
       "free": "Gratis",
       "edit": "Editar",
-      "sold": "Vendido"
-    }
+      "sold": "Vendido",
+      "exchange": "Intercambio"
+      }
   },
   "purchases": {
     "title": "Mis Compras",
@@ -979,6 +980,12 @@
     "itemAdded": "Juguete agregado al carrito",
     "itemExist": "Juguete ya está en el carrito",
     "addToCart": "Adicionar al carrito",
-    "request": "Solicitar"
+    "request": "Quiero este Juguete"
+  },
+  "SellerPromptCard": {
+    "title": "¡Aún no eres vendedor!",
+    "subtitle": "Para vender juguetes, necesitas registrarte como vendedor en Toydacity.",
+    "btnYes": "Sí, quiero ser vendedor",
+    "btnNo": "No, gracias"
   }
 }

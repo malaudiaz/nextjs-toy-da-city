@@ -9,6 +9,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { ToyResponseSuccess, ToyResponseError } from "@/types/toy";
 import { revalidatePath } from 'next/cache'; // 👈 Necesitas esta importación
+import sharp from 'sharp';
+
+const UPLOADS_DIR = join(process.cwd(), 'public', 'uploads')
+const MAX_FILES_PER_TOY = 6 // Límite de archivos por post
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50 MB
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024;  // 10 MB
+const EARTH_RADIUS_KM = 6371
 
 const ALLOWED_TYPES = [
   'image/jpeg',
@@ -17,13 +24,14 @@ const ALLOWED_TYPES = [
   'image/webp',
   'video/mp4',
   'video/quicktime',
-  'video/webm'
-]
+  'video/webm',
+] as const;
 
-const UPLOADS_DIR = join(process.cwd(), 'public', 'uploads')
-const MAX_FILES_PER_TOY = 10 // Límite de archivos por post
-const EARTH_RADIUS_KM = 6371
+type AllowedMimeType = typeof ALLOWED_TYPES[number];
 
+function isAllowedMimeType(mimeType: string): mimeType is AllowedMimeType {
+  return (ALLOWED_TYPES as readonly string[]).includes(mimeType);
+}
 
 async function ensureUploadsDirExists() {
   try {
@@ -347,34 +355,94 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
     const mediaItems = []
     
     for (const file of files) {
-      // Validar tipo de archivo
-      if (!ALLOWED_TYPES.includes(file.type)) {
-        await prisma.toy.delete({ where: { id: toy.id } }) // Rollback
+      const mimeType = file.type;
+
+      // Validar tipo permitido
+      if (!isAllowedMimeType(mimeType)) {
+        await prisma.toy.delete({ where: { id: toy.id } });
         return NextResponse.json(
-          { success: false, error: `Unsupported file type: ${file.type}` },
+          { success: false, error: `Unsupported file type: ${mimeType}` },
           { status: 400 }
-        )
+        );
       }
 
-      // Generar nombre único
-      const extension = file.type.split('/')[1]
-      const filename = `${uuidv4()}.${extension}`
-      const filePath = join(UPLOADS_DIR, filename)
+      const buffer = Buffer.from(await file.arrayBuffer());
+      let filename: string;
+      let finalBuffer: Buffer = buffer;
+
+      // 🖼️ IMAGEN: optimizar con Sharp
+      if (mimeType.startsWith('image/')) {
+        if (buffer.length > MAX_IMAGE_SIZE) {
+          await prisma.toy.delete({ where: { id: toy.id } });
+          return NextResponse.json(
+            { success: false, error: 'Image too large (max 10 MB)' },
+            { status: 400 }
+          );
+        }
+
+        try {
+          const metadata = await sharp(buffer).metadata();
+          if (!metadata.width || !metadata.height) {
+            throw new Error('Invalid image');
+          }
+
+          finalBuffer = await sharp(buffer)
+            .resize({
+              width: 1200,
+              height: 1200,
+              fit: 'inside',
+              withoutEnlargement: true,
+            })
+            .webp({ quality: 80 })
+            .toBuffer();
+
+          filename = `${uuidv4()}.webp`;
+        } catch (err) {
+          console.log(err);
+          await prisma.toy.delete({ where: { id: toy.id } });
+          return NextResponse.json(
+            { success: false, error: 'Invalid or corrupted image file' },
+            { status: 400 }
+          );
+        }
+      }
+      // 🎥 VIDEO: guardar tal cual (con límite de tamaño)
+      else if (mimeType.startsWith('video/')) {
+        if (buffer.length > MAX_VIDEO_SIZE) {
+          await prisma.toy.delete({ where: { id: toy.id } });
+          return NextResponse.json(
+            { success: false, error: 'Video too large (max 50 MB)' },
+            { status: 400 }
+          );
+        }
+
+        const ext = mimeType === 'video/quicktime'
+          ? 'mov'
+          : mimeType.split('/')[1];
+
+        filename = `${uuidv4()}.${ext}`;
+      } else {
+        await prisma.toy.delete({ where: { id: toy.id } });
+        return NextResponse.json(
+          { success: false, error: 'Unsupported file type' },
+          { status: 400 }
+        );
+      }
 
       // Guardar archivo
-      const buffer = Buffer.from(await file.arrayBuffer())
-      await writeFile(filePath, buffer)
+      const filePath = join(UPLOADS_DIR, filename);
+      await writeFile(filePath, finalBuffer);
 
-      // Crear media asociada al toy
+      // Guardar en DB
       const media = await prisma.media.create({
         data: {
           fileUrl: `/en/api/uploads/${filename}`,
-          type: file.type.startsWith('image') ? 'IMAGE' : 'VIDEO',
-          toyId: toy.id
-        }
-      })
-      
-      mediaItems.push(media)
+          type: mimeType.startsWith('image/') ? 'IMAGE' : 'VIDEO',
+          toyId: toy.id,
+        },
+      });
+
+      mediaItems.push(media);
     }
 
     // Obtener el post actualizado con los media

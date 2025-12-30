@@ -74,7 +74,7 @@ export default function ToyCard({ toy }: ToyCardProps) {
                 <div className="text-2xl font-bold text-green-700">
                   {toy.price === 0 ? (
                     <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm">
-                      {t("toys.free")}
+                      {toy.forGifts ? t("toys.free") : t("toys.exchange")}
                     </span>
                   ) : (
                     `$${toy.price.toFixed(2)}`

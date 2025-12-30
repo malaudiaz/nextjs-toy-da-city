@@ -4,12 +4,17 @@ import fs from 'fs';
 import path from 'path';
 
 const MIME_TYPES: Record<string, string> = {
+  // Imágenes
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
   '.png': 'image/png',
   '.gif': 'image/gif',
   '.webp': 'image/webp',
   '.svg': 'image/svg+xml',
+  // Videos
+  '.mp4': 'video/mp4',
+  '.mov': 'video/quicktime',
+  '.webm': 'video/webm',
 };
 
 export async function GET(

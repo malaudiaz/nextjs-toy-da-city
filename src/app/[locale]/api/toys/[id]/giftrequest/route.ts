@@ -7,24 +7,17 @@ import { getClerkUserById } from '@/lib/clerk';
 
 export async function GET(
   req: NextRequest,
-  {
-    params,
-  }: {
-    params: Promise<{
-      id: string;
-      limit: string;
-      locale: string;
-      page: string;
-    }>;
-  }
+  { params }: { params: Promise<{ id: string; locale: string }> }
 ) {
-  const { id, limit: limitStr, locale, page: pageStr } = await params;
+  const { id, locale } = await params;
+  const limitStr = req.nextUrl.searchParams.get("limit") || undefined;
+  const pageStr = req.nextUrl.searchParams.get("page") || undefined;
   const limit = limitStr ? parseInt(limitStr, 10) : 6;
-  const page = pageStr ? parseInt(pageStr, 1) : 1;
+  const page = pageStr ? parseInt(pageStr, 10) : 1;
 
   // Validar que sea un número válido
   const limitNumber = isNaN(limit) || limit < 1 ? 6 : limit;
-  const pageNumber = isNaN(page) || page < 1 ? 6 : page;
+  const pageNumber = isNaN(page) || page < 1 ? 1 : page;
 
   const g = await getTranslations("General");
   const t = await getTranslations("Toy");

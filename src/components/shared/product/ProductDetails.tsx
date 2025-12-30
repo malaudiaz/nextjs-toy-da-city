@@ -32,7 +32,7 @@ const MapComponent = dynamic(
     ssr: false,
     loading: () => (
       <div className="h-[400px] w-full bg-gray-200 flex items-center justify-center">
-        Cargando mapa...
+        Loading...
       </div>
     ),
   }

@@ -61,6 +61,7 @@ type EditPostFormProps = {
   statuses: { // ✨ NUEVO
     data: Status[];
   };
+  rolle: string;
 };
 
 const MapComponent = dynamic(
@@ -75,7 +76,7 @@ const MapComponent = dynamic(
   }
 );
 
-const EditPostForm = ({ toy, categories, conditions, statuses }: EditPostFormProps) => {
+const EditPostForm = ({ toy, categories, conditions, statuses, rolle }: EditPostFormProps) => {
   const t = useTranslations("createPostForm");
   const [files, setFiles] = useState<File[]>([]);
   const [existingImages, setExistingImages] = useState<
@@ -86,6 +87,7 @@ const EditPostForm = ({ toy, categories, conditions, statuses }: EditPostFormPro
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const isDisabled = rolle !== "seller";  
 
   const initialLocation = toy.location
     ? (toy.location.split(",").map(Number) as [number, number])
@@ -317,8 +319,12 @@ const EditPostForm = ({ toy, categories, conditions, statuses }: EditPostFormPro
                 type="checkbox"
                 id={option}
                 checked={watch(option)}
+                disabled={option === "forSale" && isDisabled} // 👈 deshabilita si no es seller
                 onChange={() => handleCheckboxChange(option)}
-                className="w-5 h-5 accent-green-700"
+                className={`w-5 h-5 accent-green-700 ${
+                  option === "forSale" &&isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+                }`}              
+
               />
               <label htmlFor={option}>{t(option)}</label>
             </div>

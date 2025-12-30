@@ -5,9 +5,10 @@ import { getTranslations } from "next-intl/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string; limit: string; locale: string }> }
+  { params }: { params: Promise<{ id: string; locale: string }> }
 ) {
-  const { id, limit: limitStr, locale } = await params;
+  const { id, locale } = await params;
+  const limitStr = req.nextUrl.searchParams.get("limit") || undefined;
   const limit = limitStr ? parseInt(limitStr, 10) : 6;
 
   // Validar que sea un número válido
