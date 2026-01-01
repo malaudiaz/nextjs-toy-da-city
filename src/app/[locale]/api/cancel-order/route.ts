@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
   }
 
   // ✅ 1. LIBERAR LOS JUGUETES PRIMERO (¡clave!)
-  const toyIds = order.items.map((item) => item.toyId);
+  const toyIds = order.items.map((item: { toyId: string }) => item.toyId);
   try {
     await prisma.toy.updateMany({
       where: { id: { in: toyIds } },
