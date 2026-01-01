@@ -21,9 +21,10 @@ export default async function EditPostPage({ params }: PageProps) {
   const { id, locale } = await params;
 
   const sellerData = await getSellerData(userId);
-  if (sellerData.role !== "seller") {
+/*   if (sellerData.role !== "seller") {
     redirect(`/${locale}/seller-onboarding`);
   }
+ */
 
   const toyId = id;
   const toy = await getToyById(toyId, locale); // ← Verifica que el juguete pertenezca al vendedor
@@ -44,6 +45,7 @@ export default async function EditPostPage({ params }: PageProps) {
         categories={categories}
         conditions={{ data: conditions }}
         statuses={{data: statuses}}
+        rolle={sellerData.role}
       />
     </div>
   );
