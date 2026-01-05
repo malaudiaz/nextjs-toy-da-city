@@ -61,13 +61,24 @@ const SaleInfo = ({ sales }: SalesProps) => {
                 <CardContent>
                   <div className="flex flex-col lg:flex-row gap-6">
                     <div className="flex-shrink-0">
-                      <Image
-                        src={sale.media[0].fileUrl || "/placeholder.svg"}
-                        alt={sale.title}
-                        width={150}
-                        height={150}
-                        className="rounded-lg object-cover w-full lg:w-[150px] h-[150px]"
-                      />
+                      {sale.media[0].type === "IMAGE" && (
+                        <Image
+                          src={sale.media[0].fileUrl}
+                          alt={sale.title}
+                          width={400}
+                          height={400}
+                          className="rounded-lg object-cover w-full lg:w-[150px] h-[150px]"
+                        />
+                      )}
+
+                      {sale.media[0].type === "VIDEO" && (
+                        <video
+                          src={sale.media[0].fileUrl}
+                          className="rounded-lg w-40 h-40 object-cover border bg-black"
+                          //controls
+                          muted // opcional, útil si múltiples videos
+                        />
+                      )}
                     </div>
 
                     <div className="flex-1 space-y-4">

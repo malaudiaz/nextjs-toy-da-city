@@ -47,7 +47,7 @@ type Toy = {
   conditionId: number;
   statusId: number; // ✨ NUEVO
   location: string | null; // "lat,lng"
-  media: { id: string; fileUrl: string }[]; // ← Asumiendo que guardas imágenes en la DB con ID y URL
+  media: { id: string; fileUrl: string, type: "IMAGE" | "VIDEO" }[]; // ← Asumiendo que guardas imágenes en la DB con ID y URL
 };
 
 type EditPostFormProps = {
@@ -80,7 +80,7 @@ const EditPostForm = ({ toy, categories, conditions, statuses, rolle }: EditPost
   const t = useTranslations("createPostForm");
   const [files, setFiles] = useState<File[]>([]);
   const [existingImages, setExistingImages] = useState<
-    { id: string; fileUrl: string }[]
+    { id: string; fileUrl: string, type: "IMAGE" | "VIDEO" }[]
   >(toy.media || []);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -429,18 +429,31 @@ const EditPostForm = ({ toy, categories, conditions, statuses, rolle }: EditPost
 
         {/* Imágenes (existentes + nuevas) */}
         <div className="flex flex-col gap-2 px-3 py-3 border-dashed border-2 border-gray-300 rounded-md">
-          <Label>{t("Image")}</Label>
+          <Label>{t("Media")}</Label>
           <div className="grid grid-cols-3 gap-2">
             {/* Imágenes existentes */}
             {existingImages.map((img, index) => (
               <div key={img.id} className="relative group">
-                <Image
-                  src={img.fileUrl}
-                  alt={`Existing ${index}`}
-                  className="w-full h-32 object-cover rounded border"
-                  width={150}
-                  height={150}
-                />
+
+                {img.type === "IMAGE" && (
+                  <Image
+                    src={img.fileUrl}
+                    alt={`Existing ${index}`}
+                    className="w-full h-64 object-cover rounded border"
+                    width={150}
+                    height={150}
+                  />
+                )}
+
+                {img.type === "VIDEO" && (
+                  <video
+                    src={img.fileUrl}
+                    className="w-full h-64 object-cover rounded border bg-black"
+                    controls
+                    muted // opcional, útil si múltiples videos
+                  />
+                )}
+
                 <button
                   type="button"
                   onClick={() => removeFile(index, true)}
@@ -452,34 +465,43 @@ const EditPostForm = ({ toy, categories, conditions, statuses, rolle }: EditPost
             ))}
 
             {/* Imágenes nuevas (previsualización) */}
-            {files.map((file, index) => (
-              <div
-                key={index + existingImages.length}
-                className="relative group"
-              >
-                {file.type.startsWith("image") && (
-                  <Image
-                    src={URL.createObjectURL(file)}
-                    alt={`Preview ${index}`}
-                    className="w-full h-32 object-cover rounded border"
-                    width={150}
-                    height={150}
-                  />
-                )}
-                <button
-                  type="button"
-                  onClick={() => removeFile(index + existingImages.length)}
-                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  &times;
-                </button>
-              </div>
-            ))}
+            {files.map((file, index) => {
+              const fileUrl = URL.createObjectURL(file);
+              return (
+                <div key={index} className="relative group">
+                  {file.type.startsWith("image") && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={fileUrl}
+                      alt={`Preview ${index}`}
+                      className="w-full h-64 object-cover rounded border"
+                    />
+                  )}
+
+                  {file.type.startsWith("video") && (
+                    <video
+                      src={fileUrl}
+                      className="w-full h-64 object-cover rounded border bg-black"
+                      controls
+                      muted // opcional, útil si múltiples videos
+                    />
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => removeFile(index)}
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    &times;
+                  </button>
+                </div>
+              );
+            })}
 
             {/* Botón para añadir más (si no se ha alcanzado el límite) */}
             {existingImages.length + files.length < MAX_FILES && (
               <div
-                className="border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer h-32"
+                className="border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer h-64"
                 onClick={() => fileInputRef.current?.click()}
               >
                 <span className="text-gray-500">{t("Add More")}</span>

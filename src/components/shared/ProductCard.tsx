@@ -14,6 +14,7 @@ type ProductCardProps = {
   title: string;
   description: string;
   image?: string;
+  type?: string;
   price: number;
   conditionDescription: string;
   location: string;
@@ -25,6 +26,7 @@ const ProductCard = ({
   title,
   description,
   image,
+  type,
   price,
   conditionDescription,
   favorites,
@@ -41,14 +43,29 @@ const ProductCard = ({
     >
       {/* Imagen */}
       <div className="w-full h-48 relative bg-gray-200 overflow-hidden rounded-t-lg">
-        <Image
-          src={image || "/image 4.png"}
-          alt={description}
-          fill
-          unoptimized={true}
-          className="object-cover transition-transform duration-300 hover:scale-105"
-          sizes="(max-width: 640px) 90vw, (max-width: 768px) 45vw, (max-width: 1024px) 22vw, 15vw"
-        />
+
+        {type === "IMAGE" && (
+
+          <Image
+            src={image || "/image 4.png"}
+            alt={description}
+            fill
+            unoptimized={true}
+            className="object-cover transition-transform duration-300 hover:scale-105"
+            sizes="(max-width: 640px) 90vw, (max-width: 768px) 45vw, (max-width: 1024px) 22vw, 15vw"
+          />
+
+        )}
+
+        {type === "VIDEO" && (
+          <video
+            src={image}
+            className="w-full h-48 object-cover rounded border bg-black"
+            controls
+            muted // opcional, útil si múltiples videos
+          />
+        )}
+
       </div>
 
       {/* Contenido inferior */}

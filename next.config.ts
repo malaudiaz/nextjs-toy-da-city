@@ -64,6 +64,9 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "10mb",
     },
+    // Mover `middlewareClientMaxBodySize` dentro de `experimental` para evitar
+    // la validación de keys no reconocidas en la raíz de la config.
+    middlewareClientMaxBodySize: '50mb',
   },
 };
 

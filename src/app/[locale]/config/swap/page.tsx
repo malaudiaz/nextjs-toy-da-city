@@ -8,10 +8,9 @@ import React, { Suspense } from "react"; // 2. Importa Suspense
 
 type ProductsProps = {
   swaps: Sale[];
-}
+};
 
-const SwapContent = async ({swaps}: ProductsProps) => {
-
+const SwapContent = async ({ swaps }: ProductsProps) => {
   return <SwapInfo swaps={swaps} />;
 };
 
@@ -27,7 +26,10 @@ export default async function ExchangesPage({ searchParams }: Props) {
       process.env.NEXT_TOYS_PER_PAGE ||
       "8"
   );
-  const {swaps, totalPosts, totalPages } = await getSwaps(currentPage, postsPerPage);
+  const { swaps, totalPosts, totalPages } = await getSwaps(
+    currentPage,
+    postsPerPage
+  );
 
   return (
     <div className="max-w-7xl mx-auto min-h-screen bg-background">
@@ -41,13 +43,13 @@ export default async function ExchangesPage({ searchParams }: Props) {
         {/* Pasamos la Promesa al componente Content */}
         <SwapContent swaps={swaps} />
       </Suspense>
-      { totalPages > 1 && (
-                <PaginationWithLinks
-                page={currentPage}
-                pageSize={postsPerPage}
-                totalCount={totalPosts}
-              />
-              )}
+      {totalPages > 1 && (
+        <PaginationWithLinks
+          page={currentPage}
+          pageSize={postsPerPage}
+          totalCount={totalPosts}
+        />
+      )}
     </div>
   );
 }

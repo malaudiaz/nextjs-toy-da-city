@@ -132,13 +132,25 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
             <div className="aspect-square relative">
               {/* eslint-disable @next/next/no-img-element */}
 
-              <Image
-                src={toy.media[selectedImage].fileUrl}
-                alt={toy.title}
-                width={400}
-                height={400}
-                className="w-full h-full object-cover"
-              />
+              {toy.media[selectedImage].type === "IMAGE" && (
+                <Image
+                  src={toy.media[selectedImage].fileUrl}
+                  alt={toy.title}
+                  width={400}
+                  height={400}
+                  className="w-full h-full object-cover"
+                />
+              )}
+              
+              {toy.media[selectedImage].type === "VIDEO" && (
+                <video
+                  src={toy.media[selectedImage].fileUrl}
+                  className="w-full h-full object-cover rounded border bg-black"
+                  controls
+                  muted // opcional, útil si múltiples videos
+                />
+              )}
+
 
               {/* Navigation Arrows */}
               <button
@@ -173,11 +185,21 @@ const ProductDetails = ({ toy, seller }: ProductDetailsProps) => {
                     : "border-gray-200 hover:border-green-300"
                 }`}
               >
-                <img
-                  src={toy.media[index].fileUrl}
-                  alt={`${toy.title} view ${index + 1}`}
-                  className="w-full h-full object-cover"
-                />
+                {toy.media[index].type === "IMAGE" && (
+                  <img
+                    src={toy.media[index].fileUrl}
+                    alt={`${toy.title} view ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                )}
+                {toy.media[index].type === "VIDEO" && (
+                  <video
+                    src={toy.media[index].fileUrl}
+                    className="w-full h-full object-cover rounded border bg-black"
+                    //controls
+                    muted // opcional, útil si múltiples videos
+                  />
+                )}
               </button>
             ))}
           </div>
