@@ -521,7 +521,13 @@
     "UpdateToy": "Actualizar",
     "CreateSuccessMessage": "¡Juguete creado correctamente!",
     "UpdateSuccessMessage": "¡Juguete actualizado correctamente!",
-    "SubmitError": "Error al guardar juguete"
+    "SubmitError": "Error al guardar juguete",
+    "Media": "Sube una foto o un video de tu juguete",
+    "unsuportGeolocation": "Su navegador no admite la geolocalización. Por favor, permítale usar su ubicación.",
+    "maxFilesError": "Solo puedes subir un máximo de {maxFiles} archivos.",
+    "minFilesError": "Debes subir al menos 1 archivo.",
+    "formError": "Error al enviar el formulario",
+    "unknownError": "Se produjo un error desconocido"
   },
   "breadcrumbs": {
     "Home": "Inicio",

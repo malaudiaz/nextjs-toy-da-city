@@ -2,7 +2,7 @@
 
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@radix-ui/react-dropdown-menu";
-import React, { ChangeEvent, useRef, useState, useEffect } from "react";
+import React, { ChangeEvent, useRef, useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { toyFormSchema, ToyFormValues } from "@/lib/schemas/toy";
 import { useForm, useWatch } from "react-hook-form";
@@ -12,7 +12,8 @@ import { useTranslations } from "next-intl";
 
 const MAX_FILES = 6;
 
-type Status = { // (Añade este tipo si no está en un archivo de tipos compartido)
+type Status = {
+  // (Añade este tipo si no está en un archivo de tipos compartido)
   id: number;
   name?: string;
   description?: string;
@@ -40,7 +41,8 @@ type CreatePostFormProps = {
   conditions: {
     data: Condition[];
   };
-  statuses: { // ✨ NUEVO
+  statuses: {
+    // ✨ NUEVO
     data: Status[];
   };
   rolle?: string;
@@ -53,7 +55,7 @@ const MapComponent = dynamic(
     ssr: false,
     loading: () => (
       <div className="h-[400px] w-full bg-gray-200 flex items-center justify-center">
-        Cargando mapa...
+        Loading...
       </div>
     ),
   }
@@ -63,7 +65,7 @@ const CreatePostForm = ({
   categories,
   conditions,
   statuses,
-  rolle
+  rolle,
 }: CreatePostFormProps) => {
   const t = useTranslations("createPostForm");
   const [files, setFiles] = useState<File[]>([]);
@@ -79,7 +81,7 @@ const CreatePostForm = ({
     null
   );
 
-  const isDisabled = rolle !== "seller";  
+  const isDisabled = rolle !== "seller";
 
   const { getToken } = useAuth();
 
@@ -90,7 +92,7 @@ const CreatePostForm = ({
     formState: { errors },
     control,
     getValues,
-    setValue
+    setValue,
   } = useForm<ToyFormValues>({
     resolver: zodResolver(toyFormSchema),
     mode: "onChange", // ← Asegúrate de tener esto
@@ -109,7 +111,7 @@ const CreatePostForm = ({
   const forGiftValue = useWatch({ control, name: "forGift" });
   const forChangeValue = useWatch({ control, name: "forChange" });
 
-  const getUserLocation = () => {
+  const getUserLocation = useCallback(() => {
     setError(null);
 
     if (navigator.geolocation) {
@@ -130,20 +132,21 @@ const CreatePostForm = ({
         }
       );
     } else {
-      setError("Geolocation is not supported by your browser");
+      setError(t("unsuportGeolocation"));
     }
-  };
+  }, [setError, setUserLocation, t]); // Incluye todas las funciones/variables usadas
 
   useEffect(() => {
     getUserLocation();
-  }, []);
+  }, [getUserLocation]); // Ahora está correctamente incluida
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = Array.from(e.target.files);
 
       if (files.length + newFiles.length > MAX_FILES) {
-        setError(`Solo puedes subir un máximo de ${MAX_FILES} archivos`);
+        const message = t("maxFilesError", { maxFiles: MAX_FILES });
+        setError(message);
         return;
       }
 
@@ -180,7 +183,9 @@ const CreatePostForm = ({
       });
 
       //Agregar la localizacion
-      const location = userLocation ? `${userLocation[0]},${userLocation[1]}` : "";
+      const location = userLocation
+        ? `${userLocation[0]},${userLocation[1]}`
+        : "";
 
       //console.log("Location:", location);
 
@@ -195,12 +200,12 @@ const CreatePostForm = ({
         window.scrollTo({
           top: 0,
           behavior: "smooth",
-        });        
+        });
         setSubmitError("Debe subir al menos un archivo");
         return;
       }
 
-      const response = await fetch('/api/toys', {
+      const response = await fetch("/api/toys", {
         method: "POST",
         body: formData,
         headers: {
@@ -209,7 +214,7 @@ const CreatePostForm = ({
       });
 
       if (!response.ok) {
-        throw new Error("Error al enviar el formulario");
+        throw new Error(t("formError"));
       }
 
       const result = await response.json();
@@ -220,7 +225,7 @@ const CreatePostForm = ({
     } catch (error) {
       console.error("Error:", error);
       setSubmitError(
-        error instanceof Error ? error.message : "Error desconocido"
+        error instanceof Error ? error.message : t("unknownError")
       );
     } finally {
       setIsSubmitting(false);
@@ -239,7 +244,7 @@ const CreatePostForm = ({
 
     // Activamos solo el seleccionado
     setValue(name, true);
-  };  
+  };
 
   return (
     <>
@@ -257,7 +262,7 @@ const CreatePostForm = ({
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-2 px-3 py-4 w-full"      
+        className="flex flex-col gap-2 px-3 py-4 w-full"
       >
         {/* Campo de título */}
         <div className="flex flex-col gap-1">
@@ -304,7 +309,7 @@ const CreatePostForm = ({
               onChange={() => handleCheckboxChange("forSale")}
               className={`w-5 h-5 accent-green-700 ${
                 isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
-              }`}              
+              }`}
             />
             <label htmlFor="forSale">{t("forSale")}</label>
           </div>
@@ -405,60 +410,74 @@ const CreatePostForm = ({
         {/* Status */}
         <div>
           <label htmlFor="statusId" className="block mb-1">
-            {t("Status")} {/* Asumiendo que tienes una traducción para "Status" */}
+            {t("Status")}{" "}
+            {/* Asumiendo que tienes una traducción para "Status" */}
           </label>
           <select
             id="statusId"
             className="w-full p-2 border rounded"
             // Asegúrate de que toyFormSchema incluya 'statusId' como un número
-            {...register("statusId", { valueAsNumber: true })} 
+            {...register("statusId", { valueAsNumber: true })}
             required
           >
             {/* Opcional: Opción por defecto deshabilitada/vacía si defaultValues.statusId es undefined */}
-            <option value="" disabled hidden>{t("SelectStatusPlaceholder")}</option>           
+            <option value="" disabled hidden>
+              {t("SelectStatusPlaceholder")}
+            </option>
             {statuses.data.map((status) => (
               <option key={status.id} value={status.id}>
-                {status.description} {/* Usar description si es el campo localizado */}
+                {status.description}{" "}
+                {/* Usar description si es el campo localizado */}
               </option>
             ))}
-
           </select>
           {errors.statusId && (
             <p className="mt-1 text-sm text-red-600">
               {errors.statusId.message}
             </p>
           )}
-        </div>        
+        </div>
 
         {/* Imágenes */}
         <div className="flex flex-col gap-2 px-3 py-3 border-dashed border-2 border-gray-300 rounded-md">
-          <Label>
-            {t("Image")}
-          </Label>
+          <Label>{t("Media")}</Label>
           <div className="grid grid-cols-3 gap-2">
-            {files.map((file, index) => (
-              <div key={index} className="relative group">
-                {file.type.startsWith("image") && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={`Preview ${index}`}
-                    className="w-full h-32 object-cover rounded border"
-                  />
-                )}
-                <button
-                  type="button"
-                  onClick={() => removeFile(index)}
-                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  &times;
-                </button>
-              </div>
-            ))}
+            {files.map((file, index) => {
+              const fileUrl = URL.createObjectURL(file);
+              return (
+                <div key={index} className="relative group">
+                  {file.type.startsWith("image") && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={fileUrl}
+                      alt={`Preview ${index}`}
+                      className="w-full h-64 object-cover rounded border"
+                    />
+                  )}
+
+                  {file.type.startsWith("video") && (
+                    <video
+                      src={fileUrl}
+                      className="w-full h-64 object-cover rounded border bg-black"
+                      controls
+                      muted // opcional, útil si múltiples videos
+                    />
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => removeFile(index)}
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    &times;
+                  </button>
+                </div>
+              );
+            })}
 
             {/* Botón para añadir más */}
             <div
-              className={`border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer h-32 ${
+              className={`border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer h-64 ${
                 files.length >= MAX_FILES ? "hidden" : ""
               }`}
               onClick={() => fileInputRef.current?.click()}

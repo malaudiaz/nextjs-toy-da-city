@@ -527,7 +527,13 @@
     "UpdateToy": "Update Toy",
     "CreateSuccessMessage": "Toy created successfully!",
     "UpdateSuccessMessage": "Toy updated successfully!",
-    "SubmitError": "Error submitting toy"
+    "SubmitError": "Error submitting toy",
+    "Media": "Upload a photo or video of your toy",
+    "unsuportGeolocation": "Your browser does not support geolocation. Please allow it to use your location.",
+    "maxFilesError": "You can only upload a maximum of {maxFiles} files.",
+    "minFilesError": "You must upload at least 1 file.",
+    "formError": "Error submitting form",
+    "unknownError": "An unknown error occurred"
   },
   "breadcrumbs":{
     "Home": "Home",
