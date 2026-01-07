@@ -10,12 +10,34 @@ import { auth } from "@clerk/nextjs/server";
 import { ToyResponseSuccess, ToyResponseError } from "@/types/toy";
 import { revalidatePath } from 'next/cache'; // 👈 Necesitas esta importación
 import sharp from 'sharp';
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 const UPLOADS_DIR = join(process.cwd(), 'public', 'uploads')
 const MAX_FILES_PER_TOY = 6 // Límite de archivos por post
 const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50 MB
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024;  // 10 MB
 const EARTH_RADIUS_KM = 6371
+
+// Configuración de almacenamiento
+const STORAGE_TYPE = process.env.NEXT_PUBLIC_STORE || 'LOCAL';
+
+// Configuración de S3
+let s3Client: S3Client | null = null;
+const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME || '';
+
+if (STORAGE_TYPE === 'AWS') {
+  const region = process.env.AWS_BUCKET_REGION || "";
+  const accessKeyId = process.env.AWS_ACCESS_KEY || "";
+  const secretAccessKey = process.env.AWS_SECRET_KEY || "";
+  
+  s3Client = new S3Client({
+    region,
+    credentials: {
+      accessKeyId,
+      secretAccessKey,
+    },
+  });
+}
 
 const ALLOWED_TYPES = [
   'image/jpeg',
@@ -430,13 +452,32 @@ export async function POST(request: Request): Promise<NextResponse<ToyResponseSu
       }
 
       // Guardar archivo
-      const filePath = join(UPLOADS_DIR, filename);
-      await writeFile(filePath, finalBuffer);
+      let fileUrl: string;
+      
+      if (STORAGE_TYPE === 'AWS' && s3Client) {
+        // Guardar en S3
+        const params = {
+          Bucket: AWS_BUCKET_NAME,
+          Key: filename,
+          Body: new Uint8Array(finalBuffer),
+          ContentType: mimeType,
+        };
+        const command = new PutObjectCommand(params);
+        await s3Client.send(command);
+        
+        // URL pública a través de CloudFront
+        fileUrl = `${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${filename}`;
+      } else {
+        // Guardar localmente
+        const filePath = join(UPLOADS_DIR, filename);
+        await writeFile(filePath, finalBuffer);
+        fileUrl = `/en/api/uploads/${filename}`;
+      }
 
       // Guardar en DB
       const media = await prisma.media.create({
         data: {
-          fileUrl: `/en/api/uploads/${filename}`,
+          fileUrl,
           type: mimeType.startsWith('image/') ? 'IMAGE' : 'VIDEO',
           toyId: toy.id,
         },

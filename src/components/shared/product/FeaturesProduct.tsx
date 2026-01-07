@@ -29,7 +29,7 @@ const FeaturesProduct = async ({products}: FeaturesProductProps) => {
                 {product.price ? (
                   <p className="text-md text-green-700 font-bold">${product.price.toFixed(2)}</p>
                 ) : (
-                  <span className="bg-green-700 text-white px-3 py-1 rounded-lg font-bold shadow-sm w-1/4">{t("free")}</span>
+                  <span className="bg-green-700 text-white px-1 py-1 rounded-lg font-bold shadow-sm w-1/4">{t("free")}</span>
                 )}
               </div>
             </div>

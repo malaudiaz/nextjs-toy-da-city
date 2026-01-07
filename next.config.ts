@@ -40,6 +40,7 @@ const remoteImagePatterns: RemotePattern[] = [
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: remoteImagePatterns,
+    domains: ['dqzgluraws70e.cloudfront.net'],
   },
   async headers() {
     if (process.env.NODE_ENV === "development") {
