@@ -7,6 +7,8 @@ export async function GET(request: NextRequest) {
   const lat = searchParams.get('lat');
   const lon = searchParams.get('lon');
 
+  console.log('*****************[GEOCODE] Received request with params:', { lat, lon }); 
+
   const t = await getTranslations("Toy");
 
   if (!lat || !lon) {
