@@ -13,8 +13,9 @@ const FavoritesContent = async ({
 }) => {
   // Espera a que la promesa de datos se resuelva
   const favorites = await favoritesPromise;
-
-  return <FavoritesInfo favorites={favorites} />;
+  const favoritesArray = favorites?.data || [];
+  
+  return <FavoritesInfo favorites={favoritesArray} />;
 };
 
 // 4. El Page Component se convierte en el contenedor de Suspense
